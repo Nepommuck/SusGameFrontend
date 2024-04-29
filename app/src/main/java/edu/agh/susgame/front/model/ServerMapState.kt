@@ -1,18 +1,18 @@
-package edu.agh.susgame.front.map
+package edu.agh.susgame.front.model
 
 import edu.agh.susgame.front.util.Coordinates
 
-class ServerInfo(
+data class ServerInfo(
     val name: String,
     val position: Coordinates,
 )
 
-class Connection(
+data class Connection(
     val serverA: ServerInfo,
     val serverB: ServerInfo,
 )
 
-class ServerMapState(
+data class ServerMapState(
     val mapSize: Coordinates,
     val serves: List<ServerInfo>,
     val connections: List<Connection>,

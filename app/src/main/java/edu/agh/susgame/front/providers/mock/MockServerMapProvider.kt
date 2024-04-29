@@ -1,12 +1,12 @@
-package edu.agh.susgame.front.map
+package edu.agh.susgame.front.providers.mock
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import edu.agh.susgame.front.model.Connection
+import edu.agh.susgame.front.model.ServerInfo
+import edu.agh.susgame.front.model.ServerMapState
+import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.util.Coordinates
-
-interface ServerMapProvider {
-    fun getServerMapState(): MutableState<ServerMapState>
-}
 
 class MockServerMapProvider : ServerMapProvider {
     private val server1 = ServerInfo("S 01", Coordinates(10, 20))

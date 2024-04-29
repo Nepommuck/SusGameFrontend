@@ -13,9 +13,8 @@
         android:theme="@style/Theme.SusGame"
         tools:targetApi="31">
         <activity
-            android:name=".front.MainActivity"
+            android:name=".front.ui.component.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.SusGame">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
