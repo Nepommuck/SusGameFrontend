@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.component
+package edu.agh.susgame.front.ui.component.game.map
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import edu.agh.susgame.front.map.ServerMapProvider
+import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.util.ZoomState
 
 @Composable
