@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
+import edu.agh.susgame.front.ui.Translation
 
 data class BottomNavigationItem(
     val label: String,
@@ -13,12 +14,12 @@ data class BottomNavigationItem(
     companion object {
         val allMenuItems = listOf(
             BottomNavigationItem(
-                label = "Map",
+                label = Translation.Game.MAP,
                 icon = Icons.Filled.MailOutline,
                 route = GameRoute.Map.route
             ),
             BottomNavigationItem(
-                label = "Computer",
+                label = Translation.Game.COMPUTER,
                 icon = Icons.Filled.Settings,
                 route = GameRoute.Computer.route
             ),
