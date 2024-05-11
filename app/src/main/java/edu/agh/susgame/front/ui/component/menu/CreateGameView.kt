@@ -1,11 +1,10 @@
 package edu.agh.susgame.front.ui.component.menu
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -14,13 +13,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -31,6 +33,8 @@ import edu.agh.susgame.front.ui.component.menu.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingL
 
 private const val maxPinLength = 6
+private const val maxPlayersAmount = 6
+private const val minPlayersAmount = 2
 @Composable
 fun CreateGameView(
     navController: NavController,
@@ -38,10 +42,12 @@ fun CreateGameView(
     var gameName by remember { mutableStateOf("") }
     var gamePIN by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(value = false) }
-    Column(Modifier.padding(PaddingL)) {
+    var selectedNumber by remember { mutableIntStateOf(2) }
+    var gameTime by remember { mutableStateOf(10) }
+    Column( Modifier.padding(PaddingL)) {
         Column(
             Modifier
-                .fillMaxHeight()
+                .padding(PaddingL)
                 .weight(1f)
         ) {
             Header(title = Translation.Menu.CREATE_GAME)
@@ -56,7 +62,6 @@ fun CreateGameView(
             )
 
             // entering game pin
-            Spacer(modifier = Modifier.width(PaddingL))
             OutlinedTextField(
                 label = { Text(Translation.Menu.ENTER_GAME_PIN) },
                 visualTransformation =  if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
@@ -84,6 +89,49 @@ fun CreateGameView(
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
+            Row(){
+                Column(verticalArrangement = Arrangement.SpaceEvenly){
+                    Text(
+                        text = "Liczba graczy:",
+                    )
+                    Text(
+                        text = "Czas gry:",
+                    )
+                }
+                Column(verticalArrangement = Arrangement.SpaceEvenly) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
+                        Button(
+                            onClick = { selectedNumber -= 1 },
+                            enabled = selectedNumber > minPlayersAmount
+                        ) {
+                            Text(text = "-")
+                        }
+                        Text(
+                            text = "$selectedNumber",
+                            modifier = Modifier.padding(PaddingL),
+                            fontWeight = FontWeight.Bold
+                        )
+                        Button(
+                            onClick = { selectedNumber += 1 },
+                            enabled = selectedNumber < maxPlayersAmount
+                        ) {
+                            Text(text = "+")
+                        }
+                    }
+                    Slider(
+                        value = gameTime.toFloat(),
+                        onValueChange = { newValue ->
+                            gameTime = newValue.toInt()
+                        },
+                        valueRange = 1f..60f, // Zakres czasu gry od 1 do 60 minut
+                        steps = 59,
+                    )
+
+                }
+            }
+
+
+
 
             // TODO GAME-52
             Text(text = "TODO GAME-52")
