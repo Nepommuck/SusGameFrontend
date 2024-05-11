@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.Button
@@ -21,7 +21,7 @@ import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.util.ZoomState
 
 @Composable
-fun ServerMapComponent(serverMapProvider: ServerMapProvider) {
+internal fun ServerMapComponent(serverMapProvider: ServerMapProvider) {
     val mapState = serverMapProvider.getServerMapState()
     val zoomState = remember {
         ZoomState(
@@ -34,7 +34,7 @@ fun ServerMapComponent(serverMapProvider: ServerMapProvider) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(1f)
+            .fillMaxHeight()
             .clipToBounds()
             .pointerInput(Unit) {
                 detectTransformGestures { _, pan, zoom, _ ->
@@ -53,9 +53,6 @@ fun ServerMapComponent(serverMapProvider: ServerMapProvider) {
                     translationY = zoomState.translationY(),
                     clip = false
                 )
-            //  TODO Make this box bigger than the outer one
-            //   .size(1200.dp)
-//                .background(Color.Red)
         ) {
             Column {
                 Text(zoomState.scaleValue().toString(), color = Color.Black)
