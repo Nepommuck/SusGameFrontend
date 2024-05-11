@@ -1,43 +1,36 @@
 package edu.agh.susgame.front.ui.component.menu.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import edu.agh.susgame.front.model.AwaitingGame
-import edu.agh.susgame.front.providers.interfaces.AppSettingsProvider
+import edu.agh.susgame.front.model.game.GameId
 import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
-import edu.agh.susgame.front.ui.component.game.map.MapViewComponent
-import edu.agh.susgame.front.ui.component.menu.AwaitingGameComponent
-import edu.agh.susgame.front.ui.component.menu.ProfileComponent
-import edu.agh.susgame.front.ui.component.menu.SearchGamesComponent
-import edu.agh.susgame.front.ui.component.menu.SettingsComponent
+import edu.agh.susgame.front.ui.component.game.navigation.GameNavBar
+import edu.agh.susgame.front.ui.component.menu.AwaitingGameView
+import edu.agh.susgame.front.ui.component.menu.CreateGameView
+import edu.agh.susgame.front.ui.component.menu.MainMenuView
+import edu.agh.susgame.front.ui.component.menu.search.SearchGamesView
 
 @Composable
 fun MenuNavigationHost(
-    padding: PaddingValues,
     navController: NavHostController,
     serverMapProvider: ServerMapProvider,
-    appSettingsProvider: AppSettingsProvider,
     awaitingGamesProvider: AwaitingGamesProvider,
 ) {
     NavHost(
         navController = navController,
-        startDestination = MenuRoute.FindGame.route,
-        modifier = Modifier.padding(padding)
+        startDestination = MenuRoute.MainMenu.route,
     ) {
-        composable(MenuRoute.FindGame.route) {
-            SearchGamesComponent(awaitingGamesProvider, navController)
+        composable(MenuRoute.MainMenu.route) {
+            MainMenuView(navController)
         }
-        composable(MenuRoute.Profile.route) {
-            ProfileComponent()
+        composable(MenuRoute.SearchGame.route) {
+            SearchGamesView(awaitingGamesProvider, navController)
         }
-        composable(MenuRoute.Settings.route) {
-            SettingsComponent(appSettingsProvider)
+        composable(MenuRoute.CreateGame.route) {
+            CreateGameView(navController)
         }
         composable(
             "${MenuRoute.AwaitingGame.route}/{${MenuRoute.AwaitingGame.gameIdArgument.name}}",
@@ -46,20 +39,20 @@ fun MenuNavigationHost(
             val gameId = backStackEntry.arguments
                 ?.getInt(MenuRoute.AwaitingGame.gameIdArgument.name)
                 ?.run {
-                    AwaitingGame.AwaitingGameId(this)
+                    GameId(this)
                 }
-            AwaitingGameComponent(gameId, awaitingGamesProvider, navController)
+            AwaitingGameView(gameId, awaitingGamesProvider, navController)
         }
         composable(
-            "${MenuRoute.GameView.route}/{${MenuRoute.GameView.gameIdArgument.name}}",
-            arguments = listOf(MenuRoute.GameView.gameIdArgument),
+            "${MenuRoute.Game.route}/{${MenuRoute.Game.gameIdArgument.name}}",
+            arguments = listOf(MenuRoute.Game.gameIdArgument),
         ) { backStackEntry ->
             val gameId = backStackEntry.arguments
-                ?.getInt(MenuRoute.GameView.gameIdArgument.name)
+                ?.getInt(MenuRoute.Game.gameIdArgument.name)
                 ?.run {
-                    AwaitingGame.AwaitingGameId(this)
+                    GameId(this)
                 }
-            MapViewComponent(serverMapProvider)
+            GameNavBar(gameId, serverMapProvider)
         }
     }
 }

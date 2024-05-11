@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.component.menu.navigation
+package edu.agh.susgame.front.ui.component.game.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,8 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import edu.agh.susgame.front.providers.interfaces.AppSettingsProvider
-import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
+import edu.agh.susgame.front.model.game.GameId
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.theme.PaddingL
 
@@ -24,7 +23,7 @@ import edu.agh.susgame.front.ui.theme.PaddingL
 @Composable
 private fun BottomBar(navController: NavHostController) {
     var navigationSelectedItem by remember {
-        mutableIntStateOf(1)
+        mutableIntStateOf(0)
     }
 
     NavigationBar {
@@ -61,10 +60,9 @@ private fun BottomBar(navController: NavHostController) {
 }
 
 @Composable
-fun NavBar(
+fun GameNavBar(
+    gameId: GameId?,
     serverMapProvider: ServerMapProvider,
-    appSettingsProvider: AppSettingsProvider,
-    awaitingGamesProvider: AwaitingGamesProvider
 ) {
     val navController = rememberNavController()
     Scaffold(
@@ -75,13 +73,11 @@ fun NavBar(
             BottomBar(navController)
         }
     ) { padding ->
-        MenuNavigationHost(
+        GameNavigationHost(
+            gameId,
             padding,
             navController,
             serverMapProvider,
-            appSettingsProvider,
-            awaitingGamesProvider
         )
     }
 }
-

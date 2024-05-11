@@ -9,14 +9,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import edu.agh.susgame.front.model.game.GameId
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.theme.PaddingL
 
 @Composable
-fun MapViewComponent(serverMapProvider: ServerMapProvider) {
+fun ServerMapView(gameId: GameId?, serverMapProvider: ServerMapProvider) {
     Column(
         modifier = Modifier
-            .padding(PaddingL)
+            .padding(top = PaddingL, start = PaddingL, end = PaddingL)
     ) {
         Box(
             contentAlignment = Alignment.Center,
