@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.providers.interfaces
 
+import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.AwaitingGame
 import edu.agh.susgame.front.model.game.GameId
 
@@ -8,5 +9,7 @@ interface AwaitingGamesProvider {
 
     fun getById(gameId: GameId): AwaitingGame?
 
-    fun join(id: GameId)
+    fun join(id: GameId, playerNickname: PlayerNickname)
+
+    fun leave(id: GameId, playerNickname: PlayerNickname)
 }

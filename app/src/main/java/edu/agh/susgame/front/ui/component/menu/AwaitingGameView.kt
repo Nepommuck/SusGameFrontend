@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.AwaitingGame
 import edu.agh.susgame.front.model.game.GameId
 import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
@@ -19,6 +20,8 @@ import edu.agh.susgame.front.ui.component.menu.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingL
 import edu.agh.susgame.front.ui.theme.PaddingS
 
+
+private val PlayerNickname = PlayerNickname("The-player")
 
 @Composable
 private fun AwaitingGameContentComponent(
@@ -39,7 +42,7 @@ private fun AwaitingGameContentComponent(
                 Modifier.padding(vertical = PaddingS)
             )
             awaitingGame.playersWaiting.forEach {
-                Text(text = it)
+                Text(text = it.value)
             }
         }
 
@@ -48,12 +51,13 @@ private fun AwaitingGameContentComponent(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Button(onClick = {
+                awaitingGamesProvider.leave(awaitingGame.id, PlayerNickname)
                 navController.navigate(MenuRoute.SearchGame.route)
             }) {
-                Text(text = "Go back")
+                Text(text = "Leave")
             }
 
-            if (awaitingGame.playersWaiting.contains("You")) {
+            if (awaitingGame.playersWaiting.contains(PlayerNickname)) {
                 Button(onClick = {
                     navController.navigate("${MenuRoute.Game.route}/${awaitingGame.id.value}")
                 }) {
@@ -61,7 +65,7 @@ private fun AwaitingGameContentComponent(
                 }
             } else {
                 Button(onClick = {
-                    awaitingGamesProvider.join(awaitingGame.id)
+                    awaitingGamesProvider.join(awaitingGame.id, PlayerNickname)
                     navController.navigate("${MenuRoute.AwaitingGame.route}/${awaitingGame.id.value}")
                 }) {
                     Text("Join")
