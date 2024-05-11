@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
+import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingL
@@ -27,7 +28,7 @@ fun SearchGamesView(
     val awaitingGames = awaitingGamesProvider.getAll()
 
     Column(Modifier.padding(PaddingL)) {
-        Header(title = "Search for a game")
+        Header(title = Translation.Menu.SearchGame.FIND_GAME)
         Column(
             modifier = Modifier
                 .verticalScroll(ScrollState(0))
@@ -45,7 +46,7 @@ fun SearchGamesView(
             Button(onClick = {
                 navController.navigate(MenuRoute.MainMenu.route)
             }) {
-                Text(text = "Go back")
+                Text(text = Translation.Button.GO_BACK)
             }
         }
     }

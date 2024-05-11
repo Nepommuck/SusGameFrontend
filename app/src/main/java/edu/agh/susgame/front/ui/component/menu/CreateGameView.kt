@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingL
@@ -22,7 +23,7 @@ fun CreateGameView(
                 .fillMaxHeight()
                 .weight(1f)
         ) {
-            Header("Create new game")
+            Header(title = Translation.Menu.CREATE_GAME)
 
             // TODO GAME-52
             Text(text = "TODO GAME-52")
@@ -30,7 +31,7 @@ fun CreateGameView(
         Button(onClick = {
             navController.navigate(MenuRoute.MainMenu.route)
         }) {
-            Text(text = "Go back")
+            Text(text = Translation.Button.GO_BACK)
         }
     }
 }

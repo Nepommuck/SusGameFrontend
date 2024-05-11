@@ -15,6 +15,7 @@ import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.AwaitingGame
 import edu.agh.susgame.front.model.game.GameId
 import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
+import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingL
@@ -38,7 +39,7 @@ private fun AwaitingGameContentComponent(
                 .weight(1f)
         ) {
             Text(
-                text = "${awaitingGame.playersWaiting.size} players waiting:",
+                text = "${Translation.Menu.SearchGame.nPlayersAwaiting(awaitingGame.playersWaiting.size)}:",
                 Modifier.padding(vertical = PaddingS)
             )
             awaitingGame.playersWaiting.forEach {
@@ -54,21 +55,21 @@ private fun AwaitingGameContentComponent(
                 awaitingGamesProvider.leave(awaitingGame.id, PlayerNickname)
                 navController.navigate(MenuRoute.SearchGame.route)
             }) {
-                Text(text = "Leave")
+                Text(text = Translation.Button.LEAVE)
             }
 
             if (awaitingGame.playersWaiting.contains(PlayerNickname)) {
                 Button(onClick = {
                     navController.navigate("${MenuRoute.Game.route}/${awaitingGame.id.value}")
                 }) {
-                    Text("Play")
+                    Text(text = Translation.Button.PLAY)
                 }
             } else {
                 Button(onClick = {
                     awaitingGamesProvider.join(awaitingGame.id, PlayerNickname)
                     navController.navigate("${MenuRoute.AwaitingGame.route}/${awaitingGame.id.value}")
                 }) {
-                    Text("Join")
+                    Text(text = Translation.Button.JOIN)
                 }
             }
         }
