@@ -46,26 +46,20 @@ fun CreateGameView(
         ) {
             Header(title = Translation.Menu.CREATE_GAME)
 
+            // entering game name
             OutlinedTextField(
-                label = { Text("Nazwa gry") },
+                label = { Text(Translation.Menu.ENTER_GAME_NAME) },
                 value = gameName,
                 onValueChange = { gameName = it},
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
 
+            // entering game pin
             Spacer(modifier = Modifier.width(PaddingL))
             OutlinedTextField(
-                label = { Text("PIN gry") },
-                visualTransformation =  if (showPassword) {
-
-                    VisualTransformation.None
-
-                } else {
-
-                    PasswordVisualTransformation()
-
-                },
+                label = { Text(Translation.Menu.ENTER_GAME_PIN) },
+                visualTransformation =  if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     if (showPassword) {
                         IconButton(onClick = { showPassword = false }) {
@@ -88,7 +82,8 @@ fun CreateGameView(
                 value = gamePIN,
                 onValueChange = { if (it.length <= maxPinLength) gamePIN = it},
                 modifier = Modifier.fillMaxWidth(),
-                singleLine = true  )
+                singleLine = true
+            )
 
             // TODO GAME-52
             Text(text = "TODO GAME-52")

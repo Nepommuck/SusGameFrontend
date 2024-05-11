@@ -22,6 +22,8 @@ object Translation {
         }
 
         const val CREATE_GAME = "Stwórz nową grę"
+        const val ENTER_GAME_NAME = "Nazwa gry"
+        const val ENTER_GAME_PIN = "PIN gry"
     }
 
     object Game {
