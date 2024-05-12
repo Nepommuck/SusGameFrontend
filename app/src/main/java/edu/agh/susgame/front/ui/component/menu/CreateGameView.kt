@@ -36,15 +36,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
-import edu.agh.susgame.front.model.game.AwaitingGame.Companion.freeId
-import edu.agh.susgame.front.model.game.GameId
 import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
 import edu.agh.susgame.front.settings.Configuration
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingL
-import edu.agh.susgame.front.model.PlayerNickname
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -62,7 +59,7 @@ fun CreateGameView(
     var showPassword by remember { mutableStateOf(value = false) }
     var selectedNumberOfPlayers by remember { mutableIntStateOf(defaultPlayersAmount) }
     var gameTime by remember { mutableIntStateOf(defaultGameTime) }
-    var checkedBool by remember { mutableStateOf(false) }
+    var isGamePinEnabled by remember { mutableStateOf(false) }
     Column(Modifier.padding(PaddingL)) {
         Column(
             Modifier
@@ -90,7 +87,9 @@ fun CreateGameView(
             // entering game pin
             Row(
                 Modifier
-                    .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceEvenly
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 OutlinedTextField(
                     label = {
@@ -100,7 +99,7 @@ fun CreateGameView(
                     },
                     visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
-                        if (checkedBool) {
+                        if (isGamePinEnabled) {
                             if (showPassword) {
                                 IconButton(onClick = { showPassword = false }) {
                                     Icon(
@@ -123,19 +122,16 @@ fun CreateGameView(
                     value = gamePIN,
                     onValueChange = { if (it.length <= Configuration.MaxPinLength) gamePIN = it },
                     singleLine = true,
-                    enabled = checkedBool,
+                    enabled = isGamePinEnabled,
                     modifier = Modifier.weight(1f),
-
                 )
                 Checkbox(
-                    checked = checkedBool,
+                    checked = isGamePinEnabled,
                     onCheckedChange = {
-                        checkedBool = it
+                        isGamePinEnabled = it
                         gamePIN = ""
                     }
                 )
-
-
             }
 
             // entering maximal amount of players
@@ -216,7 +212,15 @@ fun CreateGameView(
             ) {
                 val context = LocalContext.current
                 Button(onClick = {
-                    createGameHandler(gameName, context, awaitingGamesProvider, navController, gamePIN, selectedNumberOfPlayers,gameTime)
+                    createGameHandler(
+                        gameName,
+                        context,
+                        awaitingGamesProvider,
+                        navController,
+                        gamePIN,
+                        selectedNumberOfPlayers,
+                        gameTime
+                    )
                 }) {
                     Text(
                         text = Translation.Button.CREATE
@@ -234,25 +238,27 @@ fun CreateGameView(
     }
 }
 
-
-private fun createGameHandler(gameName: String, context: Context, provider: AwaitingGamesProvider, navController: NavController, gamePin: String, numOfPlayers: Int, gameTime: Int) {
+private fun createGameHandler(
+    gameName: String,
+    context: Context,
+    provider: AwaitingGamesProvider,
+    navController: NavController,
+    gamePin: String,
+    numOfPlayers: Int,
+    gameTime: Int
+) {
     if (gameName == "") Toast.makeText(
         context,
         Translation.CreateGame.CREATE_NO_GAME_NAME,
         Toast.LENGTH_SHORT
     ).show()
     else {
-        val newId = freeId++
-        provider.createNewGame(GameId(newId), gameName, gamePin, numOfPlayers, gameTime)
+        val newGameId = provider.createNewGame(gameName, gamePin, numOfPlayers, gameTime)
         Toast.makeText(
             context,
             Translation.CreateGame.CREATE_SUCCESS,
             Toast.LENGTH_SHORT
         ).show()
-        navController.navigate("${MenuRoute.AwaitingGame.route}/$newId")
+        navController.navigate("${MenuRoute.AwaitingGame.route}/${newGameId.value}")
     }
-
 }
-
-
-

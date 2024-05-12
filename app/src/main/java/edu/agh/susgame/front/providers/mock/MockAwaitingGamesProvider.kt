@@ -2,7 +2,7 @@ package edu.agh.susgame.front.providers.mock
 
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.AwaitingGame
-import edu.agh.susgame.front.model.game.AwaitingGame.Companion.freeId
+
 import edu.agh.susgame.front.model.game.GameId
 import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
 import edu.agh.susgame.front.settings.Configuration
@@ -10,7 +10,7 @@ import edu.agh.susgame.front.settings.Configuration
 class MockAwaitingGamesProvider : AwaitingGamesProvider {
     private var state = mutableListOf(
         AwaitingGame(
-            id = GameId(freeId++),
+            id = GameId(AwaitingGame.freeId++),
             name = "Gra dodana statycznie",
             maxNumOfPlayers = Configuration.MaxPlayersPerGame,
             gameTime = 10,
@@ -44,12 +44,12 @@ class MockAwaitingGamesProvider : AwaitingGamesProvider {
     }
 
     override fun createNewGame(
-        gameId: GameId,
         gameName: String,
         gamePIN: String,
         numOfPlayers: Int,
         gameTime: Int
-    ) {
+    ): GameId {
+        val gameId = GameId(AwaitingGame.freeId++)
         state.add(
             AwaitingGame(
                 gameId,
@@ -57,7 +57,10 @@ class MockAwaitingGamesProvider : AwaitingGamesProvider {
                 numOfPlayers,
                 gameTime,
                 gamePIN,
-                listOf<String>().map { PlayerNickname(it) })
+                emptyList<String>().map { PlayerNickname(it) }
+            )
         )
+        return gameId
     }
+
 }

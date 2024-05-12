@@ -13,5 +13,5 @@ interface AwaitingGamesProvider {
 
     fun leave(id: GameId, playerNickname: PlayerNickname)
 
-    fun createNewGame(gameId: GameId, gameName: String, gamePIN: String, numOfPlayers: Int, gameTime: Int)
+    fun createNewGame(gameName: String, gamePIN: String, numOfPlayers: Int, gameTime: Int): GameId
 }
