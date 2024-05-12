@@ -6,6 +6,7 @@ import edu.agh.susgame.front.model.game.AwaitingGame.Companion.freeId
 import edu.agh.susgame.front.model.game.GameId
 import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
 import edu.agh.susgame.front.settings.Configuration
+
 class MockAwaitingGamesProvider : AwaitingGamesProvider {
     private var state = mutableListOf(
         AwaitingGame(
@@ -49,6 +50,14 @@ class MockAwaitingGamesProvider : AwaitingGamesProvider {
         numOfPlayers: Int,
         gameTime: Int
     ) {
-        state.add(AwaitingGame(gameId,gameName,numOfPlayers,gameTime,gamePIN, listOf<String>().map { PlayerNickname(it) }))
+        state.add(
+            AwaitingGame(
+                gameId,
+                gameName,
+                numOfPlayers,
+                gameTime,
+                gamePIN,
+                listOf<String>().map { PlayerNickname(it) })
+        )
     }
 }
