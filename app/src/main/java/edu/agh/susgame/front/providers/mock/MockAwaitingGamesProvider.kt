@@ -2,30 +2,19 @@ package edu.agh.susgame.front.providers.mock
 
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.AwaitingGame
+import edu.agh.susgame.front.model.game.AwaitingGame.Companion.freeId
 import edu.agh.susgame.front.model.game.GameId
 import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
-
+import edu.agh.susgame.front.settings.Configuration
 class MockAwaitingGamesProvider : AwaitingGamesProvider {
     private var state = mutableListOf(
         AwaitingGame(
-            id = GameId(1),
-            name = "Mafia",
+            id = GameId(freeId++),
+            name = "Gra dodana statycznie",
+            maxNumOfPlayers = Configuration.MaxPlayersPerGame,
+            gameTime = 10,
+            gamePin = "game pin",
             playersWaiting = listOf("John", "Terry").map { PlayerNickname(it) },
-        ),
-        AwaitingGame(
-            id = GameId(2),
-            name = "Amogus",
-            playersWaiting = listOf("Michał", "Maciej", "Mateusz").map { PlayerNickname(it) },
-        ),
-        AwaitingGame(
-            id = GameId(4),
-            name = "Jakieś serwery na kiju",
-            playersWaiting = listOf("Włodzimierz").map { PlayerNickname(it) },
-        ),
-        AwaitingGame(
-            id = GameId(5),
-            name = "Podstawówka",
-            playersWaiting = listOf("Jan", "Paweł").map { PlayerNickname(it) },
         ),
     )
 
@@ -51,5 +40,15 @@ class MockAwaitingGamesProvider : AwaitingGamesProvider {
             else
                 game
         }.toMutableList()
+    }
+
+    override fun createNewGame(
+        gameId: GameId,
+        gameName: String,
+        gamePIN: String,
+        numOfPlayers: Int,
+        gameTime: Int
+    ) {
+        state.add(AwaitingGame(gameId,gameName,numOfPlayers,gameTime,gamePIN, listOf<String>().map { PlayerNickname(it) }))
     }
 }

@@ -17,7 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.front.model.game.AwaitingGame
-import edu.agh.susgame.front.model.game.MaxPlayersPerGame
+import edu.agh.susgame.front.settings.Configuration
+
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingM
 
@@ -45,7 +46,7 @@ internal fun AwaitingGameRowComponent(awaitingGame: AwaitingGame, navController:
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(text = awaitingGame.name, fontWeight = FontWeight.Bold)
-                Text(text = "${awaitingGame.playersWaiting.size}/$MaxPlayersPerGame")
+                Text(text = "${awaitingGame.playersWaiting.size}/${awaitingGame.maxNumOfPlayers}")
             }
         }
     }

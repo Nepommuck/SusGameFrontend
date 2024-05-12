@@ -11,10 +11,6 @@ object Translation {
         const val CREATE = "Stwórz"
     }
 
-    object Toasts {
-        const val CREATE_NO_GAME_NAME = "Podaj nazwę gry!"
-        const val CREATE_SUCCESS = "Pomyślnie stworzono grę!"
-    }
 
     object Menu {
         object SearchGame {
@@ -26,15 +22,19 @@ object Translation {
                 return "Oczekuje $n ${if (n == 1) "gracz" else "graczy"}"
             }
         }
+
         const val CREATE_GAME = "Stwórz nową grę"
     }
-    object CreateGame{
+
+    object CreateGame {
         const val ENTER_GAME_NAME = "Nazwa gry"
         const val ENTER_GAME_PIN = "PIN gry"
-        const val AMOUNT_OF_PLAYERS = "Liczba graczy:"
-        const val GAME_TIME = "Czas gry:"
-        const val MINUTES = " minuty "
-        const val DEFAULT_GAME_NAME = "Uqsz's game"
+        const val AMOUNT_OF_PLAYERS = "Liczba graczy"
+        const val GAME_TIME = "Czas gry"
+        const val MINUTES = "minut"
+        const val DEFAULT_GAME_NAME = "default"
+        const val CREATE_NO_GAME_NAME = "Podaj nazwę gry!"
+        const val CREATE_SUCCESS = "Pomyślnie stworzono grę!"
     }
 
     object Game {

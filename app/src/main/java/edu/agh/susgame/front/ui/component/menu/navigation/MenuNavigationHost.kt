@@ -30,7 +30,7 @@ fun MenuNavigationHost(
             SearchGamesView(awaitingGamesProvider, navController)
         }
         composable(MenuRoute.CreateGame.route) {
-            CreateGameView(navController)
+            CreateGameView(awaitingGamesProvider,navController)
         }
         composable(
             "${MenuRoute.AwaitingGame.route}/{${MenuRoute.AwaitingGame.gameIdArgument.name}}",
