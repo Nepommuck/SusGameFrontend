@@ -12,4 +12,6 @@ interface AwaitingGamesProvider {
     fun join(id: GameId, playerNickname: PlayerNickname)
 
     fun leave(id: GameId, playerNickname: PlayerNickname)
+
+    fun createNewGame(gameName: String, gamePIN: String, numOfPlayers: Int, gameTime: Int): GameId
 }

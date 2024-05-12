@@ -8,7 +8,9 @@ object Translation {
         const val LEAVE = "Opuść"
         const val JOIN = "Dołącz"
         const val PLAY = "Graj"
+        const val CREATE = "Stwórz"
     }
+
 
     object Menu {
         object SearchGame {
@@ -22,6 +24,17 @@ object Translation {
         }
 
         const val CREATE_GAME = "Stwórz nową grę"
+    }
+
+    object CreateGame {
+        const val ENTER_GAME_NAME = "Nazwa gry"
+        const val ENTER_GAME_PIN = "PIN gry"
+        const val AMOUNT_OF_PLAYERS = "Liczba graczy"
+        const val GAME_TIME = "Czas gry"
+        const val MINUTES = "minut"
+        const val DEFAULT_GAME_NAME = "default"
+        const val CREATE_NO_GAME_NAME = "Podaj nazwę gry!"
+        const val CREATE_SUCCESS = "Pomyślnie stworzono grę!"
     }
 
     object Game {
