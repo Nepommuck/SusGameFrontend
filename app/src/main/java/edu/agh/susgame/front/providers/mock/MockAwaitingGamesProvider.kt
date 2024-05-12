@@ -8,9 +8,12 @@ import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
 import edu.agh.susgame.front.settings.Configuration
 
 class MockAwaitingGamesProvider : AwaitingGamesProvider {
+    // Current free id for new game
+    private var freeGameId: Int = 0
+
     private var state = mutableListOf(
         AwaitingGame(
-            id = GameId(AwaitingGame.freeId++),
+            id = GameId(freeGameId++),
             name = "Gra dodana statycznie",
             maxNumOfPlayers = Configuration.MaxPlayersPerGame,
             gameTime = 10,
@@ -49,7 +52,7 @@ class MockAwaitingGamesProvider : AwaitingGamesProvider {
         numOfPlayers: Int,
         gameTime: Int
     ): GameId {
-        val gameId = GameId(AwaitingGame.freeId++)
+        val gameId = GameId(freeGameId++)
         state.add(
             AwaitingGame(
                 gameId,
@@ -57,10 +60,9 @@ class MockAwaitingGamesProvider : AwaitingGamesProvider {
                 numOfPlayers,
                 gameTime,
                 gamePIN,
-                emptyList<String>().map { PlayerNickname(it) }
+                emptyList(),
             )
         )
         return gameId
     }
-
 }
