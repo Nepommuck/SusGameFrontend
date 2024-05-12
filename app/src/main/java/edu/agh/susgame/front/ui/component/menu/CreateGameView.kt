@@ -169,7 +169,7 @@ fun CreateGameView(
             ) {
                 val context = LocalContext.current
                 Button(onClick = {
-                    // TODO: stworzenie nowej gry z odpowiednimi parametrami
+
                     if (gameName == "") Toast.makeText( context,Translation.Toasts.CREATE_NO_GAME_NAME, Toast.LENGTH_SHORT).show()
                     else Toast.makeText( context,Translation.Toasts.CREATE_SUCCESS, Toast.LENGTH_SHORT).show()
 //                    navController.navigate(MenuRoute.MainMenu.route)
