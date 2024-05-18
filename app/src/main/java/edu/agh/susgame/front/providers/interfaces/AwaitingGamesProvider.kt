@@ -16,7 +16,7 @@ interface AwaitingGamesProvider {
 
     fun createNewGame(
         gameName: String,
-        gamePIN: String,
+        gamePin: String,
         numOfPlayers: Int,
         gameTime: Int,
     ): CompletableFuture<GameId>

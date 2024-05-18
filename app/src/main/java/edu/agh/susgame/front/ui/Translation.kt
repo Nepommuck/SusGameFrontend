@@ -7,6 +7,7 @@ object Translation {
 
     object Button {
         const val GO_BACK = "Wróć"
+        const val BACK_TO_MAIN_MENU = "Wróć do menu głównego"
         const val LEAVE = "Opuść"
         const val JOIN = "Dołącz"
         const val PLAY = "Graj"
@@ -47,6 +48,8 @@ object Translation {
 
     object Error {
         private const val ERROR = "BŁĄD"
+
+        const val UnexpectedError = "Wystąpił niespodziewany błąd"
 
         fun failedToLoadGame(gameId: GameId) = "$ERROR: Nie udało się wczytać gry: ${gameId.value}"
     }

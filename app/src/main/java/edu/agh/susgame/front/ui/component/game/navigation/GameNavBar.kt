@@ -62,21 +62,23 @@ private fun BottomBar(navController: NavHostController) {
 @Composable
 fun GameNavBar(
     gameId: GameId?,
+    menuNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
 ) {
-    val navController = rememberNavController()
+    val gameNavController = rememberNavController()
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = PaddingL),
         bottomBar = {
-            BottomBar(navController)
+            BottomBar(gameNavController)
         }
     ) { padding ->
         GameNavigationHost(
             gameId,
             padding,
-            navController,
+            menuNavController,
+            gameNavController,
             serverMapProvider,
         )
     }

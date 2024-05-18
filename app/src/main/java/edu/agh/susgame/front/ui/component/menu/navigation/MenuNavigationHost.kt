@@ -15,24 +15,24 @@ import edu.agh.susgame.front.ui.component.menu.search.SearchGamesView
 
 @Composable
 fun MenuNavigationHost(
-    navController: NavHostController,
+    menuNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
     awaitingGamesProvider: AwaitingGamesProvider,
 ) {
     NavHost(
-        navController = navController,
+        navController = menuNavController,
         startDestination = MenuRoute.MainMenu.route,
     ) {
         composable(route = MenuRoute.MainMenu.route) {
-            MainMenuView(navController)
+            MainMenuView(menuNavController)
         }
 
         composable(route = MenuRoute.SearchGame.route) {
-            SearchGamesView(awaitingGamesProvider, navController)
+            SearchGamesView(awaitingGamesProvider, menuNavController)
         }
 
         composable(route = MenuRoute.CreateGame.route) {
-            CreateGameView(awaitingGamesProvider, navController)
+            CreateGameView(awaitingGamesProvider, menuNavController)
         }
 
         composable(
@@ -47,10 +47,10 @@ fun MenuNavigationHost(
 
             when (gameId) {
                 null ->
-                    SearchGamesView(awaitingGamesProvider, navController)
+                    SearchGamesView(awaitingGamesProvider, menuNavController)
 
                 else ->
-                    AwaitingGameView(gameId, awaitingGamesProvider, navController)
+                    AwaitingGameView(gameId, awaitingGamesProvider, menuNavController)
             }
         }
 
@@ -63,7 +63,7 @@ fun MenuNavigationHost(
                 ?.run {
                     GameId(this)
                 }
-            GameNavBar(gameId, serverMapProvider)
+            GameNavBar(gameId, menuNavController, serverMapProvider)
         }
     }
 }

@@ -67,9 +67,9 @@ class MockAwaitingGamesProvider(mockDelayMs: Long? = null) : AwaitingGamesProvid
 
     override fun createNewGame(
         gameName: String,
-        gamePIN: String,
+        gamePin: String,
         numOfPlayers: Int,
-        gameTime: Int
+        gameTime: Int,
     ): CompletableFuture<GameId> =
         CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
@@ -80,8 +80,8 @@ class MockAwaitingGamesProvider(mockDelayMs: Long? = null) : AwaitingGamesProvid
                     gameName,
                     numOfPlayers,
                     gameTime,
-                    gamePIN,
-                    emptyList(),
+                    gamePin,
+                    playersWaiting = emptyList(),
                 )
             )
             gameId
