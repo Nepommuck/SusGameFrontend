@@ -42,6 +42,9 @@ import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingL
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -55,7 +58,7 @@ fun CreateGameView(
     navController: NavController,
 ) {
     var gameName by remember { mutableStateOf(Translation.CreateGame.DEFAULT_GAME_NAME) }
-    var gamePIN by remember { mutableStateOf("") }
+    var gamePin by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(value = false) }
     var selectedNumberOfPlayers by remember { mutableIntStateOf(defaultPlayersAmount) }
     var gameTime by remember { mutableIntStateOf(defaultGameTime) }
@@ -119,8 +122,8 @@ fun CreateGameView(
                         }
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    value = gamePIN,
-                    onValueChange = { if (it.length <= Configuration.MaxPinLength) gamePIN = it },
+                    value = gamePin,
+                    onValueChange = { if (it.length <= Configuration.MaxPinLength) gamePin = it },
                     singleLine = true,
                     enabled = isGamePinEnabled,
                     modifier = Modifier.weight(1f),
@@ -129,7 +132,7 @@ fun CreateGameView(
                     checked = isGamePinEnabled,
                     onCheckedChange = {
                         isGamePinEnabled = it
-                        gamePIN = ""
+                        gamePin = ""
                     }
                 )
             }
@@ -217,7 +220,7 @@ fun CreateGameView(
                         context,
                         awaitingGamesProvider,
                         navController,
-                        gamePIN,
+                        gamePin,
                         selectedNumberOfPlayers,
                         gameTime
                     )
@@ -240,7 +243,7 @@ fun CreateGameView(
 
 private fun createGameHandler(
     gameName: String,
-    context: Context,
+    androidContext: Context,
     provider: AwaitingGamesProvider,
     navController: NavController,
     gamePin: String,
@@ -248,17 +251,24 @@ private fun createGameHandler(
     gameTime: Int
 ) {
     if (gameName == "") Toast.makeText(
-        context,
+        androidContext,
         Translation.CreateGame.CREATE_NO_GAME_NAME,
         Toast.LENGTH_SHORT
     ).show()
     else {
-        val newGameId = provider.createNewGame(gameName, gamePin, numOfPlayers, gameTime)
-        Toast.makeText(
-            context,
-            Translation.CreateGame.CREATE_SUCCESS,
-            Toast.LENGTH_SHORT
-        ).show()
-        navController.navigate("${MenuRoute.AwaitingGame.route}/${newGameId.value}")
+        provider.createNewGame(gameName, gamePin, numOfPlayers, gameTime)
+            .thenAccept {
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(
+                        androidContext,
+                        Translation.CreateGame.CREATE_SUCCESS,
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    navController.navigate(
+                        MenuRoute.AwaitingGame.routeWithArgument(gameId = it)
+                    )
+                }
+            }
     }
 }

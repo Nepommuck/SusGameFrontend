@@ -23,17 +23,20 @@ fun MenuNavigationHost(
         navController = navController,
         startDestination = MenuRoute.MainMenu.route,
     ) {
-        composable(MenuRoute.MainMenu.route) {
+        composable(route = MenuRoute.MainMenu.route) {
             MainMenuView(navController)
         }
-        composable(MenuRoute.SearchGame.route) {
+
+        composable(route = MenuRoute.SearchGame.route) {
             SearchGamesView(awaitingGamesProvider, navController)
         }
-        composable(MenuRoute.CreateGame.route) {
+
+        composable(route = MenuRoute.CreateGame.route) {
             CreateGameView(awaitingGamesProvider, navController)
         }
+
         composable(
-            "${MenuRoute.AwaitingGame.route}/{${MenuRoute.AwaitingGame.gameIdArgument.name}}",
+            route = MenuRoute.AwaitingGame.route,
             arguments = listOf(MenuRoute.AwaitingGame.gameIdArgument),
         ) { backStackEntry ->
             val gameId = backStackEntry.arguments
@@ -41,8 +44,16 @@ fun MenuNavigationHost(
                 ?.run {
                     GameId(this)
                 }
-            AwaitingGameView(gameId, awaitingGamesProvider, navController)
+
+            when (gameId) {
+                null ->
+                    SearchGamesView(awaitingGamesProvider, navController)
+
+                else ->
+                    AwaitingGameView(gameId, awaitingGamesProvider, navController)
+            }
         }
+
         composable(
             "${MenuRoute.Game.route}/{${MenuRoute.Game.gameIdArgument.name}}",
             arguments = listOf(MenuRoute.Game.gameIdArgument),

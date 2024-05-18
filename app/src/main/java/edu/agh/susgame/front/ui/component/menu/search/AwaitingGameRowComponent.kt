@@ -17,8 +17,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.front.model.game.AwaitingGame
-import edu.agh.susgame.front.settings.Configuration
-
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingM
 
@@ -28,7 +26,9 @@ internal fun AwaitingGameRowComponent(awaitingGame: AwaitingGame, navController:
         modifier = Modifier
             .padding(bottom = PaddingM)
             .clickable {
-                navController.navigate("${MenuRoute.AwaitingGame.route}/${awaitingGame.id.value}")
+                navController.navigate(
+                    MenuRoute.AwaitingGame.routeWithArgument(gameId = awaitingGame.id)
+                )
             },
     ) {
         Column(
