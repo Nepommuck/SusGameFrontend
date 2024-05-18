@@ -1,21 +1,25 @@
 package edu.agh.susgame.front.ui
 
+import edu.agh.susgame.front.model.game.GameId
+
 object Translation {
     const val GAME_TITLE = "SusGame"
 
     object Button {
         const val GO_BACK = "Wróć"
+        const val BACK_TO_MAIN_MENU = "Wróć do menu głównego"
         const val LEAVE = "Opuść"
         const val JOIN = "Dołącz"
         const val PLAY = "Graj"
         const val CREATE = "Stwórz"
+        const val LOADING = "Ładowanie"
     }
 
 
     object Menu {
         object SearchGame {
             const val JOIN_GAME = "Dołącz do gry"
-            const val FIND_GAME = "Znajdź do gry"
+            const val FIND_GAME = "Znajdź grę"
             fun nPlayersAwaiting(n: Int): String {
                 require(n >= 0) { "Number of players can't be negative, but was: $n" }
 
@@ -40,5 +44,13 @@ object Translation {
     object Game {
         const val MAP = "Mapa"
         const val COMPUTER = "Komputer"
+    }
+
+    object Error {
+        private const val ERROR = "BŁĄD"
+
+        const val UnexpectedError = "Wystąpił niespodziewany błąd"
+
+        fun failedToLoadGame(gameId: GameId) = "$ERROR: Nie udało się wczytać gry: ${gameId.value}"
     }
 }

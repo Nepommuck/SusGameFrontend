@@ -17,17 +17,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
+import edu.agh.susgame.front.model.ServerMapState
 import edu.agh.susgame.front.ui.util.ZoomState
 
 @Composable
-internal fun ServerMapComponent(serverMapProvider: ServerMapProvider) {
-    val mapState = serverMapProvider.getServerMapState()
+internal fun ServerMapComponent(mapState: ServerMapState) {
     val zoomState = remember {
         ZoomState(
             maxZoomIn = 2f,
             maxZoomOut = 0.5f,
-            totalSize = mapState.value.mapSize,
+            totalSize = mapState.mapSize,
         )
     }
 
@@ -56,7 +55,7 @@ internal fun ServerMapComponent(serverMapProvider: ServerMapProvider) {
         ) {
             Column {
                 Text(zoomState.scaleValue().toString(), color = Color.Black)
-                mapState.value.serves.forEach { server ->
+                mapState.serves.forEach { server ->
                     Box(
                         modifier = Modifier.offset(server.position.x.dp, server.position.y.dp)
                     ) {

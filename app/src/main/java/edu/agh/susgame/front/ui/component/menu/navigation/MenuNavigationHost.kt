@@ -15,25 +15,28 @@ import edu.agh.susgame.front.ui.component.menu.search.SearchGamesView
 
 @Composable
 fun MenuNavigationHost(
-    navController: NavHostController,
+    menuNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
     awaitingGamesProvider: AwaitingGamesProvider,
 ) {
     NavHost(
-        navController = navController,
+        navController = menuNavController,
         startDestination = MenuRoute.MainMenu.route,
     ) {
-        composable(MenuRoute.MainMenu.route) {
-            MainMenuView(navController)
+        composable(route = MenuRoute.MainMenu.route) {
+            MainMenuView(menuNavController)
         }
-        composable(MenuRoute.SearchGame.route) {
-            SearchGamesView(awaitingGamesProvider, navController)
+
+        composable(route = MenuRoute.SearchGame.route) {
+            SearchGamesView(awaitingGamesProvider, menuNavController)
         }
-        composable(MenuRoute.CreateGame.route) {
-            CreateGameView(awaitingGamesProvider, navController)
+
+        composable(route = MenuRoute.CreateGame.route) {
+            CreateGameView(awaitingGamesProvider, menuNavController)
         }
+
         composable(
-            "${MenuRoute.AwaitingGame.route}/{${MenuRoute.AwaitingGame.gameIdArgument.name}}",
+            route = MenuRoute.AwaitingGame.route,
             arguments = listOf(MenuRoute.AwaitingGame.gameIdArgument),
         ) { backStackEntry ->
             val gameId = backStackEntry.arguments
@@ -41,8 +44,16 @@ fun MenuNavigationHost(
                 ?.run {
                     GameId(this)
                 }
-            AwaitingGameView(gameId, awaitingGamesProvider, navController)
+
+            when (gameId) {
+                null ->
+                    SearchGamesView(awaitingGamesProvider, menuNavController)
+
+                else ->
+                    AwaitingGameView(gameId, awaitingGamesProvider, menuNavController)
+            }
         }
+
         composable(
             "${MenuRoute.Game.route}/{${MenuRoute.Game.gameIdArgument.name}}",
             arguments = listOf(MenuRoute.Game.gameIdArgument),
@@ -52,7 +63,7 @@ fun MenuNavigationHost(
                 ?.run {
                     GameId(this)
                 }
-            GameNavBar(gameId, serverMapProvider)
+            GameNavBar(gameId, menuNavController, serverMapProvider)
         }
     }
 }

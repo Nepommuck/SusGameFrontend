@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
@@ -36,12 +37,13 @@ fun MainMenuView(
     navController: NavController,
 ) {
     Column(
+        modifier = Modifier.fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Header(title = Translation.GAME_TITLE)
 
-        Row(modifier = Modifier.padding(PaddingM)) {
+        Row(modifier = Modifier.padding(top = PaddingM)) {
             MainMenuButton(
                 text = Translation.Menu.SearchGame.JOIN_GAME,
                 onClick = {
