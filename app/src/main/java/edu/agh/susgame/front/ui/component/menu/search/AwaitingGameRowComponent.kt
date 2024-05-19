@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.front.model.game.AwaitingGame
-import edu.agh.susgame.front.ui.component.menu.navigation.MenuRoute
+import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingM
 
 @Composable

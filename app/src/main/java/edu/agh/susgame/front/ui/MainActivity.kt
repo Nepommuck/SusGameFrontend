@@ -14,13 +14,13 @@ import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.providers.mock.MockAwaitingGamesProvider
 import edu.agh.susgame.front.providers.mock.MockServerMapProvider
-import edu.agh.susgame.front.ui.component.menu.navigation.MenuNavigationHost
+import edu.agh.susgame.front.ui.component.menu.navigation.MenuNavigationHostComponent
 import edu.agh.susgame.front.ui.theme.PaddingL
 import edu.agh.susgame.front.ui.theme.SusGameTheme
 
 
 class MainActivity : ComponentActivity() {
-    private val serverMapProvider: ServerMapProvider = MockServerMapProvider()
+    private val serverMapProvider: ServerMapProvider = MockServerMapProvider(mockDelayMs = 1_000)
     private val awaitingGamesProvider: AwaitingGamesProvider = MockAwaitingGamesProvider(
         mockDelayMs = 1_000,
     )
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
 
                     Box(modifier = Modifier.padding(PaddingL)) {
-                        MenuNavigationHost(
+                        MenuNavigationHostComponent(
                             navController,
                             serverMapProvider,
                             awaitingGamesProvider,

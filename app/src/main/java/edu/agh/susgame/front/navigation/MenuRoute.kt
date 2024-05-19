@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.component.menu.navigation
+package edu.agh.susgame.front.navigation
 
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType

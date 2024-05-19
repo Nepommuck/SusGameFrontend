@@ -18,10 +18,36 @@ import androidx.navigation.compose.rememberNavController
 import edu.agh.susgame.front.model.game.GameId
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.theme.PaddingL
+import edu.agh.susgame.front.ui.util.BottomNavigationItem
 
 
 @Composable
-private fun BottomBar(navController: NavHostController) {
+fun GameNavBarComponent(
+    gameId: GameId?,
+    menuNavController: NavHostController,
+    serverMapProvider: ServerMapProvider,
+) {
+    val gameNavController = rememberNavController()
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = PaddingL),
+        bottomBar = {
+            BottomBarComponent(gameNavController)
+        }
+    ) { padding ->
+        GameNavigationHostComponent(
+            gameId,
+            padding,
+            menuNavController,
+            gameNavController,
+            serverMapProvider,
+        )
+    }
+}
+
+@Composable
+private fun BottomBarComponent(navController: NavHostController) {
     var navigationSelectedItem by remember {
         mutableIntStateOf(0)
     }
@@ -56,30 +82,5 @@ private fun BottomBar(navController: NavHostController) {
                     }
                 )
             }
-    }
-}
-
-@Composable
-fun GameNavBar(
-    gameId: GameId?,
-    menuNavController: NavHostController,
-    serverMapProvider: ServerMapProvider,
-) {
-    val gameNavController = rememberNavController()
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = PaddingL),
-        bottomBar = {
-            BottomBar(gameNavController)
-        }
-    ) { padding ->
-        GameNavigationHost(
-            gameId,
-            padding,
-            menuNavController,
-            gameNavController,
-            serverMapProvider,
-        )
     }
 }

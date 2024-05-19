@@ -1,9 +1,10 @@
-package edu.agh.susgame.front.ui.component.game.navigation
+package edu.agh.susgame.front.ui.util
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
+import edu.agh.susgame.front.navigation.GameRoute
 import edu.agh.susgame.front.ui.Translation
 
 data class BottomNavigationItem(

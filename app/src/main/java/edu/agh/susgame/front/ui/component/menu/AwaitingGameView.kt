@@ -19,10 +19,10 @@ import androidx.navigation.NavController
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.AwaitingGame
 import edu.agh.susgame.front.model.game.GameId
+import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
-import edu.agh.susgame.front.ui.component.menu.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

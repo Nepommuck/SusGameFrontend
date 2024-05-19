@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.component.game.navigation
+package edu.agh.susgame.front.navigation
 
 sealed class GameRoute(val route: String) {
     data object Map : GameRoute("game-map")

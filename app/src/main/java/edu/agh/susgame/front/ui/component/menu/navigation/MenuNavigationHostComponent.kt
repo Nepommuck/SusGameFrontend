@@ -5,16 +5,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import edu.agh.susgame.front.model.game.GameId
+import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
-import edu.agh.susgame.front.ui.component.game.navigation.GameNavBar
+import edu.agh.susgame.front.ui.component.game.navigation.GameNavBarComponent
 import edu.agh.susgame.front.ui.component.menu.AwaitingGameView
 import edu.agh.susgame.front.ui.component.menu.CreateGameView
 import edu.agh.susgame.front.ui.component.menu.MainMenuView
 import edu.agh.susgame.front.ui.component.menu.search.SearchGamesView
 
 @Composable
-fun MenuNavigationHost(
+fun MenuNavigationHostComponent(
     menuNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
     awaitingGamesProvider: AwaitingGamesProvider,
@@ -63,7 +64,7 @@ fun MenuNavigationHost(
                 ?.run {
                     GameId(this)
                 }
-            GameNavBar(gameId, menuNavController, serverMapProvider)
+            GameNavBarComponent(gameId, menuNavController, serverMapProvider)
         }
     }
 }

@@ -10,14 +10,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import edu.agh.susgame.front.model.game.GameId
+import edu.agh.susgame.front.navigation.GameRoute
+import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.game.computer.ComputerComponent
 import edu.agh.susgame.front.ui.component.game.map.ServerMapView
-import edu.agh.susgame.front.ui.component.menu.navigation.MenuRoute
 
 @Composable
-fun GameNavigationHost(
+fun GameNavigationHostComponent(
     gameId: GameId?,
     padding: PaddingValues,
     menuNavController: NavHostController,
