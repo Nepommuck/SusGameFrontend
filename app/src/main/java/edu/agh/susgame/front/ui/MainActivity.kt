@@ -20,9 +20,11 @@ import edu.agh.susgame.front.ui.theme.SusGameTheme
 
 
 class MainActivity : ComponentActivity() {
-    private val serverMapProvider: ServerMapProvider = MockServerMapProvider(mockDelayMs = 1_000)
+    private val serverMapProvider: ServerMapProvider = MockServerMapProvider(
+//        mockDelayMs = 1_000,
+    )
     private val awaitingGamesProvider: AwaitingGamesProvider = MockAwaitingGamesProvider(
-        mockDelayMs = 1_000,
+//        mockDelayMs = 1_000,
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
