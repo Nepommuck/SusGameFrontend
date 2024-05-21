@@ -28,14 +28,6 @@ class WebAwaitingGamesProvider(private val gamesRest: GamesRest) : MockAwaitingG
 //        TODO("Not yet implemented")
 //    }
 //
-//    override fun join(id: GameId, playerNickname: PlayerNickname): CompletableFuture<Unit> {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun leave(id: GameId, playerNickname: PlayerNickname): CompletableFuture<Unit> {
-//        TODO("Not yet implemented")
-//    }
-//
 //    override fun createNewGame(
 //        gameName: String,
 //        gamePin: String,
