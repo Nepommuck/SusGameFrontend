@@ -12,8 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
-import edu.agh.susgame.front.providers.mock.MockAwaitingGamesProvider
 import edu.agh.susgame.front.providers.mock.MockServerMapProvider
+import edu.agh.susgame.front.providers.web.LocalWebConfig
+import edu.agh.susgame.front.providers.web.WebAwaitingGamesProvider
+import edu.agh.susgame.front.providers.web.rest.GamesRest
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuNavigationHostComponent
 import edu.agh.susgame.front.ui.theme.PaddingL
 import edu.agh.susgame.front.ui.theme.SusGameTheme
@@ -23,8 +25,13 @@ class MainActivity : ComponentActivity() {
     private val serverMapProvider: ServerMapProvider = MockServerMapProvider(
 //        mockDelayMs = 1_000,
     )
-    private val awaitingGamesProvider: AwaitingGamesProvider = MockAwaitingGamesProvider(
-//        mockDelayMs = 1_000,
+
+    //    private val awaitingGamesProvider: AwaitingGamesProvider = MockAwaitingGamesProvider(
+////        mockDelayMs = 1_000,
+//    )
+    private val gamesRest = GamesRest(webConfig = LocalWebConfig)
+    private val awaitingGamesProvider: AwaitingGamesProvider = WebAwaitingGamesProvider(
+        gamesRest
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -7,7 +7,7 @@ import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
 import edu.agh.susgame.front.settings.Configuration
 import java.util.concurrent.CompletableFuture
 
-class MockAwaitingGamesProvider(mockDelayMs: Long? = null) : AwaitingGamesProvider {
+open class MockAwaitingGamesProvider(mockDelayMs: Long? = null) : AwaitingGamesProvider {
     private val delayMs = mockDelayMs ?: 0
 
     // Current free id for new game

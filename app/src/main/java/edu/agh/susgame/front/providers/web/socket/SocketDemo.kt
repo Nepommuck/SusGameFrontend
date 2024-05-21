@@ -14,7 +14,6 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 suspend fun DefaultClientWebSocketSession.serverOutputMessages(messageFlow: MutableSharedFlow<String>) {
     for (message in incoming) {
@@ -45,7 +44,7 @@ class SocketDemo(
             webSocketClient.webSocket(
                 method = HttpMethod.Get,
 //                host = "0.0.0.0",
-                host = "localhost",
+                host = "192.168.0.102",
                 port = 8080,
                 path = "/games/join?gameName=game&playerName=player1",
             ) {
