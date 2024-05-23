@@ -1,10 +1,12 @@
 package edu.agh.susgame.front.ui.component.game.map
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.Button
@@ -13,15 +15,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import edu.agh.susgame.front.model.ServerMapState
+import edu.agh.susgame.front.model.graph.Graph
 import edu.agh.susgame.front.ui.util.ZoomState
 
 @Composable
-internal fun ServerMapComponent(mapState: ServerMapState) {
+internal fun ServerMapComponent(mapState: Graph) {
     val zoomState = remember {
         ZoomState(
             maxZoomIn = 2f,
@@ -53,14 +56,33 @@ internal fun ServerMapComponent(mapState: ServerMapState) {
                     clip = false
                 )
         ) {
+            Canvas(modifier = Modifier.fillMaxSize()) {// it will be improved, just testing how drawing works
+                mapState.edgeMap.forEach { (key, edge) ->
+
+                    val startXY = mapState.nodeMap[edge.firstNodeId]
+                    val endXY = mapState.nodeMap[edge.secondNodeId]
+                    if (startXY != null && endXY != null) {
+                        drawLine(
+                            color = Color.Black,
+                            start = Offset(
+                                startXY.position.x.toFloat(),
+                                startXY.position.y.toFloat()
+                            ),
+                            end = Offset(endXY.position.x.toFloat(), endXY.position.y.toFloat()),
+                            strokeWidth = 2f
+                        )
+                    }
+                }
+
+            }
             Column {
                 Text(zoomState.scaleValue().toString(), color = Color.Black)
-                mapState.serves.forEach { server ->
+                mapState.nodeMap.forEach { (key, node) ->
                     Box(
-                        modifier = Modifier.offset(server.position.x.dp, server.position.y.dp)
+                        modifier = Modifier.offset(node.position.x.dp, node.position.y.dp)
                     ) {
                         Button(onClick = { /* Do something */ }) {
-                            Text(text = server.name)
+                            Text(text = node.name + ":" + key)
                         }
                     }
                 }

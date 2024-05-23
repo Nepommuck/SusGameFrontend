@@ -47,7 +47,7 @@ fun MainMenuView(
             MainMenuButton(
                 text = Translation.Menu.SearchGame.JOIN_GAME,
                 onClick = {
-                    navController.navigate(MenuRoute.SearchGame.route)
+                    navController.navigate(MenuRoute.SearchLobby.route)
                 })
 
             Spacer(modifier = Modifier.width(PaddingL))
@@ -55,7 +55,7 @@ fun MainMenuView(
             MainMenuButton(
                 text = Translation.Menu.CREATE_GAME,
                 onClick = {
-                    navController.navigate(MenuRoute.CreateGame.route)
+                    navController.navigate(MenuRoute.CreateLobby.route)
                 })
         }
     }

@@ -2,7 +2,6 @@ package edu.agh.susgame.front.ui.component.menu
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -37,7 +37,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
+import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.settings.Configuration
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
@@ -53,8 +53,8 @@ private const val defaultPlayersAmount = 4
 private const val defaultGameTime = 10
 
 @Composable
-fun CreateGameView(
-    awaitingGamesProvider: AwaitingGamesProvider,
+fun CreateLobbyView(
+    lobbiesProvider: LobbiesProvider,
     navController: NavController,
 ) {
     var gameName by remember { mutableStateOf(Translation.CreateGame.DEFAULT_GAME_NAME) }
@@ -68,7 +68,7 @@ fun CreateGameView(
             Modifier
                 .padding(PaddingL)
                 .weight(1f)
-                .verticalScroll(ScrollState(0))
+                .verticalScroll(rememberScrollState())
         ) {
             Header(
                 title = Translation.Menu.CREATE_GAME
@@ -218,7 +218,7 @@ fun CreateGameView(
                     createGameHandler(
                         gameName,
                         context,
-                        awaitingGamesProvider,
+                        lobbiesProvider,
                         navController,
                         gamePin,
                         selectedNumberOfPlayers,
@@ -244,7 +244,7 @@ fun CreateGameView(
 private fun createGameHandler(
     gameName: String,
     androidContext: Context,
-    provider: AwaitingGamesProvider,
+    provider: LobbiesProvider,
     navController: NavController,
     gamePin: String,
     numOfPlayers: Int,
@@ -266,7 +266,7 @@ private fun createGameHandler(
                     ).show()
 
                     navController.navigate(
-                        MenuRoute.AwaitingGame.routeWithArgument(gameId = it)
+                        MenuRoute.Lobby.routeWithArgument(lobbyId = it)
                     )
                 }
             }

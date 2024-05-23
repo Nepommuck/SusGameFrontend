@@ -16,18 +16,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import edu.agh.susgame.front.model.game.AwaitingGame
+import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingM
 
 @Composable
-internal fun AwaitingGameRowComponent(awaitingGame: AwaitingGame, navController: NavController) {
+internal fun LobbyRowComponent(lobby: Lobby, navController: NavController) {
     Box(
         modifier = Modifier
             .padding(bottom = PaddingM)
             .clickable {
                 navController.navigate(
-                    MenuRoute.AwaitingGame.routeWithArgument(gameId = awaitingGame.id)
+                    MenuRoute.Lobby.routeWithArgument(lobbyId = lobby.id)
                 )
             },
     ) {
@@ -45,8 +45,8 @@ internal fun AwaitingGameRowComponent(awaitingGame: AwaitingGame, navController:
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text(text = awaitingGame.name, fontWeight = FontWeight.Bold)
-                Text(text = "${awaitingGame.playersWaiting.size}/${awaitingGame.maxNumOfPlayers}")
+                Text(text = lobby.name, fontWeight = FontWeight.Bold)
+                Text(text = "${lobby.playersWaiting.size}/${lobby.maxNumOfPlayers}")
             }
         }
     }
