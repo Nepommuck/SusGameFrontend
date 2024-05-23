@@ -28,7 +28,7 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
             color = Color.Green
         )
 
-        val lobbyIdValue1 = LobbyId(freeGameId++);
+        val lobbyIdValue1 = LobbyId(freeGameId++)
         currentLobbies.putIfAbsent(
             lobbyIdValue1, Lobby(
                 id = lobbyIdValue1,
@@ -55,7 +55,7 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
             color = Color.Green
         )
 
-        val lobbyIdValue2 = LobbyId(freeGameId++);
+        val lobbyIdValue2 = LobbyId(freeGameId++)
         currentLobbies.putIfAbsent(
             lobbyIdValue2, Lobby(
                 id = lobbyIdValue2,
