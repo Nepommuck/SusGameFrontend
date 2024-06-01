@@ -9,6 +9,15 @@ import edu.agh.susgame.front.providers.web.rest.GamesRest
 import edu.agh.susgame.front.providers.web.rest.model.AwaitingGameRest
 import java.util.concurrent.CompletableFuture
 
+data class GameCreationRequest(
+    val gameName: String,
+    val maxNumberOfPlayers: Int = 4,
+    val gamePin: String? = null
+)
+data class GameCreationResponse(
+    val gameId: Int
+)
+
 //class WebAwaitingGamesProvider(private val gamesRest: GamesRest) : AwaitingGamesProvider {
 class WebAwaitingGamesProvider(private val gamesRest: GamesRest) : MockAwaitingGamesProvider() {
     override fun getAll(): CompletableFuture<List<AwaitingGame>> =
@@ -24,18 +33,31 @@ class WebAwaitingGamesProvider(private val gamesRest: GamesRest) : MockAwaitingG
         }
 
 //  TODO GAME-24
-//    override fun getById(gameId: GameId): CompletableFuture<AwaitingGame?> {
+    override fun getById(gameId: GameId): CompletableFuture<AwaitingGame?> =
 //        TODO("Not yet implemented")
-//    }
-//
-//    override fun createNewGame(
-//        gameName: String,
-//        gamePin: String,
-//        numOfPlayers: Int,
-//        gameTime: Int
-//    ): CompletableFuture<GameId> {
-//        TODO("Not yet implemented")
-//    }
+        getAll().thenApply {
+            it.find { game -> game.id == gameId }
+        }
+
+    override fun createNewGame(
+        gameName: String,
+        gamePin: String,
+        numOfPlayers: Int,
+        gameTime: Int
+    ): CompletableFuture<GameId> {
+        val request = GameCreationRequest(
+            gameName = gameName,
+            maxNumberOfPlayers = numOfPlayers,
+            gamePin = gamePin,
+        )
+        return gamesRest.addGame(request).thenApply {
+            val gameId = Gson().fromJson(
+                it.body?.string(),
+                GameCreationResponse::class.java,
+            )
+            GameId(gameId.gameId)
+        }
+    }
 
     companion object {
         private fun awaitingGameFromRest(awaitingGameRest: AwaitingGameRest): AwaitingGame =
@@ -45,7 +67,7 @@ class WebAwaitingGamesProvider(private val gamesRest: GamesRest) : MockAwaitingG
                 maxNumOfPlayers = awaitingGameRest.maxNumberOfPlayers,
                 gameTime = 10,
                 gamePin = null,
-                playersWaiting = awaitingGameRest.players.map { PlayerNickname(it) },
+                playersWaiting = (awaitingGameRest.players + "The-player") .map { PlayerNickname(it) },
             )
     }
 }

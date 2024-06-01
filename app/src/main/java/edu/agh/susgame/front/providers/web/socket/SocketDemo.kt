@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 
 suspend fun DefaultClientWebSocketSession.serverOutputMessages(messageFlow: MutableSharedFlow<String>) {
     for (message in incoming) {
+        println(message)
         val messageStr = (message as? Frame.Text ?: continue).readText()
 
         messageFlow.emit(messageStr)
@@ -44,9 +45,9 @@ class SocketDemo(
             webSocketClient.webSocket(
                 method = HttpMethod.Get,
 //                host = "0.0.0.0",
-                host = "192.168.0.102",
+                host = "192.168.140.5",
                 port = 8080,
-                path = "/games/join?gameName=game&playerName=player1",
+                path = "/games/join?gameId=0&playerName=player1",
             ) {
                 println("4")
                 val messageOutputRoutine = launch { serverOutputMessages(serverOutputFlow) }
