@@ -9,6 +9,7 @@ import edu.agh.susgame.front.providers.interfaces.LobbiesProvider.CreateNewGameR
 import edu.agh.susgame.front.providers.web.rest.games.GamesRest
 import edu.agh.susgame.front.providers.web.rest.games.model.CreateGameApiResult
 import edu.agh.susgame.front.providers.web.rest.games.model.GetAllGamesApiResult
+import edu.agh.susgame.front.providers.web.rest.games.model.GetGameApiResult
 import edu.agh.susgame.front.providers.web.rest.model.LobbyApi
 import java.util.concurrent.CompletableFuture
 
@@ -24,17 +25,20 @@ class WebLobbiesProvider(private val gamesRest: GamesRest) : LobbiesProvider {
                     response
                         .lobbies
                         .map {
-                            awaitingGameFromRest(it)
+                            lobbyFromApiModel(it)
                         }.associateBy { it.id }
             }
                 // TODO GAME-24
                 .toMutableMap()
         }
 
-    // TODO GAME-24
     override fun getById(lobbyId: LobbyId): CompletableFuture<Lobby?> =
-        getAll().thenApply {
-            it.values.find { lobby -> lobby.id == lobbyId }
+        gamesRest.getGame(lobbyId).thenApply { response ->
+            when (response) {
+                GetGameApiResult.DoesNotExist -> null
+                GetGameApiResult.OtherError -> null
+                is GetGameApiResult.Success -> lobbyFromApiModel(response.lobby)
+            }
         }
 
     override fun createNewGame(
@@ -69,7 +73,7 @@ class WebLobbiesProvider(private val gamesRest: GamesRest) : LobbiesProvider {
     override fun createCustomLobbies() {}
 
     companion object {
-        private fun awaitingGameFromRest(lobby: LobbyApi): Lobby =
+        private fun lobbyFromApiModel(lobby: LobbyApi): Lobby =
             Lobby(
                 id = LobbyId(lobby.id),
                 name = lobby.name,

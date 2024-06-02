@@ -7,6 +7,7 @@ import edu.agh.susgame.front.providers.web.rest.games.model.CreateGameApiResult
 import edu.agh.susgame.front.providers.web.rest.games.model.GameCreationApiResponse
 import edu.agh.susgame.front.providers.web.rest.games.model.GameCreationRequest
 import edu.agh.susgame.front.providers.web.rest.games.model.GetAllGamesApiResult
+import edu.agh.susgame.front.providers.web.rest.games.model.GetGameApiResult
 import edu.agh.susgame.front.providers.web.rest.model.LobbyApi
 import edu.agh.susgame.front.util.AppConfig.WebConfig
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -18,8 +19,8 @@ import java.util.concurrent.CompletableFuture
 class GamesRest(webConfig: WebConfig) : AbstractRest(webConfig, endpointName = "games") {
     fun getAllGames(): CompletableFuture<GetAllGamesApiResult> = CompletableFuture.supplyAsync {
         val request = Request.Builder()
-            .url(baseUrl)
             .get()
+            .url(baseUrlBuilder().build())
             .build()
 
         val response = httpClient.newCall(request)
@@ -37,6 +38,34 @@ class GamesRest(webConfig: WebConfig) : AbstractRest(webConfig, endpointName = "
         }
     }
 
+    fun getGame(gameId: LobbyId): CompletableFuture<GetGameApiResult> =
+        CompletableFuture.supplyAsync {
+            val request = Request.Builder()
+                .get()
+                .url(
+                    baseUrlBuilder()
+                        .addPathSegment(gameId.value.toString())
+                        .build()
+                ).build()
+
+            val response = httpClient.newCall(request)
+                .execute()
+
+            when (response.code) {
+                HttpURLConnection.HTTP_NOT_FOUND -> GetGameApiResult.DoesNotExist
+
+                HttpURLConnection.HTTP_OK -> {
+                    val lobby = Gson().fromJson(
+                        response.body?.string(),
+                        LobbyApi::class.java,
+                    )
+                    GetGameApiResult.Success(lobby)
+                }
+
+                else -> GetGameApiResult.OtherError
+            }
+        }
+
     fun createGame(
         gameName: String,
         maxNumberOfPlayers: Int,
@@ -48,8 +77,8 @@ class GamesRest(webConfig: WebConfig) : AbstractRest(webConfig, endpointName = "
             .toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
 
         val request = Request.Builder()
-            .url(baseUrl)
             .post(body)
+            .url(baseUrlBuilder().build())
             .build()
 
         val response = httpClient.newCall(request)
