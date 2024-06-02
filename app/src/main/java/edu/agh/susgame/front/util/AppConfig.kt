@@ -20,9 +20,7 @@ interface AppConfig {
         val port: Int,
 
         val timeout: Duration,
-    ) {
-        val fullUrl = "$protocol://$domain:$port"
-    }
+    )
 
     val webConfig: WebConfig
 }
