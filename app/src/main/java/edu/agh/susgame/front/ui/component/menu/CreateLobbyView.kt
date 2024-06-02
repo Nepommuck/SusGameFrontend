@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
+import edu.agh.susgame.front.providers.interfaces.LobbiesProvider.CreateNewGameResult
 import edu.agh.susgame.front.settings.Configuration
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
@@ -248,26 +249,39 @@ private fun createGameHandler(
     navController: NavController,
     gamePin: String,
     numOfPlayers: Int,
-    gameTime: Int
+    gameTime: Int,
 ) {
     if (gameName == "") Toast.makeText(
         androidContext,
         Translation.CreateGame.CREATE_NO_GAME_NAME,
-        Toast.LENGTH_SHORT
+        Toast.LENGTH_SHORT,
     ).show()
     else {
         provider.createNewGame(gameName, gamePin, numOfPlayers, gameTime)
-            .thenAccept {
+            .thenAccept { creationResult ->
+                val toastMessage = when (creationResult) {
+                    is CreateNewGameResult.Success ->
+                        Translation.CreateGame.CREATE_SUCCESS
+
+                    CreateNewGameResult.NameAlreadyExists ->
+                        Translation.CreateGame.CREATE_NAME_ALREADY_EXISTS
+
+                    CreateNewGameResult.OtherError ->
+                        Translation.CreateGame.CREATE_OTHER_ERROR
+                }
+
                 CoroutineScope(Dispatchers.Main).launch {
                     Toast.makeText(
                         androidContext,
-                        Translation.CreateGame.CREATE_SUCCESS,
-                        Toast.LENGTH_SHORT
+                        toastMessage,
+                        Toast.LENGTH_SHORT,
                     ).show()
 
-                    navController.navigate(
-                        MenuRoute.Lobby.routeWithArgument(lobbyId = it)
-                    )
+                    if (creationResult is CreateNewGameResult.Success) {
+                        navController.navigate(
+                            MenuRoute.Lobby.routeWithArgument(lobbyId = creationResult.lobbyId),
+                        )
+                    }
                 }
             }
     }

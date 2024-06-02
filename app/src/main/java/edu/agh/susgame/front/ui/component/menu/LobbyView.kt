@@ -78,8 +78,9 @@ private fun LobbyContentComponent(
                     else Translation.Button.LEAVE
                 )
             }
-
-            if (lobby.playersWaiting.contains(player.id)) {
+            // TODO GAME-59 Fix this logic after joining is properly implemented
+//            if (lobby.playersWaiting.contains(player.id)) {
+            if (lobby.playersWaiting.toMap().values.map { it.name }.contains(player.name)) {
                 Button(onClick = {
                     navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
                 }) {

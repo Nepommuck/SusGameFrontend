@@ -6,6 +6,7 @@ import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.model.game.PlayerId
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
+import edu.agh.susgame.front.providers.interfaces.LobbiesProvider.CreateNewGameResult
 import edu.agh.susgame.front.settings.Configuration
 import java.util.concurrent.CompletableFuture
 
@@ -95,9 +96,9 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
     override fun createNewGame(
         gameName: String,
         gamePin: String,
-        numOfPlayers: Int,
+        maxNumberOfPlayers: Int,
         gameTime: Int,
-    ): CompletableFuture<LobbyId> =
+    ): CompletableFuture<CreateNewGameResult> =
         CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
             val lobbyId = LobbyId(freeGameId++)
@@ -106,11 +107,11 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
                 Lobby(
                     lobbyId,
                     gameName,
-                    numOfPlayers,
+                    maxNumberOfPlayers,
                     gameTime,
                     gamePin,
                 )
             )
-            lobbyId
+            CreateNewGameResult.Success(lobbyId)
         }
 }

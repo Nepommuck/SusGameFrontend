@@ -39,6 +39,8 @@ object Translation {
         const val DEFAULT_GAME_NAME = "default"
         const val CREATE_NO_GAME_NAME = "Podaj nazwę gry!"
         const val CREATE_SUCCESS = "Pomyślnie stworzono grę!"
+        const val CREATE_NAME_ALREADY_EXISTS = "Gra z taką nazwą już istnieje"
+        const val CREATE_OTHER_ERROR = "Wystąpił niespodziewany błąd"
     }
 
     object Game {
@@ -51,6 +53,7 @@ object Translation {
 
         const val UnexpectedError = "Wystąpił niespodziewany błąd"
 
-        fun failedToLoadGame(lobbyId: LobbyId) = "$ERROR: Nie udało się wczytać gry: ${lobbyId.value}"
+        fun failedToLoadGame(lobbyId: LobbyId) =
+            "$ERROR: Nie udało się wczytać gry: ${lobbyId.value}"
     }
 }

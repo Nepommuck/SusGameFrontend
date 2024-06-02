@@ -4,7 +4,6 @@ package edu.agh.susgame.front.model
 // !!! this file is for delete, content from here went to model.graph
 
 
-
 //data class ServerInfo(
 //    val name: String,
 //    val position: Coordinates,
