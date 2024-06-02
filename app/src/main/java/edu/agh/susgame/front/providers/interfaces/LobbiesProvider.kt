@@ -29,5 +29,4 @@ interface LobbiesProvider {
         maxNumberOfPlayers: Int,
         gameTime: Int,
     ): CompletableFuture<CreateNewGameResult>
-
 }
