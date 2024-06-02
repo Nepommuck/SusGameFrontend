@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture
 
 
 class WebLobbiesProvider(private val gamesRest: GamesRest) : LobbiesProvider {
-    override fun getAll(): CompletableFuture<MutableMap<LobbyId, Lobby>> =
+    override fun getAll(): CompletableFuture<Map<LobbyId, Lobby>> =
         gamesRest.getAllGames().thenApply { response ->
             when (response) {
                 GetAllGamesApiResult.Error ->
@@ -28,8 +28,6 @@ class WebLobbiesProvider(private val gamesRest: GamesRest) : LobbiesProvider {
                             lobbyFromApiModel(it)
                         }.associateBy { it.id }
             }
-                // TODO GAME-24
-                .toMutableMap()
         }
 
     override fun getById(lobbyId: LobbyId): CompletableFuture<Lobby?> =

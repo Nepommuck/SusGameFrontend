@@ -64,14 +64,23 @@ private fun LobbyContentComponent(
                 enabled = !isLeaveButtonLoading,
                 onClick = {
                     isLeaveButtonLoading = true
-                    player.id?.let {
-                        lobbiesProvider.leave(lobby.id, it)
-                            .thenRun {
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    navController.navigate(MenuRoute.SearchLobby.route)
-                                }
-                                isLeaveButtonLoading = false
+                    // TODO GAME-59 Fix this after socket implementation
+                    when (val playerId = player.id) {
+                        null -> {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                navController.navigate(MenuRoute.SearchLobby.route)
                             }
+                        }
+
+                        else -> {
+                            lobbiesProvider.leave(lobby.id, playerId)
+                                .thenRun {
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        navController.navigate(MenuRoute.SearchLobby.route)
+                                    }
+                                    isLeaveButtonLoading = false
+                                }
+                        }
                     }
                 }
             ) {

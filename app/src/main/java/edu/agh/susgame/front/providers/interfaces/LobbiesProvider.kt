@@ -13,7 +13,7 @@ interface LobbiesProvider {
         data object OtherError : CreateNewGameResult()
     }
 
-    fun getAll(): CompletableFuture<MutableMap<LobbyId, Lobby>>
+    fun getAll(): CompletableFuture<Map<LobbyId, Lobby>>
 
     fun getById(lobbyId: LobbyId): CompletableFuture<Lobby?>
 
