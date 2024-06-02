@@ -1,11 +1,11 @@
 package edu.agh.susgame.front.ui.component.menu.search
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -17,23 +17,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import edu.agh.susgame.front.model.game.AwaitingGame
+import edu.agh.susgame.front.model.game.Lobby
+import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
+import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 
 
 @Composable
-fun SearchGamesView(
-    awaitingGamesProvider: AwaitingGamesProvider,
+fun SearchLobbiesView(
+    lobbiesProvider: LobbiesProvider,
     navController: NavController
 ) {
-    var awaitingGames by remember { mutableStateOf<List<AwaitingGame>?>(null) }
+    var awaitingGames by remember { mutableStateOf<Map<LobbyId, Lobby>?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
+
     LaunchedEffect(Unit) {
-        awaitingGamesProvider.getAll()
+        lobbiesProvider.getAll()
             .thenAccept {
                 awaitingGames = it
                 isLoading = false
@@ -47,12 +49,12 @@ fun SearchGamesView(
         }
         Column(
             modifier = Modifier
-                .verticalScroll(ScrollState(0))
+                .verticalScroll(rememberScrollState()) // there was a problem when you press a button during scrolled state
                 .weight(1f)
                 .fillMaxHeight()
         ) {
             awaitingGames?.forEach {
-                AwaitingGameRowComponent(it, navController)
+                LobbyRowComponent(it.value, navController)
             }
         }
         Row(

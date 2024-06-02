@@ -16,11 +16,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import edu.agh.susgame.front.model.PlayerNickname
-import edu.agh.susgame.front.model.game.AwaitingGame
-import edu.agh.susgame.front.model.game.GameId
+import edu.agh.susgame.front.model.Player
+import edu.agh.susgame.front.model.game.Lobby
+import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
+import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 import edu.agh.susgame.front.ui.theme.PaddingS
@@ -29,29 +29,29 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-private val PlayerNickname = PlayerNickname("The-player")
+private val player: Player = Player(name = "The-player")
 
 @Composable
-private fun AwaitingGameContentComponent(
-    awaitingGameInitialState: AwaitingGame,
-    awaitingGamesProvider: AwaitingGamesProvider,
+private fun LobbyContentComponent(
+    lobbyInitialState: Lobby,
+    lobbiesProvider: LobbiesProvider,
     navController: NavController,
 ) {
-    var awaitingGame by remember { mutableStateOf(awaitingGameInitialState) }
+    var lobby by remember { mutableStateOf(lobbyInitialState) }
     Column {
         Column(
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f)
         ) {
-            Header(title = awaitingGame.name)
+            Header(title = lobby.name)
 
             Text(
-                text = "${Translation.Menu.SearchGame.nPlayersAwaiting(awaitingGame.playersWaiting.size)}:",
+                text = "${Translation.Menu.SearchGame.nPlayersAwaiting(lobby.playersWaiting.size)}:",
                 Modifier.padding(vertical = PaddingS)
             )
-            awaitingGame.playersWaiting.forEach {
-                Text(text = it.value)
+            lobby.playersWaiting.forEach {
+                Text(text = it.value.name)
             }
         }
 
@@ -64,13 +64,15 @@ private fun AwaitingGameContentComponent(
                 enabled = !isLeaveButtonLoading,
                 onClick = {
                     isLeaveButtonLoading = true
-                    awaitingGamesProvider.leave(awaitingGame.id, PlayerNickname)
-                        .thenRun {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                navController.navigate(MenuRoute.SearchGame.route)
+                    player.id?.let {
+                        lobbiesProvider.leave(lobby.id, it)
+                            .thenRun {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    navController.navigate(MenuRoute.SearchLobby.route)
+                                }
+                                isLeaveButtonLoading = false
                             }
-                            isLeaveButtonLoading = false
-                        }
+                    }
                 }
             ) {
                 Text(
@@ -79,9 +81,9 @@ private fun AwaitingGameContentComponent(
                 )
             }
 
-            if (awaitingGame.playersWaiting.contains(PlayerNickname)) {
+            if (lobby.playersWaiting.contains(player.id)) {
                 Button(onClick = {
-                    navController.navigate("${MenuRoute.Game.route}/${awaitingGame.id.value}")
+                    navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
                 }) {
                     Text(text = Translation.Button.PLAY)
                 }
@@ -91,11 +93,11 @@ private fun AwaitingGameContentComponent(
                     enabled = !isJoinButtonLoading,
                     onClick = {
                         isJoinButtonLoading = true
-                        awaitingGamesProvider.join(awaitingGame.id, PlayerNickname)
+                        lobbiesProvider.join(lobby.id, player)
                             .thenRun {
-                                awaitingGamesProvider.getById(awaitingGame.id).thenAccept {
+                                lobbiesProvider.getById(lobby.id).thenAccept {
                                     if (it != null) {
-                                        awaitingGame = it
+                                        lobby = it
                                     }
                                     isJoinButtonLoading = false
                                 }
@@ -113,18 +115,18 @@ private fun AwaitingGameContentComponent(
 }
 
 @Composable
-fun AwaitingGameView(
-    gameId: GameId,
-    awaitingGamesProvider: AwaitingGamesProvider,
+fun LobbyView(
+    lobbyId: LobbyId,
+    lobbiesProvider: LobbiesProvider,
     navController: NavController,
 ) {
-    var awaitingGame by remember { mutableStateOf<AwaitingGame?>(null) }
+    var lobby by remember { mutableStateOf<Lobby?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        awaitingGamesProvider.getById(gameId)
+        lobbiesProvider.getById(lobbyId)
             .thenAccept {
-                awaitingGame = it
+                lobby = it
                 isLoading = false
             }
     }
@@ -133,13 +135,13 @@ fun AwaitingGameView(
         if (isLoading) {
             Text(text = "${Translation.Button.LOADING}...")
         } else {
-            when (awaitingGame) {
+            when (lobby) {
                 null -> {
                     Column {
-                        Text(text = Translation.Error.failedToLoadGame(gameId))
+                        Text(text = Translation.Error.failedToLoadGame(lobbyId))
 
                         Button(onClick = {
-                            navController.navigate(MenuRoute.SearchGame.route)
+                            navController.navigate(MenuRoute.SearchLobby.route)
                         }) {
                             Text(text = Translation.Button.GO_BACK)
                         }
@@ -147,10 +149,10 @@ fun AwaitingGameView(
                 }
 
                 else -> {
-                    awaitingGame?.let {
-                        AwaitingGameContentComponent(
+                    lobby?.let {
+                        LobbyContentComponent(
                             it,
-                            awaitingGamesProvider,
+                            lobbiesProvider,
                             navController,
                         )
                     }

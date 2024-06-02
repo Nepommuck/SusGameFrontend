@@ -10,9 +10,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
+import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
-import edu.agh.susgame.front.providers.mock.MockAwaitingGamesProvider
+import edu.agh.susgame.front.providers.mock.MockLobbiesProvider
 import edu.agh.susgame.front.providers.mock.MockServerMapProvider
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuNavigationHostComponent
 import edu.agh.susgame.front.ui.theme.PaddingL
@@ -21,12 +21,13 @@ import edu.agh.susgame.front.ui.theme.SusGameTheme
 
 class MainActivity : ComponentActivity() {
     private val serverMapProvider: ServerMapProvider = MockServerMapProvider(mockDelayMs = 1_000)
-    private val awaitingGamesProvider: AwaitingGamesProvider = MockAwaitingGamesProvider(
+    private val lobbiesProvider: LobbiesProvider = MockLobbiesProvider(
         mockDelayMs = 1_000,
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             SusGameTheme {
                 // A surface container using the 'background' color from the theme
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
                         MenuNavigationHostComponent(
                             navController,
                             serverMapProvider,
-                            awaitingGamesProvider,
+                            lobbiesProvider,
                         )
                     }
                 }

@@ -4,21 +4,21 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import edu.agh.susgame.front.model.game.GameId
+import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.providers.interfaces.AwaitingGamesProvider
+import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.component.game.navigation.GameNavBarComponent
-import edu.agh.susgame.front.ui.component.menu.AwaitingGameView
-import edu.agh.susgame.front.ui.component.menu.CreateGameView
+import edu.agh.susgame.front.ui.component.menu.CreateLobbyView
+import edu.agh.susgame.front.ui.component.menu.LobbyView
 import edu.agh.susgame.front.ui.component.menu.MainMenuView
-import edu.agh.susgame.front.ui.component.menu.search.SearchGamesView
+import edu.agh.susgame.front.ui.component.menu.search.SearchLobbiesView
 
 @Composable
 fun MenuNavigationHostComponent(
     menuNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
-    awaitingGamesProvider: AwaitingGamesProvider,
+    lobbiesProvider: LobbiesProvider,
 ) {
     NavHost(
         navController = menuNavController,
@@ -28,30 +28,30 @@ fun MenuNavigationHostComponent(
             MainMenuView(menuNavController)
         }
 
-        composable(route = MenuRoute.SearchGame.route) {
-            SearchGamesView(awaitingGamesProvider, menuNavController)
+        composable(route = MenuRoute.SearchLobby.route) {
+            SearchLobbiesView(lobbiesProvider, menuNavController)
         }
 
-        composable(route = MenuRoute.CreateGame.route) {
-            CreateGameView(awaitingGamesProvider, menuNavController)
+        composable(route = MenuRoute.CreateLobby.route) {
+            CreateLobbyView(lobbiesProvider, menuNavController)
         }
 
         composable(
-            route = MenuRoute.AwaitingGame.route,
-            arguments = listOf(MenuRoute.AwaitingGame.gameIdArgument),
+            route = MenuRoute.Lobby.route,
+            arguments = listOf(MenuRoute.Lobby.gameIdArgument),
         ) { backStackEntry ->
-            val gameId = backStackEntry.arguments
-                ?.getInt(MenuRoute.AwaitingGame.gameIdArgument.name)
+            val lobbyId = backStackEntry.arguments
+                ?.getInt(MenuRoute.Lobby.gameIdArgument.name)
                 ?.run {
-                    GameId(this)
+                    LobbyId(this)
                 }
 
-            when (gameId) {
+            when (lobbyId) {
                 null ->
-                    SearchGamesView(awaitingGamesProvider, menuNavController)
+                    SearchLobbiesView(lobbiesProvider, menuNavController)
 
                 else ->
-                    AwaitingGameView(gameId, awaitingGamesProvider, menuNavController)
+                    LobbyView(lobbyId, lobbiesProvider, menuNavController)
             }
         }
 
@@ -59,12 +59,12 @@ fun MenuNavigationHostComponent(
             "${MenuRoute.Game.route}/{${MenuRoute.Game.gameIdArgument.name}}",
             arguments = listOf(MenuRoute.Game.gameIdArgument),
         ) { backStackEntry ->
-            val gameId = backStackEntry.arguments
+            val lobbyId = backStackEntry.arguments
                 ?.getInt(MenuRoute.Game.gameIdArgument.name)
                 ?.run {
-                    GameId(this)
+                    LobbyId(this)
                 }
-            GameNavBarComponent(gameId, menuNavController, serverMapProvider)
+            GameNavBarComponent(lobbyId, menuNavController, serverMapProvider)
         }
     }
 }

@@ -1,6 +1,6 @@
 package edu.agh.susgame.front.ui
 
-import edu.agh.susgame.front.model.game.GameId
+import edu.agh.susgame.front.model.game.LobbyId
 
 object Translation {
     const val GAME_TITLE = "SusGame"
@@ -51,6 +51,6 @@ object Translation {
 
         const val UnexpectedError = "Wystąpił niespodziewany błąd"
 
-        fun failedToLoadGame(gameId: GameId) = "$ERROR: Nie udało się wczytać gry: ${gameId.value}"
+        fun failedToLoadGame(lobbyId: LobbyId) = "$ERROR: Nie udało się wczytać gry: ${lobbyId.value}"
     }
 }

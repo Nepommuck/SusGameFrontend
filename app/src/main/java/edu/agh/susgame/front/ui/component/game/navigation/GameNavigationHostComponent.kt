@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import edu.agh.susgame.front.model.game.GameId
+import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.GameRoute
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
@@ -19,13 +19,13 @@ import edu.agh.susgame.front.ui.component.game.map.ServerMapView
 
 @Composable
 fun GameNavigationHostComponent(
-    gameId: GameId?,
+    lobbyId: LobbyId?,
     padding: PaddingValues,
     menuNavController: NavHostController,
     gameNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
 ) {
-    when (gameId) {
+    when (lobbyId) {
         null -> {
             Text(text = Translation.Error.UnexpectedError)
             Button(onClick = {
@@ -41,10 +41,10 @@ fun GameNavigationHostComponent(
             modifier = Modifier.padding(padding),
         ) {
             composable(GameRoute.Map.route) {
-                ServerMapView(gameId, serverMapProvider, menuNavController)
+                ServerMapView(lobbyId, serverMapProvider, menuNavController)
             }
             composable(GameRoute.Computer.route) {
-                ComputerComponent(gameId)
+                ComputerComponent(lobbyId)
             }
         }
     }
