@@ -1,9 +1,9 @@
 package edu.agh.susgame.front.providers.web
 
 import edu.agh.susgame.front.model.Player
+import edu.agh.susgame.front.model.PlayerId
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
-import edu.agh.susgame.front.model.game.PlayerId
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider.CreateNewGameResult
 import edu.agh.susgame.front.providers.web.rest.games.GamesRest
@@ -69,9 +69,6 @@ class WebLobbiesProvider(private val gamesRest: GamesRest) : LobbiesProvider {
     override fun leave(lobbyId: LobbyId, playerId: PlayerId): CompletableFuture<Unit> =
         CompletableFuture.supplyAsync { }
 
-    // TODO GAME-24
-    override fun createCustomLobbies() {}
-
     companion object {
         private fun lobbyFromApiModel(lobby: LobbyApi): Lobby =
             Lobby(
@@ -79,7 +76,6 @@ class WebLobbiesProvider(private val gamesRest: GamesRest) : LobbiesProvider {
                 name = lobby.name,
                 maxNumOfPlayers = lobby.maxNumberOfPlayers,
                 gameTime = 10,
-                gamePin = null,
                 // TODO GAME-59 After joining is implemented, remove this hardcoded adding `"The-player"`
                 playersWaiting = (lobby.players + "The-player")
 //                playersWaiting = lobby.players

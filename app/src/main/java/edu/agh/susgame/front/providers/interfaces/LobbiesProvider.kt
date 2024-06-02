@@ -1,9 +1,9 @@
 package edu.agh.susgame.front.providers.interfaces
 
 import edu.agh.susgame.front.model.Player
+import edu.agh.susgame.front.model.PlayerId
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
-import edu.agh.susgame.front.model.game.PlayerId
 import java.util.concurrent.CompletableFuture
 
 interface LobbiesProvider {
@@ -30,5 +30,4 @@ interface LobbiesProvider {
         gameTime: Int,
     ): CompletableFuture<CreateNewGameResult>
 
-    fun createCustomLobbies() // this function is only for testing, it shows logic behind creating new lobbies
 }

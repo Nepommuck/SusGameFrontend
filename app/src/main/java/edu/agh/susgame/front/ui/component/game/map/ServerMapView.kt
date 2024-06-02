@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
 import edu.agh.susgame.front.model.game.LobbyId
-import edu.agh.susgame.front.model.graph.Graph
+import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.Translation
@@ -28,10 +28,9 @@ fun ServerMapView(
     serverMapProvider: ServerMapProvider,
     menuNavController: NavController,
 ) {
-    var mapState by remember { mutableStateOf<Graph?>(null) }
+    var mapState by remember { mutableStateOf<GameGraph?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
-    serverMapProvider.createCustomMapState()
     serverMapProvider.getServerMapState(lobbyId)
         .thenAccept {
             mapState = it

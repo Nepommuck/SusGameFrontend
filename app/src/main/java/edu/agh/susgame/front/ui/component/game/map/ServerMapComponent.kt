@@ -20,11 +20,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import edu.agh.susgame.front.model.graph.Graph
+import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.ui.util.ZoomState
 
 @Composable
-internal fun ServerMapComponent(mapState: Graph) {
+internal fun ServerMapComponent(mapState: GameGraph) {
     val zoomState = remember {
         ZoomState(
             maxZoomIn = 2f,
@@ -57,10 +57,10 @@ internal fun ServerMapComponent(mapState: Graph) {
                 )
         ) {
             Canvas(modifier = Modifier.fillMaxSize()) {// it will be improved, just testing how drawing works
-                mapState.edgeMap.forEach { (key, edge) ->
+                mapState.edges.forEach { (key, edge) ->
 
-                    val startXY = mapState.nodeMap[edge.firstNodeId]
-                    val endXY = mapState.nodeMap[edge.secondNodeId]
+                    val startXY = mapState.nodes[edge.firstNodeId]
+                    val endXY = mapState.nodes[edge.secondNodeId]
                     if (startXY != null && endXY != null) {
                         drawLine(
                             color = Color.Black,
@@ -77,7 +77,7 @@ internal fun ServerMapComponent(mapState: Graph) {
             }
             Column {
                 Text(zoomState.scaleValue().toString(), color = Color.Black)
-                mapState.nodeMap.forEach { (key, node) ->
+                mapState.nodes.forEach { (key, node) ->
                     Box(
                         modifier = Modifier.offset(node.position.x.dp, node.position.y.dp)
                     ) {
