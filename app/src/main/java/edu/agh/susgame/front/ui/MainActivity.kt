@@ -28,8 +28,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lobbiesProvider.createCustomLobbies() // just for local testing
-
         setContent {
             SusGameTheme {
                 // A surface container using the 'background' color from the theme

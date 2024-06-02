@@ -64,13 +64,15 @@ private fun LobbyContentComponent(
                 enabled = !isLeaveButtonLoading,
                 onClick = {
                     isLeaveButtonLoading = true
-                    lobbiesProvider.leave(lobby.id, player.id)
-                        .thenRun {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                navController.navigate(MenuRoute.SearchLobby.route)
+                    player.id?.let {
+                        lobbiesProvider.leave(lobby.id, it)
+                            .thenRun {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    navController.navigate(MenuRoute.SearchLobby.route)
+                                }
+                                isLeaveButtonLoading = false
                             }
-                            isLeaveButtonLoading = false
-                        }
+                    }
                 }
             ) {
                 Text(
