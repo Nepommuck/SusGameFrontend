@@ -73,7 +73,7 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                 )
         ) {
             Canvas(modifier = Modifier.fillMaxSize()) {// it will be improved, just testing how drawing works
-                mapState.edges.forEach { (key, edge) ->
+                mapState.edges.forEach { (_, edge) ->
 
                     val startXY = mapState.nodes[edge.firstNodeId]
                     val endXY = mapState.nodes[edge.secondNodeId]
