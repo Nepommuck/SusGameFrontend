@@ -44,7 +44,7 @@ fun GameNavigationHostComponent(
                 ServerMapView(lobbyId, serverMapProvider, menuNavController)
             }
             composable(GameRoute.Computer.route) {
-                ComputerComponent(lobbyId)
+                ComputerComponent()
             }
         }
     }

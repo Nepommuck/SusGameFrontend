@@ -6,6 +6,7 @@ import edu.agh.susgame.front.model.PlayerId
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
+import edu.agh.susgame.front.providers.interfaces.LobbiesProvider.CreateNewGameResult
 import edu.agh.susgame.front.settings.Configuration
 import java.util.concurrent.CompletableFuture
 
@@ -19,10 +20,10 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
         createCustomLobbies()
     }
 
-    override fun getAll(): CompletableFuture<MutableMap<LobbyId, Lobby>> =
+    override fun getAll(): CompletableFuture<Map<LobbyId, Lobby>> =
         CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
-            currentLobbies
+            currentLobbies.toMap()
         }
 
     override fun getById(lobbyId: LobbyId): CompletableFuture<Lobby?> =
@@ -33,21 +34,27 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
     override fun join(lobbyId: LobbyId, player: Player): CompletableFuture<Unit> =
         CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
-            currentLobbies[lobbyId]?.addPlayer(player, PlayerId(freePlayerId++))
+
+            currentLobbies[lobbyId]?.let {
+                currentLobbies[lobbyId] = lobbyWithPlayerAdded(it, player)
+            }
         }
 
     override fun leave(lobbyId: LobbyId, playerId: PlayerId): CompletableFuture<Unit> =
         CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
-            currentLobbies[lobbyId]?.kickPlayer(playerId)
+
+            currentLobbies[lobbyId]?.let {
+                currentLobbies[lobbyId] = lobbyWithPlayerRemoved(it, playerId)
+            }
         }
 
     override fun createNewGame(
         gameName: String,
         gamePin: String,
-        numOfPlayers: Int,
+        maxNumberOfPlayers: Int,
         gameTime: Int,
-    ): CompletableFuture<LobbyId> =
+    ): CompletableFuture<CreateNewGameResult> =
         CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
             val lobbyId = LobbyId(freeGameId++)
@@ -56,11 +63,11 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
                 Lobby(
                     lobbyId,
                     gameName,
-                    numOfPlayers,
+                    maxNumberOfPlayers,
                     gameTime,
                 )
             )
-            lobbyId
+            CreateNewGameResult.Success(lobbyId)
         }
 
     /**
@@ -87,9 +94,8 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
             )
         )
 
-        currentLobbies[lobbyIdValue1]?.addPlayer(player0, PlayerId(freePlayerId++))
-        currentLobbies[lobbyIdValue1]?.addPlayer(player1, PlayerId(freePlayerId++))
-
+        this.join(lobbyIdValue1, player0)
+        this.join(lobbyIdValue1, player1)
 
         // game 2
         val player2 = Player(
@@ -110,7 +116,28 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
                 gameTime = 5,
             )
         )
-        currentLobbies[lobbyIdValue2]?.addPlayer(player2, PlayerId(freePlayerId++))
-        currentLobbies[lobbyIdValue2]?.addPlayer(player3, PlayerId(freePlayerId++))
+        this.join(lobbyIdValue2, player2)
+        this.join(lobbyIdValue2, player3)
+    }
+
+    private fun getFreePlayerId(): PlayerId {
+        return PlayerId(freePlayerId++)
+    }
+
+    private fun lobbyWithPlayerAdded(lobby: Lobby, player: Player): Lobby {
+        val playerId = player.id ?: getFreePlayerId()
+        player.id = playerId
+
+        return lobby.copy(
+            playersWaiting = lobby.playersWaiting + (playerId to player),
+        )
+    }
+
+    private fun lobbyWithPlayerRemoved(lobby: Lobby, playerId: PlayerId): Lobby {
+        lobby.playersWaiting[playerId]?.resetId()
+
+        return lobby.copy(
+            playersWaiting = lobby.playersWaiting - playerId,
+        )
     }
 }

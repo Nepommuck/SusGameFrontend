@@ -1,13 +1,15 @@
 package edu.agh.susgame.front.ui.component.game.computer
 
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.ui.Translation
+import edu.agh.susgame.front.ui.component.common.Header
 
 @Composable
-fun ComputerComponent(lobbyId: LobbyId) {
-    Text(text = Translation.Game.COMPUTER)
+fun ComputerComponent() {
+    Column {
+        Header(title = Translation.Game.COMPUTER)
+    }
 
     // TODO GAME-54
 }

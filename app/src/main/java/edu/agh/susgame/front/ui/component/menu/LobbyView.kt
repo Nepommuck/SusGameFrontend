@@ -64,14 +64,23 @@ private fun LobbyContentComponent(
                 enabled = !isLeaveButtonLoading,
                 onClick = {
                     isLeaveButtonLoading = true
-                    player.id?.let {
-                        lobbiesProvider.leave(lobby.id, it)
-                            .thenRun {
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    navController.navigate(MenuRoute.SearchLobby.route)
-                                }
-                                isLeaveButtonLoading = false
+                    // TODO GAME-59 Fix this after socket implementation
+                    when (val playerId = player.id) {
+                        null -> {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                navController.navigate(MenuRoute.SearchLobby.route)
                             }
+                        }
+
+                        else -> {
+                            lobbiesProvider.leave(lobby.id, playerId)
+                                .thenRun {
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        navController.navigate(MenuRoute.SearchLobby.route)
+                                    }
+                                    isLeaveButtonLoading = false
+                                }
+                        }
                     }
                 }
             ) {
@@ -80,8 +89,9 @@ private fun LobbyContentComponent(
                     else Translation.Button.LEAVE
                 )
             }
-
-            if (lobby.playersWaiting.contains(player.id)) {
+            // TODO GAME-59 Fix this logic after joining is properly implemented
+//            if (lobby.playersWaiting.contains(player.id)) {
+            if (lobby.playersWaiting.toMap().values.map { it.name }.contains(player.name)) {
                 Button(onClick = {
                     navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
                 }) {
