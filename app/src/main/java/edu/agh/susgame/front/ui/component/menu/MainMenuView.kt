@@ -36,7 +36,7 @@ private fun MainMenuButton(text: String, onClick: () -> Unit) {
 fun MainMenuView(
     navController: NavController,
 ) {
-    navController.navigate("${MenuRoute.Game.route}/0") // JUST FOR TESTING
+//    navController.navigate("${MenuRoute.Game.route}/0") // JUST FOR TESTING
     Column(
         modifier = Modifier.fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
