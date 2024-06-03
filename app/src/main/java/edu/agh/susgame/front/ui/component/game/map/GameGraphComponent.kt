@@ -108,7 +108,7 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                         ),
                     onClick = {
                         showBox.value = true
-                        nodeToShow.value = node.id
+                        nodeToShow.intValue = node.id
                     },
                 ) {
                     Text(
@@ -119,14 +119,14 @@ internal fun GameGraphComponent(mapState: GameGraph) {
             }
         }
         if (showBox.value) {
-            mapState.nodes[nodeToShow.intValue]?.let { showInfo(node = it,showBox) }
+            mapState.nodes[nodeToShow.intValue]?.let { ShowInfo(node = it,showBox) }
         }
     }
 }
 
 
 @Composable
-private fun showInfo(node: Node, showBox: MutableState<Boolean>) {
+private fun ShowInfo(node: Node, showBox: MutableState<Boolean>) {
     Box(
         modifier = Modifier
             .background(Color.Cyan)
@@ -137,7 +137,7 @@ private fun showInfo(node: Node, showBox: MutableState<Boolean>) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                node?.getInfo()?.let { Text(it) }
+                Text(node.getInfo())
             }
             Button(onClick = { showBox.value = false }) {
                 Text("X")
