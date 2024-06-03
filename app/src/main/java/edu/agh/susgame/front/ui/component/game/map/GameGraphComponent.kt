@@ -39,7 +39,7 @@ private const val buttonHeight = 30
 
 @Composable
 internal fun GameGraphComponent(mapState: GameGraph) {
-    val showBox = remember { mutableStateOf(false) }
+    val changeNodeInfoVisibility = remember { mutableStateOf(false) }
     val nodeToShow = remember { mutableIntStateOf(0) }
     val zoomState = remember {
         ZoomState(
@@ -107,7 +107,7 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                             height = buttonHeight.dp
                         ),
                     onClick = {
-                        showBox.value = true
+                        changeNodeInfoVisibility.value = true
                         nodeToShow.intValue = node.id
                     },
                 ) {
@@ -118,8 +118,8 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                 }
             }
         }
-        if (showBox.value) {
-            mapState.nodes[nodeToShow.intValue]?.let { ShowInfo(node = it,showBox) }
+        if (changeNodeInfoVisibility.value) {
+            mapState.nodes[nodeToShow.intValue]?.let { ShowInfo(node = it,changeNodeInfoVisibility) }
         }
     }
 }
