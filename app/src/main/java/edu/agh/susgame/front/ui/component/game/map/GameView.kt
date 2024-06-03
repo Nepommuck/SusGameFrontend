@@ -3,7 +3,6 @@ package edu.agh.susgame.front.ui.component.game.map
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,10 +19,9 @@ import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.Translation
-import edu.agh.susgame.front.ui.theme.PaddingL
 
 @Composable
-fun ServerMapView(
+fun GameView(
     lobbyId: LobbyId,
     serverMapProvider: ServerMapProvider,
     menuNavController: NavController,
@@ -61,7 +59,7 @@ fun ServerMapView(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxHeight()
                 ) {
-                    mapState?.let { ServerMapComponent(it) }
+                    mapState?.let { GameGraphComponent(it) }
                 }
             }
         }

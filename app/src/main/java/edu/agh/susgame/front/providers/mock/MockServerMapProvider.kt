@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture
 class MockServerMapProvider(mockDelayMs: Long? = null) : ServerMapProvider {
     private val delayMs = mockDelayMs ?: 0
 
-    private val serverMapState = GameGraph(
+    private val gameGraphState = GameGraph(
         mapSize = Coordinates(500, 200),
         nodes = mutableMapOf(),
         edges = mutableMapOf(),
@@ -28,27 +28,35 @@ class MockServerMapProvider(mockDelayMs: Long? = null) : ServerMapProvider {
     ): CompletableFuture<GameGraph> =
         CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
-            serverMapState
+            gameGraphState
         }
 
     /**
      * This function is only for testing, it shows logic behind creating game map
      */
     private fun createCustomMapState() {
-        val router1 = Router(0, "R1", Coordinates(10, 330), 30)
-        val host1 = Host(1, "H1", Coordinates(460, 50), 3)
-        val server1 = Server(2, "S1", Coordinates(120, 130), 300)
 
-        val routerHostEdge = Edge(0, 0, 1, 5)
-        val hostServerEdge = Edge(1, 1, 2, 3)
-        val serverRouterEdge = Edge(1, 1, 2, 4)
 
-        serverMapState.addNode(router1)
-        serverMapState.addNode(host1)
-        serverMapState.addNode(server1)
+        gameGraphState.addNode(Router(0, "R1", Coordinates(150, 150), 30))
+        gameGraphState.addNode(Router(1, "R2", Coordinates(250, 150), 30))
+        gameGraphState.addNode(Router(2, "R3", Coordinates(200, 25), 30))
 
-        serverMapState.addEdge(routerHostEdge)
-        serverMapState.addEdge(hostServerEdge)
-        serverMapState.addEdge(serverRouterEdge)
+        gameGraphState.addNode(Host(3, "H1", Coordinates(100, 275), 0))
+        gameGraphState.addNode(Host(4, "H2", Coordinates(200, 275), 1))
+        gameGraphState.addNode(Host(5, "H3", Coordinates(350, 250), 2))
+
+        gameGraphState.addNode(Server(6, "S1", Coordinates(75, 50), 300))
+
+
+
+        gameGraphState.addEdge(Edge(0, 3, 0, 5))
+        gameGraphState.addEdge(Edge(1, 4, 0, 5))
+        gameGraphState.addEdge(Edge(2, 5, 1, 5))
+        gameGraphState.addEdge(Edge(3, 0, 1, 5))
+        gameGraphState.addEdge(Edge(4, 0, 2, 5))
+        gameGraphState.addEdge(Edge(5, 0, 6, 5))
+        gameGraphState.addEdge(Edge(6, 1, 2, 5))
+        gameGraphState.addEdge(Edge(7, 2, 6, 5))
+
     }
 }
