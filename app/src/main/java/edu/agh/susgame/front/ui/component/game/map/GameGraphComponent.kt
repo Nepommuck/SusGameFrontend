@@ -4,11 +4,11 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.ui.util.ZoomState
 
+private const val buttonWidth = 80
+private const val buttonHeight = 80
+
 @Composable
 internal fun ServerMapComponent(mapState: GameGraph) {
     val zoomState = remember {
@@ -32,6 +35,7 @@ internal fun ServerMapComponent(mapState: GameGraph) {
             totalSize = mapState.mapSize,
         )
     }
+
 
     Box(
         modifier = Modifier
@@ -44,7 +48,7 @@ internal fun ServerMapComponent(mapState: GameGraph) {
                     zoomState.move(pan)
                 }
             }
-            .background(Color.Red)
+            .background(Color.Green)
     ) {
         Box(
             modifier = Modifier
@@ -65,26 +69,34 @@ internal fun ServerMapComponent(mapState: GameGraph) {
                         drawLine(
                             color = Color.Black,
                             start = Offset(
-                                startXY.position.x.toFloat(),
-                                startXY.position.y.toFloat()
+                                startXY.position.x.dp.toPx(),
+                                startXY.position.y.dp.toPx(),
                             ),
-                            end = Offset(endXY.position.x.toFloat(), endXY.position.y.toFloat()),
+                            end = Offset(
+                                endXY.position.x.dp.toPx(),
+                                endXY.position.y.dp.toPx(),
+                            ),
                             strokeWidth = 2f
                         )
                     }
                 }
-
             }
-            Column {
-                Text(zoomState.scaleValue().toString(), color = Color.Black)
-                mapState.nodes.forEach { (key, node) ->
-                    Box(
-                        modifier = Modifier.offset(node.position.x.dp, node.position.y.dp)
-                    ) {
-                        Button(onClick = { /* Do something */ }) {
-                            Text(text = node.name + ":" + key)
-                        }
-                    }
+
+            Text(zoomState.scaleValue().toString(), color = Color.Black)
+            mapState.nodes.forEach { (key, node) ->
+                Button(
+                    modifier = Modifier
+                        .offset(
+                            x = (node.position.x - buttonWidth / 2).dp,
+                            y = (node.position.y - buttonHeight / 2).dp,
+                        )
+                        .size(
+                            width = buttonWidth.dp,
+                            height = buttonHeight.dp
+                        ),
+                    onClick = { /* Do something */ },
+                ) {
+                    Text(text = node.name + ":" + key)
                 }
             }
         }

@@ -5,7 +5,7 @@ import edu.agh.susgame.front.util.ProviderType
 import kotlin.time.Duration.Companion.seconds
 
 object Config : AppConfig {
-    override val providers = ProviderType.Web
+    override val providers = ProviderType.MockLocal
 
     override val webConfig = AppConfig.WebConfig(
         protocol = "http",
