@@ -40,7 +40,7 @@ private const val buttonHeight = 30
 @Composable
 internal fun GameGraphComponent(mapState: GameGraph) {
     val showBox = remember { mutableStateOf(false) }
-    var nodeToShow = remember { mutableIntStateOf(0) }
+    val nodeToShow = remember { mutableIntStateOf(0) }
     val zoomState = remember {
         ZoomState(
             maxZoomIn = 2f,
