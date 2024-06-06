@@ -36,8 +36,6 @@ fun GameView(
         }
 
     Column(
-//        modifier = Modifier
-//            .padding(top = PaddingL, start = PaddingL, end = PaddingL)
     ) {
         if (isLoading) {
             Text(text = "${Translation.Button.LOADING}...")

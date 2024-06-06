@@ -16,10 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.model.graph.Node
+import edu.agh.susgame.front.model.graph.NodeId
 import edu.agh.susgame.front.ui.theme.PaddingM
 import edu.agh.susgame.front.ui.util.ZoomState
 
@@ -39,8 +40,7 @@ private const val buttonHeight = 30
 
 @Composable
 internal fun GameGraphComponent(mapState: GameGraph) {
-    val changeNodeInfoVisibility = remember { mutableStateOf(false) }
-    val nodeToShow = remember { mutableIntStateOf(0) }
+    var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
     val zoomState = remember {
         ZoomState(
             maxZoomIn = 2f,
@@ -72,7 +72,7 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                     clip = false
                 )
         ) {
-            Canvas(modifier = Modifier.fillMaxSize()) {// it will be improved, just testing how drawing works
+            Canvas(modifier = Modifier.fillMaxSize()) {
                 mapState.edges.forEach { (_, edge) ->
 
                     val startXY = mapState.nodes[edge.firstNodeId]
@@ -107,42 +107,47 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                             height = buttonHeight.dp
                         ),
                     onClick = {
-                        changeNodeInfoVisibility.value = true
-                        nodeToShow.intValue = node.id
+                        inspectedNodeId = node.id
                     },
                 ) {
                     Text(
-                        text = node.name + ":" + key,
+                        text = node.name + ":" + key.value,
                         fontSize = 7.sp
                     )
                 }
             }
         }
-        if (changeNodeInfoVisibility.value) {
-            mapState.nodes[nodeToShow.intValue]?.let { ShowInfo(node = it,changeNodeInfoVisibility) }
+        inspectedNodeId?.let { nodeId ->
+            mapState.nodes[nodeId]?.let {
+                ShowInfo(
+                    node = it,
+                    onExit = {
+                        inspectedNodeId = null
+                    },
+                )
+            }
         }
     }
 }
 
 
 @Composable
-private fun ShowInfo(node: Node, showBox: MutableState<Boolean>) {
+private fun ShowInfo(node: Node, onExit: () -> Unit) {
     Box(
         modifier = Modifier
             .background(Color.Cyan)
             .padding(PaddingM),
-        ) {
-        Row() {
+    ) {
+        Row {
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(node.getInfo())
             }
-            Button(onClick = { showBox.value = false }) {
+            Button(onClick = { onExit() }) {
                 Text("X")
             }
         }
     }
 }
-
