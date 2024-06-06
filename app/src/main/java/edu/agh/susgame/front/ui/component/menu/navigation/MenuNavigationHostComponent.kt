@@ -6,9 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.MenuRoute
+import edu.agh.susgame.front.providers.interfaces.GameService
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
-import edu.agh.susgame.front.providers.socket.GameSocket
+import edu.agh.susgame.front.providers.web.socket.WebGameService
 import edu.agh.susgame.front.ui.component.game.navigation.GameNavBarComponent
 import edu.agh.susgame.front.ui.component.menu.CreateLobbyView
 import edu.agh.susgame.front.ui.component.menu.LobbyView
@@ -20,7 +21,7 @@ fun MenuNavigationHostComponent(
     menuNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
     lobbiesProvider: LobbiesProvider,
-    gameSocket: GameSocket,
+    webGameService: GameService,
 ) {
     NavHost(
         navController = menuNavController,
@@ -53,7 +54,7 @@ fun MenuNavigationHostComponent(
                     SearchLobbiesView(lobbiesProvider, menuNavController)
 
                 else ->
-                    LobbyView(lobbyId, lobbiesProvider, gameSocket, menuNavController)
+                    LobbyView(lobbyId, lobbiesProvider, webGameService, menuNavController)
             }
         }
 
@@ -66,7 +67,7 @@ fun MenuNavigationHostComponent(
                 ?.run {
                     LobbyId(this)
                 }
-            GameNavBarComponent(lobbyId, menuNavController, serverMapProvider, gameSocket)
+            GameNavBarComponent(lobbyId, menuNavController, serverMapProvider, webGameService)
         }
     }
 }

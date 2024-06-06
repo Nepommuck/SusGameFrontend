@@ -21,8 +21,9 @@ import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.MenuRoute
+import edu.agh.susgame.front.providers.interfaces.GameService
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
-import edu.agh.susgame.front.providers.socket.GameSocket
+import edu.agh.susgame.front.providers.web.socket.WebGameService
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 import edu.agh.susgame.front.ui.theme.PaddingS
@@ -37,7 +38,7 @@ private val player: Player = Player(nickname = PlayerNickname("The-player"))
 private fun LobbyContentComponent(
     lobbyInitialState: Lobby,
     lobbiesProvider: LobbiesProvider,
-    gameSocket: GameSocket,
+    webGameService: GameService,
     navController: NavController,
 ) {
     var lobby by remember { mutableStateOf(lobbyInitialState) }
@@ -78,7 +79,7 @@ private fun LobbyContentComponent(
                         }
 
                         true -> {
-                            gameSocket.leave()
+                            webGameService.leaveLobby()
                                 .thenRun {
                                     hasPlayerJoined = false
                                     CoroutineScope(Dispatchers.Main).launch {
@@ -108,7 +109,7 @@ private fun LobbyContentComponent(
                     enabled = !isJoinButtonLoading,
                     onClick = {
                         isJoinButtonLoading = true
-                        gameSocket.join(lobby.id, player.nickname)
+                        webGameService.joinLobby(lobby.id, player.nickname)
                             .thenRun {
                                 lobbiesProvider.getById(lobby.id).thenAccept {
                                     if (it != null) {
@@ -134,7 +135,7 @@ private fun LobbyContentComponent(
 fun LobbyView(
     lobbyId: LobbyId,
     lobbiesProvider: LobbiesProvider,
-    gameSocket: GameSocket,
+    webGameService: GameService,
     navController: NavController,
 ) {
     var lobby by remember { mutableStateOf<Lobby?>(null) }
@@ -170,7 +171,7 @@ fun LobbyView(
                         LobbyContentComponent(
                             it,
                             lobbiesProvider,
-                            gameSocket,
+                            webGameService,
                             navController,
                         )
                     }

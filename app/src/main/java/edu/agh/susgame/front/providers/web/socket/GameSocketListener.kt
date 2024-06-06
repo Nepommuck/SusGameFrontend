@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.providers.socket
+package edu.agh.susgame.front.providers.web.socket
 
 import okhttp3.Response
 import okhttp3.WebSocket

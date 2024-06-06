@@ -15,7 +15,7 @@ import edu.agh.susgame.front.providers.web.rest.model.LobbyApi
 import java.util.concurrent.CompletableFuture
 
 
-class WebLobbiesProvider(private val gamesRest: GamesRest) : LobbiesProvider {
+class WebLobbiesService(private val gamesRest: GamesRest) : LobbiesProvider {
     override fun getAll(): CompletableFuture<Map<LobbyId, Lobby>> =
         gamesRest.getAllGames().thenApply { response ->
             when (response) {

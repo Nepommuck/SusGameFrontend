@@ -11,12 +11,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import edu.agh.susgame.front.Config
+import edu.agh.susgame.front.providers.interfaces.GameService
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.providers.mock.MockLobbiesProvider
 import edu.agh.susgame.front.providers.mock.MockServerMapProvider
-import edu.agh.susgame.front.providers.socket.GameSocket
-import edu.agh.susgame.front.providers.web.WebLobbiesProvider
+import edu.agh.susgame.front.providers.web.socket.WebGameService
+import edu.agh.susgame.front.providers.web.WebLobbiesService
 import edu.agh.susgame.front.providers.web.rest.games.GamesRest
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuNavigationHostComponent
 import edu.agh.susgame.front.ui.theme.PaddingL
@@ -29,14 +30,14 @@ class MainActivity : ComponentActivity() {
 
     private val lobbiesProvider: LobbiesProvider = when (Config.providers) {
         ProviderType.MockLocal -> MockLobbiesProvider(mockDelayMs = 1_000)
-        ProviderType.Web -> WebLobbiesProvider(
+        ProviderType.Web -> WebLobbiesService(
             gamesRest
         )
     }
 
     private val serverMapProvider: ServerMapProvider = MockServerMapProvider()
 
-    private val gameSocket = GameSocket(webConfig = Config.webConfig)
+    private val webGameService: GameService = WebGameService(webConfig = Config.webConfig)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +56,7 @@ class MainActivity : ComponentActivity() {
                             navController,
                             serverMapProvider,
                             lobbiesProvider,
-                            gameSocket,
+                            webGameService,
                         )
                     }
                 }

@@ -1,7 +1,8 @@
-package edu.agh.susgame.front.providers.socket
+package edu.agh.susgame.front.providers.web.socket
 
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.LobbyId
+import edu.agh.susgame.front.providers.interfaces.GameService
 import edu.agh.susgame.front.providers.web.rest.AbstractRest
 import edu.agh.susgame.front.util.AppConfig
 import okhttp3.OkHttpClient
@@ -9,7 +10,11 @@ import okhttp3.Request
 import okhttp3.WebSocket
 import java.util.concurrent.CompletableFuture
 
-class GameSocket(webConfig: AppConfig.WebConfig) : AbstractRest(webConfig, "games") {
+class WebGameService(
+    webConfig: AppConfig.WebConfig,
+) : GameService,
+    AbstractRest(webConfig, "games") {
+
     private val client = OkHttpClient()
     private val manager = WebSocketManager()
     private val listener = MyWebSocketListener(manager)
@@ -17,14 +22,14 @@ class GameSocket(webConfig: AppConfig.WebConfig) : AbstractRest(webConfig, "game
     private var socket: WebSocket? = null
     private var currentLobbyId: LobbyId? = null
 
-    val messagesFlow = manager.messagesFlow
-    val byteFlow = manager.bytesFlow
+    override val messagesFlow = manager.messagesFlow
+    override val byteFlow = manager.bytesFlow
 
     // TODO GAME-59
-    fun hasJoinedLobby(lobbyId: LobbyId): Boolean =
+    override fun hasJoinedLobby(lobbyId: LobbyId): Boolean =
         this.currentLobbyId == lobbyId
 
-    fun join(lobbyId: LobbyId, nickname: PlayerNickname): CompletableFuture<Unit> =
+    override fun joinLobby(lobbyId: LobbyId, nickname: PlayerNickname): CompletableFuture<Unit> =
         CompletableFuture.supplyAsync {
             val url = baseUrlBuilder()
                 .addPathSegment("join")
@@ -44,7 +49,10 @@ class GameSocket(webConfig: AppConfig.WebConfig) : AbstractRest(webConfig, "game
         }
 
     // TODO Game-59 Leave lobby
-    fun leave(): CompletableFuture<Unit> =
-        CompletableFuture.supplyAsync {
-        }
+    override fun leaveLobby(): CompletableFuture<Unit> =
+        CompletableFuture.supplyAsync { }
+
+    // TODO Game-59 sendMessage
+    override fun sendMessage(message: String) {
+    }
 }
