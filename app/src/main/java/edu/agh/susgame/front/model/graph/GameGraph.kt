@@ -3,8 +3,8 @@ package edu.agh.susgame.front.model.graph
 import edu.agh.susgame.front.util.Coordinates
 
 class GameGraph(
-    val nodes: MutableMap<Int, Node>,
-    val edges: MutableMap<Int, Edge>,
+    val nodes: MutableMap<NodeId, Node>,
+    val edges: MutableMap<EdgeId, Edge>,
     val mapSize: Coordinates,
 ) {
     fun addNode(node: Node) {

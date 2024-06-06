@@ -46,6 +46,14 @@ object Translation {
     object Game {
         const val MAP = "Mapa"
         const val COMPUTER = "Komputer"
+        const val BUFFER_SIZE = "Rozmiar bufora"
+        const val BUFFER_CURRENT_PACKETS = "Liczba pakietów w buforze"
+        const val PACKETS_TO_SEND = "Liczba pakietów do wysłania"
+        const val PACKETS_TO_WIN = "Liczba pakietów do wygranej"
+        const val PACKETS_RECEIVED = "Liczba otrzymanych pakietów"
+        const val ROUTER = "Router"
+        const val HOST = "Host"
+        const val SERVER = "Serwer"
     }
 
     object Error {

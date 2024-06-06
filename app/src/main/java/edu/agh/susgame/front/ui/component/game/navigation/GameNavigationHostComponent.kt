@@ -15,7 +15,7 @@ import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.game.computer.ComputerComponent
-import edu.agh.susgame.front.ui.component.game.map.ServerMapView
+import edu.agh.susgame.front.ui.component.game.map.GameView
 
 @Composable
 fun GameNavigationHostComponent(
@@ -41,7 +41,7 @@ fun GameNavigationHostComponent(
             modifier = Modifier.padding(padding),
         ) {
             composable(GameRoute.Map.route) {
-                ServerMapView(lobbyId, serverMapProvider, menuNavController)
+                GameView(lobbyId, serverMapProvider, menuNavController)
             }
             composable(GameRoute.Computer.route) {
                 ComputerComponent()
