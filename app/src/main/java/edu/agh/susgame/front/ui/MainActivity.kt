@@ -15,6 +15,7 @@ import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
 import edu.agh.susgame.front.providers.mock.MockLobbiesProvider
 import edu.agh.susgame.front.providers.mock.MockServerMapProvider
+import edu.agh.susgame.front.providers.socket.GameSocket
 import edu.agh.susgame.front.providers.web.WebLobbiesProvider
 import edu.agh.susgame.front.providers.web.rest.games.GamesRest
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuNavigationHostComponent
@@ -35,6 +36,8 @@ class MainActivity : ComponentActivity() {
 
     private val serverMapProvider: ServerMapProvider = MockServerMapProvider()
 
+    private val gameSocket = GameSocket(webConfig = Config.webConfig)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -52,6 +55,7 @@ class MainActivity : ComponentActivity() {
                             navController,
                             serverMapProvider,
                             lobbiesProvider,
+                            gameSocket,
                         )
                     }
                 }

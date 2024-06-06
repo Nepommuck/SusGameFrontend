@@ -13,6 +13,7 @@ import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.GameRoute
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
+import edu.agh.susgame.front.providers.socket.GameSocket
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.game.computer.ComputerComponent
 import edu.agh.susgame.front.ui.component.game.map.GameView
@@ -24,6 +25,7 @@ fun GameNavigationHostComponent(
     menuNavController: NavHostController,
     gameNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
+    gameSocket: GameSocket,
 ) {
     when (lobbyId) {
         null -> {
@@ -44,7 +46,7 @@ fun GameNavigationHostComponent(
                 GameView(lobbyId, serverMapProvider, menuNavController)
             }
             composable(GameRoute.Computer.route) {
-                ComputerComponent()
+                ComputerComponent(gameSocket)
             }
         }
     }

@@ -3,6 +3,7 @@ package edu.agh.susgame.front.providers.mock
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.front.model.Player
 import edu.agh.susgame.front.model.PlayerId
+import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
@@ -76,11 +77,11 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
     private fun createCustomLobbies() {
         // game 1
         val player0 = Player(
-            name = "Player_0",
+            nickname = PlayerNickname("Player_0"),
             color = Color.Red
         )
         val player1 = Player(
-            name = "Player_1",
+            nickname = PlayerNickname("Player_1"),
             color = Color.Green
         )
 
@@ -99,11 +100,11 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
 
         // game 2
         val player2 = Player(
-            name = "Player_0",
+            nickname = PlayerNickname("Player_0"),
             color = Color.Red
         )
         val player3 = Player(
-            name = "Player_1",
+            nickname = PlayerNickname("Player_1"),
             color = Color.Green
         )
 

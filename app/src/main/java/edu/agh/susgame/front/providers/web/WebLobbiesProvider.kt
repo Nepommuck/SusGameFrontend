@@ -2,6 +2,7 @@ package edu.agh.susgame.front.providers.web
 
 import edu.agh.susgame.front.model.Player
 import edu.agh.susgame.front.model.PlayerId
+import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
@@ -74,11 +75,10 @@ class WebLobbiesProvider(private val gamesRest: GamesRest) : LobbiesProvider {
                 name = lobby.name,
                 maxNumOfPlayers = lobby.maxNumberOfPlayers,
                 gameTime = 10,
-                // TODO GAME-59 After joining is implemented, remove this hardcoded adding `"The-player"`
-                playersWaiting = (lobby.players + "The-player")
-//                playersWaiting = lobby.players
+                playersWaiting = lobby.players
+                    // TODO GAME-59 Unindexed players in REST
                     .mapIndexed { index, playerNickname -> Pair(PlayerId(index), playerNickname) }
-                    .associate { it.first to Player(it.second) }
+                    .associate { it.first to Player(PlayerNickname(it.second)) }
                     .toMutableMap()
             )
     }

@@ -8,6 +8,7 @@ import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
+import edu.agh.susgame.front.providers.socket.GameSocket
 import edu.agh.susgame.front.ui.component.game.navigation.GameNavBarComponent
 import edu.agh.susgame.front.ui.component.menu.CreateLobbyView
 import edu.agh.susgame.front.ui.component.menu.LobbyView
@@ -19,6 +20,7 @@ fun MenuNavigationHostComponent(
     menuNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
     lobbiesProvider: LobbiesProvider,
+    gameSocket: GameSocket,
 ) {
     NavHost(
         navController = menuNavController,
@@ -51,7 +53,7 @@ fun MenuNavigationHostComponent(
                     SearchLobbiesView(lobbiesProvider, menuNavController)
 
                 else ->
-                    LobbyView(lobbyId, lobbiesProvider, menuNavController)
+                    LobbyView(lobbyId, lobbiesProvider, gameSocket, menuNavController)
             }
         }
 
@@ -64,7 +66,7 @@ fun MenuNavigationHostComponent(
                 ?.run {
                     LobbyId(this)
                 }
-            GameNavBarComponent(lobbyId, menuNavController, serverMapProvider)
+            GameNavBarComponent(lobbyId, menuNavController, serverMapProvider, gameSocket)
         }
     }
 }
