@@ -9,7 +9,6 @@ import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.interfaces.GameService
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
-import edu.agh.susgame.front.providers.web.socket.WebGameService
 import edu.agh.susgame.front.ui.component.game.navigation.GameNavBarComponent
 import edu.agh.susgame.front.ui.component.menu.CreateLobbyView
 import edu.agh.susgame.front.ui.component.menu.LobbyView

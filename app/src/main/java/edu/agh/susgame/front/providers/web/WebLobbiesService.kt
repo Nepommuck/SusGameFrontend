@@ -60,14 +60,6 @@ class WebLobbiesService(private val gamesRest: GamesRest) : LobbiesProvider {
                 }
             }
 
-    // TODO GAME-59 Remove
-    override fun join(lobbyId: LobbyId, player: Player): CompletableFuture<Unit> =
-        CompletableFuture.supplyAsync { }
-
-    // TODO GAME-59 Remove
-    override fun leave(lobbyId: LobbyId, playerId: PlayerId): CompletableFuture<Unit> =
-        CompletableFuture.supplyAsync { }
-
     companion object {
         private fun lobbyFromApiModel(lobby: LobbyApi): Lobby =
             Lobby(

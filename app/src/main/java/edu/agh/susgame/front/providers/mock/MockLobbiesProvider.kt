@@ -32,24 +32,6 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
             allGames[lobbyId]
         }
 
-    override fun join(lobbyId: LobbyId, player: Player): CompletableFuture<Unit> =
-        CompletableFuture.supplyAsync {
-            Thread.sleep(delayMs)
-
-            currentLobbies[lobbyId]?.let {
-                currentLobbies[lobbyId] = lobbyWithPlayerAdded(it, player)
-            }
-        }
-
-    override fun leave(lobbyId: LobbyId, playerId: PlayerId): CompletableFuture<Unit> =
-        CompletableFuture.supplyAsync {
-            Thread.sleep(delayMs)
-
-            currentLobbies[lobbyId]?.let {
-                currentLobbies[lobbyId] = lobbyWithPlayerRemoved(it, playerId)
-            }
-        }
-
     override fun createNewGame(
         gameName: String,
         gamePin: String,
@@ -69,6 +51,41 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
                 )
             )
             CreateNewGameResult.Success(lobbyId)
+        }
+
+    /**
+     * This method exists for a compatibility of `MockGameService` with `GameService` interface
+     */
+    fun hasPlayerJoinedLobby(lobbyId: LobbyId, playerNickname: PlayerNickname): Boolean =
+        currentLobbies.values.toList()
+            .find { it.id == lobbyId }
+            ?.playersWaiting
+            ?.values
+            .orEmpty()
+            .any { it.nickname == playerNickname }
+
+    /**
+     * This method exists for a compatibility of `MockGameService` with `GameService` interface
+     */
+    fun joinLobby(lobbyId: LobbyId, player: Player): CompletableFuture<Unit> =
+        CompletableFuture.supplyAsync {
+            Thread.sleep(delayMs)
+
+            currentLobbies[lobbyId]?.let {
+                currentLobbies[lobbyId] = lobbyWithPlayerAdded(it, player)
+            }
+        }
+
+    /**
+     * This method exists for a compatibility of `MockGameService` with `GameService` interface
+     */
+    fun leaveLobby(lobbyId: LobbyId, playerNickname: PlayerNickname): CompletableFuture<Unit> =
+        CompletableFuture.supplyAsync {
+            Thread.sleep(delayMs)
+
+            currentLobbies[lobbyId]?.let {
+                currentLobbies[lobbyId] = lobbyWithPlayerRemoved(it, playerNickname)
+            }
         }
 
     /**
@@ -95,8 +112,8 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
             )
         )
 
-        this.join(lobbyIdValue1, player0)
-        this.join(lobbyIdValue1, player1)
+        this.joinLobby(lobbyIdValue1, player0)
+        this.joinLobby(lobbyIdValue1, player1)
 
         // game 2
         val player2 = Player(
@@ -117,8 +134,8 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
                 gameTime = 5,
             )
         )
-        this.join(lobbyIdValue2, player2)
-        this.join(lobbyIdValue2, player3)
+        this.joinLobby(lobbyIdValue2, player2)
+        this.joinLobby(lobbyIdValue2, player3)
     }
 
     private fun getFreePlayerId(): PlayerId {
@@ -134,11 +151,23 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
         )
     }
 
-    private fun lobbyWithPlayerRemoved(lobby: Lobby, playerId: PlayerId): Lobby {
-        lobby.playersWaiting[playerId]?.resetId()
+    private fun lobbyWithPlayerRemoved(lobby: Lobby, playerNickname: PlayerNickname): Lobby {
+        val foundPlayer = lobby.playersWaiting
+            .filterValues { it.nickname == playerNickname }
+            .toList()
+            .firstOrNull()
 
-        return lobby.copy(
-            playersWaiting = lobby.playersWaiting - playerId,
-        )
+        return when (foundPlayer) {
+            null -> lobby
+            else -> {
+                val playerId = foundPlayer.first
+                val player = foundPlayer.second
+
+                player.resetId()
+                lobby.copy(
+                    playersWaiting = lobby.playersWaiting - playerId,
+                )
+            }
+        }
     }
 }

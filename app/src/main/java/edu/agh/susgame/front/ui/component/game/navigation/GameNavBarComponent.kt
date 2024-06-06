@@ -18,7 +18,6 @@ import androidx.navigation.compose.rememberNavController
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.providers.interfaces.GameService
 import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
-import edu.agh.susgame.front.providers.web.socket.WebGameService
 import edu.agh.susgame.front.ui.theme.PaddingL
 import edu.agh.susgame.front.ui.util.BottomNavigationItem
 

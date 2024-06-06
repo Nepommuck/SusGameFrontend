@@ -23,7 +23,6 @@ import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.interfaces.GameService
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
-import edu.agh.susgame.front.providers.web.socket.WebGameService
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 import edu.agh.susgame.front.ui.theme.PaddingS
