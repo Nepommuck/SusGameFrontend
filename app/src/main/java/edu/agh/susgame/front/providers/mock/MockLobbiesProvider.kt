@@ -89,7 +89,7 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
             lobbyIdValue1, Lobby(
                 id = lobbyIdValue1,
                 name = "Gra dodana statycznie 1",
-                maxNumOfPlayers = Configuration.MaxPlayersPerGame,
+                maxNumOfPlayers = Configuration.MAX_PLAYERS_PER_GAME,
                 gameTime = 10,
             )
         )
