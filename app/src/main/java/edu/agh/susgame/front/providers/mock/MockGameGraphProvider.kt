@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.providers.mock
 
+import edu.agh.susgame.front.model.PlayerId
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.model.graph.Edge
 import edu.agh.susgame.front.model.graph.EdgeId
@@ -16,9 +17,11 @@ class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
     private val delayMs = mockDelayMs ?: 0
 
     private val gameGraphState = GameGraph(
-        mapSize = Coordinates(500, 200),
+        mapSize = Coordinates(1000, 1000),
         nodes = mutableMapOf(),
         edges = mutableMapOf(),
+        paths = mutableMapOf(),
+        nodesToEdges = mutableMapOf(),
     )
 
     init {
@@ -33,6 +36,10 @@ class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
             gameGraphState
         }
 
+    override fun changePlayerPath(playerId: PlayerId, list: List<NodeId>) {
+        TODO("Not yet implemented")
+    }
+
     /**
      * This function is only for testing, it shows logic behind creating game map
      */
@@ -43,9 +50,9 @@ class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
             Router(NodeId(1), "R2", Coordinates(250, 150), 30),
             Router(NodeId(2), "R3", Coordinates(200, 25), 30),
 
-            Host(NodeId(3), "H1", Coordinates(100, 275), 0),
-            Host(NodeId(4), "H2", Coordinates(200, 275), 1),
-            Host(NodeId(5), "H3", Coordinates(350, 250), 2),
+            Host(NodeId(3), "H1", Coordinates(100, 275), PlayerId(0)),
+            Host(NodeId(4), "H2", Coordinates(200, 275), PlayerId(1)),
+            Host(NodeId(5), "H3", Coordinates(350, 250), PlayerId(2)),
 
             Server(NodeId(6), "S1", Coordinates(75, 50), 300),
         ).forEach {

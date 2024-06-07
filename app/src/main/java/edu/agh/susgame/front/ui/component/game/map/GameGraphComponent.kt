@@ -29,9 +29,12 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import edu.agh.susgame.front.model.PlayerId
 import edu.agh.susgame.front.model.graph.GameGraph
+import edu.agh.susgame.front.model.graph.Host
 import edu.agh.susgame.front.model.graph.Node
 import edu.agh.susgame.front.model.graph.NodeId
+import edu.agh.susgame.front.model.graph.Path
 import edu.agh.susgame.front.ui.theme.PaddingM
 import edu.agh.susgame.front.ui.util.ZoomState
 
@@ -41,6 +44,11 @@ private const val buttonHeight = 30
 @Composable
 internal fun GameGraphComponent(mapState: GameGraph) {
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
+    var playerIdChangingPath by remember { mutableStateOf<PlayerId?>(null) }
+    var changingPathState by remember { mutableStateOf(false) }
+    var pathToShow by remember { mutableStateOf("") }
+    var pathState by remember { mutableStateOf(Path()) }
+
     val zoomState = remember {
         ZoomState(
             maxZoomIn = 2f,
@@ -79,7 +87,7 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                     val endXY = mapState.nodes[edge.secondNodeId]
                     if (startXY != null && endXY != null) {
                         drawLine(
-                            color = Color.Black,
+                            color = edge.color,
                             start = Offset(
                                 startXY.position.x.dp.toPx(),
                                 startXY.position.y.dp.toPx(),
@@ -94,7 +102,8 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                 }
             }
 
-            Text(zoomState.scaleValue().toString(), color = Color.Black)
+//            Text(zoomState.scaleValue().toString(), color = Color.Black)
+
             mapState.nodes.forEach { (key, node) ->
                 Button(
                     modifier = Modifier
@@ -107,32 +116,66 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                             height = buttonHeight.dp
                         ),
                     onClick = {
-                        inspectedNodeId = node.id
+                        if (changingPathState) {
+                            addNodeToPath(
+                                nodeId = node.id,
+                                pathState = pathState,
+                                pathToShow = { newState -> pathToShow = newState },
+                                gameGraph = mapState
+                            )
+
+
+                        } else inspectedNodeId = node.id
                     },
-                ) {
+
+                    ) {
                     Text(
                         text = node.name + ":" + key.value,
                         fontSize = 7.sp
                     )
                 }
             }
+            Text(pathToShow)
         }
+
         inspectedNodeId?.let { nodeId ->
-            mapState.nodes[nodeId]?.let {
+            mapState.nodes[nodeId]?.let { it ->
                 ShowInfo(
                     node = it,
                     onExit = {
                         inspectedNodeId = null
                     },
+                    changingPathState = { newState -> changingPathState = newState },
+                    playerIdChangingPath = { newId -> playerIdChangingPath = newId },
+                    pathToShow = { newState -> pathToShow = newState },
+                    pathState = pathState
                 )
             }
         }
+        if (changingPathState) {
+            Button(onClick = {
+                changingPathState = false
+                playerIdChangingPath = null
+                pathState = Path()
+                pathToShow = ""
+            }) {
+                Text("Anuluj wybieranie trasy")
+            }
+        }
+
     }
 }
 
 
 @Composable
-private fun ShowInfo(node: Node, onExit: () -> Unit) {
+private fun ShowInfo(
+    node: Node,
+    onExit: () -> Unit,
+    changingPathState: (Boolean) -> Unit,
+    playerIdChangingPath: (PlayerId) -> Unit,
+    pathToShow: (String) -> Unit,
+    pathState: Path
+) {
     Box(
         modifier = Modifier
             .background(Color.Cyan)
@@ -145,9 +188,45 @@ private fun ShowInfo(node: Node, onExit: () -> Unit) {
             ) {
                 Text(node.getInfo())
             }
-            Button(onClick = { onExit() }) {
-                Text("X")
+            Column() {
+                Button(onClick = { onExit() }) {
+                    Text("X")
+                }
+
+                val hostNode = node as? Host
+                hostNode?.let { host ->
+                    Button(onClick = {
+                        changingPathState(true)
+                        playerIdChangingPath(host.playerId)
+                        pathState.addNodeToPath(nodeId = node.id)
+                        pathToShow(pathState.getPathString())
+                        onExit()
+                    }) {
+                        Text("change!")
+                    }
+                }
             }
         }
     }
+}
+
+private fun addNodeToPath(
+    nodeId: NodeId,
+    pathState: Path,
+    pathToShow: (String) -> Unit,
+    gameGraph: GameGraph
+) {
+    val newEdgeId = pathState.path.lastOrNull()?.let { lastNode ->
+        val key: Pair<NodeId, NodeId> = lastNode to nodeId
+        gameGraph.nodesToEdges[key]
+
+    }
+    newEdgeId?.let {
+        if (pathState.isNodeCorrect(nodeId)) {
+            pathState.addNodeToPath(nodeId)
+            pathToShow(pathState.getPathString())
+            gameGraph.edges[newEdgeId]?.color = Color.Blue
+        }
+    }
+
 }

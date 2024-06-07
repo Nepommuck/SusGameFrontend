@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.model.graph
 
+import edu.agh.susgame.front.model.PlayerId
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.util.Coordinates
 
@@ -32,7 +33,7 @@ class Host(
     id: NodeId,
     name: String,
     position: Coordinates,
-    private val hostId: Int,
+    val playerId: PlayerId,
     private var packetsToSend: Int = 0,
 ) : Node(id, name, position) {
     override fun getInfo(): String {
