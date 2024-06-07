@@ -7,6 +7,7 @@ import edu.agh.susgame.front.model.graph.EdgeId
 import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.model.graph.Host
 import edu.agh.susgame.front.model.graph.NodeId
+import edu.agh.susgame.front.model.graph.Path
 import edu.agh.susgame.front.model.graph.Router
 import edu.agh.susgame.front.model.graph.Server
 import edu.agh.susgame.front.providers.interfaces.GameGraphProvider
@@ -36,7 +37,7 @@ class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
             gameGraphState
         }
 
-    override fun changePlayerPath(playerId: PlayerId, list: List<NodeId>) {
+    override fun changePlayerPath(playerId: PlayerId, path: Path) {
         TODO("Not yet implemented")
     }
 

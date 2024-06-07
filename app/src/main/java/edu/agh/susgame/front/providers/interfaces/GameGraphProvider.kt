@@ -4,7 +4,7 @@ package edu.agh.susgame.front.providers.interfaces
 import edu.agh.susgame.front.model.PlayerId
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.model.graph.GameGraph
-import edu.agh.susgame.front.model.graph.NodeId
+import edu.agh.susgame.front.model.graph.Path
 import java.util.concurrent.CompletableFuture
 
 interface GameGraphProvider {
@@ -14,5 +14,5 @@ interface GameGraphProvider {
      * Changes the path that player had chosen.
      * @param playerId
      */
-    fun changePlayerPath(playerId: PlayerId, path: List<NodeId>)
+    fun changePlayerPath(playerId: PlayerId, path: Path)
 }

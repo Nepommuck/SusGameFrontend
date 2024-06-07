@@ -2,7 +2,6 @@ package edu.agh.susgame.front.ui.util
 
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.util.Coordinates
 import kotlin.math.max
 import kotlin.math.min
@@ -37,8 +36,10 @@ class ZoomState(
         val scaledWidth = totalSize.x * scale.floatValue
         val scaledHeight = totalSize.y * scale.floatValue
 
-        translationX.floatValue = (translationX.floatValue + offset.x).coerceIn(-scaledWidth, scaledWidth)
-        translationY.floatValue = (translationY.floatValue + offset.y).coerceIn(-scaledHeight, scaledHeight)
+        translationX.floatValue =
+            (translationX.floatValue + offset.x).coerceIn(-scaledWidth, scaledWidth)
+        translationY.floatValue =
+            (translationY.floatValue + offset.y).coerceIn(-scaledHeight, scaledHeight)
     }
 
 }
