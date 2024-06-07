@@ -5,6 +5,6 @@ import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.model.graph.GameGraph
 import java.util.concurrent.CompletableFuture
 
-interface ServerMapProvider {
+interface GameGraphProvider {
     fun getServerMapState(lobbyId: LobbyId): CompletableFuture<GameGraph>
 }

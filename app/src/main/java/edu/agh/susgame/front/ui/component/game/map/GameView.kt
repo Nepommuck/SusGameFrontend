@@ -17,19 +17,19 @@ import androidx.navigation.NavController
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
+import edu.agh.susgame.front.providers.interfaces.GameGraphProvider
 import edu.agh.susgame.front.ui.Translation
 
 @Composable
 fun GameView(
     lobbyId: LobbyId,
-    serverMapProvider: ServerMapProvider,
+    gameGraphProvider: GameGraphProvider,
     menuNavController: NavController,
 ) {
     var mapState by remember { mutableStateOf<GameGraph?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
-    serverMapProvider.getServerMapState(lobbyId)
+    gameGraphProvider.getServerMapState(lobbyId)
         .thenAccept {
             mapState = it
             isLoading = false

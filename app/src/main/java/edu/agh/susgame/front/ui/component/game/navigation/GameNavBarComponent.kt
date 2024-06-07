@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import edu.agh.susgame.front.model.game.LobbyId
-import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
+import edu.agh.susgame.front.providers.interfaces.GameGraphProvider
 import edu.agh.susgame.front.ui.theme.PaddingL
 import edu.agh.susgame.front.ui.util.BottomNavigationItem
 
@@ -25,7 +25,7 @@ import edu.agh.susgame.front.ui.util.BottomNavigationItem
 fun GameNavBarComponent(
     lobbyId: LobbyId?,
     menuNavController: NavHostController,
-    serverMapProvider: ServerMapProvider,
+    gameGraphProvider: GameGraphProvider,
 ) {
     val gameNavController = rememberNavController()
     Scaffold(
@@ -41,7 +41,7 @@ fun GameNavBarComponent(
             padding,
             menuNavController,
             gameNavController,
-            serverMapProvider,
+            gameGraphProvider,
         )
     }
 }

@@ -8,11 +8,11 @@ import edu.agh.susgame.front.model.graph.Host
 import edu.agh.susgame.front.model.graph.NodeId
 import edu.agh.susgame.front.model.graph.Router
 import edu.agh.susgame.front.model.graph.Server
-import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
+import edu.agh.susgame.front.providers.interfaces.GameGraphProvider
 import edu.agh.susgame.front.util.Coordinates
 import java.util.concurrent.CompletableFuture
 
-class MockServerMapProvider(mockDelayMs: Long? = null) : ServerMapProvider {
+class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
     private val delayMs = mockDelayMs ?: 0
 
     private val gameGraphState = GameGraph(
