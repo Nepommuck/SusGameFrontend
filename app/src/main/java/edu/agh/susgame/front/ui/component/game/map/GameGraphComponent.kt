@@ -35,6 +35,7 @@ import edu.agh.susgame.front.model.graph.Host
 import edu.agh.susgame.front.model.graph.Node
 import edu.agh.susgame.front.model.graph.NodeId
 import edu.agh.susgame.front.model.graph.Path
+import edu.agh.susgame.front.providers.interfaces.GameGraphProvider
 import edu.agh.susgame.front.ui.theme.PaddingM
 import edu.agh.susgame.front.ui.util.ZoomState
 
@@ -42,10 +43,12 @@ private const val buttonWidth = 70
 private const val buttonHeight = 30
 
 @Composable
-internal fun GameGraphComponent(mapState: GameGraph) {
+internal fun GameGraphComponent(
+    mapState: GameGraph,
+    gameGraphProvider: GameGraphProvider,
+) {
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
     var playerIdChangingPath by remember { mutableStateOf<PlayerId?>(null) }
-    var changingPathState by remember { mutableStateOf(false) }
     var pathToShow by remember { mutableStateOf("") }
     var pathState by remember { mutableStateOf(Path()) }
 
@@ -98,6 +101,21 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                             ),
                             strokeWidth = 3f
                         )
+                        val baseStart =
+                            Offset(startXY.position.x.dp.toPx(), startXY.position.y.dp.toPx())
+                        val baseEnd = Offset(endXY.position.x.dp.toPx(), endXY.position.y.dp.toPx())
+
+                        edge.playersIdsUsingEdge.forEachIndexed { index, playerId ->
+                            val offset = index * 10
+                            mapState.players[playerId]?.color?.let {
+                                drawLine(
+                                    color = it,
+                                    start = Offset(baseStart.x + offset, baseStart.y + offset),
+                                    end = Offset(baseEnd.x + offset, baseEnd.y + offset),
+                                    strokeWidth = 3f
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -116,16 +134,16 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                             height = buttonHeight.dp
                         ),
                     onClick = {
-                        if (changingPathState) {
+                        playerIdChangingPath?.let {
                             addNodeToPath(
                                 nodeId = node.id,
                                 pathState = pathState,
                                 pathToShow = { newState -> pathToShow = newState },
                                 gameGraph = mapState
                             )
-
-
-                        } else inspectedNodeId = node.id
+                        } ?: run {
+                            inspectedNodeId = node.id
+                        }
                     },
 
                     ) {
@@ -139,27 +157,43 @@ internal fun GameGraphComponent(mapState: GameGraph) {
         }
 
         inspectedNodeId?.let { nodeId ->
-            mapState.nodes[nodeId]?.let { it ->
+            mapState.nodes[nodeId]?.let {
                 ShowInfo(
                     node = it,
                     onExit = {
                         inspectedNodeId = null
                     },
-                    changingPathState = { newState -> changingPathState = newState },
                     playerIdChangingPath = { newId -> playerIdChangingPath = newId },
                     pathToShow = { newState -> pathToShow = newState },
                     pathState = pathState
                 )
             }
         }
-        if (changingPathState) {
-            Button(onClick = {
-                changingPathState = false
-                playerIdChangingPath = null
-                pathState = Path()
-                pathToShow = ""
-            }) {
-                Text("Anuluj wybieranie trasy")
+
+        playerIdChangingPath?.let {
+            Column() {
+                Button(onClick = {
+                    playerIdChangingPath = null
+                    pathState = Path()
+                    pathToShow = ""
+                }) {
+                    Text("Anuluj wybieranie trasy")
+                }
+                Button(onClick = {
+                    playerIdChangingPath?.let {
+                        if (pathState.path.lastOrNull() == mapState.serverId) {
+                            gameGraphProvider.changePlayerPath(
+                                playerId = it,
+                                path = pathState
+                            )
+                            playerIdChangingPath = null
+                            pathState = Path()
+                            pathToShow = ""
+                        }
+                    }
+                }) {
+                    Text("Zaakceptuj trase")
+                }
             }
         }
 
@@ -171,7 +205,6 @@ internal fun GameGraphComponent(mapState: GameGraph) {
 private fun ShowInfo(
     node: Node,
     onExit: () -> Unit,
-    changingPathState: (Boolean) -> Unit,
     playerIdChangingPath: (PlayerId) -> Unit,
     pathToShow: (String) -> Unit,
     pathState: Path
@@ -196,7 +229,6 @@ private fun ShowInfo(
                 val hostNode = node as? Host
                 hostNode?.let { host ->
                     Button(onClick = {
-                        changingPathState(true)
                         playerIdChangingPath(host.playerId)
                         pathState.addNodeToPath(nodeId = node.id)
                         pathToShow(pathState.getPathString())

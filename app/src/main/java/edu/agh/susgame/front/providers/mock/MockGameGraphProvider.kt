@@ -38,7 +38,7 @@ class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
         }
 
     override fun changePlayerPath(playerId: PlayerId, path: Path) {
-        TODO("Not yet implemented")
+        gameGraphState.paths[playerId] = path
     }
 
     /**
@@ -59,6 +59,7 @@ class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
         ).forEach {
             gameGraphState.addNode(it)
         }
+        gameGraphState.serverId=NodeId(6)
 
         listOf(
             Edge(EdgeId(0), NodeId(3), NodeId(0), 5),
