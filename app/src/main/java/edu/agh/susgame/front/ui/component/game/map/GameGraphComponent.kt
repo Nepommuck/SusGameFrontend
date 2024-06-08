@@ -36,6 +36,7 @@ import edu.agh.susgame.front.model.graph.Node
 import edu.agh.susgame.front.model.graph.NodeId
 import edu.agh.susgame.front.model.graph.Path
 import edu.agh.susgame.front.providers.interfaces.GameGraphProvider
+import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.theme.PaddingM
 import edu.agh.susgame.front.ui.util.ZoomState
 
@@ -89,6 +90,7 @@ internal fun GameGraphComponent(
                     val startXY = mapState.nodes[edge.firstNodeId]
                     val endXY = mapState.nodes[edge.secondNodeId]
                     if (startXY != null && endXY != null) {
+                        // draw graph colors
                         drawLine(
                             color = edge.color,
                             start = Offset(
@@ -99,12 +101,17 @@ internal fun GameGraphComponent(
                                 endXY.position.x.dp.toPx(),
                                 endXY.position.y.dp.toPx(),
                             ),
-                            strokeWidth = 3f
+                            strokeWidth = 7f
                         )
-                        val baseStart =
-                            Offset(startXY.position.x.dp.toPx(), startXY.position.y.dp.toPx())
-                        val baseEnd = Offset(endXY.position.x.dp.toPx(), endXY.position.y.dp.toPx())
-
+                        val baseStart = Offset(
+                            startXY.position.x.dp.toPx(),
+                            startXY.position.y.dp.toPx()
+                        )
+                        val baseEnd = Offset(
+                            endXY.position.x.dp.toPx(),
+                            endXY.position.y.dp.toPx()
+                        )
+                        // draw players colors
                         edge.playersIdsUsingEdge.forEachIndexed { index, playerId ->
                             val offset = index * 10
                             mapState.players[playerId]?.color?.let {
@@ -112,15 +119,17 @@ internal fun GameGraphComponent(
                                     color = it,
                                     start = Offset(baseStart.x + offset, baseStart.y + offset),
                                     end = Offset(baseEnd.x + offset, baseEnd.y + offset),
-                                    strokeWidth = 3f
+                                    strokeWidth = 7f
                                 )
                             }
                         }
                     }
                 }
             }
-
-//            Text(zoomState.scaleValue().toString(), color = Color.Black)
+            Column() {
+                Text(zoomState.scaleValue().toString(), color = Color.Black)
+                Text(pathToShow)
+            }
 
             mapState.nodes.forEach { (key, node) ->
                 Button(
@@ -154,7 +163,7 @@ internal fun GameGraphComponent(
                     )
                 }
             }
-            Text(pathToShow)
+
         }
 
         inspectedNodeId?.let { nodeId ->
@@ -175,13 +184,13 @@ internal fun GameGraphComponent(
         playerIdChangingPath?.let {
             Column() {
                 Button(onClick = {
-                    mapState.edges.forEach{ ( _, edge)-> edge.removePlayer(playerIdChangingPath!!)}
+                    mapState.edges.forEach { (_, edge) -> edge.removePlayer(playerIdChangingPath!!) }
                     playerIdChangingPath = null
                     pathState = Path()
                     pathToShow = ""
 
                 }) {
-                    Text("Anuluj wybieranie trasy")
+                    Text(Translation.Game.ABORT_PATH)
                 }
                 Button(onClick = {
                     playerIdChangingPath?.let {
@@ -196,7 +205,7 @@ internal fun GameGraphComponent(
                         }
                     }
                 }) {
-                    Text("Zaakceptuj trase")
+                    Text(Translation.Game.ACCEPT_PATH)
                 }
             }
         }
@@ -234,14 +243,15 @@ private fun ShowInfo(
                 val hostNode = node as? Host
                 hostNode?.let { host ->
                     Button(onClick = {
-                        mapState.edges.forEach{ ( _, edge)-> edge.removePlayer(host.playerId)}
+                        mapState.edges.forEach { (_, edge) -> edge.removePlayer(host.playerId) }
                         playerIdChangingPath(host.playerId)
                         pathState.addNodeToPath(nodeId = node.id)
                         pathToShow(pathState.getPathString())
                         onExit()
                     }) {
-                        Text("change!")
+                        Text(Translation.Game.CHANGE_PATH)
                     }
+                    mapState.paths[host.playerId]?.let { Text(it.getPathString()) }
                 }
             }
         }
@@ -252,11 +262,11 @@ private fun addNodeToPath(
     nodeId: NodeId,
     pathState: Path,
     pathToShow: (String) -> Unit,
-    playerId : PlayerId,
+    playerId: PlayerId,
     gameGraph: GameGraph
 ) {
     val edgeId = pathState.path.lastOrNull()?.let { lastNode ->
-        gameGraph.getEdgeId(lastNode,nodeId)
+        gameGraph.getEdgeId(lastNode, nodeId)
     }
 
     edgeId?.let {
