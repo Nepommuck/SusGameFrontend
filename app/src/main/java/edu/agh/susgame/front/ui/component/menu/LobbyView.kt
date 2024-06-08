@@ -42,7 +42,7 @@ private fun LobbyContentComponent(
 ) {
     var lobby by remember { mutableStateOf(lobbyInitialState) }
     var hasPlayerJoined by remember {
-        mutableStateOf(webGameService.hasJoinedLobby(lobbyInitialState.id))
+        mutableStateOf(webGameService.isPlayerInLobby(lobbyInitialState.id))
     }
 
     Column {

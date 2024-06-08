@@ -25,7 +25,7 @@ class WebGameService(
     override val messagesFlow = manager.messagesFlow
     override val byteFlow = manager.bytesFlow
 
-    override fun hasJoinedLobby(lobbyId: LobbyId): Boolean =
+    override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
         this.currentLobbyId == lobbyId
 
     override fun joinLobby(lobbyId: LobbyId, nickname: PlayerNickname): CompletableFuture<Unit> =
@@ -41,10 +41,6 @@ class WebGameService(
                 .build()
 
             socket = client.newWebSocket(request, listener)
-
-            // Why is it needed? I don't know xd. GPT wrote:
-            // Trigger shutdown of the dispatcher's executor so this process can exit cleanly.
-            client.dispatcher.executorService.shutdown()
         }
 
     // TODO Game-59 Leave lobby

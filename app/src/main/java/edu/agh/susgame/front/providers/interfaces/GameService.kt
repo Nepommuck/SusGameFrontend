@@ -12,7 +12,7 @@ interface GameService {
     val messagesFlow: SharedFlow<String>
     val byteFlow: SharedFlow<ByteString>
 
-    fun hasJoinedLobby(lobbyId: LobbyId): Boolean
+    fun isPlayerInLobby(lobbyId: LobbyId): Boolean
 
     fun joinLobby(lobbyId: LobbyId, nickname: PlayerNickname): CompletableFuture<Unit>
 

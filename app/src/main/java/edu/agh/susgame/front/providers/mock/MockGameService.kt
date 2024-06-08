@@ -21,7 +21,7 @@ class MockGameService(private val lobbyService: MockLobbiesProvider) : GameServi
     override val messagesFlow = _messagesFlow.asSharedFlow()
     override val byteFlow = _byteFlow.asSharedFlow()
 
-    override fun hasJoinedLobby(lobbyId: LobbyId): Boolean =
+    override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
         when (val lobbyInfo = joinedLobbyInfo) {
             null -> false
             else -> lobbyService.hasPlayerJoinedLobby(lobbyId, playerNickname = lobbyInfo.first)

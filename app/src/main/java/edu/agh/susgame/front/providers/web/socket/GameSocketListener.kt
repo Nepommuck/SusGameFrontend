@@ -27,6 +27,12 @@ class GameWebSocketListener(private val webSocketManager: WebSocketManager) : We
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-        println("WebSocket Error: ${t.message}")
+        println(
+            """
+                WebSocket Error: ${t.message} 
+                Stack trace: \
+                ${t.stackTrace.toList().joinToString("\n") { it.toString() }}")
+            """.trimIndent()
+        )
     }
 }
