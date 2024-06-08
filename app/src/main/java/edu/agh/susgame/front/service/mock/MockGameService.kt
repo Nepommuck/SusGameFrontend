@@ -1,9 +1,9 @@
-package edu.agh.susgame.front.providers.mock
+package edu.agh.susgame.front.service.mock
 
 import edu.agh.susgame.front.model.Player
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.LobbyId
-import edu.agh.susgame.front.providers.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.GameService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import okio.ByteString
 import java.util.concurrent.CompletableFuture
 
-class MockGameService(private val lobbyService: MockLobbiesProvider) : GameService {
+class MockGameService(private val lobbyService: MockLobbyService) : GameService {
     private val _messagesFlow = MutableSharedFlow<String>()
     private val _byteFlow = MutableSharedFlow<ByteString>()
 

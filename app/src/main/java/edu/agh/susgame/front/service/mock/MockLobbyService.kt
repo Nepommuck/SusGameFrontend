@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.providers.mock
+package edu.agh.susgame.front.service.mock
 
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.front.model.Player
@@ -6,12 +6,12 @@ import edu.agh.susgame.front.model.PlayerId
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
-import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
-import edu.agh.susgame.front.providers.interfaces.LobbiesProvider.CreateNewGameResult
+import edu.agh.susgame.front.service.interfaces.LobbyService
+import edu.agh.susgame.front.service.interfaces.LobbyService.CreateNewGameResult
 import edu.agh.susgame.front.settings.Configuration
 import java.util.concurrent.CompletableFuture
 
-class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
+class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
     private val delayMs = mockDelayMs ?: 0
     private var freeGameId: Int = 0
     private var freePlayerId: Int = 0

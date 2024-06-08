@@ -11,15 +11,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import edu.agh.susgame.front.Config
-import edu.agh.susgame.front.providers.interfaces.GameService
-import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
-import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
-import edu.agh.susgame.front.providers.mock.MockGameService
-import edu.agh.susgame.front.providers.mock.MockLobbiesProvider
-import edu.agh.susgame.front.providers.mock.MockServerMapProvider
-import edu.agh.susgame.front.providers.web.WebLobbiesService
-import edu.agh.susgame.front.providers.web.rest.games.GamesRest
-import edu.agh.susgame.front.providers.web.socket.WebGameService
+import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.LobbyService
+import edu.agh.susgame.front.service.interfaces.ServerMapProvider
+import edu.agh.susgame.front.service.mock.MockGameService
+import edu.agh.susgame.front.service.mock.MockLobbyService
+import edu.agh.susgame.front.service.mock.MockServerMapProvider
+import edu.agh.susgame.front.service.web.WebGameService
+import edu.agh.susgame.front.service.web.WebLobbyService
+import edu.agh.susgame.front.service.web.rest.games.GamesRest
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuNavigationHostComponent
 import edu.agh.susgame.front.ui.theme.PaddingL
 import edu.agh.susgame.front.ui.theme.SusGameTheme
@@ -28,7 +28,7 @@ import edu.agh.susgame.front.util.ProviderType
 
 class MainActivity : ComponentActivity() {
     private data class Services(
-        val lobbiesProvider: LobbiesProvider,
+        val lobbyService: LobbyService,
         val webGameService: GameService,
         val serverMapProvider: ServerMapProvider,
     )
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
 
     private val services = when (Config.providers) {
         ProviderType.MockLocal -> {
-            val mockLobbiesProvider = MockLobbiesProvider(mockDelayMs = 1_000)
+            val mockLobbiesProvider = MockLobbyService(mockDelayMs = 1_000)
             Services(
                 mockLobbiesProvider,
                 MockGameService(mockLobbiesProvider),
@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
         }
 
         ProviderType.Web -> Services(
-            WebLobbiesService(gamesRest),
+            WebLobbyService(gamesRest),
             WebGameService(webConfig = Config.webConfig),
             MockServerMapProvider(),
         )
@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
                         MenuNavigationHostComponent(
                             navController,
                             services.serverMapProvider,
-                            services.lobbiesProvider,
+                            services.lobbyService,
                             services.webGameService,
                         )
                     }

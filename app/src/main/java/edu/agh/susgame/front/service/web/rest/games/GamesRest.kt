@@ -1,14 +1,14 @@
-package edu.agh.susgame.front.providers.web.rest.games
+package edu.agh.susgame.front.service.web.rest.games
 
 import com.google.gson.Gson
 import edu.agh.susgame.front.model.game.LobbyId
-import edu.agh.susgame.front.providers.web.rest.AbstractRest
-import edu.agh.susgame.front.providers.web.rest.games.model.CreateGameApiResult
-import edu.agh.susgame.front.providers.web.rest.games.model.GameCreationApiResponse
-import edu.agh.susgame.front.providers.web.rest.games.model.GameCreationRequest
-import edu.agh.susgame.front.providers.web.rest.games.model.GetAllGamesApiResult
-import edu.agh.susgame.front.providers.web.rest.games.model.GetGameApiResult
-import edu.agh.susgame.front.providers.web.rest.model.LobbyApi
+import edu.agh.susgame.front.service.web.rest.AbstractRest
+import edu.agh.susgame.front.service.web.rest.games.model.CreateGameApiResult
+import edu.agh.susgame.front.service.web.rest.games.model.GameCreationApiResponse
+import edu.agh.susgame.front.service.web.rest.games.model.GameCreationRequest
+import edu.agh.susgame.front.service.web.rest.games.model.GetAllGamesApiResult
+import edu.agh.susgame.front.service.web.rest.games.model.GetGameApiResult
+import edu.agh.susgame.front.service.web.rest.model.LobbyApi
 import edu.agh.susgame.front.util.AppConfig.WebConfig
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request

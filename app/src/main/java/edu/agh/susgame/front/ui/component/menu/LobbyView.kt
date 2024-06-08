@@ -21,8 +21,8 @@ import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.providers.interfaces.GameService
-import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
+import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 import edu.agh.susgame.front.ui.theme.PaddingS
@@ -36,7 +36,7 @@ private val player: Player = Player(nickname = PlayerNickname("The-player"))
 @Composable
 private fun LobbyContentComponent(
     lobbyInitialState: Lobby,
-    lobbiesProvider: LobbiesProvider,
+    lobbyService: LobbyService,
     webGameService: GameService,
     navController: NavController,
 ) {
@@ -116,7 +116,7 @@ private fun LobbyContentComponent(
                                 // Explicit wait, because otherwise server responds with a list
                                 // that doesn't contain the new player
                                 Thread.sleep(500)
-                                lobbiesProvider.getById(lobby.id).thenAccept {
+                                lobbyService.getById(lobby.id).thenAccept {
                                     if (it != null) {
                                         lobby = it
                                     }
@@ -139,7 +139,7 @@ private fun LobbyContentComponent(
 @Composable
 fun LobbyView(
     lobbyId: LobbyId,
-    lobbiesProvider: LobbiesProvider,
+    lobbyService: LobbyService,
     webGameService: GameService,
     navController: NavController,
 ) {
@@ -147,7 +147,7 @@ fun LobbyView(
     var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        lobbiesProvider.getById(lobbyId)
+        lobbyService.getById(lobbyId)
             .thenAccept {
                 lobby = it
                 isLoading = false
@@ -175,7 +175,7 @@ fun LobbyView(
                     lobby?.let {
                         LobbyContentComponent(
                             it,
-                            lobbiesProvider,
+                            lobbyService,
                             webGameService,
                             navController,
                         )

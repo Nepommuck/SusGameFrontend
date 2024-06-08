@@ -1,10 +1,10 @@
-package edu.agh.susgame.front.providers.interfaces
+package edu.agh.susgame.front.service.interfaces
 
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
 import java.util.concurrent.CompletableFuture
 
-interface LobbiesProvider {
+interface LobbyService {
     sealed class CreateNewGameResult {
         data class Success(val lobbyId: LobbyId) : CreateNewGameResult()
         data object NameAlreadyExists : CreateNewGameResult()

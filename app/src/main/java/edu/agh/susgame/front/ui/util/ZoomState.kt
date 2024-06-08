@@ -2,7 +2,6 @@ package edu.agh.susgame.front.ui.util
 
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.util.Coordinates
 import kotlin.math.max
 import kotlin.math.min
@@ -34,11 +33,13 @@ class ZoomState(
 
 
     fun move(offset: Offset) { // TODO GAME-47 it doesn't work as it should, right now i don't have any idea how to implement it :(
-        val scaledWidth = totalSize.x * scale.floatValue*2
-        val scaledHeight = totalSize.y * scale.floatValue*2
+        val scaledWidth = totalSize.x * scale.floatValue * 2
+        val scaledHeight = totalSize.y * scale.floatValue * 2
 
-        translationX.floatValue = (translationX.floatValue + offset.x).coerceIn(-scaledWidth, scaledWidth)
-        translationY.floatValue = (translationY.floatValue + offset.y).coerceIn(-scaledHeight, scaledHeight)
+        translationX.floatValue =
+            (translationX.floatValue + offset.x).coerceIn(-scaledWidth, scaledWidth)
+        translationY.floatValue =
+            (translationY.floatValue + offset.y).coerceIn(-scaledHeight, scaledHeight)
     }
 
 }

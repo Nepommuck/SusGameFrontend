@@ -17,7 +17,7 @@ import androidx.navigation.NavController
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
+import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.Translation
 
 @Composable
@@ -35,8 +35,7 @@ fun GameView(
             isLoading = false
         }
 
-    Column(
-    ) {
+    Column {
         if (isLoading) {
             Text(text = "${Translation.Button.LOADING}...")
         } else {

@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.providers.interfaces
+package edu.agh.susgame.front.service.interfaces
 
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.LobbyId

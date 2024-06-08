@@ -1,4 +1,5 @@
 package edu.agh.susgame.front.model.graph
+
 data class EdgeId(val value: Int)
 
 class Edge(

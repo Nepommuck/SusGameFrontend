@@ -1,9 +1,10 @@
-package edu.agh.susgame.front.providers.web.socket
+package edu.agh.susgame.front.service.web
 
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.LobbyId
-import edu.agh.susgame.front.providers.interfaces.GameService
-import edu.agh.susgame.front.providers.web.rest.AbstractRest
+import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.web.rest.AbstractRest
+import edu.agh.susgame.front.service.web.socket.GameWebSocketListener
 import edu.agh.susgame.front.util.AppConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.providers.web.socket
+package edu.agh.susgame.front.service.web.socket
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
