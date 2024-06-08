@@ -7,7 +7,7 @@ import okio.ByteString
 import java.util.concurrent.CompletableFuture
 
 interface GameService {
-    // TODO GAME-59 Should be replaced by typed flows like `GameStateFlow` etc.
+    // TODO GAME-64 Should be replaced by typed flows like `GameStateFlow` etc.
     //  when backend is ready
     val messagesFlow: SharedFlow<String>
     val byteFlow: SharedFlow<ByteString>
@@ -18,7 +18,7 @@ interface GameService {
 
     fun leaveLobby(): CompletableFuture<Unit>
 
-    // TODO GAME-59 Should be replaced by less general methods like
+    // TODO GAME-64 Should be replaced by less general methods like
     //  `sendRouterUpdate(routerId, newRouterParams), `notifyAboutCreditChange(int)` etc.
     //  when backend is ready
     fun sendMessage(message: String)
