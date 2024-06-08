@@ -5,6 +5,9 @@ import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.providers.interfaces.GameService
 import edu.agh.susgame.front.providers.web.rest.AbstractRest
 import edu.agh.susgame.front.util.AppConfig
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
@@ -16,17 +19,30 @@ class WebGameService(
     AbstractRest(webConfig, "games") {
 
     private val client = OkHttpClient()
-    private val manager = WebSocketManager()
-    private val listener = GameWebSocketListener(manager)
+    private val listener = GameWebSocketListener()
 
     private var socket: WebSocket? = null
     private var currentLobbyId: LobbyId? = null
 
-    override val messagesFlow = manager.messagesFlow
-    override val byteFlow = manager.bytesFlow
+    override val messagesFlow = listener.messagesFlow
+    override val byteFlow = listener.bytesFlow
+
+    init {
+        CoroutineScope(Dispatchers.Main).launch {
+            listener.socketOpenedFlow.collect { socket ->
+                this@WebGameService.socket = socket
+            }
+        }
+        CoroutineScope(Dispatchers.Main).launch {
+            listener.socketClosedFlow.collect {
+                socket = null
+                currentLobbyId = null
+            }
+        }
+    }
 
     override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
-        this.currentLobbyId == lobbyId
+        this.currentLobbyId == lobbyId && this.socket != null
 
     override fun joinLobby(lobbyId: LobbyId, nickname: PlayerNickname): CompletableFuture<Unit> =
         CompletableFuture.supplyAsync {
@@ -40,15 +56,13 @@ class WebGameService(
                 .url(url)
                 .build()
 
-            socket = client.newWebSocket(request, listener)
+            client.newWebSocket(request, listener)
         }
 
     // TODO Game-59 Leave lobby
     override fun leaveLobby(): CompletableFuture<Unit> =
         CompletableFuture.supplyAsync {
             socket?.close(code = 1000, reason = null)
-
-            this.currentLobbyId = null
         }
 
     // TODO Game-59 sendMessage
