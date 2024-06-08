@@ -139,6 +139,7 @@ internal fun GameGraphComponent(
                                 nodeId = node.id,
                                 pathState = pathState,
                                 pathToShow = { newState -> pathToShow = newState },
+                                playerId = playerIdChangingPath!!,
                                 gameGraph = mapState
                             )
                         } ?: run {
@@ -165,7 +166,8 @@ internal fun GameGraphComponent(
                     },
                     playerIdChangingPath = { newId -> playerIdChangingPath = newId },
                     pathToShow = { newState -> pathToShow = newState },
-                    pathState = pathState
+                    pathState = pathState,
+                    mapState = mapState
                 )
             }
         }
@@ -173,9 +175,11 @@ internal fun GameGraphComponent(
         playerIdChangingPath?.let {
             Column() {
                 Button(onClick = {
+                    mapState.edges.forEach{ ( _, edge)-> edge.removePlayer(playerIdChangingPath!!)}
                     playerIdChangingPath = null
                     pathState = Path()
                     pathToShow = ""
+
                 }) {
                     Text("Anuluj wybieranie trasy")
                 }
@@ -207,7 +211,8 @@ private fun ShowInfo(
     onExit: () -> Unit,
     playerIdChangingPath: (PlayerId) -> Unit,
     pathToShow: (String) -> Unit,
-    pathState: Path
+    pathState: Path,
+    mapState: GameGraph
 ) {
     Box(
         modifier = Modifier
@@ -229,6 +234,7 @@ private fun ShowInfo(
                 val hostNode = node as? Host
                 hostNode?.let { host ->
                     Button(onClick = {
+                        mapState.edges.forEach{ ( _, edge)-> edge.removePlayer(host.playerId)}
                         playerIdChangingPath(host.playerId)
                         pathState.addNodeToPath(nodeId = node.id)
                         pathToShow(pathState.getPathString())
@@ -246,18 +252,18 @@ private fun addNodeToPath(
     nodeId: NodeId,
     pathState: Path,
     pathToShow: (String) -> Unit,
+    playerId : PlayerId,
     gameGraph: GameGraph
 ) {
-    val newEdgeId = pathState.path.lastOrNull()?.let { lastNode ->
-        val key: Pair<NodeId, NodeId> = lastNode to nodeId
-        gameGraph.nodesToEdges[key]
-
+    val edgeId = pathState.path.lastOrNull()?.let { lastNode ->
+        gameGraph.getEdgeId(lastNode,nodeId)
     }
-    newEdgeId?.let {
+
+    edgeId?.let {
         if (pathState.isNodeCorrect(nodeId)) {
             pathState.addNodeToPath(nodeId)
             pathToShow(pathState.getPathString())
-            gameGraph.edges[newEdgeId]?.color = Color.Blue
+            gameGraph.edges[edgeId]?.addPlayer(playerId)
         }
     }
 

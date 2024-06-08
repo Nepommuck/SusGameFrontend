@@ -1,5 +1,7 @@
 package edu.agh.susgame.front.providers.mock
 
+import androidx.compose.ui.graphics.Color
+import edu.agh.susgame.front.model.Player
 import edu.agh.susgame.front.model.PlayerId
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.model.graph.Edge
@@ -23,6 +25,7 @@ class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
         edges = mutableMapOf(),
         paths = mutableMapOf(),
         nodesToEdges = mutableMapOf(),
+        players = mutableMapOf()
     )
 
     init {
@@ -59,7 +62,7 @@ class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
         ).forEach {
             gameGraphState.addNode(it)
         }
-        gameGraphState.serverId=NodeId(6)
+        gameGraphState.serverId = NodeId(6)
 
         listOf(
             Edge(EdgeId(0), NodeId(3), NodeId(0), 5),
@@ -73,7 +76,24 @@ class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
         ).forEach {
             gameGraphState.addEdge(it)
         }
-
-
+        listOf(
+            Player(
+                name = "Player_0",
+                color = Color.Red,
+                id = PlayerId(0)
+            ),
+            Player(
+                name = "Player_1",
+                color = Color.Blue,
+                id = PlayerId(1)
+            ),
+            Player(
+                name = "Player_2",
+                color = Color.Magenta,
+                id = PlayerId(2)
+            ),
+        ).forEach {
+            gameGraphState.addPlayer(it)
+        }
     }
 }

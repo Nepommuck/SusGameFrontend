@@ -10,6 +10,13 @@ class Edge(
     val firstNodeId: NodeId,
     val secondNodeId: NodeId,
     var bandwidth: Int,
-    var color: Color = Color.Red,
+    var color: Color = Color.Black,
     val playersIdsUsingEdge : MutableSet<PlayerId> = mutableSetOf()
-)
+){
+    fun addPlayer(playerId: PlayerId){
+        playersIdsUsingEdge.add(playerId)
+    }
+    fun removePlayer(playerId: PlayerId){
+        playersIdsUsingEdge.remove(playerId)
+    }
+}
