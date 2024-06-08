@@ -41,7 +41,9 @@ private fun LobbyContentComponent(
     navController: NavController,
 ) {
     var lobby by remember { mutableStateOf(lobbyInitialState) }
-    var hasPlayerJoined by remember { mutableStateOf(false) }
+    var hasPlayerJoined by remember {
+        mutableStateOf(webGameService.hasJoinedLobby(lobbyInitialState.id))
+    }
 
     Column {
         Column(
@@ -95,7 +97,7 @@ private fun LobbyContentComponent(
                     else Translation.Button.LEAVE
                 )
             }
-            // TODO GAME-59 Fix this logic after joining is properly implemented
+
             if (hasPlayerJoined) {
                 Button(onClick = {
                     navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
@@ -110,6 +112,10 @@ private fun LobbyContentComponent(
                         isJoinButtonLoading = true
                         webGameService.joinLobby(lobby.id, player.nickname)
                             .thenRun {
+                                // TODO Await server socket response instead
+                                // Explicit wait, because otherwise server responds with a list
+                                // that doesn't contain the new player
+                                Thread.sleep(500)
                                 lobbiesProvider.getById(lobby.id).thenAccept {
                                     if (it != null) {
                                         lobby = it

@@ -17,7 +17,7 @@ class WebGameService(
 
     private val client = OkHttpClient()
     private val manager = WebSocketManager()
-    private val listener = MyWebSocketListener(manager)
+    private val listener = GameWebSocketListener(manager)
 
     private var socket: WebSocket? = null
     private var currentLobbyId: LobbyId? = null
@@ -25,7 +25,6 @@ class WebGameService(
     override val messagesFlow = manager.messagesFlow
     override val byteFlow = manager.bytesFlow
 
-    // TODO GAME-59
     override fun hasJoinedLobby(lobbyId: LobbyId): Boolean =
         this.currentLobbyId == lobbyId
 
@@ -50,7 +49,11 @@ class WebGameService(
 
     // TODO Game-59 Leave lobby
     override fun leaveLobby(): CompletableFuture<Unit> =
-        CompletableFuture.supplyAsync { }
+        CompletableFuture.supplyAsync {
+            socket?.close(code = 1000, reason = null)
+
+            this.currentLobbyId = null
+        }
 
     // TODO Game-59 sendMessage
     override fun sendMessage(message: String) {

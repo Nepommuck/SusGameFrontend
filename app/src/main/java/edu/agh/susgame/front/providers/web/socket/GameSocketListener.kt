@@ -5,7 +5,7 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
 
-class MyWebSocketListener(private val webSocketManager: WebSocketManager) : WebSocketListener() {
+class GameWebSocketListener(private val webSocketManager: WebSocketManager) : WebSocketListener() {
     override fun onOpen(webSocket: WebSocket, response: Response) {
         println("WebSocket opened: ${response.message}")
     }
