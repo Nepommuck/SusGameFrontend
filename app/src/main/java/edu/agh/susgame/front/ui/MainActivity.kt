@@ -29,7 +29,7 @@ import edu.agh.susgame.front.util.ProviderType
 class MainActivity : ComponentActivity() {
     private data class Services(
         val lobbyService: LobbyService,
-        val webGameService: GameService,
+        val gameService: GameService,
         val serverMapProvider: ServerMapProvider,
     )
 
@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
                             navController,
                             services.serverMapProvider,
                             services.lobbyService,
-                            services.webGameService,
+                            services.gameService,
                         )
                     }
                 }

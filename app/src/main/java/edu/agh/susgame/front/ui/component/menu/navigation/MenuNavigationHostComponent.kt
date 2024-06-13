@@ -20,7 +20,7 @@ fun MenuNavigationHostComponent(
     menuNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
     lobbyService: LobbyService,
-    webGameService: GameService,
+    gameService: GameService,
 ) {
     NavHost(
         navController = menuNavController,
@@ -53,7 +53,7 @@ fun MenuNavigationHostComponent(
                     SearchLobbiesView(lobbyService, menuNavController)
 
                 else ->
-                    LobbyView(lobbyId, lobbyService, webGameService, menuNavController)
+                    LobbyView(lobbyId, lobbyService, gameService, menuNavController)
             }
         }
 
@@ -66,7 +66,7 @@ fun MenuNavigationHostComponent(
                 ?.run {
                     LobbyId(this)
                 }
-            GameNavBarComponent(lobbyId, menuNavController, serverMapProvider, webGameService)
+            GameNavBarComponent(lobbyId, menuNavController, serverMapProvider, gameService)
         }
     }
 }

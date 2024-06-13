@@ -14,11 +14,11 @@ import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 
 @Composable
-fun ComputerComponent(webGameService: GameService) {
+fun ComputerComponent(gameService: GameService) {
     val messages = remember { mutableStateListOf<String>() }
 
-    LaunchedEffect(webGameService) {
-        webGameService.messagesFlow.collect { message ->
+    LaunchedEffect(gameService) {
+        gameService.messagesFlow.collect { message ->
             messages.add(message)
         }
     }

@@ -37,12 +37,12 @@ private val player: Player = Player(nickname = PlayerNickname("The-player"))
 private fun LobbyContentComponent(
     lobbyInitialState: Lobby,
     lobbyService: LobbyService,
-    webGameService: GameService,
+    gameService: GameService,
     navController: NavController,
 ) {
     var lobby by remember { mutableStateOf(lobbyInitialState) }
     var hasPlayerJoined by remember {
-        mutableStateOf(webGameService.isPlayerInLobby(lobbyInitialState.id))
+        mutableStateOf(gameService.isPlayerInLobby(lobbyInitialState.id))
     }
 
     Column {
@@ -80,7 +80,7 @@ private fun LobbyContentComponent(
                         }
 
                         true -> {
-                            webGameService.leaveLobby()
+                            gameService.leaveLobby()
                                 .thenRun {
                                     hasPlayerJoined = false
                                     CoroutineScope(Dispatchers.Main).launch {
@@ -110,7 +110,7 @@ private fun LobbyContentComponent(
                     enabled = !isJoinButtonLoading,
                     onClick = {
                         isJoinButtonLoading = true
-                        webGameService.joinLobby(lobby.id, player.nickname)
+                        gameService.joinLobby(lobby.id, player.nickname)
                             .thenRun {
                                 // TODO Await server socket response instead
                                 // Explicit wait, because otherwise server responds with a list
@@ -140,7 +140,7 @@ private fun LobbyContentComponent(
 fun LobbyView(
     lobbyId: LobbyId,
     lobbyService: LobbyService,
-    webGameService: GameService,
+    gameService: GameService,
     navController: NavController,
 ) {
     var lobby by remember { mutableStateOf<Lobby?>(null) }
@@ -176,7 +176,7 @@ fun LobbyView(
                         LobbyContentComponent(
                             it,
                             lobbyService,
-                            webGameService,
+                            gameService,
                             navController,
                         )
                     }

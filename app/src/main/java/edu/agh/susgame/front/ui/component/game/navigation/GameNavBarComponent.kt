@@ -27,7 +27,7 @@ fun GameNavBarComponent(
     lobbyId: LobbyId?,
     menuNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
-    webGameService: GameService,
+    gameService: GameService,
 ) {
     val gameNavController = rememberNavController()
     Scaffold(
@@ -44,7 +44,7 @@ fun GameNavBarComponent(
             menuNavController,
             gameNavController,
             serverMapProvider,
-            webGameService,
+            gameService,
         )
     }
 }

@@ -25,7 +25,7 @@ fun GameNavigationHostComponent(
     menuNavController: NavHostController,
     gameNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
-    webGameService: GameService,
+    gameService: GameService,
 ) {
     when (lobbyId) {
         null -> {
@@ -46,7 +46,7 @@ fun GameNavigationHostComponent(
                 GameView(lobbyId, serverMapProvider, menuNavController)
             }
             composable(GameRoute.Computer.route) {
-                ComputerComponent(webGameService)
+                ComputerComponent(gameService)
             }
         }
     }
