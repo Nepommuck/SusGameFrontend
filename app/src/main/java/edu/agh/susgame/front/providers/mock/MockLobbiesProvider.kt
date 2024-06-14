@@ -1,13 +1,13 @@
 package edu.agh.susgame.front.providers.mock
 
 import androidx.compose.ui.graphics.Color
+import edu.agh.susgame.front.Config
 import edu.agh.susgame.front.model.Player
 import edu.agh.susgame.front.model.PlayerId
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider.CreateNewGameResult
-import edu.agh.susgame.front.settings.Configuration
 import java.util.concurrent.CompletableFuture
 
 class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
@@ -77,11 +77,13 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
         // game 1
         val player0 = Player(
             name = "Player_0",
-            color = Color.Red
+            color = Color.Red,
+            id = PlayerId(0)
         )
         val player1 = Player(
             name = "Player_1",
-            color = Color.Green
+            color = Color.Green,
+            id = PlayerId(1)
         )
 
         val lobbyIdValue1 = LobbyId(freeGameId++)
@@ -89,7 +91,7 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
             lobbyIdValue1, Lobby(
                 id = lobbyIdValue1,
                 name = "Gra dodana statycznie 1",
-                maxNumOfPlayers = Configuration.MAX_PLAYERS_PER_GAME,
+                maxNumOfPlayers = Config.gameConfig.playersPerGame.max,
                 gameTime = 10,
             )
         )
@@ -100,11 +102,13 @@ class MockLobbiesProvider(mockDelayMs: Long? = null) : LobbiesProvider {
         // game 2
         val player2 = Player(
             name = "Player_0",
-            color = Color.Red
+            color = Color.Red,
+            id = PlayerId(0)
         )
         val player3 = Player(
             name = "Player_1",
-            color = Color.Green
+            color = Color.Green,
+            id = PlayerId(1)
         )
 
         val lobbyIdValue2 = LobbyId(freeGameId++)

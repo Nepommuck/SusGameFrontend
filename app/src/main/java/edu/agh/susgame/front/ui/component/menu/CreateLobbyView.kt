@@ -36,10 +36,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
+import edu.agh.susgame.front.Config
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider.CreateNewGameResult
-import edu.agh.susgame.front.settings.Configuration
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 import edu.agh.susgame.front.ui.theme.PaddingL
@@ -47,7 +47,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale
-import kotlin.math.roundToInt
 
 
 private const val DEFAULT_PLAYERS_AMOUNT = 4
@@ -124,7 +123,7 @@ fun CreateLobbyView(
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     value = gamePin,
-                    onValueChange = { if (it.length <= Configuration.MAX_PIN_LENGTH) gamePin = it },
+                    onValueChange = { if (it.length <= Config.gameConfig.maxPinLength) gamePin = it },
                     singleLine = true,
                     enabled = isGamePinEnabled,
                     modifier = Modifier.weight(1f),
@@ -152,7 +151,7 @@ fun CreateLobbyView(
                 Spacer(modifier = Modifier.width(PaddingL))
                 Button(
                     onClick = { selectedNumberOfPlayers -= 1 },
-                    enabled = selectedNumberOfPlayers > Configuration.MIN_PLAYERS_PER_GAME
+                    enabled = selectedNumberOfPlayers >  Config.gameConfig.playersPerGame.min
                 ) {
                     Text(
                         text = "-"
@@ -165,7 +164,7 @@ fun CreateLobbyView(
                 )
                 Button(
                     onClick = { selectedNumberOfPlayers += 1 },
-                    enabled = selectedNumberOfPlayers < Configuration.MAX_PLAYERS_PER_GAME
+                    enabled = selectedNumberOfPlayers < Config.gameConfig.playersPerGame.max
                 ) {
                     Text(
                         text = "+"
@@ -201,8 +200,8 @@ fun CreateLobbyView(
                     onValueChange = { newValue ->
                         gameTime = newValue.toInt()
                     },
-                    valueRange = Configuration.MIN_GAME_TIME..Configuration.MAX_GAME_TIME,
-                    steps = (Configuration.MAX_GAME_TIME - Configuration.MIN_GAME_TIME - 1).roundToInt()
+                    valueRange = Config.gameConfig.gameTimeMinutes.min.toFloat()..Config.gameConfig.gameTimeMinutes.max.toFloat(),
+                    steps = (Config.gameConfig.gameTimeMinutes.max - Config.gameConfig.gameTimeMinutes.min - 1)
                 )
             }
 

@@ -5,31 +5,45 @@ import edu.agh.susgame.front.model.PlayerId
 import edu.agh.susgame.front.util.Coordinates
 
 class GameGraph(
-    val nodes: MutableMap<NodeId, Node>,
-    val edges: MutableMap<EdgeId, Edge>,
+    val nodes: Map<NodeId, Node>,
+    val edges: Map<EdgeId, Edge>,
+    val players: Map<PlayerId, Player>,
     val paths: MutableMap<PlayerId, Path>,
-    val players: MutableMap<PlayerId, Player>,
-    val nodesToEdges: MutableMap<Pair<NodeId, NodeId>, EdgeId>,
-    var serverId: NodeId = NodeId(0),
+    val serverId: NodeId,
     val mapSize: Coordinates,
 ) {
-    fun addNode(node: Node) {
-        nodes[node.id] = node
+    companion object {
+        fun fromLists(
+            nodes: List<Node>,
+            edges: List<Edge>,
+            players: List<Player>,
+            serverId: NodeId,
+            mapSize: Coordinates,
+        ): GameGraph =
+            GameGraph(
+                nodes = nodes.associateBy { it.id },
+                edges = edges.associateBy { it.id },
+                players = players.associateBy { it.id!! },
+                paths = mutableMapOf(),
+                serverId = serverId,
+                mapSize = mapSize,
+            )
     }
 
-    fun addEdge(edge: Edge) {
-        edges[edge.id] = edge
-        nodesToEdges[Pair(edge.firstNodeId, edge.secondNodeId)] = edge.id
-        nodesToEdges[Pair(edge.secondNodeId, edge.firstNodeId)] = edge.id
-    }
+    private val nodesToEdges = edges
+        .values
+        .associate {
+            Pair(it.firstNodeId, it.secondNodeId) to it.id
+        }.flatMap {
+            sequenceOf(
+                it.toPair(),
+                Pair(it.key.second, it.key.first) to it.value
+            )
+        }.associate {
+            it.first to it.second
+        }
 
-    fun addPlayer(player: Player) {
-        player.id?.let { players[it] = player }
+    fun getEdgeId(firstNode: NodeId, secondNode: NodeId): EdgeId? {
+        return this.nodesToEdges[Pair(firstNode, secondNode)]
     }
-
-    fun getEdgeId(firstId: NodeId, secondId: NodeId) : EdgeId? {
-        val key: Pair<NodeId, NodeId> = firstId to secondId
-        return nodesToEdges[key]
-    }
-
 }

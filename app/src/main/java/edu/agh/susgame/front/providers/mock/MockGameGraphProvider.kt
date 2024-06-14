@@ -9,7 +9,7 @@ import edu.agh.susgame.front.model.graph.EdgeId
 import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.model.graph.Host
 import edu.agh.susgame.front.model.graph.NodeId
-import edu.agh.susgame.front.model.graph.Path
+import edu.agh.susgame.front.model.graph.PathBuilder
 import edu.agh.susgame.front.model.graph.Router
 import edu.agh.susgame.front.model.graph.Server
 import edu.agh.susgame.front.providers.interfaces.GameGraphProvider
@@ -19,18 +19,7 @@ import java.util.concurrent.CompletableFuture
 class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
     private val delayMs = mockDelayMs ?: 0
 
-    private val gameGraphState = GameGraph(
-        mapSize = Coordinates(1000, 1000),
-        nodes = mutableMapOf(),
-        edges = mutableMapOf(),
-        paths = mutableMapOf(),
-        nodesToEdges = mutableMapOf(),
-        players = mutableMapOf()
-    )
-
-    init {
-        createCustomMapState()
-    }
+    private val gameGraphState = createCustomMapState()
 
     override fun getServerMapState(
         lobbyId: LobbyId,
@@ -40,16 +29,16 @@ class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
             gameGraphState
         }
 
-    override fun changePlayerPath(playerId: PlayerId, path: Path) {
-        gameGraphState.paths[playerId] = path
+    override fun changePlayerPath(playerId: PlayerId, pathBuilder: PathBuilder) {
+        //
     }
 
     /**
      * This function is only for testing, it shows logic behind creating game map
      */
-    private fun createCustomMapState() {
+    private fun createCustomMapState(): GameGraph {
 
-        listOf(
+        val nodes = listOf(
             Router(NodeId(0), "R1", Coordinates(150, 150), 30),
             Router(NodeId(1), "R2", Coordinates(250, 150), 30),
             Router(NodeId(2), "R3", Coordinates(200, 25), 30),
@@ -59,12 +48,10 @@ class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
             Host(NodeId(5), "H3", Coordinates(350, 250), PlayerId(2)),
 
             Server(NodeId(6), "S1", Coordinates(75, 50), 300),
-        ).forEach {
-            gameGraphState.addNode(it)
-        }
-        gameGraphState.serverId = NodeId(6)
+        )
+        val serverId = NodeId(6)
 
-        listOf(
+        val edges = listOf(
             Edge(EdgeId(0), NodeId(3), NodeId(0), 5),
             Edge(EdgeId(1), NodeId(4), NodeId(0), 5),
             Edge(EdgeId(2), NodeId(1), NodeId(5), 5),
@@ -73,10 +60,9 @@ class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
             Edge(EdgeId(5), NodeId(0), NodeId(6), 5),
             Edge(EdgeId(6), NodeId(1), NodeId(2), 5),
             Edge(EdgeId(7), NodeId(2), NodeId(6), 5),
-        ).forEach {
-            gameGraphState.addEdge(it)
-        }
-        listOf(
+        )
+
+        val players = listOf(
             Player(
                 name = "Player_0",
                 color = Color.Red,
@@ -92,8 +78,17 @@ class MockGameGraphProvider(mockDelayMs: Long? = null) : GameGraphProvider {
                 color = Color.Magenta,
                 id = PlayerId(2)
             ),
-        ).forEach {
-            gameGraphState.addPlayer(it)
-        }
+        )
+        val mapSize = Coordinates(1000, 1000)
+
+        val gameGraphState = GameGraph.fromLists(
+            nodes = nodes,
+            edges = edges,
+            players = players,
+            serverId = serverId,
+            mapSize = mapSize
+        )
+
+        return gameGraphState
     }
 }
