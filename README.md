@@ -1,24 +1,26 @@
+# SusGame - Frontend
+
 ## App config
 
-App config can be changed by editing the **Config file**: `app/src/main/java/edu/agh/susgame/front/Config.kt`
+App config can be changed by editing the **[`Config.kt`](app/src/main/java/edu/agh/susgame/front/Config.kt) file**
 
 ### Local (Mock) setup
 
-Set the following in the **Config file** (`Config.kt`):
+Set the following in the **[`Config.kt`](app/src/main/java/edu/agh/susgame/front/Config.kt) file**:
 ```
 override val providers = ProviderType.MockLocal
 ```
 The remaining configuration will be ignored
 
 ### Server setup
-1. Run the server (`SusGameBackend` repository) in the same network
+1. Run the server ([**SusGameBackend** repository](https://github.com/Nepommuck/SusGameBackend)) in the same network
 2. Get your public IPv4 address. On linux it can be achieved by:
     ```
     ❯ ip addr | grep "global dynamic"
     inet 192.168.0.15/24 brd 192.168.0.255 scope global dynamic noprefixroute wlp0s20f3
     ```
    where `192.168.0.15` is what interests us
-3. Update the **Config file** (`Config.kt`):
+3. Update the **[`Config.kt`](app/src/main/java/edu/agh/susgame/front/Config.kt) file**:
     ```
     override val providers = ProviderType.Web
 
@@ -27,9 +29,14 @@ The remaining configuration will be ignored
         domain = "192.168.0.15",
         // ...
     ```
-4. Paste your IPv4 address into `app/src/main/res/xml/network_security_config.xml`:
+4. Paste your IPv4 address into [**`network_security_config.xml`**](./app/src/main/res/xml/network_security_config.xml):
     ```
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">192.168.0.15</domain>
     </domain-config>
     ```
+
+## Working with DTO
+- In order to modify DTO, commit to [**SusGameDTO** repository](https://github.com/Nepommuck/SusGameDTO)
+   
+- In order to update DTO to newest version, run [**`update-DTO.sh`**](./scripts/update-DTO.sh) script
