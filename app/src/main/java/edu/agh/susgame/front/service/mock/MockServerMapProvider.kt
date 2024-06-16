@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.providers.mock
+package edu.agh.susgame.front.service.mock
 
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.model.graph.Edge
@@ -8,7 +8,7 @@ import edu.agh.susgame.front.model.graph.Host
 import edu.agh.susgame.front.model.graph.NodeId
 import edu.agh.susgame.front.model.graph.Router
 import edu.agh.susgame.front.model.graph.Server
-import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
+import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.util.Coordinates
 import java.util.concurrent.CompletableFuture
 

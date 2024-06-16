@@ -12,7 +12,8 @@ import androidx.navigation.compose.composable
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.GameRoute
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.providers.interfaces.ServerMapProvider
+import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.game.computer.ComputerComponent
 import edu.agh.susgame.front.ui.component.game.map.GameView
@@ -24,6 +25,7 @@ fun GameNavigationHostComponent(
     menuNavController: NavHostController,
     gameNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
+    gameService: GameService,
 ) {
     when (lobbyId) {
         null -> {
@@ -44,7 +46,7 @@ fun GameNavigationHostComponent(
                 GameView(lobbyId, serverMapProvider, menuNavController)
             }
             composable(GameRoute.Computer.route) {
-                ComputerComponent()
+                ComputerComponent(gameService)
             }
         }
     }

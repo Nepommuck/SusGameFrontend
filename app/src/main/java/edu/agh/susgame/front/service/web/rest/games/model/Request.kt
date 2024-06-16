@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.providers.web.rest.games.model
+package edu.agh.susgame.front.service.web.rest.games.model
 
 data class GameCreationRequest(
     val gameName: String,

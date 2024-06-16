@@ -1,7 +1,7 @@
-package edu.agh.susgame.front.providers.web.rest.games.model
+package edu.agh.susgame.front.service.web.rest.games.model
 
 import edu.agh.susgame.front.model.game.LobbyId
-import edu.agh.susgame.front.providers.web.rest.model.LobbyApi
+import edu.agh.susgame.front.service.web.rest.model.LobbyApi
 
 
 sealed class GetAllGamesApiResult {

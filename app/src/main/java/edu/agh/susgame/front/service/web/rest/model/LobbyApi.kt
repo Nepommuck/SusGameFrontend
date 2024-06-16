@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.providers.web.rest.model
+package edu.agh.susgame.front.service.web.rest.model
 
 data class LobbyApi(
     val id: Int,

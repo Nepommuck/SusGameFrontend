@@ -17,10 +17,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import edu.agh.susgame.front.model.Player
+import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
+import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 import edu.agh.susgame.front.ui.theme.PaddingS
@@ -29,15 +31,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-private val player: Player = Player(name = "The-player")
+private val player: Player = Player(nickname = PlayerNickname("The-player"))
 
 @Composable
 private fun LobbyContentComponent(
     lobbyInitialState: Lobby,
-    lobbiesProvider: LobbiesProvider,
+    lobbyService: LobbyService,
+    gameService: GameService,
     navController: NavController,
 ) {
     var lobby by remember { mutableStateOf(lobbyInitialState) }
+    var hasPlayerJoined by remember {
+        mutableStateOf(gameService.isPlayerInLobby(lobbyInitialState.id))
+    }
+
     Column {
         Column(
             modifier = Modifier
@@ -50,8 +57,8 @@ private fun LobbyContentComponent(
                 text = "${Translation.Menu.SearchGame.nPlayersAwaiting(lobby.playersWaiting.size)}:",
                 Modifier.padding(vertical = PaddingS)
             )
-            lobby.playersWaiting.forEach {
-                Text(text = it.value.name)
+            lobby.playersWaiting.values.forEach {
+                Text(text = it.nickname.value)
             }
         }
 
@@ -64,17 +71,18 @@ private fun LobbyContentComponent(
                 enabled = !isLeaveButtonLoading,
                 onClick = {
                     isLeaveButtonLoading = true
-                    // TODO GAME-59 Fix this after socket implementation
-                    when (val playerId = player.id) {
-                        null -> {
+
+                    when (hasPlayerJoined) {
+                        false -> {
                             CoroutineScope(Dispatchers.Main).launch {
                                 navController.navigate(MenuRoute.SearchLobby.route)
                             }
                         }
 
-                        else -> {
-                            lobbiesProvider.leave(lobby.id, playerId)
+                        true -> {
+                            gameService.leaveLobby()
                                 .thenRun {
+                                    hasPlayerJoined = false
                                     CoroutineScope(Dispatchers.Main).launch {
                                         navController.navigate(MenuRoute.SearchLobby.route)
                                     }
@@ -89,9 +97,8 @@ private fun LobbyContentComponent(
                     else Translation.Button.LEAVE
                 )
             }
-            // TODO GAME-59 Fix this logic after joining is properly implemented
-//            if (lobby.playersWaiting.contains(player.id)) {
-            if (lobby.playersWaiting.toMap().values.map { it.name }.contains(player.name)) {
+
+            if (hasPlayerJoined) {
                 Button(onClick = {
                     navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
                 }) {
@@ -103,14 +110,19 @@ private fun LobbyContentComponent(
                     enabled = !isJoinButtonLoading,
                     onClick = {
                         isJoinButtonLoading = true
-                        lobbiesProvider.join(lobby.id, player)
+                        gameService.joinLobby(lobby.id, player.nickname)
                             .thenRun {
-                                lobbiesProvider.getById(lobby.id).thenAccept {
+                                // TODO Await server socket response instead
+                                // Explicit wait, because otherwise server responds with a list
+                                // that doesn't contain the new player
+                                Thread.sleep(500)
+                                lobbyService.getById(lobby.id).thenAccept {
                                     if (it != null) {
                                         lobby = it
                                     }
                                     isJoinButtonLoading = false
                                 }
+                                hasPlayerJoined = true
                             }
                     },
                 ) {
@@ -127,14 +139,15 @@ private fun LobbyContentComponent(
 @Composable
 fun LobbyView(
     lobbyId: LobbyId,
-    lobbiesProvider: LobbiesProvider,
+    lobbyService: LobbyService,
+    gameService: GameService,
     navController: NavController,
 ) {
     var lobby by remember { mutableStateOf<Lobby?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        lobbiesProvider.getById(lobbyId)
+        lobbyService.getById(lobbyId)
             .thenAccept {
                 lobby = it
                 isLoading = false
@@ -162,7 +175,8 @@ fun LobbyView(
                     lobby?.let {
                         LobbyContentComponent(
                             it,
-                            lobbiesProvider,
+                            lobbyService,
+                            gameService,
                             navController,
                         )
                     }
