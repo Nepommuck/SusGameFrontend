@@ -29,7 +29,7 @@ fun GameNavigationHostComponent(
 ) {
     when (lobbyId) {
         null -> {
-            Text(text = Translation.Error.UnexpectedError)
+            Text(text = Translation.Error.UNEXPECTED_ERROR)
             Button(onClick = {
                 menuNavController.navigate(MenuRoute.MainMenu.route)
             }) {

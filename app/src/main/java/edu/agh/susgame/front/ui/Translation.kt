@@ -13,21 +13,24 @@ object Translation {
         const val PLAY = "Graj"
         const val CREATE = "Stwórz"
         const val LOADING = "Ładowanie"
+        const val SEND = "Wyślij"
     }
 
-
     object Menu {
-        object SearchGame {
-            const val JOIN_GAME = "Dołącz do gry"
-            const val FIND_GAME = "Znajdź grę"
-            fun nPlayersAwaiting(n: Int): String {
-                require(n >= 0) { "Number of players can't be negative, but was: $n" }
-
-                return "Oczekuje $n ${if (n == 1) "gracz" else "graczy"}"
-            }
-        }
-
+        const val JOIN_GAME = "Dołącz do gry"
         const val CREATE_GAME = "Stwórz nową grę"
+    }
+
+    object Lobby {
+        const val FIND_GAME = "Znajdź grę"
+        const val CHOOSE_NICKNAME = "Podaj nick"
+        const val NICKNAME_ERROR_MESSAGE = "Nick nie może zawierać spacji"
+
+        fun nPlayersAwaiting(n: Int): String {
+            require(n >= 0) { "Number of players can't be negative, but was: $n" }
+
+            return "Oczekuje $n ${if (n == 1) "gracz" else "graczy"}"
+        }
     }
 
     object CreateGame {
@@ -59,7 +62,7 @@ object Translation {
     object Error {
         private const val ERROR = "BŁĄD"
 
-        const val UnexpectedError = "Wystąpił niespodziewany błąd"
+        const val UNEXPECTED_ERROR = "Wystąpił niespodziewany błąd"
 
         fun failedToLoadGame(lobbyId: LobbyId) =
             "$ERROR: Nie udało się wczytać gry: ${lobbyId.value}"

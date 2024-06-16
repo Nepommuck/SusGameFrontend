@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,8 +16,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
-import edu.agh.susgame.front.model.Player
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
@@ -30,9 +31,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
-private val player: Player = Player(nickname = PlayerNickname("The-player"))
-
 @Composable
 private fun LobbyContentComponent(
     lobbyInitialState: Lobby,
@@ -44,6 +42,20 @@ private fun LobbyContentComponent(
     var hasPlayerJoined by remember {
         mutableStateOf(gameService.isPlayerInLobby(lobbyInitialState.id))
     }
+    var playerNicknameInputValue by remember { mutableStateOf("") }
+    var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
+
+    fun isNicknameError() = currentNickname == null && playerNicknameInputValue.isNotEmpty()
+
+    fun updateNicknameIfValid(newNickname: String) {
+        val trimmedNickname = newNickname.trim()
+
+        currentNickname = if (trimmedNickname.any { it.isWhitespace() }) {
+            null
+        } else {
+            PlayerNickname(trimmedNickname)
+        }
+    }
 
     Column {
         Column(
@@ -54,12 +66,30 @@ private fun LobbyContentComponent(
             Header(title = lobby.name)
 
             Text(
-                text = "${Translation.Menu.SearchGame.nPlayersAwaiting(lobby.playersWaiting.size)}:",
+                text = "${Translation.Lobby.nPlayersAwaiting(lobby.playersWaiting.size)}:",
                 Modifier.padding(vertical = PaddingS)
             )
             lobby.playersWaiting.values.forEach {
                 Text(text = it.nickname.value)
             }
+        }
+
+        if (!hasPlayerJoined) {
+            if (isNicknameError()) {
+                Text(text = Translation.Lobby.NICKNAME_ERROR_MESSAGE, color = Color.Red)
+            }
+
+            OutlinedTextField(
+                label = { Text(text = Translation.Lobby.CHOOSE_NICKNAME) },
+                modifier = Modifier.fillMaxWidth(),
+                value = playerNicknameInputValue,
+                onValueChange = {
+                    playerNicknameInputValue = it
+                    updateNicknameIfValid(it)
+                },
+                isError = isNicknameError(),
+                singleLine = true,
+            )
         }
 
         Row(
@@ -107,23 +137,25 @@ private fun LobbyContentComponent(
             } else {
                 var isJoinButtonLoading by remember { mutableStateOf(false) }
                 Button(
-                    enabled = !isJoinButtonLoading,
+                    enabled = !isJoinButtonLoading && currentNickname != null,
                     onClick = {
                         isJoinButtonLoading = true
-                        gameService.joinLobby(lobby.id, player.nickname)
-                            .thenRun {
-                                // TODO Await server socket response instead
-                                // Explicit wait, because otherwise server responds with a list
-                                // that doesn't contain the new player
-                                Thread.sleep(500)
-                                lobbyService.getById(lobby.id).thenAccept {
-                                    if (it != null) {
-                                        lobby = it
+                        currentNickname?.let { nickname ->
+                            gameService.joinLobby(lobby.id, nickname)
+                                .thenRun {
+                                    // TODO Await server socket response instead
+                                    // Explicit wait, because otherwise server responds with a list
+                                    // that doesn't contain the new player
+                                    Thread.sleep(500)
+                                    lobbyService.getById(lobby.id).thenAccept {
+                                        if (it != null) {
+                                            lobby = it
+                                        }
+                                        isJoinButtonLoading = false
                                     }
-                                    isJoinButtonLoading = false
+                                    hasPlayerJoined = true
                                 }
-                                hasPlayerJoined = true
-                            }
+                        }
                     },
                 ) {
                     Text(
