@@ -1,25 +1,26 @@
 package edu.agh.susgame.front.service.mock
 
+import edu.agh.susgame.dto.SocketMessage
 import edu.agh.susgame.front.model.Player
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.GameService.Companion.SimpleMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import okio.ByteString
 import java.util.concurrent.CompletableFuture
 
 class MockGameService(private val lobbyService: MockLobbyService) : GameService {
-    private val _messagesFlow = MutableSharedFlow<String>()
-    private val _byteFlow = MutableSharedFlow<ByteString>()
+    private val _messagesFlow = MutableSharedFlow<SimpleMessage>()
+    private val _gameStateFlow = MutableSharedFlow<SocketMessage.GameState>()
 
     private var joinedLobbyInfo: Pair<PlayerNickname, LobbyId>? = null
 
     override val messagesFlow = _messagesFlow.asSharedFlow()
-    override val byteFlow = _byteFlow.asSharedFlow()
+    override val gameStateFlow = _gameStateFlow.asSharedFlow()
 
     override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
         when (val lobbyInfo = joinedLobbyInfo) {
@@ -39,9 +40,14 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
             )
         }
 
-    override fun sendMessage(message: String) {
+    override fun sendSimpleMessage(message: String) {
         CoroutineScope(Dispatchers.Main).launch {
-            _messagesFlow.emit(message)
+            _messagesFlow.emit(
+                SimpleMessage(
+                    author = PlayerNickname("Local-Player"),
+                    message = message,
+                )
+            )
         }
     }
 }

@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.24"
 }
 
 android {
@@ -50,7 +52,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -66,6 +67,8 @@ dependencies {
 
     implementation(libs.okhttp)
     implementation(libs.gson)
+    implementation(libs.serialization.core)
+    implementation(libs.serialization.cbor)
 
     testImplementation(libs.junit)
 

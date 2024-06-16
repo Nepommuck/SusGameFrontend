@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.service.web
 
+import edu.agh.susgame.dto.SocketMessage
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.service.interfaces.GameService
@@ -9,9 +10,13 @@ import edu.agh.susgame.front.util.AppConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.cbor.Cbor
+import kotlinx.serialization.encodeToByteArray
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
+import okio.ByteString.Companion.toByteString
 import java.util.concurrent.CompletableFuture
 
 class WebGameService(
@@ -24,9 +29,10 @@ class WebGameService(
 
     private var socket: WebSocket? = null
     private var currentLobbyId: LobbyId? = null
+    private var playerNickname: PlayerNickname? = null
 
     override val messagesFlow = listener.messagesFlow
-    override val byteFlow = listener.bytesFlow
+    override val gameStateFlow = listener.gameStateFlow
 
     init {
         CoroutineScope(Dispatchers.Main).launch {
@@ -38,6 +44,7 @@ class WebGameService(
             listener.socketClosedFlow.collect {
                 socket = null
                 currentLobbyId = null
+                playerNickname = null
             }
         }
     }
@@ -58,6 +65,8 @@ class WebGameService(
                 .build()
 
             client.newWebSocket(request, listener)
+            currentLobbyId = lobbyId
+            playerNickname = nickname
         }
 
     override fun leaveLobby(): CompletableFuture<Unit> =
@@ -65,7 +74,15 @@ class WebGameService(
             socket?.close(code = 1000, reason = null)
         }
 
-    override fun sendMessage(message: String) {
-        socket?.send(message)
+    @OptIn(ExperimentalSerializationApi::class)
+    override fun sendSimpleMessage(message: String) {
+        val socketMessage: SocketMessage = SocketMessage.SimpleMessage(
+            authorNickname = playerNickname?.value.orEmpty(),
+            message,
+        )
+
+        socket?.send(
+            Cbor.encodeToByteArray(socketMessage).toByteString()
+        )
     }
 }
