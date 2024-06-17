@@ -12,24 +12,6 @@ class GameGraph(
     val serverId: NodeId,
     val mapSize: Coordinates,
 ) {
-    companion object {
-        fun fromLists(
-            nodes: List<Node>,
-            edges: List<Edge>,
-            players: List<Player>,
-            serverId: NodeId,
-            mapSize: Coordinates,
-        ): GameGraph =
-            GameGraph(
-                nodes = nodes.associateBy { it.id },
-                edges = edges.associateBy { it.id },
-                players = players.associateBy { it.id!! },
-                paths = mutableMapOf(),
-                serverId = serverId,
-                mapSize = mapSize,
-            )
-    }
-
     private val nodesToEdges = edges
         .values
         .associate {
@@ -45,5 +27,25 @@ class GameGraph(
 
     fun getEdgeId(firstNode: NodeId, secondNode: NodeId): EdgeId? {
         return this.nodesToEdges[Pair(firstNode, secondNode)]
+    }
+
+    companion object {
+        fun fromLists(
+            nodes: List<Node>,
+            edges: List<Edge>,
+            players: List<Player>,
+            serverId: NodeId,
+            mapSize: Coordinates,
+        ): GameGraph =
+            GameGraph(
+                nodes = nodes.associateBy { it.id },
+                edges = edges.associateBy { it.id },
+                players = players.associateBy {
+                    it.id ?: throw IllegalArgumentException("One of players had unset id")
+                },
+                paths = mutableMapOf(),
+                serverId = serverId,
+                mapSize = mapSize,
+            )
     }
 }

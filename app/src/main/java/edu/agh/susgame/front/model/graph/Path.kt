@@ -1,8 +1,7 @@
 package edu.agh.susgame.front.model.graph
 
-class PathBuilder(
+class PathBuilder {
     val path: MutableList<NodeId> = mutableListOf()
-) {
     fun addNodeToPath(nodeId: NodeId) {
         if (isNodeValid(nodeId)) {
             path.add(nodeId)
@@ -28,7 +27,6 @@ class PathBuilder(
 
 class Path(
     private val path: List<NodeId>
-
 ) {
     fun getPathString(): String {
         return path.joinToString(", ") { it.value.toString() }
