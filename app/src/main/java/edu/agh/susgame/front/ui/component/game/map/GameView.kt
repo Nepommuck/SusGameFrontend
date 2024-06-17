@@ -55,7 +55,7 @@ fun GameView(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxHeight()
                 ) {
-                    mapState?.let { GameGraphComponent(it) }
+                    mapState?.let { GameGraphComponent(it, serverMapProvider) }
                 }
             }
         }

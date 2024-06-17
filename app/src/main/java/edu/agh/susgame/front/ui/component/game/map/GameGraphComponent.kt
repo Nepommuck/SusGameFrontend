@@ -35,7 +35,7 @@ import edu.agh.susgame.front.model.graph.Host
 import edu.agh.susgame.front.model.graph.Node
 import edu.agh.susgame.front.model.graph.NodeId
 import edu.agh.susgame.front.model.graph.PathBuilder
-import edu.agh.susgame.front.providers.interfaces.GameGraphProvider
+import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.theme.PaddingM
 import edu.agh.susgame.front.ui.util.ZoomState
@@ -46,7 +46,7 @@ private const val buttonHeight = 30
 @Composable
 internal fun GameGraphComponent(
     mapState: GameGraph,
-    gameGraphProvider: GameGraphProvider,
+    gameGraphProvider: ServerMapProvider,
 ) {
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
     var playerIdChangingPath by remember { mutableStateOf<PlayerId?>(null) }
