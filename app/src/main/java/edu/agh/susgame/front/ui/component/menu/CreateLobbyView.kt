@@ -38,8 +38,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
 import edu.agh.susgame.front.Config
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
-import edu.agh.susgame.front.providers.interfaces.LobbiesProvider.CreateNewGameResult
+import edu.agh.susgame.front.service.interfaces.LobbyService
+import edu.agh.susgame.front.service.interfaces.LobbyService.CreateNewGameResult
+import edu.agh.susgame.front.settings.Configuration
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 import edu.agh.susgame.front.ui.theme.PaddingL
@@ -54,7 +55,7 @@ private const val DEFAULT_GAME_TIME = 10
 
 @Composable
 fun CreateLobbyView(
-    lobbiesProvider: LobbiesProvider,
+    lobbyService: LobbyService,
     navController: NavController,
 ) {
     var gameName by remember { mutableStateOf(Translation.CreateGame.DEFAULT_GAME_NAME) }
@@ -218,7 +219,7 @@ fun CreateLobbyView(
                     createGameHandler(
                         gameName,
                         context,
-                        lobbiesProvider,
+                        lobbyService,
                         navController,
                         gamePin,
                         selectedNumberOfPlayers,
@@ -244,7 +245,7 @@ fun CreateLobbyView(
 private fun createGameHandler(
     gameName: String,
     androidContext: Context,
-    provider: LobbiesProvider,
+    provider: LobbyService,
     navController: NavController,
     gamePin: String,
     numOfPlayers: Int,

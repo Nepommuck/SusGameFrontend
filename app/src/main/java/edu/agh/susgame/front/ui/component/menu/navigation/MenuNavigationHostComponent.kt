@@ -6,6 +6,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.MenuRoute
+import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.LobbyService
+import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
 import edu.agh.susgame.front.providers.interfaces.GameGraphProvider
 import edu.agh.susgame.front.ui.component.game.navigation.GameNavBarComponent
@@ -17,8 +20,9 @@ import edu.agh.susgame.front.ui.component.menu.search.SearchLobbiesView
 @Composable
 fun MenuNavigationHostComponent(
     menuNavController: NavHostController,
-    gameGraphProvider: GameGraphProvider,
-    lobbiesProvider: LobbiesProvider,
+    serverMapProvider: ServerMapProvider,
+    lobbyService: LobbyService,
+    gameService: GameService,
 ) {
     NavHost(
         navController = menuNavController,
@@ -29,11 +33,11 @@ fun MenuNavigationHostComponent(
         }
 
         composable(route = MenuRoute.SearchLobby.route) {
-            SearchLobbiesView(lobbiesProvider, menuNavController)
+            SearchLobbiesView(lobbyService, menuNavController)
         }
 
         composable(route = MenuRoute.CreateLobby.route) {
-            CreateLobbyView(lobbiesProvider, menuNavController)
+            CreateLobbyView(lobbyService, menuNavController)
         }
 
         composable(
@@ -48,10 +52,10 @@ fun MenuNavigationHostComponent(
 
             when (lobbyId) {
                 null ->
-                    SearchLobbiesView(lobbiesProvider, menuNavController)
+                    SearchLobbiesView(lobbyService, menuNavController)
 
                 else ->
-                    LobbyView(lobbyId, lobbiesProvider, menuNavController)
+                    LobbyView(lobbyId, lobbyService, gameService, menuNavController)
             }
         }
 
@@ -64,7 +68,7 @@ fun MenuNavigationHostComponent(
                 ?.run {
                     LobbyId(this)
                 }
-            GameNavBarComponent(lobbyId, menuNavController, gameGraphProvider)
+            GameNavBarComponent(lobbyId, menuNavController, serverMapProvider, gameService)
         }
     }
 }

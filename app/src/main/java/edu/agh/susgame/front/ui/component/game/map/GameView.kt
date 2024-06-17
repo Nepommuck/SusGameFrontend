@@ -16,26 +16,25 @@ import androidx.navigation.NavController
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.providers.interfaces.GameGraphProvider
+import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.Translation
 
 @Composable
 fun GameView(
     lobbyId: LobbyId,
-    gameGraphProvider: GameGraphProvider,
+    serverMapProvider: ServerMapProvider,
     menuNavController: NavController,
 ) {
     var mapState by remember { mutableStateOf<GameGraph?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
-    gameGraphProvider.getServerMapState(lobbyId)
+    serverMapProvider.getServerMapState(lobbyId)
         .thenAccept {
             mapState = it
             isLoading = false
         }
 
-    Column(
-    ) {
+    Column {
         if (isLoading) {
             Text(text = "${Translation.Button.LOADING}...")
         } else {
@@ -56,9 +55,7 @@ fun GameView(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxHeight()
                 ) {
-                    mapState?.let {
-                        GameGraphComponent(it, gameGraphProvider)
-                    }
+                    mapState?.let { GameGraphComponent(it) }
                 }
             }
         }

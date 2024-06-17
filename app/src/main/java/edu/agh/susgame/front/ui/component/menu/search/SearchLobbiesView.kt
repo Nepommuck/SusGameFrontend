@@ -20,14 +20,14 @@ import androidx.navigation.NavController
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.providers.interfaces.LobbiesProvider
+import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 
 
 @Composable
 fun SearchLobbiesView(
-    lobbiesProvider: LobbiesProvider,
+    lobbyService: LobbyService,
     navController: NavController
 ) {
     var awaitingGames by remember { mutableStateOf<Map<LobbyId, Lobby>?>(null) }
@@ -35,7 +35,7 @@ fun SearchLobbiesView(
 
 
     LaunchedEffect(Unit) {
-        lobbiesProvider.getAll()
+        lobbyService.getAll()
             .thenAccept {
                 awaitingGames = it
                 isLoading = false
