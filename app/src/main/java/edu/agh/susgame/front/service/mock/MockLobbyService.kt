@@ -1,14 +1,14 @@
 package edu.agh.susgame.front.service.mock
 
 import androidx.compose.ui.graphics.Color
+import edu.agh.susgame.front.Config
 import edu.agh.susgame.front.model.Player
 import edu.agh.susgame.front.model.PlayerId
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.Lobby
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.service.interfaces.LobbyService.CreateNewGameResult
-import edu.agh.susgame.front.settings.Configuration
+
 import java.util.concurrent.CompletableFuture
 
 class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
@@ -37,7 +37,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         gamePin: String,
         maxNumberOfPlayers: Int,
         gameTime: Int,
-    ): CompletableFuture<CreateNewGameResult> =
+    ): CompletableFuture<LobbyService.CreateNewGameResult> =
         CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
             val lobbyId = LobbyId(freeGameId++)
@@ -50,7 +50,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
                     gameTime,
                 )
             )
-            CreateNewGameResult.Success(lobbyId)
+            LobbyService.CreateNewGameResult.Success(lobbyId)
         }
 
     /**
@@ -107,7 +107,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
             lobbyIdValue1, Lobby(
                 id = lobbyIdValue1,
                 name = "Gra dodana statycznie 1",
-                maxNumOfPlayers = Configuration.MaxPlayersPerGame,
+                maxNumOfPlayers = Config.gameConfig.playersPerGame.max,
                 gameTime = 10,
             )
         )

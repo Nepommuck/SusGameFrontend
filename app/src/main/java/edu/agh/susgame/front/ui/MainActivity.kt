@@ -11,12 +11,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import edu.agh.susgame.front.Config
+import edu.agh.susgame.front.providers.mock.MockServerMapProvider
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.service.mock.MockGameService
 import edu.agh.susgame.front.service.mock.MockLobbyService
-import edu.agh.susgame.front.service.mock.MockServerMapProvider
 import edu.agh.susgame.front.service.web.WebGameService
 import edu.agh.susgame.front.service.web.WebLobbyService
 import edu.agh.susgame.front.service.web.rest.games.GamesRest
