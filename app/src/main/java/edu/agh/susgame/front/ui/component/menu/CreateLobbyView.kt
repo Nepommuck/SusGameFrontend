@@ -36,10 +36,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
+import edu.agh.susgame.front.Config
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.service.interfaces.LobbyService.CreateNewGameResult
-import edu.agh.susgame.front.settings.Configuration
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
 import edu.agh.susgame.front.ui.theme.PaddingL
@@ -47,11 +47,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale
-import kotlin.math.roundToInt
 
 
-private const val defaultPlayersAmount = 4
-private const val defaultGameTime = 10
+private const val DEFAULT_PLAYERS_AMOUNT = 4
+private const val DEFAULT_GAME_TIME = 10
 
 @Composable
 fun CreateLobbyView(
@@ -61,8 +60,8 @@ fun CreateLobbyView(
     var gameName by remember { mutableStateOf(Translation.CreateGame.DEFAULT_GAME_NAME) }
     var gamePin by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(value = false) }
-    var selectedNumberOfPlayers by remember { mutableIntStateOf(defaultPlayersAmount) }
-    var gameTime by remember { mutableIntStateOf(defaultGameTime) }
+    var selectedNumberOfPlayers by remember { mutableIntStateOf(DEFAULT_PLAYERS_AMOUNT) }
+    var gameTime by remember { mutableIntStateOf(DEFAULT_GAME_TIME) }
     var isGamePinEnabled by remember { mutableStateOf(false) }
     Column(Modifier.padding(PaddingL)) {
         Column(
@@ -124,7 +123,7 @@ fun CreateLobbyView(
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     value = gamePin,
-                    onValueChange = { if (it.length <= Configuration.MaxPinLength) gamePin = it },
+                    onValueChange = { if (it.length <= Config.gameConfig.maxPinLength) gamePin = it },
                     singleLine = true,
                     enabled = isGamePinEnabled,
                     modifier = Modifier.weight(1f),
@@ -152,7 +151,7 @@ fun CreateLobbyView(
                 Spacer(modifier = Modifier.width(PaddingL))
                 Button(
                     onClick = { selectedNumberOfPlayers -= 1 },
-                    enabled = selectedNumberOfPlayers > Configuration.MinPlayersAmount
+                    enabled = selectedNumberOfPlayers >  Config.gameConfig.playersPerGame.min
                 ) {
                     Text(
                         text = "-"
@@ -165,7 +164,7 @@ fun CreateLobbyView(
                 )
                 Button(
                     onClick = { selectedNumberOfPlayers += 1 },
-                    enabled = selectedNumberOfPlayers < Configuration.MaxPlayersPerGame
+                    enabled = selectedNumberOfPlayers < Config.gameConfig.playersPerGame.max
                 ) {
                     Text(
                         text = "+"
@@ -201,8 +200,8 @@ fun CreateLobbyView(
                     onValueChange = { newValue ->
                         gameTime = newValue.toInt()
                     },
-                    valueRange = Configuration.MinGameTime..Configuration.MaxGameTime,
-                    steps = (Configuration.MaxGameTime - Configuration.MinGameTime - 1).roundToInt()
+                    valueRange = Config.gameConfig.gameTimeMinutes.min.toFloat()..Config.gameConfig.gameTimeMinutes.max.toFloat(),
+                    steps = (Config.gameConfig.gameTimeMinutes.max - Config.gameConfig.gameTimeMinutes.min - 1)
                 )
             }
 

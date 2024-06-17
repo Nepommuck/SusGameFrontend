@@ -49,7 +49,7 @@ fun SearchLobbiesView(
         }
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState()) // there was a problem when you press a button during scrolled state
+                .verticalScroll(rememberScrollState())
                 .weight(1f)
                 .fillMaxHeight()
         ) {
