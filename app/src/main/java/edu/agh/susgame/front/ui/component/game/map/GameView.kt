@@ -41,7 +41,7 @@ fun GameView(
             when (mapState) {
                 null -> {
                     Column {
-                        Text(text = Translation.Error.UnexpectedError)
+                        Text(text = Translation.Error.UNEXPECTED_ERROR)
 
                         Button(onClick = {
                             menuNavController.navigate(MenuRoute.SearchLobby.route)

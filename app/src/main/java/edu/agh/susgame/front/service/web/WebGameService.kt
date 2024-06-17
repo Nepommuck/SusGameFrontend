@@ -65,7 +65,7 @@ class WebGameService(
             socket?.close(code = 1000, reason = null)
         }
 
-    // TODO Game-65 Implement sending messages by websocket
     override fun sendMessage(message: String) {
+        socket?.send(message)
     }
 }

@@ -46,7 +46,7 @@ fun MainMenuView(
 
         Row(modifier = Modifier.padding(top = PaddingM)) {
             MainMenuButton(
-                text = Translation.Menu.SearchGame.JOIN_GAME,
+                text = Translation.Menu.JOIN_GAME,
                 onClick = {
                     navController.navigate(MenuRoute.SearchLobby.route)
                 })
