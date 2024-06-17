@@ -13,7 +13,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.navigation.MenuRoute
@@ -56,7 +55,7 @@ fun GameView(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxHeight()
                 ) {
-                    mapState?.let { GameGraphComponent(it) }
+                    mapState?.let { GameGraphComponent(it, serverMapProvider) }
                 }
             }
         }

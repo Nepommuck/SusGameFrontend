@@ -29,9 +29,14 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import edu.agh.susgame.front.model.PlayerId
 import edu.agh.susgame.front.model.graph.GameGraph
+import edu.agh.susgame.front.model.graph.Host
 import edu.agh.susgame.front.model.graph.Node
 import edu.agh.susgame.front.model.graph.NodeId
+import edu.agh.susgame.front.model.graph.PathBuilder
+import edu.agh.susgame.front.service.interfaces.ServerMapProvider
+import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.theme.PaddingM
 import edu.agh.susgame.front.ui.util.ZoomState
 
@@ -39,8 +44,15 @@ private const val buttonWidth = 70
 private const val buttonHeight = 30
 
 @Composable
-internal fun GameGraphComponent(mapState: GameGraph) {
+internal fun GameGraphComponent(
+    mapState: GameGraph,
+    gameGraphProvider: ServerMapProvider,
+) {
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
+    var playerIdChangingPath by remember { mutableStateOf<PlayerId?>(null) }
+    var pathToShow by remember { mutableStateOf("") }
+    var pathBuilderState by remember { mutableStateOf(PathBuilder()) }
+
     val zoomState = remember {
         ZoomState(
             maxZoomIn = 2f,
@@ -49,28 +61,25 @@ internal fun GameGraphComponent(mapState: GameGraph) {
         )
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .clipToBounds()
-            .pointerInput(Unit) {
-                detectTransformGestures { _, pan, zoom, _ ->
-                    zoomState.scale(zoom)
-                    zoomState.move(pan)
-                }
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight()
+        .clipToBounds()
+        .pointerInput(Unit) {
+            detectTransformGestures { _, pan, zoom, _ ->
+                zoomState.scale(zoom)
+                zoomState.move(pan)
             }
-            .background(Color.Green)
-    ) {
+        }
+        .background(Color.Green)) {
         Box(
-            modifier = Modifier
-                .graphicsLayer(
-                    scaleX = zoomState.scaleValue(),
-                    scaleY = zoomState.scaleValue(),
-                    translationX = zoomState.translationX(),
-                    translationY = zoomState.translationY(),
-                    clip = false
-                )
+            modifier = Modifier.graphicsLayer(
+                scaleX = zoomState.scaleValue(),
+                scaleY = zoomState.scaleValue(),
+                translationX = zoomState.translationX(),
+                translationY = zoomState.translationY(),
+                clip = false
+            )
         ) {
             Canvas(modifier = Modifier.fillMaxSize()) {
                 mapState.edges.forEach { (_, edge) ->
@@ -78,23 +87,42 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                     val startXY = mapState.nodes[edge.firstNodeId]
                     val endXY = mapState.nodes[edge.secondNodeId]
                     if (startXY != null && endXY != null) {
+                        // draw graph colors
                         drawLine(
-                            color = Color.Black,
-                            start = Offset(
+                            color = edge.color, start = Offset(
                                 startXY.position.x.dp.toPx(),
                                 startXY.position.y.dp.toPx(),
-                            ),
-                            end = Offset(
+                            ), end = Offset(
                                 endXY.position.x.dp.toPx(),
                                 endXY.position.y.dp.toPx(),
-                            ),
-                            strokeWidth = 3f
+                            ), strokeWidth = 7f
                         )
+                        val baseStart = Offset(
+                            startXY.position.x.dp.toPx(), startXY.position.y.dp.toPx()
+                        )
+                        val baseEnd = Offset(
+                            endXY.position.x.dp.toPx(), endXY.position.y.dp.toPx()
+                        )
+                        // draw players colors
+                        edge.playersIdsUsingEdge.forEachIndexed { index, playerId ->
+                            val offset = index * 10
+                            mapState.players[playerId]?.color?.let {
+                                drawLine(
+                                    color = it,
+                                    start = Offset(baseStart.x + offset, baseStart.y + offset),
+                                    end = Offset(baseEnd.x + offset, baseEnd.y + offset),
+                                    strokeWidth = 7f
+                                )
+                            }
+                        }
                     }
                 }
             }
+            Column() {
+                Text(zoomState.scaleValue().toString(), color = Color.Black)
+                Text(pathToShow)
+            }
 
-            Text(zoomState.scaleValue().toString(), color = Color.Black)
             mapState.nodes.forEach { (key, node) ->
                 Button(
                     modifier = Modifier
@@ -103,20 +131,31 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                             y = (node.position.y - buttonHeight / 2).dp,
                         )
                         .size(
-                            width = buttonWidth.dp,
-                            height = buttonHeight.dp
+                            width = buttonWidth.dp, height = buttonHeight.dp
                         ),
                     onClick = {
-                        inspectedNodeId = node.id
+                        playerIdChangingPath?.let {
+                            addNodeToPath(
+                                nodeId = node.id,
+                                pathBuilderState = pathBuilderState,
+                                pathToShow = { newState -> pathToShow = newState },
+                                playerId = playerIdChangingPath!!,
+                                gameGraph = mapState
+                            )
+                        } ?: run {
+                            inspectedNodeId = node.id
+                        }
                     },
-                ) {
+
+                    ) {
                     Text(
-                        text = node.name + ":" + key.value,
-                        fontSize = 7.sp
+                        text = node.name + ":" + key.value, fontSize = 7.sp
                     )
                 }
             }
+
         }
+
         inspectedNodeId?.let { nodeId ->
             mapState.nodes[nodeId]?.let {
                 ShowInfo(
@@ -124,15 +163,60 @@ internal fun GameGraphComponent(mapState: GameGraph) {
                     onExit = {
                         inspectedNodeId = null
                     },
+                    playerIdChangingPath = { newId -> playerIdChangingPath = newId },
+                    pathToShow = { newState -> pathToShow = newState },
+                    pathBuilderState = pathBuilderState,
+                    mapState = mapState
                 )
             }
         }
+
+        playerIdChangingPath?.let {
+            Column() {
+                Button(onClick = {
+                    mapState.edges.forEach { (_, edge) -> edge.removePlayer(playerIdChangingPath!!) }
+                    playerIdChangingPath = null
+                    pathBuilderState = PathBuilder()
+                    pathToShow = ""
+
+                }) {
+                    Text(Translation.Game.ABORT_PATH)
+                }
+                Button(onClick = {
+                    playerIdChangingPath?.let {
+                        if (pathBuilderState.isPathValid(serverId = mapState.serverId)) {
+                            gameGraphProvider.changePlayerPath(
+                                playerId = it, pathBuilder = pathBuilderState
+                            )
+                            playerIdChangingPath = null
+                            pathBuilderState = PathBuilder()
+                            pathToShow = ""
+
+                        }
+                    }
+                }, enabled = playerIdChangingPath?.let {
+                    pathBuilderState.isPathValid(serverId = mapState.serverId)
+                } ?: false
+
+                ) {
+                    Text(Translation.Game.ACCEPT_PATH)
+                }
+            }
+        }
+
     }
 }
 
 
 @Composable
-private fun ShowInfo(node: Node, onExit: () -> Unit) {
+private fun ShowInfo(
+    node: Node,
+    onExit: () -> Unit,
+    playerIdChangingPath: (PlayerId) -> Unit,
+    pathToShow: (String) -> Unit,
+    pathBuilderState: PathBuilder,
+    mapState: GameGraph
+) {
     Box(
         modifier = Modifier
             .background(Color.Cyan)
@@ -145,9 +229,46 @@ private fun ShowInfo(node: Node, onExit: () -> Unit) {
             ) {
                 Text(node.getInfo())
             }
-            Button(onClick = { onExit() }) {
-                Text("X")
+            Column() {
+                Button(onClick = { onExit() }) {
+                    Text("X")
+                }
+
+                val hostNode = node as? Host
+                hostNode?.let { host ->
+                    Button(onClick = {
+                        mapState.edges.forEach { (_, edge) -> edge.removePlayer(host.playerId) }
+                        playerIdChangingPath(host.playerId)
+                        pathBuilderState.addNodeToPath(nodeId = node.id)
+                        pathToShow(pathBuilderState.getPathString())
+                        onExit()
+                    }) {
+                        Text(Translation.Game.CHANGE_PATH)
+                    }
+                    mapState.paths[host.playerId]?.let { Text(it.getPathString()) }
+                }
             }
         }
     }
+}
+
+private fun addNodeToPath(
+    nodeId: NodeId,
+    pathBuilderState: PathBuilder,
+    pathToShow: (String) -> Unit,
+    playerId: PlayerId,
+    gameGraph: GameGraph
+) {
+    val edgeId = pathBuilderState.path.lastOrNull()?.let { lastNode ->
+        gameGraph.getEdgeId(lastNode, nodeId)
+    }
+
+    edgeId?.let {
+        if (pathBuilderState.isNodeValid(nodeId)) {
+            pathBuilderState.addNodeToPath(nodeId)
+            pathToShow(pathBuilderState.getPathString())
+            gameGraph.edges[edgeId]?.addPlayer(playerId)
+        }
+    }
+
 }
