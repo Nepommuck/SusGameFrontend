@@ -1,6 +1,6 @@
 package edu.agh.susgame.front.service.web
 
-import edu.agh.susgame.dto.SocketMessage
+import edu.agh.susgame.dto.ClientSocketMessage
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.LobbyId
 import edu.agh.susgame.front.service.interfaces.GameService
@@ -32,7 +32,6 @@ class WebGameService(
     private var playerNickname: PlayerNickname? = null
 
     override val messagesFlow = listener.messagesFlow
-    override val gameStateFlow = listener.gameStateFlow
 
     init {
         CoroutineScope(Dispatchers.Main).launch {
@@ -76,13 +75,10 @@ class WebGameService(
 
     @OptIn(ExperimentalSerializationApi::class)
     override fun sendSimpleMessage(message: String) {
-        val socketMessage: SocketMessage = SocketMessage.SimpleMessage(
-            authorNickname = playerNickname?.value.orEmpty(),
-            message,
-        )
+        val clientSocketMessage: ClientSocketMessage = ClientSocketMessage.ChatMessage(message)
 
         socket?.send(
-            Cbor.encodeToByteArray(socketMessage).toByteString()
+            Cbor.encodeToByteArray(clientSocketMessage).toByteString()
         )
     }
 }

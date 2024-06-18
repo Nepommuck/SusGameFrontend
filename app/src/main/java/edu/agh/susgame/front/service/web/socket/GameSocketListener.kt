@@ -1,6 +1,6 @@
 package edu.agh.susgame.front.service.web.socket
 
-import edu.agh.susgame.dto.SocketMessage
+import edu.agh.susgame.dto.ServerSocketMessage
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.service.interfaces.GameService.Companion.SimpleMessage
 import kotlinx.coroutines.CoroutineScope
@@ -22,13 +22,11 @@ class GameWebSocketListener : WebSocketListener() {
     private val _socketClosedFlow = MutableSharedFlow<Unit>()
 
     private val _messagesFlow = MutableSharedFlow<SimpleMessage>()
-    private val _gameStateFlow = MutableSharedFlow<SocketMessage.GameState>()
 
     val socketOpenedFlow: SharedFlow<WebSocket> = _socketOpenedFlow.asSharedFlow()
     val socketClosedFlow: SharedFlow<Unit> = _socketClosedFlow.asSharedFlow()
 
     val messagesFlow: SharedFlow<SimpleMessage> = _messagesFlow.asSharedFlow()
-    val gameStateFlow: SharedFlow<SocketMessage.GameState> = _gameStateFlow.asSharedFlow()
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
         println("WebSocket opened: ${response.message}")
@@ -48,9 +46,10 @@ class GameWebSocketListener : WebSocketListener() {
 
         CoroutineScope(Dispatchers.Main).launch {
             when (
-                val decodedMessage = Cbor.decodeFromByteArray<SocketMessage>(bytes.toByteArray())
+                val decodedMessage = Cbor
+                    .decodeFromByteArray<ServerSocketMessage>(bytes.toByteArray())
             ) {
-                is SocketMessage.SimpleMessage -> {
+                is ServerSocketMessage.ChatMessage -> {
                     _messagesFlow.emit(
                         SimpleMessage(
                             author = PlayerNickname(decodedMessage.authorNickname),
@@ -59,9 +58,7 @@ class GameWebSocketListener : WebSocketListener() {
                     )
                 }
 
-                SocketMessage.GameState -> {
-                    _gameStateFlow.emit(SocketMessage.GameState)
-                }
+                else -> {}
             }
         }
     }

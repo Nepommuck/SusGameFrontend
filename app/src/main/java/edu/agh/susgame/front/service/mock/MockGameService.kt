@@ -1,6 +1,5 @@
 package edu.agh.susgame.front.service.mock
 
-import edu.agh.susgame.dto.SocketMessage
 import edu.agh.susgame.front.model.Player
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.LobbyId
@@ -15,12 +14,10 @@ import java.util.concurrent.CompletableFuture
 
 class MockGameService(private val lobbyService: MockLobbyService) : GameService {
     private val _messagesFlow = MutableSharedFlow<SimpleMessage>()
-    private val _gameStateFlow = MutableSharedFlow<SocketMessage.GameState>()
 
     private var joinedLobbyInfo: Pair<PlayerNickname, LobbyId>? = null
 
     override val messagesFlow = _messagesFlow.asSharedFlow()
-    override val gameStateFlow = _gameStateFlow.asSharedFlow()
 
     override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
         when (val lobbyInfo = joinedLobbyInfo) {

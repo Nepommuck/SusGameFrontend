@@ -1,6 +1,5 @@
 package edu.agh.susgame.front.service.interfaces
 
-import edu.agh.susgame.dto.SocketMessage
 import edu.agh.susgame.front.model.PlayerNickname
 import edu.agh.susgame.front.model.game.LobbyId
 import kotlinx.coroutines.flow.SharedFlow
@@ -9,7 +8,6 @@ import java.util.concurrent.CompletableFuture
 
 interface GameService {
     val messagesFlow: SharedFlow<SimpleMessage>
-    val gameStateFlow: SharedFlow<SocketMessage.GameState>
 
     fun isPlayerInLobby(lobbyId: LobbyId): Boolean
 
