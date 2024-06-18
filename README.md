@@ -40,3 +40,5 @@ The remaining configuration will be ignored
 - In order to modify DTO, commit to [**SusGameDTO** repository](https://github.com/Nepommuck/SusGameDTO)
    
 - In order to update DTO to newest version, run [**`update-DTO.sh`**](./scripts/update-DTO.sh) script
+- 
+- In order to update DTO to given **SusGameDTO** repository branch, run [**`update-DTO.sh`**](./scripts/update-DTO.sh) script with branch name as an argument
