@@ -43,7 +43,7 @@ fun SearchLobbiesView(
     }
 
     Column {
-        Header(title = Translation.Menu.SearchGame.FIND_GAME)
+        Header(title = Translation.Lobby.FIND_GAME)
         if (isLoading) {
             Text(text = "${Translation.Button.LOADING}...")
         }
