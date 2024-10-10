@@ -12,7 +12,7 @@ object Config : AppConfig {
     override val webConfig = WebConfig(
 
         // NOTE: This value must be changed in `app/src/main/res/xml/network_security_config.xml` as well
-        domain = "192.168.0.105",
+        domain = "10.204.40.163",
 
         protocol = "http",
         port = 8080,
