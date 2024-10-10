@@ -55,6 +55,7 @@ fun ComputerComponent(gameService: GameService) {
 
             Button(onClick = {
                 gameService.sendSimpleMessage(newMessageInputValue)
+                messages.add("[You]: ${newMessageInputValue}")
                 newMessageInputValue = ""
             }) {
                 Text(text = Translation.Button.SEND)

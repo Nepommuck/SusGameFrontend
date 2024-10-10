@@ -15,7 +15,7 @@ interface GameService {
 
     fun leaveLobby(): CompletableFuture<Unit>
 
-    // TODO GAME-64 Should be replaced by less general methods like
+    // TODO Should be replaced by less general methods like
     //  `sendRouterUpdate(routerId, newRouterParams), `notifyAboutCreditChange(int)` etc.
     //  when backend is ready
     fun sendSimpleMessage(message: String)
