@@ -1,11 +1,17 @@
 package edu.agh.susgame.front.service.web.socket
 
+import edu.agh.susgame.dto.ServerSocketMessage
+import edu.agh.susgame.front.model.PlayerNickname
+import edu.agh.susgame.front.service.interfaces.GameService.Companion.SimpleMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.cbor.Cbor
+import kotlinx.serialization.decodeFromByteArray
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
@@ -15,14 +21,12 @@ class GameWebSocketListener : WebSocketListener() {
     private val _socketOpenedFlow = MutableSharedFlow<WebSocket>()
     private val _socketClosedFlow = MutableSharedFlow<Unit>()
 
-    private val _messagesFlow = MutableSharedFlow<String>()
-    private val _bytesFlow = MutableSharedFlow<ByteString>()
+    private val _messagesFlow = MutableSharedFlow<SimpleMessage>()
 
     val socketOpenedFlow: SharedFlow<WebSocket> = _socketOpenedFlow.asSharedFlow()
     val socketClosedFlow: SharedFlow<Unit> = _socketClosedFlow.asSharedFlow()
 
-    val messagesFlow: SharedFlow<String> = _messagesFlow.asSharedFlow()
-    val bytesFlow: SharedFlow<ByteString> = _bytesFlow.asSharedFlow()
+    val messagesFlow: SharedFlow<SimpleMessage> = _messagesFlow.asSharedFlow()
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
         println("WebSocket opened: ${response.message}")
@@ -33,18 +37,29 @@ class GameWebSocketListener : WebSocketListener() {
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
-        println("WebSocket Receiving: $text")
-
-        CoroutineScope(Dispatchers.Main).launch {
-            _messagesFlow.emit(text)
-        }
+        println("WebSocket Receiving text: $text")
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
         println("WebSocket Receiving bytes: ${bytes.hex()}")
 
         CoroutineScope(Dispatchers.Main).launch {
-            _bytesFlow.emit(bytes)
+            when (
+                val decodedMessage = Cbor
+                    .decodeFromByteArray<ServerSocketMessage>(bytes.toByteArray())
+            ) {
+                is ServerSocketMessage.ChatMessage -> {
+                    _messagesFlow.emit(
+                        SimpleMessage(
+                            author = PlayerNickname(decodedMessage.authorNickname),
+                            message = decodedMessage.message,
+                        )
+                    )
+                }
+
+                else -> {}
+            }
         }
     }
 

@@ -1,3 +1,9 @@
 # Default ignored files
-/shelf/
-/workspace.xml
+shelf/
+codeStyles/
+
+workspace.xml
+deploymentTargetDropDown.xml
+
+runConfigurations.xml
+SusGameFrontend.iml

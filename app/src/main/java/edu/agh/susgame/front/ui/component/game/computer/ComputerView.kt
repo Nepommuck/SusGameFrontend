@@ -30,7 +30,7 @@ fun ComputerComponent(gameService: GameService) {
 
     LaunchedEffect(gameService) {
         gameService.messagesFlow.collect { message ->
-            messages.add(message)
+            messages.add("[${message.author.value}]: ${message.message}")
         }
     }
 
@@ -54,7 +54,8 @@ fun ComputerComponent(gameService: GameService) {
             )
 
             Button(onClick = {
-                gameService.sendMessage(newMessageInputValue)
+                gameService.sendSimpleMessage(newMessageInputValue)
+                messages.add("[You]: ${newMessageInputValue}")
                 newMessageInputValue = ""
             }) {
                 Text(text = Translation.Button.SEND)
