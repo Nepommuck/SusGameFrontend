@@ -20,7 +20,7 @@ import edu.agh.susgame.front.service.mock.MockGameService
 import edu.agh.susgame.front.service.mock.MockLobbyService
 import edu.agh.susgame.front.service.web.WebGameService
 import edu.agh.susgame.front.service.web.WebLobbyService
-import edu.agh.susgame.front.service.web.rest.games.GamesRestImpl
+import edu.agh.susgame.front.rest.GamesRestImpl
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuNavigationHostComponent
 import edu.agh.susgame.front.ui.theme.PaddingL
 import edu.agh.susgame.front.ui.theme.SusGameTheme

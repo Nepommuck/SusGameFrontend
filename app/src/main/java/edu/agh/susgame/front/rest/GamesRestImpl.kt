@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.service.web.rest.games
+package edu.agh.susgame.front.rest
 
 import com.google.gson.Gson
 import edu.agh.susgame.dto.rest.games.GamesRest
@@ -9,7 +9,6 @@ import edu.agh.susgame.dto.rest.games.model.GetAllGamesApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameApiResult
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
-import edu.agh.susgame.front.service.web.rest.AbstractRest
 import edu.agh.susgame.front.util.AppConfig.WebConfig
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
