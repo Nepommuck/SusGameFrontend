@@ -15,7 +15,6 @@ import java.util.concurrent.CompletableFuture
 class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
     private val delayMs = mockDelayMs ?: 0
     private var freeGameId: Int = 0
-    private var freePlayerId: Int = 0
     private var currentLobbies: MutableMap<LobbyId, Lobby> = mutableMapOf()
 
     init {

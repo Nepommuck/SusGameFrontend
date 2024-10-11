@@ -1,14 +1,15 @@
 package edu.agh.susgame.front.service.web.rest.games
 
 import com.google.gson.Gson
+import edu.agh.susgame.dto.rest.games.GamesRest
+import edu.agh.susgame.dto.rest.games.model.CreateGameApiResult
+import edu.agh.susgame.dto.rest.games.model.GameCreationApiResponse
+import edu.agh.susgame.dto.rest.games.model.GameCreationRequest
+import edu.agh.susgame.dto.rest.games.model.GetAllGamesApiResult
+import edu.agh.susgame.dto.rest.games.model.GetGameApiResult
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.service.web.rest.AbstractRest
-import edu.agh.susgame.front.service.web.rest.games.model.CreateGameApiResult
-import edu.agh.susgame.front.service.web.rest.games.model.GameCreationApiResponse
-import edu.agh.susgame.front.service.web.rest.games.model.GameCreationRequest
-import edu.agh.susgame.front.service.web.rest.games.model.GetAllGamesApiResult
-import edu.agh.susgame.front.service.web.rest.games.model.GetGameApiResult
 import edu.agh.susgame.front.util.AppConfig.WebConfig
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
@@ -16,29 +17,32 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.net.HttpURLConnection
 import java.util.concurrent.CompletableFuture
 
-class GamesRestImpl(webConfig: WebConfig) : AbstractRest(webConfig, endpointName = "games") {
-    fun getAllGames(): CompletableFuture<GetAllGamesApiResult> = CompletableFuture.supplyAsync {
-        val request = Request.Builder()
-            .get()
-            .url(baseUrlBuilder().build())
-            .build()
+class GamesRestImpl(webConfig: WebConfig) : GamesRest,
+    AbstractRest(webConfig, endpointName = "games") {
 
-        val response = httpClient.newCall(request)
-            .execute()
+    override fun getAllGames(): CompletableFuture<GetAllGamesApiResult> =
+        CompletableFuture.supplyAsync {
+            val request = Request.Builder()
+                .get()
+                .url(baseUrlBuilder().build())
+                .build()
 
-        if (!response.isSuccessful)
-            GetAllGamesApiResult.Error
-        else {
-            val lobbies = Gson().fromJson(
-                response.body?.string(),
-                Array<Lobby>::class.java,
-            ).toList()
+            val response = httpClient.newCall(request)
+                .execute()
 
-            GetAllGamesApiResult.Success(lobbies)
+            if (!response.isSuccessful)
+                GetAllGamesApiResult.Error
+            else {
+                val lobbies = Gson().fromJson(
+                    response.body?.string(),
+                    Array<Lobby>::class.java,
+                ).toList()
+
+                GetAllGamesApiResult.Success(lobbies)
+            }
         }
-    }
 
-    fun getGame(gameId: LobbyId): CompletableFuture<GetGameApiResult> =
+    override fun getGame(gameId: LobbyId): CompletableFuture<GetGameApiResult> =
         CompletableFuture.supplyAsync {
             val request = Request.Builder()
                 .get()
@@ -66,10 +70,10 @@ class GamesRestImpl(webConfig: WebConfig) : AbstractRest(webConfig, endpointName
             }
         }
 
-    fun createGame(
+    override fun createGame(
         gameName: String,
         maxNumberOfPlayers: Int,
-        gamePin: String? = null,
+        gamePin: String?,
     ): CompletableFuture<CreateGameApiResult> = CompletableFuture.supplyAsync {
         val gameCreationRequest = GameCreationRequest(gameName, maxNumberOfPlayers, gamePin)
 

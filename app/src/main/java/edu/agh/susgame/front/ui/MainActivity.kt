@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import edu.agh.susgame.dto.rest.games.GamesRest
 import edu.agh.susgame.front.Config
 import edu.agh.susgame.front.providers.mock.MockServerMapProvider
 import edu.agh.susgame.front.service.interfaces.GameService
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
         val serverMapProvider: ServerMapProvider,
     )
 
-    private val gamesRest = GamesRestImpl(webConfig = Config.webConfig)
+    private val gamesRest: GamesRest = GamesRestImpl(webConfig = Config.webConfig)
 
     private val services = when (Config.providers) {
         ProviderType.MockLocal -> {
