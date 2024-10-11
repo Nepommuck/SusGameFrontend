@@ -33,7 +33,6 @@ git add "$LOCAL_DTO_PATH"
 
 echo "Adding a warning message to files"
 
-# Find files and apply the sed command to insert at the beginning
 WARNING_TEXT="// WARNING: THIS FILE WAS CLONED AUTOMATICALLY FROM 'SusGameDTO' GITHUB REPOSITORY
 // IT SHOULD NOT BE EDITED IN ANY WAY
 // IN ORDER TO CHANGE THIS DTO, COMMIT TO 'SusGameDTO' GITHUB REPOSITORY
