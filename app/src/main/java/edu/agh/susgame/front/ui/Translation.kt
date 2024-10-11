@@ -1,6 +1,6 @@
 package edu.agh.susgame.front.ui
 
-import edu.agh.susgame.front.model.game.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyId
 
 object Translation {
     const val GAME_TITLE = "SusGame"

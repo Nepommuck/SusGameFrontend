@@ -1,12 +1,13 @@
 package edu.agh.susgame.front.service.interfaces
 
-import edu.agh.susgame.front.model.PlayerNickname
-import edu.agh.susgame.front.model.game.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.PlayerNickname
 import kotlinx.coroutines.flow.SharedFlow
 import java.util.concurrent.CompletableFuture
 
-
 interface GameService {
+    data class SimpleMessage(val author: PlayerNickname, val message: String)
+
     val messagesFlow: SharedFlow<SimpleMessage>
 
     fun isPlayerInLobby(lobbyId: LobbyId): Boolean
@@ -19,8 +20,4 @@ interface GameService {
     //  `sendRouterUpdate(routerId, newRouterParams), `notifyAboutCreditChange(int)` etc.
     //  when backend is ready
     fun sendSimpleMessage(message: String)
-
-    companion object {
-        data class SimpleMessage(val author: PlayerNickname, val message: String)
-    }
 }

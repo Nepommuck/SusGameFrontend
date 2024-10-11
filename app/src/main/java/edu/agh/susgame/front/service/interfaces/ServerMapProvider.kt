@@ -1,8 +1,8 @@
 package edu.agh.susgame.front.service.interfaces
 
 
-import edu.agh.susgame.front.model.PlayerId
-import edu.agh.susgame.front.model.game.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.model.graph.PathBuilder
 import java.util.concurrent.CompletableFuture

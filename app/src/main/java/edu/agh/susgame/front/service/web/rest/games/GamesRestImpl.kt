@@ -1,14 +1,14 @@
 package edu.agh.susgame.front.service.web.rest.games
 
 import com.google.gson.Gson
-import edu.agh.susgame.front.model.game.LobbyId
+import edu.agh.susgame.dto.rest.model.Lobby
+import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.service.web.rest.AbstractRest
 import edu.agh.susgame.front.service.web.rest.games.model.CreateGameApiResult
 import edu.agh.susgame.front.service.web.rest.games.model.GameCreationApiResponse
 import edu.agh.susgame.front.service.web.rest.games.model.GameCreationRequest
 import edu.agh.susgame.front.service.web.rest.games.model.GetAllGamesApiResult
 import edu.agh.susgame.front.service.web.rest.games.model.GetGameApiResult
-import edu.agh.susgame.front.service.web.rest.model.LobbyApi
 import edu.agh.susgame.front.util.AppConfig.WebConfig
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
@@ -16,7 +16,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.net.HttpURLConnection
 import java.util.concurrent.CompletableFuture
 
-class GamesRest(webConfig: WebConfig) : AbstractRest(webConfig, endpointName = "games") {
+class GamesRestImpl(webConfig: WebConfig) : AbstractRest(webConfig, endpointName = "games") {
     fun getAllGames(): CompletableFuture<GetAllGamesApiResult> = CompletableFuture.supplyAsync {
         val request = Request.Builder()
             .get()
@@ -31,7 +31,7 @@ class GamesRest(webConfig: WebConfig) : AbstractRest(webConfig, endpointName = "
         else {
             val lobbies = Gson().fromJson(
                 response.body?.string(),
-                Array<LobbyApi>::class.java,
+                Array<Lobby>::class.java,
             ).toList()
 
             GetAllGamesApiResult.Success(lobbies)
@@ -57,7 +57,7 @@ class GamesRest(webConfig: WebConfig) : AbstractRest(webConfig, endpointName = "
                 HttpURLConnection.HTTP_OK -> {
                     val lobby = Gson().fromJson(
                         response.body?.string(),
-                        LobbyApi::class.java,
+                        Lobby::class.java,
                     )
                     GetGameApiResult.Success(lobby)
                 }

@@ -1,16 +1,16 @@
 package edu.agh.susgame.front.service.web.rest.games.model
 
-import edu.agh.susgame.front.model.game.LobbyId
-import edu.agh.susgame.front.service.web.rest.model.LobbyApi
+import edu.agh.susgame.dto.rest.model.Lobby
+import edu.agh.susgame.dto.rest.model.LobbyId
 
 
 sealed class GetAllGamesApiResult {
-    data class Success(val lobbies: List<LobbyApi>) : GetAllGamesApiResult()
+    data class Success(val lobbies: List<Lobby>) : GetAllGamesApiResult()
     data object Error : GetAllGamesApiResult()
 }
 
 sealed class GetGameApiResult {
-    data class Success(val lobby: LobbyApi) : GetGameApiResult()
+    data class Success(val lobby: Lobby) : GetGameApiResult()
     data object DoesNotExist : GetGameApiResult()
     data object OtherError : GetGameApiResult()
 }

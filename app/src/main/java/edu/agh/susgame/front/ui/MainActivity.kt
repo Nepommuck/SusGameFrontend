@@ -19,7 +19,7 @@ import edu.agh.susgame.front.service.mock.MockGameService
 import edu.agh.susgame.front.service.mock.MockLobbyService
 import edu.agh.susgame.front.service.web.WebGameService
 import edu.agh.susgame.front.service.web.WebLobbyService
-import edu.agh.susgame.front.service.web.rest.games.GamesRest
+import edu.agh.susgame.front.service.web.rest.games.GamesRestImpl
 import edu.agh.susgame.front.ui.component.menu.navigation.MenuNavigationHostComponent
 import edu.agh.susgame.front.ui.theme.PaddingL
 import edu.agh.susgame.front.ui.theme.SusGameTheme
@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
         val serverMapProvider: ServerMapProvider,
     )
 
-    private val gamesRest = GamesRest(webConfig = Config.webConfig)
+    private val gamesRest = GamesRestImpl(webConfig = Config.webConfig)
 
     private val services = when (Config.providers) {
         ProviderType.MockLocal -> {
