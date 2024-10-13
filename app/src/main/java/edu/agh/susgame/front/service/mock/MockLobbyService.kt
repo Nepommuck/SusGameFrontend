@@ -48,6 +48,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
                     gameName,
                     maxNumberOfPlayers,
                     gameTime,
+                    playersWaiting = emptyList(),
                 )
             )
             CreateNewGameResult.Success(lobbyId)
@@ -60,7 +61,6 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         currentLobbies.values.toList()
             .find { it.id == lobbyId }
             ?.playersWaiting
-            ?.values
             .orEmpty()
             .any { it.nickname == playerNickname }
 
@@ -111,6 +111,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
                 name = "Gra dodana statycznie 1",
                 maxNumOfPlayers = Config.gameConfig.playersPerGame.max,
                 gameTime = 10,
+                playersWaiting = emptyList(),
             )
         )
 
@@ -131,12 +132,20 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
 
         val lobbyIdValue2 = LobbyId(freeGameId++)
         currentLobbies.putIfAbsent(
-            lobbyIdValue2, Lobby(
+            lobbyIdValue2,
+            Lobby(
                 id = lobbyIdValue2,
                 name = "Gra dodana statycznie 2",
                 maxNumOfPlayers = 4,
                 gameTime = 5,
-            )
+                playersWaiting = listOf(
+                    Player(
+                        nickname = PlayerNickname("Nonexistent-Player"),
+                        id = PlayerId(99),
+                        colorHex = 0xFF0000,
+                    ),
+                ),
+            ),
         )
         this.joinLobby(lobbyIdValue2, player2)
         this.joinLobby(lobbyIdValue2, player3)
@@ -144,23 +153,21 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
 
     private fun lobbyWithPlayerAdded(lobby: Lobby, player: Player): Lobby {
         return lobby.copy(
-            playersWaiting = lobby.playersWaiting + (player.id to player),
+            playersWaiting = lobby.playersWaiting + player,
         )
     }
 
     private fun lobbyWithPlayerRemoved(lobby: Lobby, playerNickname: PlayerNickname): Lobby {
         val foundPlayer = lobby.playersWaiting
-            .filterValues { it.nickname == playerNickname }
+            .filter { it.nickname == playerNickname }
             .toList()
             .firstOrNull()
 
         return when (foundPlayer) {
             null -> lobby
             else -> {
-                val playerId = foundPlayer.first
-
                 lobby.copy(
-                    playersWaiting = lobby.playersWaiting - playerId,
+                    playersWaiting = lobby.playersWaiting - foundPlayer,
                 )
             }
         }

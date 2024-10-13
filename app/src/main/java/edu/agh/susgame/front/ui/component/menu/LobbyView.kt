@@ -69,7 +69,7 @@ private fun LobbyContentComponent(
                 text = "${Translation.Lobby.nPlayersAwaiting(lobby.playersWaiting.size)}:",
                 Modifier.padding(vertical = PaddingS)
             )
-            lobby.playersWaiting.values.forEach {
+            lobby.playersWaiting.forEach {
                 Text(text = it.nickname.value)
             }
         }
