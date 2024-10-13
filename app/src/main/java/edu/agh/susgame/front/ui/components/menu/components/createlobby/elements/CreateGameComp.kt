@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.ui.Translation
-//import edu.agh.susgame.front.ui.component.menu.components.createlobby.createGameHandler
+import edu.agh.susgame.front.service.interfaces.CreateNewGameResult
 import edu.agh.susgame.front.ui.theme.PaddingL
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -74,13 +74,13 @@ private fun createGameHandler(
         provider.createNewGame(gameName, gamePin, numOfPlayers, gameTime)
             .thenAccept { creationResult ->
                 val toastMessage = when (creationResult) {
-                    is LobbyService.CreateNewGameResult.Success ->
+                    is CreateNewGameResult.Success ->
                         Translation.CreateGame.CREATE_SUCCESS
 
-                    LobbyService.CreateNewGameResult.NameAlreadyExists ->
+                    CreateNewGameResult.NameAlreadyExists ->
                         Translation.CreateGame.CREATE_NAME_ALREADY_EXISTS
 
-                    LobbyService.CreateNewGameResult.OtherError ->
+                    CreateNewGameResult.OtherError ->
                         Translation.CreateGame.CREATE_OTHER_ERROR
                 }
 
@@ -91,7 +91,7 @@ private fun createGameHandler(
                         Toast.LENGTH_SHORT,
                     ).show()
 
-                    if (creationResult is LobbyService.CreateNewGameResult.Success) {
+                    if (creationResult is CreateNewGameResult.Success) {
                         navController.navigate(
                             MenuRoute.Lobby.routeWithArgument(lobbyId = creationResult.lobbyId),
                         )
