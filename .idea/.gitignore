@@ -2,11 +2,12 @@
 shelf/
 codeStyles/
 
-/caches/
+caches/
 
 workspace.xml
 deploymentTargetDropDown.xml
 
 runConfigurations.xml
 SusGameFrontend.iml
-/deploymentTargetSelector.xml
+deploymentTargetSelector.xml
+misc.xml
