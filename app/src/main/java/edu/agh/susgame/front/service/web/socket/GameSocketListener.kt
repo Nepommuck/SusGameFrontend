@@ -1,8 +1,8 @@
 package edu.agh.susgame.front.service.web.socket
 
-import edu.agh.susgame.dto.ServerSocketMessage
-import edu.agh.susgame.front.model.PlayerNickname
-import edu.agh.susgame.front.service.interfaces.GameService.Companion.SimpleMessage
+import edu.agh.susgame.dto.rest.model.PlayerNickname
+import edu.agh.susgame.dto.socket.ServerSocketMessage
+import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow

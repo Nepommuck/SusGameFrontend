@@ -1,17 +1,13 @@
 package edu.agh.susgame.front.service.web
 
-import edu.agh.susgame.front.model.Player
-import edu.agh.susgame.front.model.PlayerId
-import edu.agh.susgame.front.model.PlayerNickname
-import edu.agh.susgame.front.model.game.Lobby
-import edu.agh.susgame.front.model.game.LobbyId
+import edu.agh.susgame.dto.rest.games.GamesRest
+import edu.agh.susgame.dto.rest.games.model.CreateGameApiResult
+import edu.agh.susgame.dto.rest.games.model.GetAllGamesApiResult
+import edu.agh.susgame.dto.rest.games.model.GetGameApiResult
+import edu.agh.susgame.dto.rest.model.Lobby
+import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.front.service.interfaces.CreateNewGameResult
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.service.interfaces.LobbyService.CreateNewGameResult
-import edu.agh.susgame.front.service.web.rest.games.GamesRest
-import edu.agh.susgame.front.service.web.rest.games.model.CreateGameApiResult
-import edu.agh.susgame.front.service.web.rest.games.model.GetAllGamesApiResult
-import edu.agh.susgame.front.service.web.rest.games.model.GetGameApiResult
-import edu.agh.susgame.front.service.web.rest.model.LobbyApi
 import java.util.concurrent.CompletableFuture
 
 
@@ -25,9 +21,7 @@ class WebLobbyService(private val gamesRest: GamesRest) : LobbyService {
                 is GetAllGamesApiResult.Success ->
                     response
                         .lobbies
-                        .map {
-                            lobbyFromApiModel(it)
-                        }.associateBy { it.id }
+                        .associateBy { it.id }
             }
         }
 
@@ -36,7 +30,7 @@ class WebLobbyService(private val gamesRest: GamesRest) : LobbyService {
             when (response) {
                 GetGameApiResult.DoesNotExist -> null
                 GetGameApiResult.OtherError -> null
-                is GetGameApiResult.Success -> lobbyFromApiModel(response.lobby)
+                is GetGameApiResult.Success -> response.lobby
             }
         }
 
@@ -59,19 +53,4 @@ class WebLobbyService(private val gamesRest: GamesRest) : LobbyService {
                         CreateNewGameResult.OtherError
                 }
             }
-
-    companion object {
-        private fun lobbyFromApiModel(lobby: LobbyApi): Lobby =
-            Lobby(
-                id = LobbyId(lobby.id),
-                name = lobby.name,
-                maxNumOfPlayers = lobby.maxNumberOfPlayers,
-                gameTime = 10,
-                playersWaiting = lobby.players
-                    // TODO GAME-62 Unindexed players in REST
-                    .mapIndexed { index, playerNickname -> Pair(PlayerId(index), playerNickname) }
-                    .associate { it.first to Player(PlayerNickname(it.second)) }
-                    .toMutableMap()
-            )
-    }
 }

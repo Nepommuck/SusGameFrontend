@@ -1,7 +1,7 @@
 package edu.agh.susgame.front.model.graph
 
-import edu.agh.susgame.front.model.Player
-import edu.agh.susgame.front.model.PlayerId
+import edu.agh.susgame.dto.rest.model.Player
+import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.util.Coordinates
 
 class GameGraph(
@@ -40,9 +40,7 @@ class GameGraph(
             GameGraph(
                 nodes = nodes.associateBy { it.id },
                 edges = edges.associateBy { it.id },
-                players = players.associateBy {
-                    it.id ?: throw IllegalArgumentException("One of players had unset id")
-                },
+                players = players.associateBy { it.id },
                 paths = mutableMapOf(),
                 serverId = serverId,
                 mapSize = mapSize,

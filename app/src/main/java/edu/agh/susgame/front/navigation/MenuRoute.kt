@@ -3,7 +3,7 @@ package edu.agh.susgame.front.navigation
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import edu.agh.susgame.front.model.game.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyId
 
 
 sealed class MenuRoute(

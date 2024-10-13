@@ -1,12 +1,13 @@
 package edu.agh.susgame.front.service.mock
 
 import androidx.compose.ui.graphics.Color
+import edu.agh.susgame.dto.rest.model.Lobby
+import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.Player
+import edu.agh.susgame.dto.rest.model.PlayerId
+import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.Config
-import edu.agh.susgame.front.model.Player
-import edu.agh.susgame.front.model.PlayerId
-import edu.agh.susgame.front.model.PlayerNickname
-import edu.agh.susgame.front.model.game.Lobby
-import edu.agh.susgame.front.model.game.LobbyId
+import edu.agh.susgame.front.service.interfaces.CreateNewGameResult
 import edu.agh.susgame.front.service.interfaces.LobbyService
 
 import java.util.concurrent.CompletableFuture
@@ -14,7 +15,6 @@ import java.util.concurrent.CompletableFuture
 class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
     private val delayMs = mockDelayMs ?: 0
     private var freeGameId: Int = 0
-    private var freePlayerId: Int = 0
     private var currentLobbies: MutableMap<LobbyId, Lobby> = mutableMapOf()
 
     init {
@@ -37,7 +37,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         gamePin: String,
         maxNumberOfPlayers: Int,
         gameTime: Int,
-    ): CompletableFuture<LobbyService.CreateNewGameResult> =
+    ): CompletableFuture<CreateNewGameResult> =
         CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
             val lobbyId = LobbyId(freeGameId++)
@@ -48,9 +48,10 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
                     gameName,
                     maxNumberOfPlayers,
                     gameTime,
+                    playersWaiting = emptyList(),
                 )
             )
-            LobbyService.CreateNewGameResult.Success(lobbyId)
+            CreateNewGameResult.Success(lobbyId)
         }
 
     /**
@@ -60,7 +61,6 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         currentLobbies.values.toList()
             .find { it.id == lobbyId }
             ?.playersWaiting
-            ?.values
             .orEmpty()
             .any { it.nickname == playerNickname }
 
@@ -95,11 +95,13 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         // game 1
         val player0 = Player(
             nickname = PlayerNickname("Player_0"),
-            color = Color.Red
+            id = PlayerId(0),
+            colorHex = Color.Red.value.toLong(),
         )
         val player1 = Player(
             nickname = PlayerNickname("Player_1"),
-            color = Color.Green
+            id = PlayerId(1),
+            colorHex = Color.Green.value.toLong(),
         )
 
         val lobbyIdValue1 = LobbyId(freeGameId++)
@@ -109,6 +111,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
                 name = "Gra dodana statycznie 1",
                 maxNumOfPlayers = Config.gameConfig.playersPerGame.max,
                 gameTime = 10,
+                playersWaiting = emptyList(),
             )
         )
 
@@ -118,54 +121,53 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         // game 2
         val player2 = Player(
             nickname = PlayerNickname("Player_0"),
-            color = Color.Red
+            id = PlayerId(0),
+            colorHex = Color.Red.value.toLong(),
         )
         val player3 = Player(
             nickname = PlayerNickname("Player_1"),
-            color = Color.Green
+            id = PlayerId(1),
+            colorHex = Color.Green.value.toLong(),
         )
 
         val lobbyIdValue2 = LobbyId(freeGameId++)
         currentLobbies.putIfAbsent(
-            lobbyIdValue2, Lobby(
+            lobbyIdValue2,
+            Lobby(
                 id = lobbyIdValue2,
                 name = "Gra dodana statycznie 2",
                 maxNumOfPlayers = 4,
                 gameTime = 5,
-            )
+                playersWaiting = listOf(
+                    Player(
+                        nickname = PlayerNickname("Nonexistent-Player"),
+                        id = PlayerId(99),
+                        colorHex = 0xFF0000,
+                    ),
+                ),
+            ),
         )
         this.joinLobby(lobbyIdValue2, player2)
         this.joinLobby(lobbyIdValue2, player3)
     }
 
-    private fun getFreePlayerId(): PlayerId {
-        return PlayerId(freePlayerId++)
-    }
-
     private fun lobbyWithPlayerAdded(lobby: Lobby, player: Player): Lobby {
-        val playerId = player.id ?: getFreePlayerId()
-        player.id = playerId
-
         return lobby.copy(
-            playersWaiting = lobby.playersWaiting + (playerId to player),
+            playersWaiting = lobby.playersWaiting + player,
         )
     }
 
     private fun lobbyWithPlayerRemoved(lobby: Lobby, playerNickname: PlayerNickname): Lobby {
         val foundPlayer = lobby.playersWaiting
-            .filterValues { it.nickname == playerNickname }
+            .filter { it.nickname == playerNickname }
             .toList()
             .firstOrNull()
 
         return when (foundPlayer) {
             null -> lobby
             else -> {
-                val playerId = foundPlayer.first
-                val player = foundPlayer.second
-
-                player.resetId()
                 lobby.copy(
-                    playersWaiting = lobby.playersWaiting - playerId,
+                    playersWaiting = lobby.playersWaiting - foundPlayer,
                 )
             }
         }

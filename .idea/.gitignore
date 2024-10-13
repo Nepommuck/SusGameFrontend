@@ -2,8 +2,15 @@
 shelf/
 codeStyles/
 
+caches/
+inspectionProfiles/
+libraries/
+modules/
+
 workspace.xml
 deploymentTargetDropDown.xml
-
 runConfigurations.xml
 SusGameFrontend.iml
+deploymentTargetSelector.xml
+misc.xml
+modules.xml

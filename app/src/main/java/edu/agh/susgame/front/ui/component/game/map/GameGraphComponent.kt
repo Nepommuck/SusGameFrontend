@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import edu.agh.susgame.front.model.PlayerId
+import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.model.graph.Host
 import edu.agh.susgame.front.model.graph.Node
@@ -106,9 +106,9 @@ internal fun GameGraphComponent(
                         // draw players colors
                         edge.playersIdsUsingEdge.forEachIndexed { index, playerId ->
                             val offset = index * 10
-                            mapState.players[playerId]?.color?.let {
+                            mapState.players[playerId]?.colorHex?.let {
                                 drawLine(
-                                    color = it,
+                                    color = Color(it),
                                     start = Offset(baseStart.x + offset, baseStart.y + offset),
                                     end = Offset(baseEnd.x + offset, baseEnd.y + offset),
                                     strokeWidth = 7f

@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import edu.agh.susgame.front.model.game.Lobby
+import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingM
 

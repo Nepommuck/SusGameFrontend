@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.service.web.rest
+package edu.agh.susgame.front.rest
 
 import edu.agh.susgame.front.util.AppConfig.WebConfig
 import okhttp3.HttpUrl

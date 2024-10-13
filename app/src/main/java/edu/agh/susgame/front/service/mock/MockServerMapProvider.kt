@@ -1,10 +1,10 @@
 package edu.agh.susgame.front.providers.mock
 
 import androidx.compose.ui.graphics.Color
-import edu.agh.susgame.front.model.Player
-import edu.agh.susgame.front.model.PlayerId
-import edu.agh.susgame.front.model.PlayerNickname
-import edu.agh.susgame.front.model.game.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.Player
+import edu.agh.susgame.dto.rest.model.PlayerId
+import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.model.graph.Edge
 import edu.agh.susgame.front.model.graph.EdgeId
 import edu.agh.susgame.front.model.graph.GameGraph
@@ -31,7 +31,7 @@ class MockServerMapProvider(mockDelayMs: Long? = null) : ServerMapProvider {
         }
 
     override fun changePlayerPath(playerId: PlayerId, pathBuilder: PathBuilder) {
-        //
+        // TODO Implement
     }
 
     /**
@@ -66,17 +66,17 @@ class MockServerMapProvider(mockDelayMs: Long? = null) : ServerMapProvider {
         val players = listOf(
             Player(
                 nickname = PlayerNickname("Player_0"),
-                color = Color.Red,
+                colorHex = Color.Red.value.toLong(),
                 id = PlayerId(0)
             ),
             Player(
                 nickname = PlayerNickname("Player_1"),
-                color = Color.Blue,
+                colorHex = Color.Blue.value.toLong(),
                 id = PlayerId(1)
             ),
             Player(
                 nickname = PlayerNickname("Player_2"),
-                color = Color.Magenta,
+                colorHex = Color.Magenta.value.toLong(),
                 id = PlayerId(2)
             ),
         )

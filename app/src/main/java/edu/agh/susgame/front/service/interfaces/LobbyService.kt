@@ -1,16 +1,17 @@
 package edu.agh.susgame.front.service.interfaces
 
-import edu.agh.susgame.front.model.game.Lobby
-import edu.agh.susgame.front.model.game.LobbyId
+import edu.agh.susgame.dto.rest.model.Lobby
+import edu.agh.susgame.dto.rest.model.LobbyId
 import java.util.concurrent.CompletableFuture
 
-interface LobbyService {
-    sealed class CreateNewGameResult {
-        data class Success(val lobbyId: LobbyId) : CreateNewGameResult()
-        data object NameAlreadyExists : CreateNewGameResult()
-        data object OtherError : CreateNewGameResult()
-    }
 
+sealed class CreateNewGameResult {
+    data class Success(val lobbyId: LobbyId) : CreateNewGameResult()
+    data object NameAlreadyExists : CreateNewGameResult()
+    data object OtherError : CreateNewGameResult()
+}
+
+interface LobbyService {
     fun getAll(): CompletableFuture<Map<LobbyId, Lobby>>
 
     fun getById(lobbyId: LobbyId): CompletableFuture<Lobby?>
