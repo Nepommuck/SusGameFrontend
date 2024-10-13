@@ -20,7 +20,7 @@ import edu.agh.susgame.front.service.mock.MockLobbyService
 import edu.agh.susgame.front.service.web.WebGameService
 import edu.agh.susgame.front.service.web.WebLobbyService
 import edu.agh.susgame.front.service.web.rest.games.GamesRest
-import edu.agh.susgame.front.ui.component.menu.navigation.MenuNavigationHostComponent
+import edu.agh.susgame.front.ui.component.menu.MenuNavigationHost
 import edu.agh.susgame.front.ui.theme.PaddingL
 import edu.agh.susgame.front.ui.theme.SusGameTheme
 import edu.agh.susgame.front.util.ProviderType
@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
 
                     Box(modifier = Modifier.padding(PaddingL)) {
-                        MenuNavigationHostComponent(
+                        MenuNavigationHost(
                             navController,
                             services.serverMapProvider,
                             services.lobbyService,

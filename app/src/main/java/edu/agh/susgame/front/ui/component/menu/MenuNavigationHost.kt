@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.component.menu.navigation
+package edu.agh.susgame.front.ui.component.menu
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -10,13 +10,13 @@ import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.component.game.navigation.GameNavBarComponent
-import edu.agh.susgame.front.ui.component.menu.CreateLobbyView
-import edu.agh.susgame.front.ui.component.menu.LobbyView
-import edu.agh.susgame.front.ui.component.menu.MainMenuView
-import edu.agh.susgame.front.ui.component.menu.search.SearchLobbiesView
+import edu.agh.susgame.front.ui.component.menu.components.createlobby.CreateLobbyView
+import edu.agh.susgame.front.ui.component.menu.components.lobby.LobbyView
+import edu.agh.susgame.front.ui.component.menu.components.mainmenu.MainMenuView
+import edu.agh.susgame.front.ui.component.menu.components.searchlobby.SearchLobbiesView
 
 @Composable
-fun MenuNavigationHostComponent(
+fun MenuNavigationHost(
     menuNavController: NavHostController,
     serverMapProvider: ServerMapProvider,
     lobbyService: LobbyService,
