@@ -32,7 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-private fun LobbyContentComponent(
+internal fun LobbyComp(
     lobbyInitialState: Lobby,
     lobbyService: LobbyService,
     gameService: GameService,

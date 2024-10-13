@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.component.menu.search
+package edu.agh.susgame.front.ui.component.menu.components.searchlobby
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +23,7 @@ import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
+import edu.agh.susgame.front.ui.component.menu.components.searchlobby.elements.LobbyRow
 
 
 @Composable
@@ -54,7 +55,7 @@ fun SearchLobbiesView(
                 .fillMaxHeight()
         ) {
             awaitingGames?.forEach {
-                LobbyRowComponent(it.value, navController)
+                LobbyRow(it.value, navController)
             }
         }
         Row(

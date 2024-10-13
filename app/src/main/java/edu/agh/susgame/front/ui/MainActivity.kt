@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
 
                     Box(modifier = Modifier.padding(PaddingL)) {
-                        MenuNavigationHostComponent(
+                        MenuNavigationHost(
                             navController,
                             services.serverMapProvider,
                             services.lobbyService,

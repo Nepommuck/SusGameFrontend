@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.component.menu.search
+package edu.agh.susgame.front.ui.component.menu.components.searchlobby.elements
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,7 +21,10 @@ import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.ui.theme.PaddingM
 
 @Composable
-internal fun LobbyRowComponent(lobby: Lobby, navController: NavController) {
+internal fun LobbyRow(
+    lobby: Lobby,
+    navController: NavController
+) {
     Box(
         modifier = Modifier
             .padding(bottom = PaddingM)

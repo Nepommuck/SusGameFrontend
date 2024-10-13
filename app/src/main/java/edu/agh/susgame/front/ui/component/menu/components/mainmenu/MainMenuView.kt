@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.component.menu
+package edu.agh.susgame.front.ui.component.menu.components.mainmenu
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,19 +18,9 @@ import androidx.navigation.NavController
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.ui.Translation
 import edu.agh.susgame.front.ui.component.common.Header
+import edu.agh.susgame.front.ui.component.menu.components.mainmenu.elements.MainMenuButton
 import edu.agh.susgame.front.ui.theme.PaddingL
 import edu.agh.susgame.front.ui.theme.PaddingM
-
-
-@Composable
-private fun MainMenuButton(text: String, onClick: () -> Unit) {
-    Button(
-        onClick,
-        modifier = Modifier.defaultMinSize(minWidth = 160.dp),
-    ) {
-        Text(text)
-    }
-}
 
 @Composable
 fun MainMenuView(
