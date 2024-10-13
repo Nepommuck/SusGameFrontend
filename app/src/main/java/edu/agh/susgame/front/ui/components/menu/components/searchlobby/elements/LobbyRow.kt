@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.ui.theme.PaddingM
+import edu.agh.susgame.front.ui.components.common.theme.PaddingM
 
 @Composable
 internal fun LobbyRow(

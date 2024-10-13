@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.util
+package edu.agh.susgame.front.utils
 
 import kotlin.time.Duration
 

@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.theme
+package edu.agh.susgame.front.ui.components.common.theme
 
 import androidx.compose.ui.unit.dp
 

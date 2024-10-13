@@ -36,9 +36,9 @@ import edu.agh.susgame.front.model.graph.Node
 import edu.agh.susgame.front.model.graph.NodeId
 import edu.agh.susgame.front.model.graph.PathBuilder
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
-import edu.agh.susgame.front.ui.Translation
-import edu.agh.susgame.front.ui.theme.PaddingM
-import edu.agh.susgame.front.ui.util.ZoomState
+import edu.agh.susgame.front.Translation
+import edu.agh.susgame.front.ui.components.common.theme.PaddingM
+import edu.agh.susgame.front.ui.components.common.util.ZoomState
 
 private const val buttonWidth = 70
 private const val buttonHeight = 30

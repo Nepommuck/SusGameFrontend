@@ -14,7 +14,7 @@ import edu.agh.susgame.front.navigation.GameRoute
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
-import edu.agh.susgame.front.ui.Translation
+import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.ui.components.game.computer.ComputerComponent
 import edu.agh.susgame.front.ui.components.game.map.GameView
 

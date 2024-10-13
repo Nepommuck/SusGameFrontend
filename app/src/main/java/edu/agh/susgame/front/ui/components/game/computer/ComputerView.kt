@@ -19,9 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import edu.agh.susgame.front.service.interfaces.GameService
-import edu.agh.susgame.front.ui.Translation
+import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.ui.components.common.Header
-import edu.agh.susgame.front.ui.theme.PaddingS
+import edu.agh.susgame.front.ui.components.common.theme.PaddingS
 
 @Composable
 fun ComputerComponent(gameService: GameService) {

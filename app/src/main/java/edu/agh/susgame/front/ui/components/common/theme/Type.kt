@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.theme
+package edu.agh.susgame.front.ui.components.common.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

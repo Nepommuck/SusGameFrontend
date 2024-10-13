@@ -1,8 +1,7 @@
-package edu.agh.susgame.front.ui.util
+package edu.agh.susgame.front.ui.components.common.util
 
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.geometry.Offset
-import edu.agh.susgame.front.util.Coordinates
 import kotlin.math.max
 import kotlin.math.min
 
@@ -21,7 +20,7 @@ class ZoomState(
     private val translationX = mutableFloatStateOf(totalSize.x.toFloat() / 2)
     private val translationY = mutableFloatStateOf(totalSize.y.toFloat() / 2)
 
-    private val centroidX = mutableFloatStateOf(0f)
+//    private val centroidX = mutableFloatStateOf(0f)
 
     fun scaleValue(): Float = scale.floatValue
     fun translationX(): Float = translationX.floatValue

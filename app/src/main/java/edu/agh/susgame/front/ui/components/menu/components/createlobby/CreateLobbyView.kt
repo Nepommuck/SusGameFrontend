@@ -16,14 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.ui.Translation
+import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.ui.components.common.Header
 import edu.agh.susgame.front.ui.components.menu.components.createlobby.elements.CreateGameComp
 import edu.agh.susgame.front.ui.components.menu.components.createlobby.elements.GameNameComp
 import edu.agh.susgame.front.ui.components.menu.components.createlobby.elements.GamePinComp
 import edu.agh.susgame.front.ui.components.menu.components.createlobby.elements.GameTimeComp
 import edu.agh.susgame.front.ui.components.menu.components.createlobby.elements.NumberOfPlayersComp
-import edu.agh.susgame.front.ui.theme.PaddingL
+import edu.agh.susgame.front.ui.components.common.theme.PaddingL
 
 
 private const val DEFAULT_PLAYERS_AMOUNT = 4

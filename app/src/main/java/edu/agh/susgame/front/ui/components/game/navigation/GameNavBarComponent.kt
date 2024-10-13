@@ -18,8 +18,8 @@ import androidx.navigation.compose.rememberNavController
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
-import edu.agh.susgame.front.ui.theme.PaddingL
-import edu.agh.susgame.front.ui.util.BottomNavigationItem
+import edu.agh.susgame.front.ui.components.common.theme.PaddingL
+import edu.agh.susgame.front.ui.components.common.util.BottomNavigationItem
 
 
 @Composable

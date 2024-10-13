@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.em
-import edu.agh.susgame.front.ui.theme.PaddingL
+import edu.agh.susgame.front.ui.components.common.theme.PaddingL
 
 @Composable
 fun Header(title: String) {

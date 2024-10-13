@@ -22,9 +22,9 @@ import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.ui.Translation
+import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.ui.components.common.Header
-import edu.agh.susgame.front.ui.theme.PaddingS
+import edu.agh.susgame.front.ui.components.common.theme.PaddingS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

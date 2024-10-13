@@ -13,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import edu.agh.susgame.front.Config
-import edu.agh.susgame.front.ui.Translation
-import edu.agh.susgame.front.ui.theme.PaddingL
+import edu.agh.susgame.front.Translation
+import edu.agh.susgame.front.ui.components.common.theme.PaddingL
 
 @Composable
 fun NumberOfPlayersComp(

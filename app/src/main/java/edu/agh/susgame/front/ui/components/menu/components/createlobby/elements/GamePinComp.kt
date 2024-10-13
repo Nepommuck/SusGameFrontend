@@ -19,7 +19,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import edu.agh.susgame.front.Config
-import edu.agh.susgame.front.ui.Translation
+import edu.agh.susgame.front.Translation
 
 @Composable
 fun GamePinComp(

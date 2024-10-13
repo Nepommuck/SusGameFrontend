@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import edu.agh.susgame.dto.rest.games.GamesRest
 import edu.agh.susgame.front.Config
+import edu.agh.susgame.front.utils.ProviderType
 import edu.agh.susgame.front.providers.mock.MockServerMapProvider
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
@@ -22,9 +23,8 @@ import edu.agh.susgame.front.service.web.WebGameService
 import edu.agh.susgame.front.service.web.WebLobbyService
 import edu.agh.susgame.front.rest.GamesRestImpl
 import edu.agh.susgame.front.ui.components.menu.MenuNavigationHost
-import edu.agh.susgame.front.ui.theme.PaddingL
-import edu.agh.susgame.front.ui.theme.SusGameTheme
-import edu.agh.susgame.front.util.ProviderType
+import edu.agh.susgame.front.ui.components.common.theme.PaddingL
+import edu.agh.susgame.front.ui.components.common.theme.SusGameTheme
 
 
 class MainActivity : ComponentActivity() {

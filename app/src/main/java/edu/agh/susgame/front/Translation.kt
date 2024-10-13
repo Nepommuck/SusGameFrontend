@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui
+package edu.agh.susgame.front
 
 import edu.agh.susgame.dto.rest.model.LobbyId
 

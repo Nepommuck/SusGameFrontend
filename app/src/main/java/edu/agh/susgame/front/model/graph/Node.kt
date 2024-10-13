@@ -1,8 +1,8 @@
 package edu.agh.susgame.front.model.graph
 
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.front.ui.Translation
-import edu.agh.susgame.front.util.Coordinates
+import edu.agh.susgame.front.Translation
+import edu.agh.susgame.front.ui.components.common.util.Coordinates
 
 data class NodeId(val value: Int)
 abstract class Node(

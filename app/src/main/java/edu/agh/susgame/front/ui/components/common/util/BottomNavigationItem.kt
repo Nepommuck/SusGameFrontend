@@ -1,11 +1,11 @@
-package edu.agh.susgame.front.ui.util
+package edu.agh.susgame.front.ui.components.common.util
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import edu.agh.susgame.front.navigation.GameRoute
-import edu.agh.susgame.front.ui.Translation
+import edu.agh.susgame.front.Translation
 
 data class BottomNavigationItem(
     val label: String,

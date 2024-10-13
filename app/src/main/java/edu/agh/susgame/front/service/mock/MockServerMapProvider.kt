@@ -14,7 +14,7 @@ import edu.agh.susgame.front.model.graph.PathBuilder
 import edu.agh.susgame.front.model.graph.Router
 import edu.agh.susgame.front.model.graph.Server
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
-import edu.agh.susgame.front.util.Coordinates
+import edu.agh.susgame.front.ui.components.common.util.Coordinates
 import java.util.concurrent.CompletableFuture
 
 class MockServerMapProvider(mockDelayMs: Long? = null) : ServerMapProvider {

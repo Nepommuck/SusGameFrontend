@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.theme
+package edu.agh.susgame.front.ui.components.common.theme
 
 import android.app.Activity
 import android.os.Build
