@@ -1,8 +1,6 @@
 package edu.agh.susgame.front.ui.components.menu.components.lobby
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -12,11 +10,11 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
-import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.ui.component.menu.components.lobby.elements.LobbyComp
+import edu.agh.susgame.front.ui.components.menu.components.lobby.elements.FailedToLoadComp
+import edu.agh.susgame.front.ui.components.menu.components.lobby.elements.LoadingComp
 
 @Composable
 fun LobbyView(
@@ -37,33 +35,13 @@ fun LobbyView(
     }
 
     Column {
-        if (isLoading) {
-            Text(text = "${Translation.Button.LOADING}...")
-        } else {
-            when (lobby) {
-                null -> {
-                    Column {
-                        Text(text = Translation.Error.failedToLoadGame(lobbyId))
-
-                        Button(onClick = {
-                            navController.navigate(MenuRoute.SearchLobby.route)
-                        }) {
-                            Text(text = Translation.Button.GO_BACK)
-                        }
-                    }
-                }
-
-                else -> {
-                    lobby?.let {
-                        LobbyComp(
-                            it,
-                            lobbyService,
-                            gameService,
-                            navController,
-                        )
-                    }
-                }
+        when {
+            isLoading -> LoadingComp()
+            lobby == null -> FailedToLoadComp(lobbyId, navController)
+            else -> lobby?.let {
+                LobbyComp(it, lobbyService, gameService, navController)
             }
         }
     }
 }
+
