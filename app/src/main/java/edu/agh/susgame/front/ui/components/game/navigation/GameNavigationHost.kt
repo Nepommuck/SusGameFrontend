@@ -15,11 +15,11 @@ import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.Translation
-import edu.agh.susgame.front.ui.components.game.computer.ComputerComponent
-import edu.agh.susgame.front.ui.components.game.map.GameView
+import edu.agh.susgame.front.ui.components.game.components.computer.ComputerComponent
+import edu.agh.susgame.front.ui.components.game.components.map.GameView
 
 @Composable
-fun GameNavigationHostComponent(
+fun GameNavigationHost(
     lobbyId: LobbyId?,
     padding: PaddingValues,
     menuNavController: NavHostController,

@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.game.computer
+package edu.agh.susgame.front.ui.components.game.components.computer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

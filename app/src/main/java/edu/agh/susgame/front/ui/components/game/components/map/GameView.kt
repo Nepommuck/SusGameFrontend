@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.game.map
+package edu.agh.susgame.front.ui.components.game.components.map
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +18,7 @@ import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.Translation
+import edu.agh.susgame.front.ui.components.game.components.map.components.GameGraphComponent
 
 @Composable
 fun GameView(

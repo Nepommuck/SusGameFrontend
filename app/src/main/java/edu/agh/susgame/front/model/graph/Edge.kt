@@ -19,4 +19,5 @@ class Edge(
     fun removePlayer(playerId: PlayerId){
         playersIdsUsingEdge.remove(playerId)
     }
+
 }

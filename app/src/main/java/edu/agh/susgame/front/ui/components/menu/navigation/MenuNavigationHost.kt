@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.menu
+package edu.agh.susgame.front.ui.components.menu.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -9,7 +9,7 @@ import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
-import edu.agh.susgame.front.ui.components.game.navigation.GameNavBarComponent
+import edu.agh.susgame.front.ui.components.game.navigation.GameNavBarComp
 import edu.agh.susgame.front.ui.components.menu.components.createlobby.CreateLobbyView
 import edu.agh.susgame.front.ui.components.menu.components.lobby.LobbyView
 import edu.agh.susgame.front.ui.components.menu.components.mainmenu.MainMenuView
@@ -66,7 +66,7 @@ fun MenuNavigationHost(
                 ?.run {
                     LobbyId(this)
                 }
-            GameNavBarComponent(lobbyId, menuNavController, serverMapProvider, gameService)
+            GameNavBarComp(lobbyId, menuNavController, serverMapProvider, gameService)
         }
     }
 }

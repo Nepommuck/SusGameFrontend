@@ -5,15 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import edu.agh.susgame.dto.rest.games.GamesRest
 import edu.agh.susgame.front.Config
-import edu.agh.susgame.front.utils.ProviderType
 import edu.agh.susgame.front.providers.mock.MockServerMapProvider
+import edu.agh.susgame.front.rest.GamesRestImpl
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
@@ -21,10 +20,9 @@ import edu.agh.susgame.front.service.mock.MockGameService
 import edu.agh.susgame.front.service.mock.MockLobbyService
 import edu.agh.susgame.front.service.web.WebGameService
 import edu.agh.susgame.front.service.web.WebLobbyService
-import edu.agh.susgame.front.rest.GamesRestImpl
-import edu.agh.susgame.front.ui.components.menu.MenuNavigationHost
-import edu.agh.susgame.front.ui.components.common.theme.PaddingL
 import edu.agh.susgame.front.ui.components.common.theme.SusGameTheme
+import edu.agh.susgame.front.ui.components.menu.navigation.MenuNavigationHost
+import edu.agh.susgame.front.utils.ProviderType
 
 
 class MainActivity : ComponentActivity() {
@@ -56,6 +54,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
         setContent {
             SusGameTheme {
                 // A surface container using the 'background' color from the theme
@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    Box(modifier = Modifier.padding(PaddingL)) {
+                    Box() {
                         MenuNavigationHost(
                             navController,
                             services.serverMapProvider,
