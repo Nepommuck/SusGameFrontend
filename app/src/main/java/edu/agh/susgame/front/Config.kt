@@ -1,13 +1,13 @@
 package edu.agh.susgame.front
 
-import edu.agh.susgame.front.util.AppConfig
-import edu.agh.susgame.front.util.AppConfig.*
-import edu.agh.susgame.front.util.AppConfig.GameConfig.*
-import edu.agh.susgame.front.util.ProviderType
+import edu.agh.susgame.front.utils.AppConfig
+import edu.agh.susgame.front.utils.AppConfig.*
+import edu.agh.susgame.front.utils.AppConfig.GameConfig.*
+import edu.agh.susgame.front.utils.ProviderType
 import kotlin.time.Duration.Companion.seconds
 
 object Config : AppConfig {
-    override val providers = ProviderType.Web
+    override val providers = ProviderType.MockLocal
 
     override val webConfig = WebConfig(
 

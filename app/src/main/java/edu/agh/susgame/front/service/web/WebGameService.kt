@@ -6,7 +6,7 @@ import edu.agh.susgame.dto.socket.ClientSocketMessage
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.rest.AbstractRest
 import edu.agh.susgame.front.service.web.socket.GameWebSocketListener
-import edu.agh.susgame.front.util.AppConfig
+import edu.agh.susgame.front.utils.AppConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

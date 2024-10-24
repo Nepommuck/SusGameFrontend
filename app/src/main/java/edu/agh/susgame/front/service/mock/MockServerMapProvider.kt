@@ -1,6 +1,5 @@
 package edu.agh.susgame.front.providers.mock
 
-import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.Player
 import edu.agh.susgame.dto.rest.model.PlayerId
@@ -14,7 +13,7 @@ import edu.agh.susgame.front.model.graph.PathBuilder
 import edu.agh.susgame.front.model.graph.Router
 import edu.agh.susgame.front.model.graph.Server
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
-import edu.agh.susgame.front.util.Coordinates
+import edu.agh.susgame.front.ui.components.common.util.Coordinates
 import java.util.concurrent.CompletableFuture
 
 class MockServerMapProvider(mockDelayMs: Long? = null) : ServerMapProvider {
@@ -66,17 +65,17 @@ class MockServerMapProvider(mockDelayMs: Long? = null) : ServerMapProvider {
         val players = listOf(
             Player(
                 nickname = PlayerNickname("Player_0"),
-                colorHex = Color.Red.value.toLong(),
+                colorHex = 0xAF00FF00,
                 id = PlayerId(0)
             ),
             Player(
                 nickname = PlayerNickname("Player_1"),
-                colorHex = Color.Blue.value.toLong(),
+                colorHex = 0xAFF000FF,
                 id = PlayerId(1)
             ),
             Player(
                 nickname = PlayerNickname("Player_2"),
-                colorHex = Color.Magenta.value.toLong(),
+                colorHex = 0xAFFF5733,
                 id = PlayerId(2)
             ),
         )
