@@ -1,5 +1,7 @@
 package edu.agh.susgame.front.model.graph
 
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.ui.components.common.util.Coordinates
@@ -11,53 +13,6 @@ abstract class Node(
     val position: Coordinates,
 ) {
     abstract fun getInfo(): String // TODO fow now it's in string, later on this should be improved to something more accurate
-}
-
-class Router(
-    id: NodeId,
-    name: String,
-    position: Coordinates,
-    private var bufferSize: Int,
-    private var bufferCurrentPackets: Int = 0,
-) : Node(id, name, position) {
-    override fun getInfo(): String {
-        return """
-            ${Translation.Game.ROUTER}
-            ${Translation.Game.BUFFER_SIZE}: $bufferSize
-            ${Translation.Game.BUFFER_CURRENT_PACKETS}: $bufferCurrentPackets
-        """.trimIndent()
-    }
-}
-
-class Host(
-    id: NodeId,
-    name: String,
-    position: Coordinates,
-    val playerId: PlayerId,
-    private var packetsToSend: Int = 0,
-) : Node(id, name, position) {
-    override fun getInfo(): String {
-        return """
-            ${Translation.Game.HOST}
-            ${Translation.Game.PACKETS_TO_SEND}: $packetsToSend
-        """.trimIndent()
-    }
-}
-
-class Server(
-    id: NodeId,
-    name: String,
-    position: Coordinates,
-    private val packetsToWin: Int,
-    private var packetsReceived: Int = 0,
-) : Node(id, name, position) {
-    override fun getInfo(): String {
-        return """
-            ${Translation.Game.SERVER}
-            ${Translation.Game.PACKETS_TO_WIN}: $packetsToWin
-            ${Translation.Game.PACKETS_RECEIVED}: $packetsReceived
-        """.trimIndent()
-    }
 }
 
 

@@ -11,11 +11,11 @@ import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.model.graph.GameGraph
-import edu.agh.susgame.front.model.graph.Host
+import edu.agh.susgame.front.model.graph.nodes.Host
 import edu.agh.susgame.front.model.graph.NodeId
 import edu.agh.susgame.front.model.graph.PathBuilder
-import edu.agh.susgame.front.model.graph.Router
-import edu.agh.susgame.front.model.graph.Server
+import edu.agh.susgame.front.model.graph.nodes.Router
+import edu.agh.susgame.front.model.graph.nodes.Server
 
 
 private const val scaleFactor = 0.1f

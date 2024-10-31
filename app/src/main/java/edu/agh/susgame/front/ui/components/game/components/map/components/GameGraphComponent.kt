@@ -26,11 +26,13 @@ import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.model.graph.NodeId
 import edu.agh.susgame.front.model.graph.PathBuilder
+import edu.agh.susgame.front.model.graph.nodes.Server
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.components.common.util.ZoomState
 import edu.agh.susgame.front.ui.components.game.components.map.components.drawers.EdgeDrawer
 import edu.agh.susgame.front.ui.components.game.components.map.components.drawers.NodeDrawer
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.NodeInfoComp
+import edu.agh.susgame.front.ui.components.game.components.map.components.elements.ProgressBarComp
 
 private const val buttonWidth = 70
 private const val buttonHeight = 30
@@ -40,9 +42,12 @@ internal fun GameGraphComponent(
     gameGraph: GameGraph,
     gameGraphProvider: ServerMapProvider,
 ) {
+    val server = gameGraph.nodes[gameGraph.serverId] as Server
+
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
     var playerIdChangingPath by remember { mutableStateOf<PlayerId?>(null) }
     var pathBuilderState by remember { mutableStateOf(PathBuilder()) }
+    val packetsReceived by remember { server.packetsReceived }
 
 
     val zoomState = remember {
@@ -64,6 +69,9 @@ internal fun GameGraphComponent(
             )
     )
 
+    ProgressBarComp(packetsReceived = packetsReceived, packetsToWin = server.getPacketsToWin())
+
+
     Box(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight()
@@ -73,76 +81,75 @@ internal fun GameGraphComponent(
                 zoomState.scale(zoom)
                 zoomState.move(pan)
             }
-        })
-    {
-
-        Box(
-            modifier = Modifier.graphicsLayer(
-                scaleX = zoomState.scaleValue(),
-                scaleY = zoomState.scaleValue(),
-                translationX = zoomState.translationX(),
-                translationY = zoomState.translationY(),
-                clip = false
-            )
-        ) {
-            EdgeDrawer(gameGraph = gameGraph)
-
-            NodeDrawer(
-                gameGraph = gameGraph,
-                playerIdChangingPath = playerIdChangingPath,
-                pathBuilderState = pathBuilderState,
-                onInspectedNodeChange = { newId -> inspectedNodeId = newId },
-            )
-
-            Text(zoomState.scaleValue().toString(), color = Color.Black)
-
         }
+        .graphicsLayer(
+            scaleX = zoomState.scaleValue(),
+            scaleY = zoomState.scaleValue(),
+            translationX = zoomState.translationX(),
+            translationY = zoomState.translationY(),
+            clip = false
+        )
+    ) {
+        Button(onClick = {server.setReceived(10)}) {Text("PACKETS")} // JUST FOR TESTING, WILL BE DELETED
 
-        inspectedNodeId?.let { nodeId ->
-            gameGraph.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
-                NodeInfoComp(
-                    node = node,
-                    onExit = { inspectedNodeId = null },
-                    playerIdChangingPath = { newId -> playerIdChangingPath = newId },
-                    pathBuilderState = pathBuilderState,
-                    mapState = gameGraph
-                )
-            }
-        }
+        EdgeDrawer(gameGraph = gameGraph)
 
+        NodeDrawer(
+            gameGraph = gameGraph,
+            playerIdChangingPath = playerIdChangingPath,
+            pathBuilderState = pathBuilderState,
+            onInspectedNodeChange = { newId -> inspectedNodeId = newId },
+        )
 
-        playerIdChangingPath?.let {
-            Column {
-                Button(onClick = {
-                    gameGraph.edges.forEach { (_, edge) -> edge.removePlayer(playerIdChangingPath!!) }
-                    playerIdChangingPath = null
-                    pathBuilderState = PathBuilder()
-
-                }) {
-                    Text(Translation.Game.ABORT_PATH)
-                }
-                Button(
-                    onClick = {
-                        if (pathBuilderState.isPathValid(serverId = gameGraph.serverId)) {
-                            gameGraphProvider.changePlayerPath(
-                                playerId = it, pathBuilder = pathBuilderState
-                            )
-                            playerIdChangingPath = null
-                            inspectedNodeId = null
-                            pathBuilderState = PathBuilder()
-                        }
-
-                    }, enabled = pathBuilderState.isPathValid(serverId = gameGraph.serverId)
-
-
-                ) {
-                    Text(Translation.Game.ACCEPT_PATH)
-                }
-            }
-        }
+        Text(zoomState.scaleValue().toString(), color = Color.Black)
 
     }
+
+    inspectedNodeId?.let { nodeId ->
+        gameGraph.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
+            NodeInfoComp(
+                node = node,
+                onExit = { inspectedNodeId = null },
+                playerIdChangingPath = { newId -> playerIdChangingPath = newId },
+                pathBuilderState = pathBuilderState,
+                mapState = gameGraph
+            )
+        }
+    }
+
+
+    playerIdChangingPath?.let {
+        Column {
+            Button(onClick = {
+                gameGraph.edges.forEach { (_, edge) -> edge.removePlayer(playerIdChangingPath!!) }
+                playerIdChangingPath = null
+                pathBuilderState = PathBuilder()
+
+            }) {
+                Text(Translation.Game.ABORT_PATH)
+            }
+            Button(
+                onClick = {
+                    if (pathBuilderState.isPathValid(serverId = gameGraph.serverId)) {
+                        gameGraphProvider.changePlayerPath(
+                            playerId = it, pathBuilder = pathBuilderState
+                        )
+                        playerIdChangingPath = null
+                        inspectedNodeId = null
+                        pathBuilderState = PathBuilder()
+                    }
+
+                }, enabled = pathBuilderState.isPathValid(serverId = gameGraph.serverId)
+
+
+            ) {
+                Text(Translation.Game.ACCEPT_PATH)
+            }
+        }
+    }
+
 }
+
 
 
 

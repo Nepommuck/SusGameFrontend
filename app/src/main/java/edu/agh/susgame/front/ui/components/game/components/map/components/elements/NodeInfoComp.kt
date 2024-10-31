@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.model.graph.GameGraph
-import edu.agh.susgame.front.model.graph.Host
+import edu.agh.susgame.front.model.graph.nodes.Host
 import edu.agh.susgame.front.model.graph.Node
 import edu.agh.susgame.front.model.graph.PathBuilder
 import edu.agh.susgame.front.ui.components.common.theme.PaddingM
