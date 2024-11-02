@@ -17,8 +17,8 @@ class ZoomState(
     }
 
     private val scale = mutableFloatStateOf(1f)
-    private val translationX = mutableFloatStateOf(totalSize.x.toFloat() / 2)
-    private val translationY = mutableFloatStateOf(totalSize.y.toFloat() / 2)
+    private val translationX = mutableFloatStateOf(0f)
+    private val translationY = mutableFloatStateOf(0f)
 
 //    private val centroidX = mutableFloatStateOf(0f)
 
@@ -32,8 +32,8 @@ class ZoomState(
 
 
     fun move(offset: Offset) { // TODO GAME-47 it doesn't work as it should, right now i don't have any idea how to implement it :(
-        val scaledWidth = totalSize.x * scale.floatValue * 2
-        val scaledHeight = totalSize.y * scale.floatValue * 2
+        val scaledWidth = totalSize.x * scale.floatValue*2
+        val scaledHeight = totalSize.y * scale.floatValue*2
 
         translationX.floatValue =
             (translationX.floatValue + offset.x).coerceIn(-scaledWidth, scaledWidth)
@@ -42,3 +42,6 @@ class ZoomState(
     }
 
 }
+
+
+
