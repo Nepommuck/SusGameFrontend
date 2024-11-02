@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.game.components.map.components.elements.progressbar
+package edu.agh.susgame.front.ui.components.game.components.map.components.elements.upperbar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -10,35 +10,37 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import edu.agh.susgame.front.ui.components.common.theme.TextStyler
+import edu.agh.susgame.front.ui.components.common.util.Calculate
 import kotlinx.coroutines.delay
 
+private const val delayMs: Long = 300
+private val animationSymbols = listOf('/', "-", '\\', '|')
+
 @Composable
-fun AnimationComp() {
-    val symbols = listOf('/', "-", '\\', '|')
-    var index by remember { mutableIntStateOf(0) }
+fun LoadAnim() {
+    var animFrameIndex by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(Unit) {
         while (true) {
-            delay(300) // Opóźnienie dla animacji
-            index = (index + 1) % symbols.size // Zmieniaj indeks
+            delay(delayMs)
+            animFrameIndex = Calculate.incrementAnimIndex(animFrameIndex, animationSymbols.size)
         }
     }
 
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
     ) {
         Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.Center) {
-            Text(text = "(")
+            Text(text = "(", style = TextStyler.TerminalLarge)
         }
         Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.Center) {
-            Text(text = symbols[index].toString())
+            Text(text = animationSymbols[animFrameIndex].toString(), style = TextStyler.TerminalLarge)
         }
         Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.Center) {
-            Text(text = ")")
+            Text(text = ")", style = TextStyler.TerminalLarge)
         }
 
     }

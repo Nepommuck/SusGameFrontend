@@ -34,9 +34,6 @@ import edu.agh.susgame.front.ui.components.game.components.map.components.drawer
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.NodeInfoComp
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.ProgressBarComp
 
-private const val buttonWidth = 70
-private const val buttonHeight = 30
-
 @Composable
 internal fun GameGraphComponent(
     gameGraph: GameGraph,
@@ -57,6 +54,7 @@ internal fun GameGraphComponent(
             totalSize = gameGraph.mapSize,
         )
     }
+
     Image(
         painter = painterResource(id = R.drawable.background),
         contentDescription = null,
@@ -90,7 +88,7 @@ internal fun GameGraphComponent(
             clip = false
         )
     ) {
-        Button(onClick = {server.setReceived(10)}) {Text("PACKETS")} // JUST FOR TESTING, WILL BE DELETED
+        Button(onClick = { server.setReceived(10) }) { Text("PACKETS") } // JUST FOR TESTING, WILL BE DELETED
 
         EdgeDrawer(gameGraph = gameGraph)
 
