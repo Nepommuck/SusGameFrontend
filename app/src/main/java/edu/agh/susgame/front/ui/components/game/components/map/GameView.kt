@@ -24,6 +24,7 @@ fun GameView(
     lobbyId: LobbyId,
     serverMapProvider: ServerMapProvider,
     menuNavController: NavController,
+    gameNavController: NavController
 ) {
     var gameGraph by remember { mutableStateOf<GameGraph?>(null) }
     var isLoading by remember { mutableStateOf(true) }
@@ -58,7 +59,8 @@ fun GameView(
 
                 ) {
 
-                    gameGraph?.let { GameGraphComponent(it, serverMapProvider) }
+
+                    gameGraph?.let { GameGraphComponent(it, serverMapProvider, gameNavController) }
                 }
             }
         }

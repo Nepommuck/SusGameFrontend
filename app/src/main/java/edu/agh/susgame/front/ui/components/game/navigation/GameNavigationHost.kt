@@ -43,10 +43,10 @@ fun GameNavigationHost(
             modifier = Modifier.padding(padding),
         ) {
             composable(GameRoute.Map.route) {
-                GameView(lobbyId, serverMapProvider, menuNavController)
+                GameView(lobbyId, serverMapProvider, menuNavController, gameNavController)
             }
             composable(GameRoute.Computer.route) {
-                ComputerComponent(gameService)
+                ComputerComponent(gameService,gameNavController)
             }
         }
     }

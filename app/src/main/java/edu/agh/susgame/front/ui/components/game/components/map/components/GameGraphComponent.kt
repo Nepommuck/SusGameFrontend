@@ -12,12 +12,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.Translation
@@ -31,11 +31,14 @@ import edu.agh.susgame.front.ui.components.game.components.map.components.drawer
 import edu.agh.susgame.front.ui.components.game.components.map.components.drawers.NodeDrawer
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.NodeInfoComp
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.ProgressBarComp
+import edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar.NavIcons
+import edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar.ViewState
 
 @Composable
 internal fun GameGraphComponent(
     gameGraph: GameGraph,
     gameGraphProvider: ServerMapProvider,
+    gameNavController: NavController
 ) {
     val server = gameGraph.nodes[gameGraph.serverId] as Server
 
@@ -64,9 +67,6 @@ internal fun GameGraphComponent(
                 .fillMaxSize(),
             contentScale = ContentScale.Crop
         )
-
-
-
 
         Box(modifier = Modifier
             .fillMaxSize()
@@ -98,13 +98,11 @@ internal fun GameGraphComponent(
 //            Text(zoomState.scaleValue().toString(), color = Color.Black)
 
         }
+        NavIcons(gameNavController = gameNavController, ViewState.MAP)
 
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.BottomStart
-        ) {
-            Button(onClick = { server.setReceived(10) }) { Text("PACKETS") } // JUST FOR TESTING, WILL BE DELETED
-        }
+
+        Button(onClick = { server.setReceived(10) }) { Text("PACKETS") } // JUST FOR TESTING, WILL BE DELETED
+
 
         inspectedNodeId?.let { nodeId ->
             gameGraph.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->

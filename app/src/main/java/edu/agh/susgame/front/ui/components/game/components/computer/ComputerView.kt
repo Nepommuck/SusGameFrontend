@@ -18,13 +18,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import edu.agh.susgame.front.service.interfaces.GameService
+import androidx.navigation.NavController
 import edu.agh.susgame.front.Translation
+import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.ui.components.common.Header
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS
+import edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar.NavIcons
+import edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar.ViewState
 
 @Composable
-fun ComputerComponent(gameService: GameService) {
+fun ComputerComponent(
+    gameService: GameService,
+    gameNavController: NavController
+) {
     val messages = remember { mutableStateListOf<String>() }
     var newMessageInputValue by remember { mutableStateOf("") }
 
@@ -65,7 +71,10 @@ fun ComputerComponent(gameService: GameService) {
         messages.forEach { message ->
             Text(text = message)
         }
+
+
     }
+    NavIcons(gameNavController = gameNavController, ViewState.COMPUTER)
 
     // TODO GAME-54
 }

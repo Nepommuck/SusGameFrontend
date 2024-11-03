@@ -23,9 +23,9 @@ fun GameNavBarComp(
         modifier = Modifier
             .fillMaxSize(),
 //            .padding(top = PaddingL),
-        bottomBar = {
-            BottomBarComponent(gameNavController)
-        }
+//        bottomBar = {
+//            BottomBarComponent(gameNavController)
+//        }
     ) { padding ->
         GameNavigationHost(
             lobbyId,
