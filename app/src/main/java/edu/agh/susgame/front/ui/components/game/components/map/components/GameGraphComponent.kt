@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.navigation.NavController
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.Translation
@@ -25,20 +24,21 @@ import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.model.graph.NodeId
 import edu.agh.susgame.front.model.graph.PathBuilder
 import edu.agh.susgame.front.model.graph.nodes.Server
+import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.components.common.util.ZoomState
+import edu.agh.susgame.front.ui.components.game.components.computer.ComputerComponent
 import edu.agh.susgame.front.ui.components.game.components.map.components.drawers.EdgeDrawer
 import edu.agh.susgame.front.ui.components.game.components.map.components.drawers.NodeDrawer
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.NodeInfoComp
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.ProgressBarComp
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar.NavIcons
-import edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar.ViewState
 
 @Composable
 internal fun GameGraphComponent(
     gameGraph: GameGraph,
     gameGraphProvider: ServerMapProvider,
-    gameNavController: NavController
+    gameService: GameService
 ) {
     val server = gameGraph.nodes[gameGraph.serverId] as Server
 
@@ -46,6 +46,7 @@ internal fun GameGraphComponent(
     var playerIdChangingPath by remember { mutableStateOf<PlayerId?>(null) }
     var pathBuilderState by remember { mutableStateOf(PathBuilder()) }
     val packetsReceived by remember { server.packetsReceived }
+    var isComputerViewVisible by remember { mutableStateOf(false) }
 
 
     val zoomState = remember {
@@ -55,6 +56,11 @@ internal fun GameGraphComponent(
             totalSize = gameGraph.mapSize,
         )
     }
+
+    fun setComputerViewVisibility(visible: Boolean) {
+        isComputerViewVisible = visible
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -98,7 +104,7 @@ internal fun GameGraphComponent(
 //            Text(zoomState.scaleValue().toString(), color = Color.Black)
 
         }
-        NavIcons(gameNavController = gameNavController, ViewState.MAP)
+
 
 
         Button(onClick = { server.setReceived(10) }) { Text("PACKETS") } // JUST FOR TESTING, WILL BE DELETED
@@ -147,7 +153,17 @@ internal fun GameGraphComponent(
             }
         }
 
+
+
+
         ProgressBarComp(packetsReceived = packetsReceived, packetsToWin = server.getPacketsToWin())
+
+        if (isComputerViewVisible) {
+            ComputerComponent(gameService = gameService)
+        }
+        NavIcons(
+            isComputerVisible = isComputerViewVisible,
+            setComputerViewVisibility = { visible -> setComputerViewVisibility(visible) })
 
     }
 }

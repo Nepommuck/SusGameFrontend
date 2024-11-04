@@ -16,6 +16,7 @@ import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.model.graph.GameGraph
 import edu.agh.susgame.front.navigation.MenuRoute
+import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.components.game.components.map.components.GameGraphComponent
 
@@ -24,7 +25,7 @@ fun GameView(
     lobbyId: LobbyId,
     serverMapProvider: ServerMapProvider,
     menuNavController: NavController,
-    gameNavController: NavController
+    gameService: GameService
 ) {
     var gameGraph by remember { mutableStateOf<GameGraph?>(null) }
     var isLoading by remember { mutableStateOf(true) }
@@ -60,7 +61,7 @@ fun GameView(
                 ) {
 
 
-                    gameGraph?.let { GameGraphComponent(it, serverMapProvider, gameNavController) }
+                    gameGraph?.let { GameGraphComponent(it, serverMapProvider, gameService) }
                 }
             }
         }
