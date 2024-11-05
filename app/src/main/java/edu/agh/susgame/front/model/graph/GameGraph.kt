@@ -2,6 +2,8 @@ package edu.agh.susgame.front.model.graph
 
 import edu.agh.susgame.dto.rest.model.Player
 import edu.agh.susgame.dto.rest.model.PlayerId
+import edu.agh.susgame.front.model.graph.node.Node
+import edu.agh.susgame.front.model.graph.node.NodeId
 import edu.agh.susgame.front.ui.components.common.util.Coordinates
 
 class GameGraph(

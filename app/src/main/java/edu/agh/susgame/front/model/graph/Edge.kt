@@ -2,6 +2,7 @@ package edu.agh.susgame.front.model.graph
 
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.PlayerId
+import edu.agh.susgame.front.model.graph.node.NodeId
 
 data class EdgeId(val value: Int)
 

@@ -1,12 +1,13 @@
 package edu.agh.susgame.front.ui.components.game.components.map.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,35 +15,48 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.model.graph.GameGraph
-import edu.agh.susgame.front.model.graph.NodeId
 import edu.agh.susgame.front.model.graph.PathBuilder
+import edu.agh.susgame.front.model.graph.node.NodeId
+import edu.agh.susgame.front.model.graph.node.Server
+import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
+import edu.agh.susgame.front.ui.components.common.theme.PaddingS
+import edu.agh.susgame.front.ui.components.common.util.Calculate
 import edu.agh.susgame.front.ui.components.common.util.ZoomState
+import edu.agh.susgame.front.ui.components.game.components.computer.ComputerComponent
 import edu.agh.susgame.front.ui.components.game.components.map.components.drawers.EdgeDrawer
 import edu.agh.susgame.front.ui.components.game.components.map.components.drawers.NodeDrawer
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.NodeInfoComp
+import edu.agh.susgame.front.ui.components.game.components.map.components.elements.ProgressBarComp
+import edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar.NavIcons
 
-private const val buttonWidth = 70
-private const val buttonHeight = 30
+private val SIZE_DP = 50.dp
 
 @Composable
 internal fun GameGraphComponent(
     gameGraph: GameGraph,
     gameGraphProvider: ServerMapProvider,
+    gameService: GameService
 ) {
+    val server = gameGraph.nodes[gameGraph.serverId] as Server
+
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
     var playerIdChangingPath by remember { mutableStateOf<PlayerId?>(null) }
     var pathBuilderState by remember { mutableStateOf(PathBuilder()) }
+    val packetsReceived by remember { server.packetsReceived }
+    var isComputerViewVisible by remember { mutableStateOf(false) }
 
 
     val zoomState = remember {
@@ -52,39 +66,42 @@ internal fun GameGraphComponent(
             totalSize = gameGraph.mapSize,
         )
     }
-    Image(
-        painter = painterResource(id = R.drawable.background),
-        contentDescription = null,
+
+    fun setComputerViewVisibility(visible: Boolean) {
+        isComputerViewVisible = visible
+    }
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .graphicsLayer(
-                scaleX = 2f,
-                scaleY = 3f,
-                rotationZ = 90f
-            )
-    )
+    ) {
 
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight()
-        .clipToBounds()
-        .pointerInput(Unit) {
-            detectTransformGestures { _, pan, zoom, _ ->
-                zoomState.scale(zoom)
-                zoomState.move(pan)
+        Image(
+            painter = painterResource(id = R.drawable.background),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTransformGestures { _, pan, zoom, _ ->
+                    zoomState.scale(zoom)
+                    zoomState.move(pan)
+                }
             }
-        })
-    {
-
-        Box(
-            modifier = Modifier.graphicsLayer(
+            .graphicsLayer(
                 scaleX = zoomState.scaleValue(),
                 scaleY = zoomState.scaleValue(),
                 translationX = zoomState.translationX(),
                 translationY = zoomState.translationY(),
                 clip = false
             )
+
         ) {
+
             EdgeDrawer(gameGraph = gameGraph)
 
             NodeDrawer(
@@ -93,10 +110,13 @@ internal fun GameGraphComponent(
                 pathBuilderState = pathBuilderState,
                 onInspectedNodeChange = { newId -> inspectedNodeId = newId },
             )
-
-            Text(zoomState.scaleValue().toString(), color = Color.Black)
-
         }
+
+        Button(
+            onClick = { server.setReceived(10) },
+            modifier = Modifier.align(Alignment.TopEnd)
+        ) { Text("PACKETS") } // JUST FOR TESTING, WILL BE DELETED
+
 
         inspectedNodeId?.let { nodeId ->
             gameGraph.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
@@ -110,37 +130,70 @@ internal fun GameGraphComponent(
             }
         }
 
-
-        playerIdChangingPath?.let {
-            Column {
-                Button(onClick = {
-                    gameGraph.edges.forEach { (_, edge) -> edge.removePlayer(playerIdChangingPath!!) }
-                    playerIdChangingPath = null
-                    pathBuilderState = PathBuilder()
-
-                }) {
-                    Text(Translation.Game.ABORT_PATH)
-                }
-                Button(
-                    onClick = {
-                        if (pathBuilderState.isPathValid(serverId = gameGraph.serverId)) {
-                            gameGraphProvider.changePlayerPath(
-                                playerId = it, pathBuilder = pathBuilderState
-                            )
-                            playerIdChangingPath = null
-                            inspectedNodeId = null
-                            pathBuilderState = PathBuilder()
-                        }
-
-                    }, enabled = pathBuilderState.isPathValid(serverId = gameGraph.serverId)
-
-
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+        ) {
+            playerIdChangingPath?.let {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(Translation.Game.ACCEPT_PATH)
+                    Box(
+                        modifier = Modifier
+                            .size(SIZE_DP)
+                            .padding(PaddingS)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.cross), // Drawable for abort
+                            contentDescription = Translation.Game.ABORT_PATH,
+                            modifier = Modifier.clickable {
+                                gameGraph.edges.forEach { (_, edge) ->
+                                    edge.removePlayer(playerIdChangingPath!!)
+                                }
+                                playerIdChangingPath = null
+                                pathBuilderState = PathBuilder()
+                            }
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .size(SIZE_DP)
+                            .padding(PaddingS)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.accept), // Drawable for accept
+                            contentDescription = Translation.Game.ACCEPT_PATH,
+                            modifier = Modifier
+                                .alpha(Calculate.getAlpha(pathBuilderState.isPathValid(serverId = gameGraph.serverId)))
+                                .clickable(
+                                    enabled = pathBuilderState.isPathValid(
+                                        serverId = gameGraph.serverId
+                                    )
+                                ) {
+                                    if (pathBuilderState.isPathValid(serverId = gameGraph.serverId)) {
+                                        gameGraphProvider.changePlayerPath(
+                                            playerId = it, pathBuilder = pathBuilderState
+                                        )
+                                        playerIdChangingPath = null
+                                        inspectedNodeId = null
+                                        pathBuilderState = PathBuilder()
+                                    }
+                                }
+                        )
+                    }
                 }
             }
         }
 
+        ProgressBarComp(packetsReceived = packetsReceived, packetsToWin = server.packetsToWin)
+
+        if (isComputerViewVisible) {
+            ComputerComponent(gameService = gameService)
+        }
+        NavIcons(
+            isComputerVisible = isComputerViewVisible,
+            setComputerViewVisibility = { visible -> setComputerViewVisibility(visible) }
+        )
     }
 }
 

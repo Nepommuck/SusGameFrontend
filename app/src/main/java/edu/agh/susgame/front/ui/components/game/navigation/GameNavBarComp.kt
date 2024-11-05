@@ -22,10 +22,6 @@ fun GameNavBarComp(
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
-//            .padding(top = PaddingL),
-        bottomBar = {
-            BottomBarComponent(gameNavController)
-        }
     ) { padding ->
         GameNavigationHost(
             lobbyId,

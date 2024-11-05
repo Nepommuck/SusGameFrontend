@@ -17,10 +17,8 @@ class ZoomState(
     }
 
     private val scale = mutableFloatStateOf(1f)
-    private val translationX = mutableFloatStateOf(totalSize.x.toFloat() / 2)
-    private val translationY = mutableFloatStateOf(totalSize.y.toFloat() / 2)
-
-//    private val centroidX = mutableFloatStateOf(0f)
+    private val translationX = mutableFloatStateOf(0f)
+    private val translationY = mutableFloatStateOf(0f)
 
     fun scaleValue(): Float = scale.floatValue
     fun translationX(): Float = translationX.floatValue
@@ -40,5 +38,4 @@ class ZoomState(
         translationY.floatValue =
             (translationY.floatValue + offset.y).coerceIn(-scaledHeight, scaledHeight)
     }
-
 }

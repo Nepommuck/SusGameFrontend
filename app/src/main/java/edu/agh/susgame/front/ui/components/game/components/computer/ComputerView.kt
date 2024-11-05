@@ -1,9 +1,10 @@
 package edu.agh.susgame.front.ui.components.game.components.computer
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -18,13 +19,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import edu.agh.susgame.front.service.interfaces.GameService
+import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.front.Translation
+import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.ui.components.common.Header
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS
 
 @Composable
-fun ComputerComponent(gameService: GameService) {
+fun ComputerComponent(
+    gameService: GameService,
+) {
     val messages = remember { mutableStateListOf<String>() }
     var newMessageInputValue by remember { mutableStateOf("") }
 
@@ -36,12 +40,15 @@ fun ComputerComponent(gameService: GameService) {
 
     Column(
         modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(rememberScrollState())
+            .background(Color.Blue)
+
     ) {
         Header(title = Translation.Game.COMPUTER)
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             OutlinedTextField(
@@ -65,6 +72,7 @@ fun ComputerComponent(gameService: GameService) {
         messages.forEach { message ->
             Text(text = message)
         }
+
     }
 
     // TODO GAME-54
