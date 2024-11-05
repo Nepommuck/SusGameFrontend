@@ -1,24 +1,33 @@
 package edu.agh.susgame.front.ui.components.game.components.map.components.elements
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.model.graph.GameGraph
-import edu.agh.susgame.front.model.graph.nodes.Host
 import edu.agh.susgame.front.model.graph.Node
 import edu.agh.susgame.front.model.graph.PathBuilder
+import edu.agh.susgame.front.model.graph.nodes.Host
 import edu.agh.susgame.front.ui.components.common.theme.PaddingM
+import edu.agh.susgame.front.ui.components.common.theme.TextStyler
+
+private val sizeDp = 50.dp
 
 @Composable
 fun NodeInfoComp(
@@ -30,32 +39,57 @@ fun NodeInfoComp(
 ) {
     Box(
         modifier = Modifier
-            .background(Color.Cyan)
-            .padding(PaddingM),
+            .fillMaxSize()
     ) {
-        Row {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(node.getInfo())
-            }
-            Column {
-                Button(onClick = { onExit() }) {
-                    Text("X")
-                }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.4f)
+                .fillMaxHeight(0.5f)
+                .align(Alignment.BottomEnd)
+                .padding(PaddingM)
+                .background(Color(0x40808080))
+        ) {
 
-                val hostNode = node as? Host
-                hostNode?.let { host ->
-                    Button(onClick = {
-                        mapState.edges.forEach { (_, edge) -> edge.removePlayer(host.playerId) }
-                        playerIdChangingPath(host.playerId)
-                        pathBuilderState.addNodeToPath(nodeId = node.id)
-                        onExit()
-                    }) {
-                        Text(Translation.Game.CHANGE_PATH)
+            Row(Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(5f)
+                        .padding(PaddingM),
+                ) {
+                    Text(node.getInfo(), style = TextStyler.TerminalMedium)
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                        .padding(PaddingM)
+                ) {
+
+                    Box(modifier = Modifier.size(sizeDp)) {
+                        Image(
+                            painter = painterResource(id = R.drawable.cross),
+                            contentDescription = "Exit",
+                            modifier = Modifier.clickable { onExit() }
+                        )
+
                     }
-                    mapState.paths[host.playerId]?.let { Text(it.getPathString()) }
+                    val hostNode = node as? Host
+                    hostNode?.let { host ->
+
+                        Box(modifier = Modifier.size(sizeDp)) {
+                            Image(
+                                painter = painterResource(id = R.drawable.shuffle),
+                                contentDescription = "Exit",
+                                modifier = Modifier.clickable {
+                                    mapState.edges.forEach { (_, edge) -> edge.removePlayer(host.playerId) }
+                                    playerIdChangingPath(host.playerId)
+                                    pathBuilderState.addNodeToPath(nodeId = node.id)
+                                    onExit()
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }

@@ -12,10 +12,14 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.model.graph.GameGraph
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+
+private const val circleRadius = 50f
 
 @Composable
 fun EdgeDrawer(gameGraph: GameGraph) {
-    // Przechwycenie aktualnej gęstości ekranu
     val density = LocalDensity.current
 
     Canvas(modifier = Modifier.fillMaxSize()) {
@@ -32,12 +36,28 @@ fun EdgeDrawer(gameGraph: GameGraph) {
                     Offset(endXY.position.x.dp.toPx(), endXY.position.y.dp.toPx())
                 }
 
+                val dx = endOffset.x - startOffset.x
+                val dy = endOffset.y - startOffset.y
+
+
+                val angle = atan2(dy, dx)
+
+
+                val newStartOffset = Offset(
+                    startOffset.x + cos(angle) * circleRadius,
+                    startOffset.y + sin(angle) * circleRadius
+                )
+
+                val newEndOffset = Offset(
+                    endOffset.x - cos(angle) * circleRadius,
+                    endOffset.y - sin(angle) * circleRadius
+                )
+
                 val path = Path().apply {
-                    moveTo(startOffset.x, startOffset.y) // Używamy startOffset
-                    lineTo(endOffset.x, endOffset.y) // Używamy endOffset
+                    moveTo(newStartOffset.x, newStartOffset.y)
+                    lineTo(newEndOffset.x, newEndOffset.y)
                 }
 
-                // Rysujemy przerywaną linię
                 drawPath(
                     path = path,
                     color = Color.Gray,
@@ -46,22 +66,21 @@ fun EdgeDrawer(gameGraph: GameGraph) {
                         pathEffect = PathEffect.dashPathEffect(
                             floatArrayOf(10f, 7f),
                             0f
-                        ) // 10f długość kreski, 10f przerwy
+                        )
                     )
                 )
 
-                // Rysowanie kolorów graczy korzystających z krawędzi
                 edge.playersIdsUsingEdge.forEachIndexed { index, playerId ->
                     gameGraph.players[playerId]?.colorHex?.let { hexColor ->
-                        val playerOffset = index * 10 // Możesz dostosować wartość przesunięcia
+                        val playerOffset = index * 10
 
-                        // Tworzenie ścieżki dla linii gracza
+
                         val playerPath = Path().apply {
                             moveTo(startOffset.x + playerOffset, startOffset.y + playerOffset)
                             lineTo(endOffset.x + playerOffset, endOffset.y + playerOffset)
                         }
 
-                        // Rysowanie przerywanej linii gracza
+
                         drawPath(
                             path = playerPath,
                             color = Color(hexColor),
@@ -70,7 +89,7 @@ fun EdgeDrawer(gameGraph: GameGraph) {
                                 pathEffect = PathEffect.dashPathEffect(
                                     floatArrayOf(10f, 7f),
                                     0f
-                                ) // 7f długość kreski, 7f przerwy
+                                )
                             )
                         )
                     }
