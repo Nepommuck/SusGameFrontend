@@ -27,12 +27,13 @@ import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.model.graph.GameGraph
-import edu.agh.susgame.front.model.graph.NodeId
 import edu.agh.susgame.front.model.graph.PathBuilder
-import edu.agh.susgame.front.model.graph.nodes.Server
+import edu.agh.susgame.front.model.graph.node.NodeId
+import edu.agh.susgame.front.model.graph.node.Server
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS
+import edu.agh.susgame.front.ui.components.common.util.Calculate
 import edu.agh.susgame.front.ui.components.common.util.ZoomState
 import edu.agh.susgame.front.ui.components.game.components.computer.ComputerComponent
 import edu.agh.susgame.front.ui.components.game.components.map.components.drawers.EdgeDrawer
@@ -41,7 +42,7 @@ import edu.agh.susgame.front.ui.components.game.components.map.components.elemen
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.ProgressBarComp
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar.NavIcons
 
-private val sizeDp = 50.dp
+private val SIZE_DP = 50.dp
 
 @Composable
 internal fun GameGraphComponent(
@@ -109,12 +110,7 @@ internal fun GameGraphComponent(
                 pathBuilderState = pathBuilderState,
                 onInspectedNodeChange = { newId -> inspectedNodeId = newId },
             )
-
-//            Text(zoomState.scaleValue().toString(), color = Color.Black)
-
         }
-
-
 
         Button(
             onClick = { server.setReceived(10) },
@@ -144,7 +140,7 @@ internal fun GameGraphComponent(
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(sizeDp)
+                            .size(SIZE_DP)
                             .padding(PaddingS)
                     ) {
                         Image(
@@ -161,15 +157,14 @@ internal fun GameGraphComponent(
                     }
                     Box(
                         modifier = Modifier
-                            .size(sizeDp)
+                            .size(SIZE_DP)
                             .padding(PaddingS)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.accept), // Drawable for accept
                             contentDescription = Translation.Game.ACCEPT_PATH,
                             modifier = Modifier
-                                .alpha(if (pathBuilderState.isPathValid(serverId = gameGraph.serverId)) 1f else 0.5f) // Adjusts opacity based on enabled state
-
+                                .alpha(Calculate.getAlpha(pathBuilderState.isPathValid(serverId = gameGraph.serverId)))
                                 .clickable(
                                     enabled = pathBuilderState.isPathValid(
                                         serverId = gameGraph.serverId
@@ -190,18 +185,15 @@ internal fun GameGraphComponent(
             }
         }
 
-
-
-
-        ProgressBarComp(packetsReceived = packetsReceived, packetsToWin = server.getPacketsToWin())
+        ProgressBarComp(packetsReceived = packetsReceived, packetsToWin = server.packetsToWin)
 
         if (isComputerViewVisible) {
             ComputerComponent(gameService = gameService)
         }
         NavIcons(
             isComputerVisible = isComputerViewVisible,
-            setComputerViewVisibility = { visible -> setComputerViewVisibility(visible) })
-
+            setComputerViewVisibility = { visible -> setComputerViewVisibility(visible) }
+        )
     }
 }
 

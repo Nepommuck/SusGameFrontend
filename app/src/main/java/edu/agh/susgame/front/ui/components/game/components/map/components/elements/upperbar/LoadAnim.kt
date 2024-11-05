@@ -15,8 +15,8 @@ import edu.agh.susgame.front.ui.components.common.theme.TextStyler
 import edu.agh.susgame.front.ui.components.common.util.Calculate
 import kotlinx.coroutines.delay
 
-private const val delayMs: Long = 300
-private val animationSymbols = listOf('/', "-", '\\', '|')
+private const val DELAY_MS: Long = 300
+private val ANIMATION_SYMBOLS = listOf('/', "-", '\\', '|')
 
 @Composable
 fun LoadAnim() {
@@ -24,8 +24,8 @@ fun LoadAnim() {
 
     LaunchedEffect(Unit) {
         while (true) {
-            delay(delayMs)
-            animFrameIndex = Calculate.incrementAnimIndex(animFrameIndex, animationSymbols.size)
+            delay(DELAY_MS)
+            animFrameIndex = Calculate.incrementAnimIndex(animFrameIndex, ANIMATION_SYMBOLS.size)
         }
     }
 
@@ -37,7 +37,7 @@ fun LoadAnim() {
             Text(text = "(", style = TextStyler.TerminalLarge)
         }
         Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.Center) {
-            Text(text = animationSymbols[animFrameIndex].toString(), style = TextStyler.TerminalLarge)
+            Text(text = ANIMATION_SYMBOLS[animFrameIndex].toString(), style = TextStyler.TerminalLarge)
         }
         Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.Center) {
             Text(text = ")", style = TextStyler.TerminalLarge)

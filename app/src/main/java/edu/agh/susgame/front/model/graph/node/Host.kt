@@ -1,9 +1,7 @@
-package edu.agh.susgame.front.model.graph.nodes
+package edu.agh.susgame.front.model.graph.node
 
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.Translation
-import edu.agh.susgame.front.model.graph.Node
-import edu.agh.susgame.front.model.graph.NodeId
 import edu.agh.susgame.front.ui.components.common.util.Coordinates
 
 class Host(

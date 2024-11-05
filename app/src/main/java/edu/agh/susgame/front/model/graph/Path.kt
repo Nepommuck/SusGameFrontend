@@ -1,5 +1,7 @@
 package edu.agh.susgame.front.model.graph
 
+import edu.agh.susgame.front.model.graph.node.NodeId
+
 class PathBuilder {
     val path: MutableList<NodeId> = mutableListOf()
     fun addNodeToPath(nodeId: NodeId) {

@@ -73,9 +73,7 @@ fun ComputerComponent(
             Text(text = message)
         }
 
-
     }
-//    NavIcons(gameNavController = gameNavController, ViewState.COMPUTER)
 
     // TODO GAME-54
 }

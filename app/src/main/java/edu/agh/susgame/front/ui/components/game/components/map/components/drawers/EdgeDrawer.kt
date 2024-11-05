@@ -16,7 +16,7 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-private const val circleRadius = 50f
+private const val CIRCLE_RADIUS = 50f
 
 @Composable
 fun EdgeDrawer(gameGraph: GameGraph) {
@@ -44,13 +44,13 @@ fun EdgeDrawer(gameGraph: GameGraph) {
 
 
                 val newStartOffset = Offset(
-                    startOffset.x + cos(angle) * circleRadius,
-                    startOffset.y + sin(angle) * circleRadius
+                    startOffset.x + cos(angle) * CIRCLE_RADIUS,
+                    startOffset.y + sin(angle) * CIRCLE_RADIUS
                 )
 
                 val newEndOffset = Offset(
-                    endOffset.x - cos(angle) * circleRadius,
-                    endOffset.y - sin(angle) * circleRadius
+                    endOffset.x - cos(angle) * CIRCLE_RADIUS,
+                    endOffset.y - sin(angle) * CIRCLE_RADIUS
                 )
 
                 val path = Path().apply {

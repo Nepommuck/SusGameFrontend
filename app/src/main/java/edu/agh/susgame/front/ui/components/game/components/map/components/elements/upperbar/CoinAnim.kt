@@ -12,8 +12,8 @@ import edu.agh.susgame.R
 import edu.agh.susgame.front.ui.components.common.util.Calculate
 import kotlinx.coroutines.delay
 
-private const val delayMs: Long = 70
-private val animationFrames = listOf(
+private const val DELAY_MS: Long = 70
+private val ANIMATION_FRAMES = listOf(
     R.drawable.token0,
     R.drawable.token1,
     R.drawable.token2,
@@ -29,15 +29,14 @@ fun CoinAnim() {
 
     LaunchedEffect(Unit) {
         while (true) {
-            delay(delayMs)
-            animFrameIndex = Calculate.incrementAnimIndex(animFrameIndex, animationFrames.size)
+            delay(DELAY_MS)
+            animFrameIndex = Calculate.incrementAnimIndex(animFrameIndex, ANIMATION_FRAMES.size)
         }
     }
 
     Image(
-        painter = painterResource(id = animationFrames[animFrameIndex]),
+        painter = painterResource(id = ANIMATION_FRAMES[animFrameIndex]),
         contentDescription = null,
-//        modifier = Modifier.fillMaxSize()
     )
 }
 

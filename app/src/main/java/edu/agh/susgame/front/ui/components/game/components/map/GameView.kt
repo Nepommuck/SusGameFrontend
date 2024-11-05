@@ -55,12 +55,8 @@ fun GameView(
                 }
 
                 else -> Box(
-//                    contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxSize()
-
                 ) {
-
-
                     gameGraph?.let { GameGraphComponent(it, serverMapProvider, gameService) }
                 }
             }

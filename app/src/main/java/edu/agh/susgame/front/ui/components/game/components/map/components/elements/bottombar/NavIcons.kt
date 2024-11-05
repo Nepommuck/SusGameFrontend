@@ -10,13 +10,14 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.front.ui.components.common.theme.PaddingXS
+import edu.agh.susgame.front.ui.components.common.util.Calculate
 
-private val sizeDp = 50.dp
+private val SIZE_DP = 50.dp
 
 @Composable
 fun NavIcons(isComputerVisible: Boolean, setComputerViewVisibility: (Boolean) -> Unit) {
@@ -30,9 +31,9 @@ fun NavIcons(isComputerVisible: Boolean, setComputerViewVisibility: (Boolean) ->
         Image(painter = painterResource(id = R.drawable.network),
             contentDescription = null,
             modifier = Modifier
-                .size(sizeDp)
+                .size(SIZE_DP)
                 .padding(PaddingXS)
-                .graphicsLayer { alpha = if (!isComputerVisible) 1f else 0.5f }
+                .alpha(Calculate.getAlpha(!isComputerVisible))
                 .clickable {
                     setComputerViewVisibility(false)
                 }
@@ -41,9 +42,9 @@ fun NavIcons(isComputerVisible: Boolean, setComputerViewVisibility: (Boolean) ->
         Image(painter = painterResource(id = R.drawable.button_console),
             contentDescription = null,
             modifier = Modifier
-                .size(sizeDp)
+                .size(SIZE_DP)
                 .padding(PaddingXS)
-                .graphicsLayer { alpha = if (isComputerVisible) 1f else 0.5f }
+                .alpha(Calculate.getAlpha(isComputerVisible))
                 .clickable {
                     setComputerViewVisibility(true)
                 }

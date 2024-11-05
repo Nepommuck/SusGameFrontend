@@ -18,14 +18,15 @@ import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.model.graph.GameGraph
-import edu.agh.susgame.front.model.graph.NodeId
+import edu.agh.susgame.front.model.graph.node.NodeId
 import edu.agh.susgame.front.model.graph.PathBuilder
-import edu.agh.susgame.front.model.graph.nodes.Host
-import edu.agh.susgame.front.model.graph.nodes.Router
-import edu.agh.susgame.front.model.graph.nodes.Server
+import edu.agh.susgame.front.model.graph.node.Host
+import edu.agh.susgame.front.model.graph.node.Node
+import edu.agh.susgame.front.model.graph.node.Router
+import edu.agh.susgame.front.model.graph.node.Server
 
 
-private const val scaleFactor = 0.04f
+private const val SCALE_FACTOR = 0.04f
 
 @Composable
 fun NodeDrawer(
@@ -39,18 +40,13 @@ fun NodeDrawer(
             .fillMaxSize()
     ) {
         val context = LocalContext.current
-        gameGraph.nodes.forEach { (key, node) ->
+        gameGraph.nodes.forEach { (_, node) ->
 
-            val imageResource = when (node) {
-                is Host -> R.drawable.host
-                is Router -> R.drawable.router
-                is Server -> R.drawable.server
-                else -> R.drawable.host
-            }
+            val imageResourceId = nodeToResourceId(node)
 
             val density = LocalDensity.current
 
-            val imageSize = getImageSize(context, imageResource)
+            val imageSize = getImageSize(context, imageResourceId)
             val width = with(density) { imageSize.width.dp.toPx() }
             val height = with(density) { imageSize.height.dp.toPx() }
 
@@ -59,11 +55,11 @@ fun NodeDrawer(
 
 
             Box(modifier = Modifier
-                .size(width = with(density) { width.toDp() } * scaleFactor,
-                    height = with(density) { height.toDp() } * scaleFactor)
+                .size(width = with(density) { width.toDp() } * SCALE_FACTOR,
+                    height = with(density) { height.toDp() } * SCALE_FACTOR)
                 .graphicsLayer(
-                    translationX = positionX - (width * scaleFactor) / 2,
-                    translationY = positionY - (height * scaleFactor) / 2
+                    translationX = positionX - (width * SCALE_FACTOR) / 2,
+                    translationY = positionY - (height * SCALE_FACTOR) / 2
 
                 )
                 .clickable {
@@ -79,7 +75,7 @@ fun NodeDrawer(
                     onInspectedNodeChange(node.id)
                 }) {
                 Image(
-                    painter = painterResource(id = imageResource),
+                    painter = painterResource(id = imageResourceId),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -113,4 +109,10 @@ private fun addNodeToPath(
         }
     }
 
+}
+
+private fun nodeToResourceId(node: Node): Int = when (node) {
+    is Host -> R.drawable.host
+    is Router -> R.drawable.router
+    is Server -> R.drawable.server
 }

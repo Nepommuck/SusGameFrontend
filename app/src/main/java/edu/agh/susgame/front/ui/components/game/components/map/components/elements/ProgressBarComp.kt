@@ -19,8 +19,8 @@ import edu.agh.susgame.front.ui.components.game.components.map.components.elemen
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.upperbar.LoadAnim
 import kotlin.math.roundToInt
 
-private const val height: Float = 0.17f
-private val tempPlayerMoney: Int = 512
+private const val HEIGHT: Float = 0.17f
+private const val TEMP_PLAYER_MONEY: Int = 512
 
 @Composable
 fun ProgressBarComp(
@@ -29,7 +29,7 @@ fun ProgressBarComp(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxHeight(height)
+            .fillMaxHeight(HEIGHT)
             .fillMaxWidth()
     ) {
         Row(
@@ -81,7 +81,9 @@ fun ProgressBarComp(
                 .padding(PaddingL)
         ) {
             Spacer(modifier = Modifier.weight(1f))
-            Row(modifier = Modifier.weight(6f).fillMaxHeight()) {
+            Row(modifier = Modifier
+                .weight(6f)
+                .fillMaxHeight()) {
                 Box(
                     modifier = Modifier.fillMaxHeight()
                 ) {
@@ -91,15 +93,9 @@ fun ProgressBarComp(
                     modifier = Modifier.fillMaxHeight(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("$tempPlayerMoney ByteTokens", style = TextStyler.TerminalMedium)
+                    Text("$TEMP_PLAYER_MONEY ByteTokens", style = TextStyler.TerminalMedium)
                 }
             }
         }
-
-
     }
 }
-
-
-
-
