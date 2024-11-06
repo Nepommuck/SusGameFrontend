@@ -29,12 +29,6 @@ The remaining configuration will be ignored
         domain = "192.168.0.15",
         // ...
     ```
-4. Paste your IPv4 address into [**`network_security_config.xml`**](./app/src/main/res/xml/network_security_config.xml):
-    ```
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">192.168.0.15</domain>
-    </domain-config>
-    ```
 
 ## Working with DTO
 - In order to modify DTO, commit to [**SusGameDTO** repository](https://github.com/Nepommuck/SusGameDTO)

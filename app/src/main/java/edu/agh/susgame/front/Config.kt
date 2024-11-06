@@ -10,8 +10,6 @@ object Config : AppConfig {
     override val providers = ProviderType.Web
 
     override val webConfig = WebConfig(
-
-        // NOTE: This value must be changed in `app/src/main/res/xml/network_security_config.xml` as well
         domain = "192.168.0.102",
 
         protocol = "http",
