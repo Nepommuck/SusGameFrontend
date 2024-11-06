@@ -3,9 +3,10 @@ package edu.agh.susgame.front.service.web
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ClientSocketMessage
-import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.rest.AbstractRest
+import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.web.socket.GameWebSocketListener
+import edu.agh.susgame.front.ui.graph.node.NodeId
 import edu.agh.susgame.front.utils.AppConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,10 +74,28 @@ class WebGameService(
             socket?.close(code = 1000, reason = null)
         }
 
-    @OptIn(ExperimentalSerializationApi::class)
     override fun sendSimpleMessage(message: String) {
-        val clientSocketMessage: ClientSocketMessage = ClientSocketMessage.ChatMessage(message)
+        sendClientSocketMessage(
+            clientSocketMessage = ClientSocketMessage.ChatMessage(message)
+        )
+    }
 
+    override fun sendHostUpdate(
+        hostId: NodeId,
+        packetPath: List<NodeId>,
+        packetsSentPerTick: Int,
+    ) {
+        sendClientSocketMessage(
+            clientSocketMessage = ClientSocketMessage.HostDTO(
+                id = hostId.value,
+                packetPath = packetPath.map { it.value },
+                packetsSentPerTick = packetsSentPerTick,
+            )
+        )
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    private fun sendClientSocketMessage(clientSocketMessage: ClientSocketMessage) {
         socket?.send(
             Cbor.encodeToByteArray(clientSocketMessage).toByteString()
         )

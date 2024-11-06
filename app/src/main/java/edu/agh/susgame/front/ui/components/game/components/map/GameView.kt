@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.Translation
-import edu.agh.susgame.front.model.graph.GameGraph
+import edu.agh.susgame.front.ui.graph.GameGraph
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider

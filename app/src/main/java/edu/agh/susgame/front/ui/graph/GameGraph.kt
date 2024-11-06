@@ -1,15 +1,15 @@
-package edu.agh.susgame.front.model.graph
+package edu.agh.susgame.front.ui.graph
 
-import edu.agh.susgame.dto.rest.model.Player
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.front.model.graph.node.Node
-import edu.agh.susgame.front.model.graph.node.NodeId
+import edu.agh.susgame.dto.rest.model.PlayerREST
+import edu.agh.susgame.front.ui.graph.node.Node
+import edu.agh.susgame.front.ui.graph.node.NodeId
 import edu.agh.susgame.front.ui.components.common.util.Coordinates
 
 class GameGraph(
     val nodes: Map<NodeId, Node>,
     val edges: Map<EdgeId, Edge>,
-    val players: Map<PlayerId, Player>,
+    val players: Map<PlayerId, PlayerREST>,
     val paths: MutableMap<PlayerId, Path>,
     val serverId: NodeId,
     val mapSize: Coordinates,
@@ -35,7 +35,7 @@ class GameGraph(
         fun fromLists(
             nodes: List<Node>,
             edges: List<Edge>,
-            players: List<Player>,
+            players: List<PlayerREST>,
             serverId: NodeId,
             mapSize: Coordinates,
         ): GameGraph =

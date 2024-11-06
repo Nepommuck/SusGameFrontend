@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.model.graph.node
+package edu.agh.susgame.front.ui.graph.node
 
 import androidx.compose.runtime.mutableIntStateOf
 import edu.agh.susgame.front.Translation

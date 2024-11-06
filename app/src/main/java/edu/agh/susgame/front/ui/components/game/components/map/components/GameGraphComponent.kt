@@ -26,10 +26,10 @@ import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.Translation
-import edu.agh.susgame.front.model.graph.GameGraph
-import edu.agh.susgame.front.model.graph.PathBuilder
-import edu.agh.susgame.front.model.graph.node.NodeId
-import edu.agh.susgame.front.model.graph.node.Server
+import edu.agh.susgame.front.ui.graph.GameGraph
+import edu.agh.susgame.front.ui.graph.PathBuilder
+import edu.agh.susgame.front.ui.graph.node.NodeId
+import edu.agh.susgame.front.ui.graph.node.Server
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS

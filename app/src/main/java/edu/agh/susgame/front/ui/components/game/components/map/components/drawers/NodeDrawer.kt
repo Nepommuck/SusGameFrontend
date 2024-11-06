@@ -17,13 +17,13 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.front.model.graph.GameGraph
-import edu.agh.susgame.front.model.graph.node.NodeId
-import edu.agh.susgame.front.model.graph.PathBuilder
-import edu.agh.susgame.front.model.graph.node.Host
-import edu.agh.susgame.front.model.graph.node.Node
-import edu.agh.susgame.front.model.graph.node.Router
-import edu.agh.susgame.front.model.graph.node.Server
+import edu.agh.susgame.front.ui.graph.GameGraph
+import edu.agh.susgame.front.ui.graph.node.NodeId
+import edu.agh.susgame.front.ui.graph.PathBuilder
+import edu.agh.susgame.front.ui.graph.node.Host
+import edu.agh.susgame.front.ui.graph.node.Node
+import edu.agh.susgame.front.ui.graph.node.Router
+import edu.agh.susgame.front.ui.graph.node.Server
 
 
 private const val SCALE_FACTOR = 0.04f

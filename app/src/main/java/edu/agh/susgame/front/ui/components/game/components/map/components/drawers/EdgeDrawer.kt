@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import edu.agh.susgame.front.model.graph.GameGraph
+import edu.agh.susgame.front.ui.graph.GameGraph
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin

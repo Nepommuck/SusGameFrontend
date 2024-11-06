@@ -58,7 +58,15 @@ class GameWebSocketListener : WebSocketListener() {
                     )
                 }
 
-                else -> {}
+                is ServerSocketMessage.GameState -> {
+                    // TODO GAME-79 Handle those messages
+                    println("INFOOO")
+                    println(decodedMessage)
+                }
+
+                is ServerSocketMessage.ServerError -> {
+                    println("Received an error from the server: $decodedMessage")
+                }
             }
         }
     }
