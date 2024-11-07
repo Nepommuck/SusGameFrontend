@@ -31,6 +31,10 @@ class GameMapFront(
         return this.nodesToEdges[Pair(firstNode, secondNode)]
     }
 
+    fun testEdge(){
+        edges.forEach{(edgeid,edge) -> edge.addPlayer(PlayerId(0))}
+    }
+
     companion object {
         fun fromLists(
             nodes: List<Node>,

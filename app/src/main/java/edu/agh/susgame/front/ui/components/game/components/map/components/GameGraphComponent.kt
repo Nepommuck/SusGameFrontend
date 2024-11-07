@@ -26,12 +26,7 @@ import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.Translation
-import edu.agh.susgame.front.ui.graph.GameMapFront
-import edu.agh.susgame.front.ui.graph.PathBuilder
-import edu.agh.susgame.front.ui.graph.node.NodeId
-import edu.agh.susgame.front.ui.graph.node.Server
 import edu.agh.susgame.front.service.interfaces.GameService
-import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS
 import edu.agh.susgame.front.ui.components.common.util.Calculate
 import edu.agh.susgame.front.ui.components.common.util.ZoomState
@@ -41,6 +36,10 @@ import edu.agh.susgame.front.ui.components.game.components.map.components.drawer
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.NodeInfoComp
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.ProgressBarComp
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar.NavIcons
+import edu.agh.susgame.front.ui.graph.GameMapFront
+import edu.agh.susgame.front.ui.graph.PathBuilder
+import edu.agh.susgame.front.ui.graph.node.NodeId
+import edu.agh.susgame.front.ui.graph.node.Server
 
 private val SIZE_DP = 50.dp
 
@@ -52,6 +51,9 @@ internal fun GameGraphComponent(
     val gameInfo by remember {
         mutableStateOf(gameMapFront)
     }
+
+    gameService.initGameFront(gameInfo)
+
     val server = gameInfo.nodes[gameInfo.serverId] as Server
 
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }

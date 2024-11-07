@@ -6,6 +6,7 @@ import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
+import edu.agh.susgame.front.ui.graph.GameMapFront
 import edu.agh.susgame.front.ui.graph.node.NodeId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,10 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
     private var joinedLobbyInfo: Pair<PlayerNickname, LobbyId>? = null
 
     override val messagesFlow = _messagesFlow.asSharedFlow()
+
+    override fun initGameFront(gameMapFront: GameMapFront) {
+        TODO("Not yet implemented")
+    }
 
     override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
         when (val lobbyInfo = joinedLobbyInfo) {

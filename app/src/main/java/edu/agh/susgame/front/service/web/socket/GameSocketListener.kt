@@ -3,6 +3,7 @@ package edu.agh.susgame.front.service.web.socket
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
+import edu.agh.susgame.front.ui.graph.GameMapFront
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,6 +28,12 @@ class GameWebSocketListener : WebSocketListener() {
     val socketClosedFlow: SharedFlow<Unit> = _socketClosedFlow.asSharedFlow()
 
     val messagesFlow: SharedFlow<SimpleMessage> = _messagesFlow.asSharedFlow()
+
+    var gameMapFront: GameMapFront? = null
+
+    fun initGameMapFront(gameMap: GameMapFront) {
+        gameMapFront = gameMap
+    }
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
         println("WebSocket opened: ${response.message}")
@@ -56,6 +63,7 @@ class GameWebSocketListener : WebSocketListener() {
                             message = decodedMessage.message,
                         )
                     )
+                    gameMapFront?.testEdge()
                 }
 
                 is ServerSocketMessage.GameState -> {
