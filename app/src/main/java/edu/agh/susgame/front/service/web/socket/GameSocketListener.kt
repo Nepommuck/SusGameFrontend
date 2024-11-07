@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.service.web.socket
 
+import androidx.compose.runtime.MutableState
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
@@ -29,9 +30,9 @@ class GameWebSocketListener : WebSocketListener() {
 
     val messagesFlow: SharedFlow<SimpleMessage> = _messagesFlow.asSharedFlow()
 
-    var gameMapFront: GameMapFront? = null
+    var gameMapFront: MutableState<GameMapFront>? = null
 
-    fun initGameMapFront(gameMap: GameMapFront) {
+    fun initGameMapFront(gameMap: MutableState<GameMapFront>) {
         gameMapFront = gameMap
     }
 
@@ -65,7 +66,7 @@ class GameWebSocketListener : WebSocketListener() {
             decodedMessage?.let {
                 when (it) {
                     is ServerSocketMessage.ChatMessage -> {
-                        gameMapFront?.addMessage(
+                        gameMapFront?.value?.addMessage(
                             SimpleMessage(
                                 author = PlayerNickname(it.authorNickname),
                                 message = it.message,
@@ -74,6 +75,7 @@ class GameWebSocketListener : WebSocketListener() {
                     }
                     is ServerSocketMessage.GameState -> {
                         println("GameState message: $it")
+                        gameMapFront?.value?.packetsRec?.value = it.servers[0].packetsReceived
                     }
                     is ServerSocketMessage.ServerError -> {
                         println("Server error: $it")

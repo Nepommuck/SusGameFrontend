@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.ui.graph.node
 
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
 import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.ui.components.common.util.Coordinates
@@ -9,8 +10,9 @@ class Server(
     name: String,
     position: Coordinates,
     val packetsToWin: Int,
+    var packetsReceived: MutableIntState = mutableIntStateOf(0)
 ) : Node(id, name, position) {
-    var packetsReceived = mutableIntStateOf(0)
+
     override fun getInfo(): String {
         return """
             ${Translation.Game.SERVER}

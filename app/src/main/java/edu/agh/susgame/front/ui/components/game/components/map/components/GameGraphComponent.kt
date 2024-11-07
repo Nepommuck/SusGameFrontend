@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,13 +51,16 @@ internal fun GameGraphComponent(
     gameMapFront: GameMapFront,
     gameService: GameService
 ) {
-    val gameInfo by remember {
+    val gameInfo = remember {
         mutableStateOf(gameMapFront)
     }
 
-    gameService.initGameFront(gameInfo)
+    LaunchedEffect(Unit) {
+        gameService.initGameFront(gameInfo)
+        gameService.sendStartGame()
+    }
 
-    val server = gameInfo.nodes[gameInfo.serverId] as Server
+    val server = gameInfo.value.nodes[gameInfo.value.serverId] as Server
 
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
     var playerIdChangingPath by remember { mutableStateOf<PlayerId?>(null) }
@@ -68,7 +73,7 @@ internal fun GameGraphComponent(
         ZoomState(
             maxZoomIn = 2f,
             maxZoomOut = 0.5f,
-            totalSize = gameInfo.mapSize,
+            totalSize = gameInfo.value.mapSize,
         )
     }
 
@@ -107,30 +112,31 @@ internal fun GameGraphComponent(
 
         ) {
 
-            EdgeDrawer(gameMapFront = gameInfo)
+            EdgeDrawer(gameMapFront = gameInfo.value)
 
             NodeDrawer(
-                gameMapFront = gameInfo,
+                gameMapFront = gameInfo.value,
                 playerIdChangingPath = playerIdChangingPath,
                 pathBuilderState = pathBuilderState,
                 onInspectedNodeChange = { newId -> inspectedNodeId = newId },
             )
         }
 
-        Button(
-            onClick = { server.setReceived(10) },
-            modifier = Modifier.align(Alignment.TopEnd)
-        ) { Text("PACKETS") } // JUST FOR TESTING, WILL BE DELETED
+//        Button(
+//            onClick = { gameInfo.value.packetsRec.value=3
+//                      println("UPDATE")},
+//            modifier = Modifier.align(Alignment.TopEnd)
+//        ) { Text("PACKETS"+gameInfo.value.packetsRec.value.toString()) } // JUST FOR TESTING, WILL BE DELETED
 
 
         inspectedNodeId?.let { nodeId ->
-            gameInfo.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
+            gameInfo.value.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
                 NodeInfoComp(
                     node = node,
                     onExit = { inspectedNodeId = null },
                     playerIdChangingPath = { newId -> playerIdChangingPath = newId },
                     pathBuilderState = pathBuilderState,
-                    mapState = gameInfo
+                    mapState = gameInfo.value
                 )
             }
         }
@@ -152,7 +158,7 @@ internal fun GameGraphComponent(
                             painter = painterResource(id = R.drawable.cross), // Drawable for abort
                             contentDescription = Translation.Game.ABORT_PATH,
                             modifier = Modifier.clickable {
-                                gameInfo.edges.forEach { (_, edge) ->
+                                gameInfo.value.edges.forEach { (_, edge) ->
                                     edge.removePlayer(playerIdChangingPath!!)
                                 }
                                 playerIdChangingPath = null
@@ -169,18 +175,18 @@ internal fun GameGraphComponent(
                             painter = painterResource(id = R.drawable.accept), // Drawable for accept
                             contentDescription = Translation.Game.ACCEPT_PATH,
                             modifier = Modifier
-                                .alpha(Calculate.getAlpha(pathBuilderState.isPathValid(serverId = gameInfo.serverId)))
+                                .alpha(Calculate.getAlpha(pathBuilderState.isPathValid(serverId = gameInfo.value.serverId)))
                                 .clickable(
                                     enabled = pathBuilderState.isPathValid(
-                                        serverId = gameInfo.serverId
+                                        serverId = gameInfo.value.serverId
                                     )
                                 ) {
-                                    if (pathBuilderState.isPathValid(serverId = gameInfo.serverId)) {
+                                    if (pathBuilderState.isPathValid(serverId = gameInfo.value.serverId)) {
                                         val path = Path(pathBuilderState.path)
                                         gameService.sendHostUpdate(
                                             NodeId(3), path.path, 2 )
 
-//                                        gameInfo.getHostID(it)?.let { hostId ->
+//                                        gameInfo.value.getHostID(it)?.let { hostId ->
 //                                            gameService.sendHostUpdate(
 //                                                NodeId(2), pathBuilderState.path, 1 )
 //                                        }
@@ -198,7 +204,7 @@ internal fun GameGraphComponent(
             }
         }
 
-        ProgressBarComp(packetsReceived = packetsReceived, packetsToWin = server.packetsToWin)
+        ProgressBarComp(packetsReceived = packetsReceived, packetsToWin = server.packetsToWin, gameInfo)
 
         if (isComputerViewVisible) {
             ComputerComponent(gameService = gameService, gameMapFront = gameInfo)

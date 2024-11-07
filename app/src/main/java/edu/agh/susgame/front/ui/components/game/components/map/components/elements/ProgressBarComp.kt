@@ -9,6 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import edu.agh.susgame.front.ui.components.common.theme.PaddingL
@@ -17,6 +21,7 @@ import edu.agh.susgame.front.ui.components.common.util.Calculate
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.upperbar.BarComp
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.upperbar.CoinAnim
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.upperbar.LoadAnim
+import edu.agh.susgame.front.ui.graph.GameMapFront
 import kotlin.math.roundToInt
 
 private const val HEIGHT: Float = 0.17f
@@ -25,7 +30,8 @@ private const val TEMP_PLAYER_MONEY: Int = 512
 @Composable
 fun ProgressBarComp(
     packetsReceived: Int,
-    packetsToWin: Int
+    packetsToWin: Int,
+    gameMapFront: MutableState<GameMapFront>
 ) {
     Row(
         modifier = Modifier
@@ -55,7 +61,7 @@ fun ProgressBarComp(
                     .weight(10f),
 
                 ) {
-                BarComp(packetsReceived = packetsReceived, packetsToWin = packetsToWin)
+                BarComp(packetsReceived = packetsReceived, packetsToWin = packetsToWin, gameMapFront)
             }
             Box(
                 modifier = Modifier
@@ -65,7 +71,7 @@ fun ProgressBarComp(
 
             ) {
                 val percentage: String = (Calculate.getFloatProgress(
-                    packetsReceived,
+                    gameMapFront.value.getPacketsReceived().value,
                     packetsToWin
                 ) * 100).roundToInt().toString()
 

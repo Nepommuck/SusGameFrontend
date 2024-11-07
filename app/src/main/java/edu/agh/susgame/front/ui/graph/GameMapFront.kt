@@ -1,5 +1,10 @@
 package edu.agh.susgame.front.ui.graph
 
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.front.service.interfaces.GameService
@@ -7,6 +12,7 @@ import edu.agh.susgame.front.ui.components.common.util.Coordinates
 import edu.agh.susgame.front.ui.graph.node.Host
 import edu.agh.susgame.front.ui.graph.node.Node
 import edu.agh.susgame.front.ui.graph.node.NodeId
+import edu.agh.susgame.front.ui.graph.node.Server
 
 class GameMapFront(
     val hosts: Map<PlayerId, NodeId>,
@@ -16,7 +22,8 @@ class GameMapFront(
     val paths: MutableMap<PlayerId, Path>,
     val serverId: NodeId,
     val mapSize: Coordinates,
-    val chatMessages: MutableSet<String> = mutableSetOf<String>()
+    val chatMessages: MutableSet<String> = mutableSetOf<String>(),
+    val packetsRec: MutableState<Int> = mutableIntStateOf(0)
 ) {
     private val nodesToEdges = edges
         .values
@@ -45,6 +52,14 @@ class GameMapFront(
 
     fun testEdge() {
         edges.forEach { (edgeid, edge) -> edge.addPlayer(PlayerId(0)) }
+    }
+    fun upgradePacketsReceived(packets: Int){
+        packetsRec.value = packets
+        println("upgrade")
+    }
+
+    fun getPacketsReceived(): MutableState<Int> {
+        return packetsRec
     }
 
     companion object {

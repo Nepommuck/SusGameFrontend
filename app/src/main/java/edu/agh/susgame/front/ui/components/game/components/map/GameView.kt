@@ -38,7 +38,7 @@ fun GameView(
             isLoading = false
         }
 
-    gameMapFront?.let { gameService.initGameFront(it) }
+//    gameMapFront?.let { gameService.initGameFront(it) }
     Column {
         if (isLoading) {
             Text(text = "${Translation.Button.LOADING}...")
