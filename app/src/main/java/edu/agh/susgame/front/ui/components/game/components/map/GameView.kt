@@ -14,26 +14,27 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.Translation
-import edu.agh.susgame.front.ui.graph.GameGraph
 import edu.agh.susgame.front.navigation.MenuRoute
+import edu.agh.susgame.front.providers.mock.MockServerMapProvider
 import edu.agh.susgame.front.service.interfaces.GameService
-import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.components.game.components.map.components.GameGraphComponent
+import edu.agh.susgame.front.ui.graph.GameMapFront
 
 @Composable
 fun GameView(
     lobbyId: LobbyId,
-    serverMapProvider: ServerMapProvider,
     menuNavController: NavController,
     gameService: GameService
 ) {
-    var gameGraph by remember { mutableStateOf<GameGraph?>(null) }
+    var gameMapFront by remember { mutableStateOf<GameMapFront?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
-
+    // NEW INSTANCE OF gameMapFront SHOULD BE CREATED HERE FROM gameService
+    // PARSER SHOULD CONNECT gameService AND gameMapFront
+    val serverMapProvider = MockServerMapProvider()
     serverMapProvider.getServerMapState(lobbyId)
         .thenAccept {
-            gameGraph = it
+            gameMapFront = it
             isLoading = false
         }
 
@@ -41,7 +42,7 @@ fun GameView(
         if (isLoading) {
             Text(text = "${Translation.Button.LOADING}...")
         } else {
-            when (gameGraph) {
+            when (gameMapFront) {
                 null -> {
                     Column {
                         Text(text = Translation.Error.UNEXPECTED_ERROR)
@@ -57,7 +58,12 @@ fun GameView(
                 else -> Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    gameGraph?.let { GameGraphComponent(it, serverMapProvider, gameService) }
+                    gameMapFront?.let {
+                        GameGraphComponent(
+                            gameMapFront = it,
+                            gameService = gameService
+                        )
+                    }
                 }
             }
         }

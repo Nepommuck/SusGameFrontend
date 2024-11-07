@@ -6,7 +6,7 @@ import edu.agh.susgame.front.ui.graph.node.Node
 import edu.agh.susgame.front.ui.graph.node.NodeId
 import edu.agh.susgame.front.ui.components.common.util.Coordinates
 
-class GameGraph(
+class GameMapFront(
     val nodes: Map<NodeId, Node>,
     val edges: Map<EdgeId, Edge>,
     val players: Map<PlayerId, PlayerREST>,
@@ -38,8 +38,8 @@ class GameGraph(
             players: List<PlayerREST>,
             serverId: NodeId,
             mapSize: Coordinates,
-        ): GameGraph =
-            GameGraph(
+        ): GameMapFront =
+            GameMapFront(
                 nodes = nodes.associateBy { it.id },
                 edges = edges.associateBy { it.id },
                 players = players.associateBy { it.id },

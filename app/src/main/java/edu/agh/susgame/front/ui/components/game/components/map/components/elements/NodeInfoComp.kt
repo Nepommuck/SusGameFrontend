@@ -20,7 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.front.ui.graph.GameGraph
+import edu.agh.susgame.front.ui.graph.GameMapFront
 import edu.agh.susgame.front.ui.graph.node.Node
 import edu.agh.susgame.front.ui.graph.PathBuilder
 import edu.agh.susgame.front.ui.graph.node.Host
@@ -35,7 +35,7 @@ fun NodeInfoComp(
     onExit: () -> Unit,
     playerIdChangingPath: (PlayerId) -> Unit,
     pathBuilderState: PathBuilder,
-    mapState: GameGraph
+    mapState: GameMapFront
 ) {
     Box(
         modifier = Modifier

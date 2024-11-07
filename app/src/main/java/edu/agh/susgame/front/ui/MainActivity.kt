@@ -29,7 +29,6 @@ class MainActivity : ComponentActivity() {
     private data class Services(
         val lobbyService: LobbyService,
         val gameService: GameService,
-        val serverMapProvider: ServerMapProvider,
     )
 
     private val gamesRest: GamesRest = GamesRestImpl(webConfig = Config.webConfig)
@@ -40,14 +39,12 @@ class MainActivity : ComponentActivity() {
             Services(
                 mockLobbiesProvider,
                 MockGameService(mockLobbiesProvider),
-                MockServerMapProvider(),
             )
         }
 
         ProviderType.Web -> Services(
             WebLobbyService(gamesRest),
             WebGameService(webConfig = Config.webConfig),
-            MockServerMapProvider(),
         )
     }
 
@@ -66,7 +63,6 @@ class MainActivity : ComponentActivity() {
                     Box() {
                         MenuNavigationHost(
                             navController,
-                            services.serverMapProvider,
                             services.lobbyService,
                             services.gameService,
                         )

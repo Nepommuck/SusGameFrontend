@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.Translation
-import edu.agh.susgame.front.ui.graph.GameGraph
+import edu.agh.susgame.front.ui.graph.GameMapFront
 import edu.agh.susgame.front.ui.graph.PathBuilder
 import edu.agh.susgame.front.ui.graph.node.NodeId
 import edu.agh.susgame.front.ui.graph.node.Server
@@ -46,11 +46,13 @@ private val SIZE_DP = 50.dp
 
 @Composable
 internal fun GameGraphComponent(
-    gameGraph: GameGraph,
-    gameGraphProvider: ServerMapProvider,
+    gameMapFront: GameMapFront,
     gameService: GameService
 ) {
-    val server = gameGraph.nodes[gameGraph.serverId] as Server
+    val gameInfo by remember {
+        mutableStateOf(gameMapFront)
+    }
+    val server = gameInfo.nodes[gameInfo.serverId] as Server
 
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
     var playerIdChangingPath by remember { mutableStateOf<PlayerId?>(null) }
@@ -63,7 +65,7 @@ internal fun GameGraphComponent(
         ZoomState(
             maxZoomIn = 2f,
             maxZoomOut = 0.5f,
-            totalSize = gameGraph.mapSize,
+            totalSize = gameInfo.mapSize,
         )
     }
 
@@ -102,10 +104,10 @@ internal fun GameGraphComponent(
 
         ) {
 
-            EdgeDrawer(gameGraph = gameGraph)
+            EdgeDrawer(gameMapFront = gameInfo)
 
             NodeDrawer(
-                gameGraph = gameGraph,
+                gameMapFront = gameInfo,
                 playerIdChangingPath = playerIdChangingPath,
                 pathBuilderState = pathBuilderState,
                 onInspectedNodeChange = { newId -> inspectedNodeId = newId },
@@ -119,13 +121,13 @@ internal fun GameGraphComponent(
 
 
         inspectedNodeId?.let { nodeId ->
-            gameGraph.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
+            gameInfo.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
                 NodeInfoComp(
                     node = node,
                     onExit = { inspectedNodeId = null },
                     playerIdChangingPath = { newId -> playerIdChangingPath = newId },
                     pathBuilderState = pathBuilderState,
-                    mapState = gameGraph
+                    mapState = gameInfo
                 )
             }
         }
@@ -147,7 +149,7 @@ internal fun GameGraphComponent(
                             painter = painterResource(id = R.drawable.cross), // Drawable for abort
                             contentDescription = Translation.Game.ABORT_PATH,
                             modifier = Modifier.clickable {
-                                gameGraph.edges.forEach { (_, edge) ->
+                                gameInfo.edges.forEach { (_, edge) ->
                                     edge.removePlayer(playerIdChangingPath!!)
                                 }
                                 playerIdChangingPath = null
@@ -164,16 +166,16 @@ internal fun GameGraphComponent(
                             painter = painterResource(id = R.drawable.accept), // Drawable for accept
                             contentDescription = Translation.Game.ACCEPT_PATH,
                             modifier = Modifier
-                                .alpha(Calculate.getAlpha(pathBuilderState.isPathValid(serverId = gameGraph.serverId)))
+                                .alpha(Calculate.getAlpha(pathBuilderState.isPathValid(serverId = gameInfo.serverId)))
                                 .clickable(
                                     enabled = pathBuilderState.isPathValid(
-                                        serverId = gameGraph.serverId
+                                        serverId = gameInfo.serverId
                                     )
                                 ) {
-                                    if (pathBuilderState.isPathValid(serverId = gameGraph.serverId)) {
-                                        gameGraphProvider.changePlayerPath(
-                                            playerId = it, pathBuilder = pathBuilderState
-                                        )
+                                    if (pathBuilderState.isPathValid(serverId = gameInfo.serverId)) {
+//                                        gameGraphProvider.changePlayerPath( // THERE SHOULD BE REQUEST TO THE SERVER
+//                                            playerId = it, pathBuilder = pathBuilderState
+//                                        )
                                         playerIdChangingPath = null
                                         inspectedNodeId = null
                                         pathBuilderState = PathBuilder()
