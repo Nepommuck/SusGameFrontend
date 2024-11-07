@@ -44,7 +44,7 @@ fun ComputerComponent(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .background(Color.Blue)
+            .background(Color.Cyan)
 
     ) {
         Header(title = Translation.Game.COMPUTER)
