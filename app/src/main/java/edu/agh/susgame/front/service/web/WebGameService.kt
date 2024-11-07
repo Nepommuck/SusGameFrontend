@@ -3,6 +3,7 @@ package edu.agh.susgame.front.service.web
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ClientSocketMessage
+import edu.agh.susgame.dto.socket.common.GameStatus
 import edu.agh.susgame.front.rest.AbstractRest
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.web.socket.GameWebSocketListener
@@ -88,6 +89,12 @@ class WebGameService(
         )
     }
 
+    override fun sendStartGame() {
+        sendClientSocketMessage(
+            clientSocketMessage = ClientSocketMessage.GameState(gameStatus = GameStatus.RUNNING)
+        )
+    }
+
     override fun sendHostUpdate(
         hostId: NodeId,
         packetPath: List<NodeId>,
@@ -100,6 +107,7 @@ class WebGameService(
                 packetsSentPerTick = packetsSentPerTick,
             )
         )
+
     }
 
     @OptIn(ExperimentalSerializationApi::class)

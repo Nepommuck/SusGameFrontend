@@ -28,8 +28,9 @@ class PathBuilder {
 }
 
 class Path(
-    private val path: List<NodeId>
+    val path: List<NodeId>
 ) {
+
     fun getPathString(): String {
         return path.joinToString(", ") { it.value.toString() }
     }

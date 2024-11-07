@@ -37,6 +37,7 @@ import edu.agh.susgame.front.ui.components.game.components.map.components.elemen
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.ProgressBarComp
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar.NavIcons
 import edu.agh.susgame.front.ui.graph.GameMapFront
+import edu.agh.susgame.front.ui.graph.Path
 import edu.agh.susgame.front.ui.graph.PathBuilder
 import edu.agh.susgame.front.ui.graph.node.NodeId
 import edu.agh.susgame.front.ui.graph.node.Server
@@ -175,6 +176,14 @@ internal fun GameGraphComponent(
                                     )
                                 ) {
                                     if (pathBuilderState.isPathValid(serverId = gameInfo.serverId)) {
+                                        val path = Path(pathBuilderState.path)
+                                        gameService.sendHostUpdate(
+                                            NodeId(3), path.path, 2 )
+
+//                                        gameInfo.getHostID(it)?.let { hostId ->
+//                                            gameService.sendHostUpdate(
+//                                                NodeId(2), pathBuilderState.path, 1 )
+//                                        }
 //                                        gameGraphProvider.changePlayerPath( // THERE SHOULD BE REQUEST TO THE SERVER
 //                                            playerId = it, pathBuilder = pathBuilderState
 //                                        )
@@ -192,7 +201,7 @@ internal fun GameGraphComponent(
         ProgressBarComp(packetsReceived = packetsReceived, packetsToWin = server.packetsToWin)
 
         if (isComputerViewVisible) {
-            ComputerComponent(gameService = gameService)
+            ComputerComponent(gameService = gameService, gameMapFront = gameInfo)
         }
         NavIcons(
             isComputerVisible = isComputerViewVisible,

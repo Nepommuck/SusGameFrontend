@@ -26,6 +26,10 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
         TODO("Not yet implemented")
     }
 
+    override fun sendStartGame() {
+        TODO("Not yet implemented")
+    }
+
     override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
         when (val lobbyInfo = joinedLobbyInfo) {
             null -> false

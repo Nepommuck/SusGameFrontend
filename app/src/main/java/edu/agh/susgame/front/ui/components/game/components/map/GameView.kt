@@ -37,6 +37,7 @@ fun GameView(
             gameMapFront = it
             isLoading = false
         }
+
     gameMapFront?.let { gameService.initGameFront(it) }
     Column {
         if (isLoading) {

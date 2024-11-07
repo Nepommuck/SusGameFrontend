@@ -24,6 +24,9 @@ interface GameService {
 
     fun sendHostUpdate(hostId: NodeId, packetPath: List<NodeId>, packetsSentPerTick: Int)
 
+    fun sendStartGame()
+
+
     // TODO GAME-79 All specific methods like
     //  `sendRouterUpdate(routerId, newRouterParams), `notifyAboutCreditChange(int)` etc.
     //  should be added

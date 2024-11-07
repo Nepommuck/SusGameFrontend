@@ -43,6 +43,7 @@ class GameWebSocketListener : WebSocketListener() {
         }
     }
 
+
     override fun onMessage(webSocket: WebSocket, text: String) {
         println("WebSocket Receiving text: $text")
     }
@@ -52,30 +53,36 @@ class GameWebSocketListener : WebSocketListener() {
         println("WebSocket Receiving bytes: ${bytes.hex()}")
 
         CoroutineScope(Dispatchers.Main).launch {
-            when (
-                val decodedMessage = Cbor
-                    .decodeFromByteArray<ServerSocketMessage>(bytes.toByteArray())
-            ) {
-                is ServerSocketMessage.ChatMessage -> {
-                    _messagesFlow.emit(
-                        SimpleMessage(
-                            author = PlayerNickname(decodedMessage.authorNickname),
-                            message = decodedMessage.message,
-                        )
-                    )
-                    gameMapFront?.testEdge()
-                }
 
-                is ServerSocketMessage.GameState -> {
-                    // TODO GAME-79 Handle those messages
-                    println("INFOOO")
-                    println(decodedMessage)
-                }
-
-                is ServerSocketMessage.ServerError -> {
-                    println("Received an error from the server: $decodedMessage")
-                }
+            val decodedMessage: ServerSocketMessage? = try {
+                val byteArray = bytes.toByteArray()
+                Cbor.decodeFromByteArray<ServerSocketMessage>(byteArray)
+            } catch (e: Exception) {
+                println("Error processing message: ${e.localizedMessage}")
+                null
             }
+
+            decodedMessage?.let {
+                when (it) {
+                    is ServerSocketMessage.ChatMessage -> {
+                        gameMapFront?.addMessage(
+                            SimpleMessage(
+                                author = PlayerNickname(it.authorNickname),
+                                message = it.message,
+                            )
+                        )
+                    }
+                    is ServerSocketMessage.GameState -> {
+                        println("GameState message: $it")
+                    }
+                    is ServerSocketMessage.ServerError -> {
+                        println("Server error: $it")
+                    }
+                }
+            } ?: run {
+                println("Failed to decode the message or unsupported message type")
+            }
+
         }
     }
 
