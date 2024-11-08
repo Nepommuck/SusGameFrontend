@@ -6,7 +6,7 @@ import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.front.ui.graph.Edge
 import edu.agh.susgame.front.ui.graph.EdgeId
-import edu.agh.susgame.front.ui.graph.GameMapFront
+import edu.agh.susgame.front.ui.graph.GameManager
 import edu.agh.susgame.front.ui.graph.node.Host
 import edu.agh.susgame.front.ui.graph.node.NodeId
 import edu.agh.susgame.front.ui.graph.PathBuilder
@@ -23,7 +23,7 @@ class MockServerMapProvider(mockDelayMs: Long? = null) : ServerMapProvider {
 
     override fun getServerMapState(
         lobbyId: LobbyId,
-    ): CompletableFuture<GameMapFront> =
+    ): CompletableFuture<GameManager> =
         CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
             gameGraphState
@@ -36,7 +36,7 @@ class MockServerMapProvider(mockDelayMs: Long? = null) : ServerMapProvider {
     /**
      * This function is only for testing, it shows logic behind creating game map
      */
-    private fun createCustomMapState(): GameMapFront {
+    private fun createCustomMapState(): GameManager {
 
         val nodes = listOf(
             Router(NodeId(0), "R1", Coordinates(150, 150), 30),
@@ -81,7 +81,7 @@ class MockServerMapProvider(mockDelayMs: Long? = null) : ServerMapProvider {
         )
         val mapSize = Coordinates(1000, 1000)
 
-        val gameMapFrontState = GameMapFront.fromLists(
+        val gameManagerState = GameManager.fromLists(
             nodes = nodes,
             edges = edges,
             players = players,
@@ -89,6 +89,6 @@ class MockServerMapProvider(mockDelayMs: Long? = null) : ServerMapProvider {
             mapSize = mapSize
         )
 
-        return gameMapFrontState
+        return gameManagerState
     }
 }

@@ -24,12 +24,12 @@ import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.ui.components.common.Header
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS
-import edu.agh.susgame.front.ui.graph.GameMapFront
+import edu.agh.susgame.front.ui.graph.GameManager
 
 @Composable
 fun ComputerComponent(
     gameService: GameService,
-    gameMapFront: MutableState<GameMapFront>
+    gameManager: MutableState<GameManager>
 ) {
 //    val messages = remember { mutableStateListOf<String>() }
     var newMessageInputValue by remember { mutableStateOf("") }
@@ -64,7 +64,7 @@ fun ComputerComponent(
 
             Button(onClick = {
                 gameService.sendSimpleMessage(newMessageInputValue)
-                gameMapFront.value.addMessage(
+                gameManager.value.addMessage(
                     GameService.SimpleMessage(
                         PlayerNickname("You"),
                         newMessageInputValue
@@ -76,7 +76,7 @@ fun ComputerComponent(
             }
         }
 
-        gameMapFront.value.chatMessages.forEach { message ->
+        gameManager.value.chatMessages.forEach { message ->
             Text(text = message)
         }
 

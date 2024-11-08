@@ -7,7 +7,7 @@ import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
-import edu.agh.susgame.front.ui.graph.GameMapFront
+import edu.agh.susgame.front.ui.graph.GameManager
 import edu.agh.susgame.front.ui.graph.node.NodeId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +23,7 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
 
     override val messagesFlow = _messagesFlow.asSharedFlow()
 
-    override fun initGameFront(gameMapFront: MutableState<GameMapFront>) {
+    override fun initGameFront(gameManager: MutableState<GameManager>) {
         TODO("Not yet implemented")
     }
 

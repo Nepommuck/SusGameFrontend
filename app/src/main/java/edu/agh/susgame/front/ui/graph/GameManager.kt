@@ -1,10 +1,7 @@
 package edu.agh.susgame.front.ui.graph
 
-import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.front.service.interfaces.GameService
@@ -12,9 +9,8 @@ import edu.agh.susgame.front.ui.components.common.util.Coordinates
 import edu.agh.susgame.front.ui.graph.node.Host
 import edu.agh.susgame.front.ui.graph.node.Node
 import edu.agh.susgame.front.ui.graph.node.NodeId
-import edu.agh.susgame.front.ui.graph.node.Server
 
-class GameMapFront(
+class GameManager(
     val hosts: Map<PlayerId, NodeId>,
     val nodes: Map<NodeId, Node>,
     val edges: Map<EdgeId, Edge>,
@@ -23,8 +19,11 @@ class GameMapFront(
     val serverId: NodeId,
     val mapSize: Coordinates,
     val chatMessages: MutableSet<String> = mutableSetOf<String>(),
-    val packetsRec: MutableState<Int> = mutableIntStateOf(0)
+    val packetsRec: MutableState<Int> = mutableIntStateOf(0),
+    val playerMoney: MutableState<Int> = mutableIntStateOf(0)
+
 ) {
+    var packetsToWin: Int = 0
     private val nodesToEdges = edges
         .values
         .associate {
@@ -53,6 +52,8 @@ class GameMapFront(
     fun testEdge() {
         edges.forEach { (edgeid, edge) -> edge.addPlayer(PlayerId(0)) }
     }
+
+
     fun upgradePacketsReceived(packets: Int){
         packetsRec.value = packets
         println("upgrade")
@@ -69,8 +70,8 @@ class GameMapFront(
             players: List<PlayerREST>,
             serverId: NodeId,
             mapSize: Coordinates,
-        ): GameMapFront =
-            GameMapFront(
+        ): GameManager =
+            GameManager(
                 hosts = nodes.filterIsInstance<Host>()
                     .associateBy { it.playerId }
                     .mapValues { it.value.id },
@@ -80,6 +81,7 @@ class GameMapFront(
                 paths = mutableMapOf(),
                 serverId = serverId,
                 mapSize = mapSize,
+
             )
     }
 }

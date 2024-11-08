@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.front.ui.graph.GameMapFront
+import edu.agh.susgame.front.ui.graph.GameManager
 import edu.agh.susgame.front.ui.graph.node.NodeId
 import edu.agh.susgame.front.ui.graph.PathBuilder
 import edu.agh.susgame.front.ui.graph.node.Host
@@ -30,7 +30,7 @@ private const val SCALE_FACTOR = 0.04f
 
 @Composable
 fun NodeDrawer(
-    gameMapFront: GameMapFront,
+    gameManager: GameManager,
     playerIdChangingPath: PlayerId?,
     pathBuilderState: PathBuilder,
     onInspectedNodeChange: (NodeId?) -> Unit,
@@ -40,7 +40,7 @@ fun NodeDrawer(
             .fillMaxSize()
     ) {
         val context = LocalContext.current
-        gameMapFront.nodes.forEach { (_, node) ->
+        gameManager.nodes.forEach { (_, node) ->
 
             val imageResourceId = nodeToResourceId(node)
 
@@ -69,7 +69,7 @@ fun NodeDrawer(
                             nodeId = node.id,
                             pathBuilderState = pathBuilderState,
                             playerId = playerIdChangingPath,
-                            gameMapFront = gameMapFront
+                            gameManager = gameManager
                         )
                     }
                     onInspectedNodeChange(node.id)
@@ -96,16 +96,16 @@ private fun addNodeToPath(
     nodeId: NodeId,
     pathBuilderState: PathBuilder,
     playerId: PlayerId,
-    gameMapFront: GameMapFront,
+    gameManager: GameManager,
 ) {
     val edgeId = pathBuilderState.path.lastOrNull()?.let { lastNode ->
-        gameMapFront.getEdgeId(lastNode, nodeId)
+        gameManager.getEdgeId(lastNode, nodeId)
     }
 
     edgeId?.let {
         if (pathBuilderState.isNodeValid(nodeId)) {
             pathBuilderState.addNodeToPath(nodeId)
-            gameMapFront.edges[edgeId]?.addPlayer(playerId)
+            gameManager.edges[edgeId]?.addPlayer(playerId)
         }
     }
 

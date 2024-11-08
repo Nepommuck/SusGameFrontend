@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import edu.agh.susgame.front.ui.graph.GameMapFront
+import edu.agh.susgame.front.ui.graph.GameManager
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -19,14 +19,14 @@ import kotlin.math.sin
 private const val CIRCLE_RADIUS = 50f
 
 @Composable
-fun EdgeDrawer(gameMapFront: GameMapFront) {
+fun EdgeDrawer(gameManager: GameManager) {
     val density = LocalDensity.current
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        gameMapFront.edges.forEach { (_, edge) ->
+        gameManager.edges.forEach { (_, edge) ->
 
-            val startXY = gameMapFront.nodes[edge.firstNodeId]
-            val endXY = gameMapFront.nodes[edge.secondNodeId]
+            val startXY = gameManager.nodes[edge.firstNodeId]
+            val endXY = gameManager.nodes[edge.secondNodeId]
 
             if (startXY != null && endXY != null) {
                 val startOffset = with(density) {
@@ -71,7 +71,7 @@ fun EdgeDrawer(gameMapFront: GameMapFront) {
                 )
 
                 edge.playersIdsUsingEdge.forEachIndexed { index, playerId ->
-                    gameMapFront.players[playerId]?.colorHex?.let { hexColor ->
+                    gameManager.players[playerId]?.colorHex?.let { hexColor ->
                         val playerOffset = index * 10
 
 

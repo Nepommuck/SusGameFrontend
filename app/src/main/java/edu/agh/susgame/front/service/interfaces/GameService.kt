@@ -3,7 +3,7 @@ package edu.agh.susgame.front.service.interfaces
 import androidx.compose.runtime.MutableState
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
-import edu.agh.susgame.front.ui.graph.GameMapFront
+import edu.agh.susgame.front.ui.graph.GameManager
 import edu.agh.susgame.front.ui.graph.node.NodeId
 import kotlinx.coroutines.flow.SharedFlow
 import java.util.concurrent.CompletableFuture
@@ -13,7 +13,7 @@ interface GameService {
 
     val messagesFlow: SharedFlow<SimpleMessage>
 
-    fun initGameFront(gameMapFront: MutableState<GameMapFront>)
+    fun initGameFront(gameManager: MutableState<GameManager>)
 
     fun isPlayerInLobby(lobbyId: LobbyId): Boolean
 

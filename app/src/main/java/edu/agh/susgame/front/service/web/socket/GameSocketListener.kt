@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
-import edu.agh.susgame.front.ui.graph.GameMapFront
+import edu.agh.susgame.front.ui.graph.GameManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,10 +30,10 @@ class GameWebSocketListener : WebSocketListener() {
 
     val messagesFlow: SharedFlow<SimpleMessage> = _messagesFlow.asSharedFlow()
 
-    var gameMapFront: MutableState<GameMapFront>? = null
+    var gameManager: MutableState<GameManager>? = null
 
-    fun initGameMapFront(gameMap: MutableState<GameMapFront>) {
-        gameMapFront = gameMap
+    fun initGameMapFront(gameMap: MutableState<GameManager>) {
+        gameManager = gameMap
     }
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
@@ -66,7 +66,7 @@ class GameWebSocketListener : WebSocketListener() {
             decodedMessage?.let {
                 when (it) {
                     is ServerSocketMessage.ChatMessage -> {
-                        gameMapFront?.value?.addMessage(
+                        gameManager?.value?.addMessage(
                             SimpleMessage(
                                 author = PlayerNickname(it.authorNickname),
                                 message = it.message,
@@ -75,7 +75,7 @@ class GameWebSocketListener : WebSocketListener() {
                     }
                     is ServerSocketMessage.GameState -> {
                         println("GameState message: $it")
-                        gameMapFront?.value?.packetsRec?.value = it.servers[0].packetsReceived
+                        gameManager?.value?.packetsRec?.value = it.servers[0].packetsReceived
                     }
                     is ServerSocketMessage.ServerError -> {
                         println("Server error: $it")

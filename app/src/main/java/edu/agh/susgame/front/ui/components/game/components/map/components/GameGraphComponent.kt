@@ -8,11 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
+import edu.agh.susgame.front.Config
 import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS
@@ -38,34 +36,38 @@ import edu.agh.susgame.front.ui.components.game.components.map.components.drawer
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.NodeInfoComp
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.ProgressBarComp
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar.NavIcons
-import edu.agh.susgame.front.ui.graph.GameMapFront
+import edu.agh.susgame.front.ui.graph.GameManager
 import edu.agh.susgame.front.ui.graph.Path
 import edu.agh.susgame.front.ui.graph.PathBuilder
 import edu.agh.susgame.front.ui.graph.node.NodeId
-import edu.agh.susgame.front.ui.graph.node.Server
+import edu.agh.susgame.front.utils.ProviderType
 
 private val SIZE_DP = 50.dp
 
 @Composable
 internal fun GameGraphComponent(
-    gameMapFront: GameMapFront,
+    gameManagerM: GameManager,
     gameService: GameService
 ) {
-    val gameInfo = remember {
-        mutableStateOf(gameMapFront)
+    val gameManager = remember {
+        mutableStateOf(gameManagerM)
     }
+    when (Config.providers) {
+        ProviderType.MockLocal -> {
 
-    LaunchedEffect(Unit) {
-        gameService.initGameFront(gameInfo)
-        gameService.sendStartGame()
+        }
+
+        ProviderType.Web ->
+            LaunchedEffect(Unit) {
+                gameService.initGameFront(gameManager)
+                gameService.sendStartGame()
+            }
+
     }
-
-    val server = gameInfo.value.nodes[gameInfo.value.serverId] as Server
 
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
     var playerIdChangingPath by remember { mutableStateOf<PlayerId?>(null) }
     var pathBuilderState by remember { mutableStateOf(PathBuilder()) }
-    val packetsReceived by remember { server.packetsReceived }
     var isComputerViewVisible by remember { mutableStateOf(false) }
 
 
@@ -73,7 +75,7 @@ internal fun GameGraphComponent(
         ZoomState(
             maxZoomIn = 2f,
             maxZoomOut = 0.5f,
-            totalSize = gameInfo.value.mapSize,
+            totalSize = gameManager.value.mapSize,
         )
     }
 
@@ -112,10 +114,10 @@ internal fun GameGraphComponent(
 
         ) {
 
-            EdgeDrawer(gameMapFront = gameInfo.value)
+            EdgeDrawer(gameManager = gameManager.value)
 
             NodeDrawer(
-                gameMapFront = gameInfo.value,
+                gameManager = gameManager.value,
                 playerIdChangingPath = playerIdChangingPath,
                 pathBuilderState = pathBuilderState,
                 onInspectedNodeChange = { newId -> inspectedNodeId = newId },
@@ -130,13 +132,13 @@ internal fun GameGraphComponent(
 
 
         inspectedNodeId?.let { nodeId ->
-            gameInfo.value.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
+            gameManager.value.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
                 NodeInfoComp(
                     node = node,
                     onExit = { inspectedNodeId = null },
                     playerIdChangingPath = { newId -> playerIdChangingPath = newId },
                     pathBuilderState = pathBuilderState,
-                    mapState = gameInfo.value
+                    gameManager = gameManager
                 )
             }
         }
@@ -158,7 +160,7 @@ internal fun GameGraphComponent(
                             painter = painterResource(id = R.drawable.cross), // Drawable for abort
                             contentDescription = Translation.Game.ABORT_PATH,
                             modifier = Modifier.clickable {
-                                gameInfo.value.edges.forEach { (_, edge) ->
+                                gameManager.value.edges.forEach { (_, edge) ->
                                     edge.removePlayer(playerIdChangingPath!!)
                                 }
                                 playerIdChangingPath = null
@@ -175,16 +177,17 @@ internal fun GameGraphComponent(
                             painter = painterResource(id = R.drawable.accept), // Drawable for accept
                             contentDescription = Translation.Game.ACCEPT_PATH,
                             modifier = Modifier
-                                .alpha(Calculate.getAlpha(pathBuilderState.isPathValid(serverId = gameInfo.value.serverId)))
+                                .alpha(Calculate.getAlpha(pathBuilderState.isPathValid(serverId = gameManager.value.serverId)))
                                 .clickable(
                                     enabled = pathBuilderState.isPathValid(
-                                        serverId = gameInfo.value.serverId
+                                        serverId = gameManager.value.serverId
                                     )
                                 ) {
-                                    if (pathBuilderState.isPathValid(serverId = gameInfo.value.serverId)) {
+                                    if (pathBuilderState.isPathValid(serverId = gameManager.value.serverId)) {
                                         val path = Path(pathBuilderState.path)
                                         gameService.sendHostUpdate(
-                                            NodeId(3), path.path, 2 )
+                                            NodeId(3), path.path, 2
+                                        )
 
 //                                        gameInfo.value.getHostID(it)?.let { hostId ->
 //                                            gameService.sendHostUpdate(
@@ -204,10 +207,10 @@ internal fun GameGraphComponent(
             }
         }
 
-        ProgressBarComp(packetsReceived = packetsReceived, packetsToWin = server.packetsToWin, gameInfo)
+        ProgressBarComp(gameManager = gameManager)
 
         if (isComputerViewVisible) {
-            ComputerComponent(gameService = gameService, gameMapFront = gameInfo)
+            ComputerComponent(gameService = gameService, gameManager = gameManager)
         }
         NavIcons(
             isComputerVisible = isComputerViewVisible,

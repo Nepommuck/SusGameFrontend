@@ -18,7 +18,7 @@ import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.providers.mock.MockServerMapProvider
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.ui.components.game.components.map.components.GameGraphComponent
-import edu.agh.susgame.front.ui.graph.GameMapFront
+import edu.agh.susgame.front.ui.graph.GameManager
 
 @Composable
 fun GameView(
@@ -26,7 +26,7 @@ fun GameView(
     menuNavController: NavController,
     gameService: GameService
 ) {
-    var gameMapFront by remember { mutableStateOf<GameMapFront?>(null) }
+    var gameManager by remember { mutableStateOf<GameManager?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
     // NEW INSTANCE OF gameMapFront SHOULD BE CREATED HERE FROM gameService
@@ -34,16 +34,15 @@ fun GameView(
     val serverMapProvider = MockServerMapProvider()
     serverMapProvider.getServerMapState(lobbyId)
         .thenAccept {
-            gameMapFront = it
+            gameManager = it
             isLoading = false
         }
 
-//    gameMapFront?.let { gameService.initGameFront(it) }
     Column {
         if (isLoading) {
             Text(text = "${Translation.Button.LOADING}...")
         } else {
-            when (gameMapFront) {
+            when (gameManager) {
                 null -> {
                     Column {
                         Text(text = Translation.Error.UNEXPECTED_ERROR)
@@ -59,9 +58,9 @@ fun GameView(
                 else -> Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    gameMapFront?.let {
+                    gameManager?.let {
                         GameGraphComponent(
-                            gameMapFront = it,
+                            gameManagerM = it,
                             gameService = gameService
                         )
                     }
