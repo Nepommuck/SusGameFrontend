@@ -52,7 +52,7 @@ class GameWebSocketListener : WebSocketListener() {
 
     @OptIn(ExperimentalSerializationApi::class)
     override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
-        println("WebSocket Receiving bytes: ${bytes.hex()}")
+        println("WebSocket: Received bytes: ${bytes.hex()}")
 
         CoroutineScope(Dispatchers.Main).launch {
 
@@ -70,6 +70,8 @@ class GameWebSocketListener : WebSocketListener() {
                 }
             }
 
+            println("WebSocket: Decoded received message: $decodedMessage")
+
             when (decodedMessage) {
                 is ServerSocketMessage.ChatMessage -> {
                     gameManager?.value?.addMessage(
@@ -81,13 +83,12 @@ class GameWebSocketListener : WebSocketListener() {
                 }
 
                 is ServerSocketMessage.GameState -> {
-                    println("GameState message: $decodedMessage")
                     gameManager?.value?.packetsRec?.value =
                         decodedMessage.servers[0].packetsReceived
                 }
 
                 is ServerSocketMessage.ServerError -> {
-                    println("Server error: $decodedMessage")
+                    println("Server error: ${decodedMessage.errorMessage}")
                 }
             }
         }
