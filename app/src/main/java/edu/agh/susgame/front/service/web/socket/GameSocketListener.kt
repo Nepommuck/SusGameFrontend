@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.decodeFromByteArray
 import okhttp3.Response
@@ -55,36 +56,40 @@ class GameWebSocketListener : WebSocketListener() {
 
         CoroutineScope(Dispatchers.Main).launch {
 
-            val decodedMessage: ServerSocketMessage? = try {
+            val decodedMessage = try {
                 val byteArray = bytes.toByteArray()
                 Cbor.decodeFromByteArray<ServerSocketMessage>(byteArray)
             } catch (e: Exception) {
-                println("Error processing message: ${e.localizedMessage}")
-                null
-            }
+                when (e) {
+                    is SerializationException, is IllegalArgumentException -> {
+                        println("Error processing message: ${e.localizedMessage}")
+                        return@launch
+                    }
 
-            decodedMessage?.let {
-                when (it) {
-                    is ServerSocketMessage.ChatMessage -> {
-                        gameManager?.value?.addMessage(
-                            SimpleMessage(
-                                author = PlayerNickname(it.authorNickname),
-                                message = it.message,
-                            )
-                        )
-                    }
-                    is ServerSocketMessage.GameState -> {
-                        println("GameState message: $it")
-                        gameManager?.value?.packetsRec?.value = it.servers[0].packetsReceived
-                    }
-                    is ServerSocketMessage.ServerError -> {
-                        println("Server error: $it")
-                    }
+                    else -> throw e
                 }
-            } ?: run {
-                println("Failed to decode the message or unsupported message type")
             }
 
+            when (decodedMessage) {
+                is ServerSocketMessage.ChatMessage -> {
+                    gameManager?.value?.addMessage(
+                        SimpleMessage(
+                            author = PlayerNickname(decodedMessage.authorNickname),
+                            message = decodedMessage.message,
+                        )
+                    )
+                }
+
+                is ServerSocketMessage.GameState -> {
+                    println("GameState message: $decodedMessage")
+                    gameManager?.value?.packetsRec?.value =
+                        decodedMessage.servers[0].packetsReceived
+                }
+
+                is ServerSocketMessage.ServerError -> {
+                    println("Server error: $decodedMessage")
+                }
+            }
         }
     }
 

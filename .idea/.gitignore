@@ -9,6 +9,7 @@ modules/
 
 workspace.xml
 deploymentTargetDropDown.xml
+gradle.xml
 runConfigurations.xml
 SusGameFrontend.iml
 deploymentTargetSelector.xml

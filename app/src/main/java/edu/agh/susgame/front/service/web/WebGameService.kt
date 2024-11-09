@@ -35,7 +35,7 @@ class WebGameService(
     private var currentLobbyId: LobbyId? = null
     private var playerNickname: PlayerNickname? = null
 
-    private var gameFront : MutableState<GameManager>? = null
+    private var gameFront: MutableState<GameManager>? = null
 
     override val messagesFlow = listener.messagesFlow
 
@@ -54,7 +54,7 @@ class WebGameService(
         }
     }
 
-    override fun initGameFront(gameManager: MutableState<GameManager>){
+    override fun initGameFront(gameManager: MutableState<GameManager>) {
         gameFront = gameManager
         listener.initGameMapFront(gameManager)
     }
@@ -104,11 +104,10 @@ class WebGameService(
         sendClientSocketMessage(
             clientSocketMessage = ClientSocketMessage.HostDTO(
                 id = 1,
-                packetPath = listOf(2,3),
+                packetPath = listOf(2, 3),
                 packetsSentPerTick = packetsSentPerTick,
             )
         )
-
     }
 
     @OptIn(ExperimentalSerializationApi::class)
