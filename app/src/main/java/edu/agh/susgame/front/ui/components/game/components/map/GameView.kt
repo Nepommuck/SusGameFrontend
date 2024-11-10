@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -13,12 +14,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.front.Config
 import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.providers.mock.MockServerMapProvider
 import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.mock.createCustomMapState
 import edu.agh.susgame.front.ui.components.game.components.map.components.GameGraphComponent
 import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.utils.ProviderType
 
 @Composable
 fun GameView(
@@ -29,40 +32,35 @@ fun GameView(
     var gameManager by remember { mutableStateOf<GameManager?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
-    // NEW INSTANCE OF gameMapFront SHOULD BE CREATED HERE FROM gameService
-    // PARSER SHOULD CONNECT gameService AND gameMapFront
-    val serverMapProvider = MockServerMapProvider()
-    serverMapProvider.getServerMapState(lobbyId)
-        .thenAccept {
-            gameManager = it
-            isLoading = false
+    LaunchedEffect(lobbyId) {
+        when (Config.providers) {
+            ProviderType.MockLocal -> {
+                gameManager = createCustomMapState()
+                isLoading = false
+            }
+            ProviderType.Web -> {
+                // TODO LOAD MAP FROM THE SERVER AND INIT GameManager
+                gameManager = createCustomMapState()
+                isLoading = false
+            }
         }
+    }
 
     Column {
         if (isLoading) {
             Text(text = "${Translation.Button.LOADING}...")
         } else {
-            when (gameManager) {
-                null -> {
-                    Column {
-                        Text(text = Translation.Error.UNEXPECTED_ERROR)
-
-                        Button(onClick = {
-                            menuNavController.navigate(MenuRoute.SearchLobby.route)
-                        }) {
-                            Text(text = Translation.Button.BACK_TO_MAIN_MENU)
-                        }
-                    }
+            gameManager?.let {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    GameGraphComponent(gameManager = it, gameService = gameService)
                 }
-
-                else -> Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    gameManager?.let {
-                        GameGraphComponent(
-                            gameManagerM = it,
-                            gameService = gameService
-                        )
+            } ?: run {
+                Column {
+                    Text(text = Translation.Error.UNEXPECTED_ERROR)
+                    Button(onClick = {
+                        menuNavController.navigate(MenuRoute.SearchLobby.route)
+                    }) {
+                        Text(text = Translation.Button.BACK_TO_MAIN_MENU)
                     }
                 }
             }

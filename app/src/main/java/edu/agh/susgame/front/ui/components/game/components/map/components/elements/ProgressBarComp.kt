@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import edu.agh.susgame.front.ui.components.common.theme.PaddingL
@@ -22,12 +22,13 @@ import edu.agh.susgame.front.ui.graph.GameManager
 import kotlin.math.roundToInt
 
 private const val HEIGHT: Float = 0.17f
-private const val TEMP_PLAYER_MONEY: Int = 512
 
 @Composable
 fun ProgressBarComp(
-    gameManager: MutableState<GameManager>
+    gameManager: GameManager
 ) {
+    val packetsReceived by gameManager.packetsRec
+
     Row(
         modifier = Modifier
             .fillMaxHeight(HEIGHT)
@@ -66,8 +67,9 @@ fun ProgressBarComp(
 
             ) {
                 val percentage: String = (Calculate.getFloatProgress(
-                    gameManager.value.packetsRec.value,
-                    gameManager.value.packetsToWin
+                    packetsReceived,
+
+                    gameManager.packetsToWin
                 ) * 100).roundToInt().toString()
 
                 Text(
@@ -82,9 +84,11 @@ fun ProgressBarComp(
                 .padding(PaddingL)
         ) {
             Spacer(modifier = Modifier.weight(1f))
-            Row(modifier = Modifier
-                .weight(6f)
-                .fillMaxHeight()) {
+            Row(
+                modifier = Modifier
+                    .weight(6f)
+                    .fillMaxHeight()
+            ) {
                 Box(
                     modifier = Modifier.fillMaxHeight()
                 ) {
@@ -94,7 +98,10 @@ fun ProgressBarComp(
                     modifier = Modifier.fillMaxHeight(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("${gameManager.value.playerMoney.value} ByteTokens", style = TextStyler.TerminalMedium)
+                    Text(
+                        "${gameManager.playerMoney.value} ByteTokens",
+                        style = TextStyler.TerminalMedium
+                    )
                 }
             }
         }

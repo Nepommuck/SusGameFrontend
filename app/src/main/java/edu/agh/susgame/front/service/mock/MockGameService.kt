@@ -1,6 +1,5 @@
 package edu.agh.susgame.front.service.mock
 
-import androidx.compose.runtime.MutableState
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
@@ -23,7 +22,7 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
 
     override val messagesFlow = _messagesFlow.asSharedFlow()
 
-    override fun initGameFront(gameManager: MutableState<GameManager>) {
+    override fun initGameFront(gameManager: GameManager) {
         TODO("Not yet implemented")
     }
 

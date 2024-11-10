@@ -46,12 +46,9 @@ private val SIZE_DP = 50.dp
 
 @Composable
 internal fun GameGraphComponent(
-    gameManagerM: GameManager,
+    gameManager: GameManager,
     gameService: GameService
 ) {
-    val gameManager = remember {
-        mutableStateOf(gameManagerM)
-    }
     when (Config.providers) {
         ProviderType.MockLocal -> {
 
@@ -75,7 +72,7 @@ internal fun GameGraphComponent(
         ZoomState(
             maxZoomIn = 2f,
             maxZoomOut = 0.5f,
-            totalSize = gameManager.value.mapSize,
+            totalSize = gameManager.mapSize,
         )
     }
 
@@ -114,25 +111,18 @@ internal fun GameGraphComponent(
 
         ) {
 
-            EdgeDrawer(gameManager = gameManager.value)
+            EdgeDrawer(gameManager = gameManager)
 
             NodeDrawer(
-                gameManager = gameManager.value,
+                gameManager = gameManager,
                 playerIdChangingPath = playerIdChangingPath,
                 pathBuilderState = pathBuilderState,
                 onInspectedNodeChange = { newId -> inspectedNodeId = newId },
             )
         }
 
-//        Button(
-//            onClick = { gameInfo.value.packetsRec.value=3
-//                      println("UPDATE")},
-//            modifier = Modifier.align(Alignment.TopEnd)
-//        ) { Text("PACKETS"+gameInfo.value.packetsRec.value.toString()) } // JUST FOR TESTING, WILL BE DELETED
-
-
         inspectedNodeId?.let { nodeId ->
-            gameManager.value.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
+            gameManager.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
                 NodeInfoComp(
                     node = node,
                     onExit = { inspectedNodeId = null },
@@ -157,10 +147,10 @@ internal fun GameGraphComponent(
                             .padding(PaddingS)
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.cross), // Drawable for abort
+                            painter = painterResource(id = R.drawable.cross),
                             contentDescription = Translation.Game.ABORT_PATH,
                             modifier = Modifier.clickable {
-                                gameManager.value.edges.forEach { (_, edge) ->
+                                gameManager.edges.forEach { (_, edge) ->
                                     edge.removePlayer(playerIdChangingPath!!)
                                 }
                                 playerIdChangingPath = null
@@ -177,13 +167,13 @@ internal fun GameGraphComponent(
                             painter = painterResource(id = R.drawable.accept), // Drawable for accept
                             contentDescription = Translation.Game.ACCEPT_PATH,
                             modifier = Modifier
-                                .alpha(Calculate.getAlpha(pathBuilderState.isPathValid(serverId = gameManager.value.serverId)))
+                                .alpha(Calculate.getAlpha(pathBuilderState.isPathValid(serverId = gameManager.serverId)))
                                 .clickable(
                                     enabled = pathBuilderState.isPathValid(
-                                        serverId = gameManager.value.serverId
+                                        serverId = gameManager.serverId
                                     )
                                 ) {
-                                    if (pathBuilderState.isPathValid(serverId = gameManager.value.serverId)) {
+                                    if (pathBuilderState.isPathValid(serverId = gameManager.serverId)) {
                                         val path = Path(pathBuilderState.path)
                                         gameService.sendHostUpdate(
                                             NodeId(3), path.path, 2
@@ -212,14 +202,10 @@ internal fun GameGraphComponent(
         if (isComputerViewVisible) {
             ComputerComponent(gameService = gameService, gameManager = gameManager)
         }
+
         NavIcons(
             isComputerVisible = isComputerViewVisible,
             setComputerViewVisibility = { visible -> setComputerViewVisibility(visible) }
         )
     }
 }
-
-
-
-
-

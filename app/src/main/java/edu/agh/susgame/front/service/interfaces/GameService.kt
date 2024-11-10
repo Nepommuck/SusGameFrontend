@@ -1,6 +1,5 @@
 package edu.agh.susgame.front.service.interfaces
 
-import androidx.compose.runtime.MutableState
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.ui.graph.GameManager
@@ -13,7 +12,7 @@ interface GameService {
 
     val messagesFlow: SharedFlow<SimpleMessage>
 
-    fun initGameFront(gameManager: MutableState<GameManager>)
+    fun initGameFront(gameManager: GameManager)
 
     fun isPlayerInLobby(lobbyId: LobbyId): Boolean
 

@@ -36,7 +36,7 @@ fun NodeInfoComp(
     onExit: () -> Unit,
     playerIdChangingPath: (PlayerId) -> Unit,
     pathBuilderState: PathBuilder,
-    gameManager: MutableState<GameManager>
+    gameManager: GameManager
 ) {
     Box(
         modifier = Modifier
@@ -83,7 +83,7 @@ fun NodeInfoComp(
                                 painter = painterResource(id = R.drawable.shuffle),
                                 contentDescription = "Exit",
                                 modifier = Modifier.clickable {
-                                    gameManager.value.edges.forEach { (_, edge) -> edge.removePlayer(host.playerId) }
+                                    gameManager.edges.forEach { (_, edge) -> edge.removePlayer(host.playerId) }
                                     playerIdChangingPath(host.playerId)
                                     pathBuilderState.addNodeToPath(nodeId = node.id)
                                     onExit()

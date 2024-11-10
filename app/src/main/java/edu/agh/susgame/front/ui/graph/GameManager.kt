@@ -18,12 +18,11 @@ class GameManager(
     val paths: MutableMap<PlayerId, Path>,
     val serverId: NodeId,
     val mapSize: Coordinates,
-    val chatMessages: MutableSet<String> = mutableSetOf<String>(),
+    val chatMessages: MutableSet<String> = mutableSetOf(),
     val packetsRec: MutableState<Int> = mutableIntStateOf(0),
-    val playerMoney: MutableState<Int> = mutableIntStateOf(0)
-
+    val playerMoney: MutableState<Int> = mutableIntStateOf(0),
+    val packetsToWin: Int = 100
 ) {
-    var packetsToWin: Int = 0
     private val nodesToEdges = edges
         .values
         .associate {
@@ -53,15 +52,15 @@ class GameManager(
         edges.forEach { (edgeid, edge) -> edge.addPlayer(PlayerId(0)) }
     }
 
+//
+//    fun upgradePacketsReceived(packets: Int){
+//        packetsRec = packets
+//        println("upgrade")
+//    }
 
-    fun upgradePacketsReceived(packets: Int){
-        packetsRec.value = packets
-        println("upgrade")
-    }
-
-    fun getPacketsReceived(): MutableState<Int> {
-        return packetsRec
-    }
+//    fun getPacketsReceived(): MutableState<Int> {
+//        return packetsRec
+//    }
 
     companion object {
         fun fromLists(

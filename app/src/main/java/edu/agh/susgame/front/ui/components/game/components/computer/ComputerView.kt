@@ -12,7 +12,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,16 +28,9 @@ import edu.agh.susgame.front.ui.graph.GameManager
 @Composable
 fun ComputerComponent(
     gameService: GameService,
-    gameManager: MutableState<GameManager>
+    gameManager: GameManager
 ) {
-//    val messages = remember { mutableStateListOf<String>() }
     var newMessageInputValue by remember { mutableStateOf("") }
-
-//    LaunchedEffect(gameService) {
-//        gameService.messagesFlow.collect { message ->
-//            messages.add("[${message.author.value}]: ${message.message}")
-//        }
-//    }
 
     Column(
         modifier = Modifier
@@ -64,7 +56,7 @@ fun ComputerComponent(
 
             Button(onClick = {
                 gameService.sendSimpleMessage(newMessageInputValue)
-                gameManager.value.addMessage(
+                gameManager.addMessage(
                     GameService.SimpleMessage(
                         PlayerNickname("You"),
                         newMessageInputValue
@@ -76,7 +68,7 @@ fun ComputerComponent(
             }
         }
 
-        gameManager.value.chatMessages.forEach { message ->
+        gameManager.chatMessages.forEach { message ->
             Text(text = message)
         }
 

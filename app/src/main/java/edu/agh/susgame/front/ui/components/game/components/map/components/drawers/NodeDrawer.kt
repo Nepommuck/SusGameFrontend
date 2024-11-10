@@ -18,10 +18,10 @@ import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.ui.graph.GameManager
-import edu.agh.susgame.front.ui.graph.node.NodeId
 import edu.agh.susgame.front.ui.graph.PathBuilder
 import edu.agh.susgame.front.ui.graph.node.Host
 import edu.agh.susgame.front.ui.graph.node.Node
+import edu.agh.susgame.front.ui.graph.node.NodeId
 import edu.agh.susgame.front.ui.graph.node.Router
 import edu.agh.susgame.front.ui.graph.node.Server
 

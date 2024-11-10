@@ -1,7 +1,5 @@
 package edu.agh.susgame.front.service.web.socket
 
-import androidx.compose.runtime.MutableState
-import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 import edu.agh.susgame.front.ui.graph.GameManager
@@ -31,10 +29,10 @@ class GameWebSocketListener : WebSocketListener() {
 
     val messagesFlow: SharedFlow<SimpleMessage> = _messagesFlow.asSharedFlow()
 
-    var gameManager: MutableState<GameManager>? = null
+    private var webManager: WebManager? = null
 
-    fun initGameMapFront(gameMap: MutableState<GameManager>) {
-        gameManager = gameMap
+    fun initWebManager(gameManager: GameManager) {
+        this.webManager = WebManager(gameManager)
     }
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
@@ -74,21 +72,15 @@ class GameWebSocketListener : WebSocketListener() {
 
             when (decodedMessage) {
                 is ServerSocketMessage.ChatMessage -> {
-                    gameManager?.value?.addMessage(
-                        SimpleMessage(
-                            author = PlayerNickname(decodedMessage.authorNickname),
-                            message = decodedMessage.message,
-                        )
-                    )
+                    webManager?.handleChatMessage(decodedMessage)
                 }
 
                 is ServerSocketMessage.GameState -> {
-                    gameManager?.value?.packetsRec?.value =
-                        decodedMessage.servers[0].packetsReceived
+                    webManager?.handleGameState(decodedMessage)
                 }
 
                 is ServerSocketMessage.ServerError -> {
-                    println("Server error: ${decodedMessage.errorMessage}")
+                    webManager?.handleServerError(decodedMessage)
                 }
             }
         }

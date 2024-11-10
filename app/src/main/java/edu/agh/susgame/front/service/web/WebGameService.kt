@@ -1,6 +1,5 @@
 package edu.agh.susgame.front.service.web
 
-import androidx.compose.runtime.MutableState
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ClientSocketMessage
@@ -35,7 +34,7 @@ class WebGameService(
     private var currentLobbyId: LobbyId? = null
     private var playerNickname: PlayerNickname? = null
 
-    private var gameFront: MutableState<GameManager>? = null
+    private var gameManager: GameManager? = null
 
     override val messagesFlow = listener.messagesFlow
 
@@ -54,9 +53,9 @@ class WebGameService(
         }
     }
 
-    override fun initGameFront(gameManager: MutableState<GameManager>) {
-        gameFront = gameManager
-        listener.initGameMapFront(gameManager)
+    override fun initGameFront(gameManager: GameManager) {
+        this.gameManager = gameManager
+        listener.initWebManager(gameManager)
     }
 
     override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
