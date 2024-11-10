@@ -27,7 +27,7 @@ private const val HEIGHT: Float = 0.17f
 fun ProgressBarComp(
     gameManager: GameManager
 ) {
-    val packetsReceived by gameManager.packetsRec
+    val packetsReceived by gameManager.packetsReceived
 
     Row(
         modifier = Modifier

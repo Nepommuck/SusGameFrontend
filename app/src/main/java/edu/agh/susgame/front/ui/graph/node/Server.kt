@@ -20,8 +20,4 @@ class Server(
             ${Translation.Game.PACKETS_RECEIVED}: ${packetsReceived.intValue}
         """.trimIndent()
     }
-
-    fun setReceived(n: Int) {
-        packetsReceived.intValue += n
-    }
 }

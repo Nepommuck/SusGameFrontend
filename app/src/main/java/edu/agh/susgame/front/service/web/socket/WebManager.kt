@@ -16,12 +16,10 @@ class WebManager(val gameManager: GameManager) {
     }
 
     fun handleGameState(decodedMessage: ServerSocketMessage.GameState) {
-        gameManager.packetsRec.value = decodedMessage.servers[0].packetsReceived
+        gameManager.packetsReceived.value = decodedMessage.servers[0].packetsReceived
     }
 
     fun handleServerError(decodedMessage: ServerSocketMessage.ServerError) {
         println("Server error: ${decodedMessage.errorMessage}")
     }
-
-
 }

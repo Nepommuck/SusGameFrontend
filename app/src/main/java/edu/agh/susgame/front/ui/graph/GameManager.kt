@@ -19,7 +19,7 @@ class GameManager(
     val serverId: NodeId,
     val mapSize: Coordinates,
     val chatMessages: MutableSet<String> = mutableSetOf(),
-    val packetsRec: MutableState<Int> = mutableIntStateOf(0),
+    val packetsReceived: MutableState<Int> = mutableIntStateOf(0),
     val playerMoney: MutableState<Int> = mutableIntStateOf(0),
     val packetsToWin: Int = 100
 ) {
@@ -48,20 +48,6 @@ class GameManager(
         chatMessages.add(("[${message.author.value}]: ${message.message}"))
     }
 
-    fun testEdge() {
-        edges.forEach { (edgeid, edge) -> edge.addPlayer(PlayerId(0)) }
-    }
-
-//
-//    fun upgradePacketsReceived(packets: Int){
-//        packetsRec = packets
-//        println("upgrade")
-//    }
-
-//    fun getPacketsReceived(): MutableState<Int> {
-//        return packetsRec
-//    }
-
     companion object {
         fun fromLists(
             nodes: List<Node>,
@@ -81,6 +67,6 @@ class GameManager(
                 serverId = serverId,
                 mapSize = mapSize,
 
-            )
+                )
     }
 }
