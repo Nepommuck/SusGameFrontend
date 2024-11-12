@@ -169,13 +169,6 @@ internal fun GameGraphComponent(
                                             NodeId(3), path.path, 2
                                         )
 
-//                                        gameInfo.value.getHostID(it)?.let { hostId ->
-//                                            gameService.sendHostUpdate(
-//                                                NodeId(2), pathBuilderState.path, 1 )
-//                                        }
-//                                        gameGraphProvider.changePlayerPath( // THERE SHOULD BE REQUEST TO THE SERVER
-//                                            playerId = it, pathBuilder = pathBuilderState
-//                                        )
                                         playerIdChangingPath = null
                                         inspectedNodeId = null
                                         pathBuilderState = PathBuilder()
