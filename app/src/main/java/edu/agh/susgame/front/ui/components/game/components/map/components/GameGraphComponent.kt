@@ -24,7 +24,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.front.Config
 import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS
@@ -40,7 +39,6 @@ import edu.agh.susgame.front.ui.graph.GameManager
 import edu.agh.susgame.front.ui.graph.Path
 import edu.agh.susgame.front.ui.graph.PathBuilder
 import edu.agh.susgame.front.ui.graph.node.NodeId
-import edu.agh.susgame.front.utils.ProviderType
 
 private val SIZE_DP = 50.dp
 
@@ -49,17 +47,9 @@ internal fun GameGraphComponent(
     gameManager: GameManager,
     gameService: GameService
 ) {
-    when (Config.providers) {
-        ProviderType.MockLocal -> {
-
-        }
-
-        ProviderType.Web ->
-            LaunchedEffect(Unit) {
-                gameService.initGameFront(gameManager)
-                gameService.sendStartGame()
-            }
-
+    LaunchedEffect(Unit) {
+        gameService.initGameFront(gameManager)
+        gameService.sendStartGame()
     }
 
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }

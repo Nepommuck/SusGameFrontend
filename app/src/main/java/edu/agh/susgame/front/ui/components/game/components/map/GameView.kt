@@ -14,14 +14,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.LobbyId
-import edu.agh.susgame.front.Config
 import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.mock.createCustomMapState
 import edu.agh.susgame.front.ui.components.game.components.map.components.GameGraphComponent
 import edu.agh.susgame.front.ui.graph.GameManager
-import edu.agh.susgame.front.utils.ProviderType
 
 @Composable
 fun GameView(
@@ -33,17 +31,9 @@ fun GameView(
     var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(lobbyId) {
-        when (Config.providers) {
-            ProviderType.MockLocal -> {
-                gameManager = createCustomMapState()
-                isLoading = false
-            }
-            ProviderType.Web -> {
-                // TODO LOAD MAP FROM THE SERVER AND INIT GameManager
-                gameManager = createCustomMapState()
-                isLoading = false
-            }
-        }
+        // TODO LOAD MAP FROM THE SERVER AND INIT GameManager
+        gameManager = createCustomMapState()
+        isLoading = false
     }
 
     Column {

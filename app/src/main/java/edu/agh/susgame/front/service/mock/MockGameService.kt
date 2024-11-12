@@ -22,13 +22,9 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
 
     override val messagesFlow = _messagesFlow.asSharedFlow()
 
-    override fun initGameFront(gameManager: GameManager) {
-        TODO("Not yet implemented")
-    }
+    override fun initGameFront(gameManager: GameManager) {}
 
-    override fun sendStartGame() {
-        TODO("Not yet implemented")
-    }
+    override fun sendStartGame() {}
 
     override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
         when (val lobbyInfo = joinedLobbyInfo) {
