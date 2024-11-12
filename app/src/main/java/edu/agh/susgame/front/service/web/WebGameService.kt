@@ -3,9 +3,12 @@ package edu.agh.susgame.front.service.web
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ClientSocketMessage
-import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.dto.socket.common.GameStatus
 import edu.agh.susgame.front.rest.AbstractRest
+import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.web.socket.GameWebSocketListener
+import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.ui.graph.node.NodeId
 import edu.agh.susgame.front.utils.AppConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +34,8 @@ class WebGameService(
     private var currentLobbyId: LobbyId? = null
     private var playerNickname: PlayerNickname? = null
 
+    private var gameManager: GameManager? = null
+
     override val messagesFlow = listener.messagesFlow
 
     init {
@@ -46,6 +51,11 @@ class WebGameService(
                 playerNickname = null
             }
         }
+    }
+
+    override fun initGameFront(gameManager: GameManager) {
+        this.gameManager = gameManager
+        listener.initWebManager(gameManager)
     }
 
     override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
@@ -73,10 +83,34 @@ class WebGameService(
             socket?.close(code = 1000, reason = null)
         }
 
-    @OptIn(ExperimentalSerializationApi::class)
     override fun sendSimpleMessage(message: String) {
-        val clientSocketMessage: ClientSocketMessage = ClientSocketMessage.ChatMessage(message)
+        sendClientSocketMessage(
+            clientSocketMessage = ClientSocketMessage.ChatMessage(message)
+        )
+    }
 
+    override fun sendStartGame() {
+        sendClientSocketMessage(
+            clientSocketMessage = ClientSocketMessage.GameState(gameStatus = GameStatus.RUNNING)
+        )
+    }
+
+    override fun sendHostUpdate(
+        hostId: NodeId,
+        packetPath: List<NodeId>,
+        packetsSentPerTick: Int,
+    ) {
+        sendClientSocketMessage(
+            clientSocketMessage = ClientSocketMessage.HostDTO(
+                id = 1,
+                packetPath = listOf(2, 3),
+                packetsSentPerTick = packetsSentPerTick,
+            )
+        )
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    private fun sendClientSocketMessage(clientSocketMessage: ClientSocketMessage) {
         socket?.send(
             Cbor.encodeToByteArray(clientSocketMessage).toByteString()
         )

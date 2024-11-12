@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.model.graph.node
+package edu.agh.susgame.front.ui.graph.node
 
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.Translation

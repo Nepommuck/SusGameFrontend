@@ -12,37 +12,31 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.ui.components.common.Header
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS
+import edu.agh.susgame.front.ui.graph.GameManager
 
 @Composable
 fun ComputerComponent(
     gameService: GameService,
+    gameManager: GameManager
 ) {
-    val messages = remember { mutableStateListOf<String>() }
     var newMessageInputValue by remember { mutableStateOf("") }
-
-    LaunchedEffect(gameService) {
-        gameService.messagesFlow.collect { message ->
-            messages.add("[${message.author.value}]: ${message.message}")
-        }
-    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .background(Color.Blue)
+            .background(Color.Cyan)
 
     ) {
         Header(title = Translation.Game.COMPUTER)
@@ -62,14 +56,19 @@ fun ComputerComponent(
 
             Button(onClick = {
                 gameService.sendSimpleMessage(newMessageInputValue)
-                messages.add("[You]: ${newMessageInputValue}")
+                gameManager.addMessage(
+                    GameService.SimpleMessage(
+                        PlayerNickname("You"),
+                        newMessageInputValue
+                    )
+                )
                 newMessageInputValue = ""
             }) {
                 Text(text = Translation.Button.SEND)
             }
         }
 
-        messages.forEach { message ->
+        gameManager.chatMessages.forEach { message ->
             Text(text = message)
         }
 

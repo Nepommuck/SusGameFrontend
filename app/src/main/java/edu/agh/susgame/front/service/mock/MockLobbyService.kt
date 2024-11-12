@@ -3,7 +3,7 @@ package edu.agh.susgame.front.service.mock
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
-import edu.agh.susgame.dto.rest.model.Player
+import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.Config
@@ -67,7 +67,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
     /**
      * This method exists for a compatibility of `MockGameService` with `GameService` interface
      */
-    fun joinLobby(lobbyId: LobbyId, player: Player): CompletableFuture<Unit> =
+    fun joinLobby(lobbyId: LobbyId, player: PlayerREST): CompletableFuture<Unit> =
         CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
 
@@ -93,12 +93,12 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
      */
     private fun createCustomLobbies() {
         // game 1
-        val player0 = Player(
+        val player0 = PlayerREST(
             nickname = PlayerNickname("Player_0"),
             id = PlayerId(0),
             colorHex = Color.Red.value.toLong(),
         )
-        val player1 = Player(
+        val player1 = PlayerREST(
             nickname = PlayerNickname("Player_1"),
             id = PlayerId(1),
             colorHex = Color.Green.value.toLong(),
@@ -119,12 +119,12 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         this.joinLobby(lobbyIdValue1, player1)
 
         // game 2
-        val player2 = Player(
+        val player2 = PlayerREST(
             nickname = PlayerNickname("Player_0"),
             id = PlayerId(0),
             colorHex = Color.Red.value.toLong(),
         )
-        val player3 = Player(
+        val player3 = PlayerREST(
             nickname = PlayerNickname("Player_1"),
             id = PlayerId(1),
             colorHex = Color.Green.value.toLong(),
@@ -139,8 +139,8 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
                 maxNumOfPlayers = 4,
                 gameTime = 5,
                 playersWaiting = listOf(
-                    Player(
-                        nickname = PlayerNickname("Nonexistent-Player"),
+                    PlayerREST(
+                        nickname = PlayerNickname("Nonexistent-PlayerREST"),
                         id = PlayerId(99),
                         colorHex = 0xFF0000,
                     ),
@@ -151,7 +151,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         this.joinLobby(lobbyIdValue2, player3)
     }
 
-    private fun lobbyWithPlayerAdded(lobby: Lobby, player: Player): Lobby {
+    private fun lobbyWithPlayerAdded(lobby: Lobby, player: PlayerREST): Lobby {
         return lobby.copy(
             playersWaiting = lobby.playersWaiting + player,
         )

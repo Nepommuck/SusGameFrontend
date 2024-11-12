@@ -22,7 +22,7 @@ import edu.agh.susgame.front.ui.components.common.theme.PaddingM
 fun MainMenuView(
     navController: NavController,
 ) {
-    navController.navigate("${MenuRoute.Game.route}/0") // at start opens GameMap view, which helps in developing the map
+//    navController.navigate("${MenuRoute.Game.route}/0") // at start opens GameMap view, which helps in developing the map
     Column(
         modifier = Modifier.fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,

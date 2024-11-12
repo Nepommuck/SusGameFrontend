@@ -158,6 +158,7 @@ internal fun LobbyComp(
                 ) {
                     Text(
                         text = if (isJoinButtonLoading) Translation.Button.LOADING
+
                         else Translation.Button.JOIN
                     )
                 }

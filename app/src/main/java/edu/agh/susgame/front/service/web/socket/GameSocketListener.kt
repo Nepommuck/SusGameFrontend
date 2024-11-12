@@ -1,8 +1,8 @@
 package edu.agh.susgame.front.service.web.socket
 
-import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
+import edu.agh.susgame.front.ui.graph.GameManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.decodeFromByteArray
 import okhttp3.Response
@@ -28,6 +29,12 @@ class GameWebSocketListener : WebSocketListener() {
 
     val messagesFlow: SharedFlow<SimpleMessage> = _messagesFlow.asSharedFlow()
 
+    private var webManager: WebManager? = null
+
+    fun initWebManager(gameManager: GameManager) {
+        this.webManager = WebManager(gameManager)
+    }
+
     override fun onOpen(webSocket: WebSocket, response: Response) {
         println("WebSocket opened: ${response.message}")
 
@@ -36,29 +43,45 @@ class GameWebSocketListener : WebSocketListener() {
         }
     }
 
+
     override fun onMessage(webSocket: WebSocket, text: String) {
         println("WebSocket Receiving text: $text")
     }
 
     @OptIn(ExperimentalSerializationApi::class)
     override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
-        println("WebSocket Receiving bytes: ${bytes.hex()}")
+        println("WebSocket: Received bytes: ${bytes.hex()}")
 
         CoroutineScope(Dispatchers.Main).launch {
-            when (
-                val decodedMessage = Cbor
-                    .decodeFromByteArray<ServerSocketMessage>(bytes.toByteArray())
-            ) {
+
+            val decodedMessage = try {
+                val byteArray = bytes.toByteArray()
+                Cbor.decodeFromByteArray<ServerSocketMessage>(byteArray)
+            } catch (e: Exception) {
+                when (e) {
+                    is SerializationException, is IllegalArgumentException -> {
+                        println("Error processing message: ${e.localizedMessage}")
+                        return@launch
+                    }
+
+                    else -> throw e
+                }
+            }
+
+            println("WebSocket: Decoded received message: $decodedMessage")
+
+            when (decodedMessage) {
                 is ServerSocketMessage.ChatMessage -> {
-                    _messagesFlow.emit(
-                        SimpleMessage(
-                            author = PlayerNickname(decodedMessage.authorNickname),
-                            message = decodedMessage.message,
-                        )
-                    )
+                    webManager?.handleChatMessage(decodedMessage)
                 }
 
-                else -> {}
+                is ServerSocketMessage.GameState -> {
+                    webManager?.handleGameState(decodedMessage)
+                }
+
+                is ServerSocketMessage.ServerError -> {
+                    webManager?.handleServerError(decodedMessage)
+                }
             }
         }
     }

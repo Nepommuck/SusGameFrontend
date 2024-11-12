@@ -11,11 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import edu.agh.susgame.dto.rest.games.GamesRest
 import edu.agh.susgame.front.Config
-import edu.agh.susgame.front.providers.mock.MockServerMapProvider
 import edu.agh.susgame.front.rest.GamesRestImpl
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.service.mock.MockGameService
 import edu.agh.susgame.front.service.mock.MockLobbyService
 import edu.agh.susgame.front.service.web.WebGameService
@@ -29,7 +27,6 @@ class MainActivity : ComponentActivity() {
     private data class Services(
         val lobbyService: LobbyService,
         val gameService: GameService,
-        val serverMapProvider: ServerMapProvider,
     )
 
     private val gamesRest: GamesRest = GamesRestImpl(webConfig = Config.webConfig)
@@ -40,21 +37,17 @@ class MainActivity : ComponentActivity() {
             Services(
                 mockLobbiesProvider,
                 MockGameService(mockLobbiesProvider),
-                MockServerMapProvider(),
             )
         }
 
         ProviderType.Web -> Services(
             WebLobbyService(gamesRest),
             WebGameService(webConfig = Config.webConfig),
-            MockServerMapProvider(),
         )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
 
         setContent {
             SusGameTheme {
@@ -68,7 +61,6 @@ class MainActivity : ComponentActivity() {
                     Box() {
                         MenuNavigationHost(
                             navController,
-                            services.serverMapProvider,
                             services.lobbyService,
                             services.gameService,
                         )

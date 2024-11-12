@@ -1,6 +1,6 @@
-package edu.agh.susgame.front.model.graph
+package edu.agh.susgame.front.ui.graph
 
-import edu.agh.susgame.front.model.graph.node.NodeId
+import edu.agh.susgame.front.ui.graph.node.NodeId
 
 class PathBuilder {
     val path: MutableList<NodeId> = mutableListOf()
@@ -28,8 +28,9 @@ class PathBuilder {
 }
 
 class Path(
-    private val path: List<NodeId>
+    val path: List<NodeId>
 ) {
+
     fun getPathString(): String {
         return path.joinToString(", ") { it.value.toString() }
     }

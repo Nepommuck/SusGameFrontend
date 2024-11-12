@@ -8,9 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,12 +25,7 @@ import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.Translation
-import edu.agh.susgame.front.model.graph.GameGraph
-import edu.agh.susgame.front.model.graph.PathBuilder
-import edu.agh.susgame.front.model.graph.node.NodeId
-import edu.agh.susgame.front.model.graph.node.Server
 import edu.agh.susgame.front.service.interfaces.GameService
-import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS
 import edu.agh.susgame.front.ui.components.common.util.Calculate
 import edu.agh.susgame.front.ui.components.common.util.ZoomState
@@ -41,21 +35,26 @@ import edu.agh.susgame.front.ui.components.game.components.map.components.drawer
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.NodeInfoComp
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.ProgressBarComp
 import edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar.NavIcons
+import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.ui.graph.Path
+import edu.agh.susgame.front.ui.graph.PathBuilder
+import edu.agh.susgame.front.ui.graph.node.NodeId
 
 private val SIZE_DP = 50.dp
 
 @Composable
 internal fun GameGraphComponent(
-    gameGraph: GameGraph,
-    gameGraphProvider: ServerMapProvider,
+    gameManager: GameManager,
     gameService: GameService
 ) {
-    val server = gameGraph.nodes[gameGraph.serverId] as Server
+    LaunchedEffect(Unit) {
+        gameService.initGameFront(gameManager)
+        gameService.sendStartGame()
+    }
 
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
     var playerIdChangingPath by remember { mutableStateOf<PlayerId?>(null) }
     var pathBuilderState by remember { mutableStateOf(PathBuilder()) }
-    val packetsReceived by remember { server.packetsReceived }
     var isComputerViewVisible by remember { mutableStateOf(false) }
 
 
@@ -63,7 +62,7 @@ internal fun GameGraphComponent(
         ZoomState(
             maxZoomIn = 2f,
             maxZoomOut = 0.5f,
-            totalSize = gameGraph.mapSize,
+            totalSize = gameManager.mapSize,
         )
     }
 
@@ -102,30 +101,24 @@ internal fun GameGraphComponent(
 
         ) {
 
-            EdgeDrawer(gameGraph = gameGraph)
+            EdgeDrawer(gameManager = gameManager)
 
             NodeDrawer(
-                gameGraph = gameGraph,
+                gameManager = gameManager,
                 playerIdChangingPath = playerIdChangingPath,
                 pathBuilderState = pathBuilderState,
                 onInspectedNodeChange = { newId -> inspectedNodeId = newId },
             )
         }
 
-        Button(
-            onClick = { server.setReceived(10) },
-            modifier = Modifier.align(Alignment.TopEnd)
-        ) { Text("PACKETS") } // JUST FOR TESTING, WILL BE DELETED
-
-
         inspectedNodeId?.let { nodeId ->
-            gameGraph.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
+            gameManager.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
                 NodeInfoComp(
                     node = node,
                     onExit = { inspectedNodeId = null },
                     playerIdChangingPath = { newId -> playerIdChangingPath = newId },
                     pathBuilderState = pathBuilderState,
-                    mapState = gameGraph
+                    gameManager = gameManager
                 )
             }
         }
@@ -144,10 +137,10 @@ internal fun GameGraphComponent(
                             .padding(PaddingS)
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.cross), // Drawable for abort
+                            painter = painterResource(id = R.drawable.cross),
                             contentDescription = Translation.Game.ABORT_PATH,
                             modifier = Modifier.clickable {
-                                gameGraph.edges.forEach { (_, edge) ->
+                                gameManager.edges.forEach { (_, edge) ->
                                     edge.removePlayer(playerIdChangingPath!!)
                                 }
                                 playerIdChangingPath = null
@@ -164,16 +157,18 @@ internal fun GameGraphComponent(
                             painter = painterResource(id = R.drawable.accept), // Drawable for accept
                             contentDescription = Translation.Game.ACCEPT_PATH,
                             modifier = Modifier
-                                .alpha(Calculate.getAlpha(pathBuilderState.isPathValid(serverId = gameGraph.serverId)))
+                                .alpha(Calculate.getAlpha(pathBuilderState.isPathValid(serverId = gameManager.serverId)))
                                 .clickable(
                                     enabled = pathBuilderState.isPathValid(
-                                        serverId = gameGraph.serverId
+                                        serverId = gameManager.serverId
                                     )
                                 ) {
-                                    if (pathBuilderState.isPathValid(serverId = gameGraph.serverId)) {
-                                        gameGraphProvider.changePlayerPath(
-                                            playerId = it, pathBuilder = pathBuilderState
+                                    if (pathBuilderState.isPathValid(serverId = gameManager.serverId)) {
+                                        val path = Path(pathBuilderState.path)
+                                        gameService.sendHostUpdate(
+                                            NodeId(3), path.path, 2
                                         )
+
                                         playerIdChangingPath = null
                                         inspectedNodeId = null
                                         pathBuilderState = PathBuilder()
@@ -185,19 +180,15 @@ internal fun GameGraphComponent(
             }
         }
 
-        ProgressBarComp(packetsReceived = packetsReceived, packetsToWin = server.packetsToWin)
+        ProgressBarComp(gameManager = gameManager)
 
         if (isComputerViewVisible) {
-            ComputerComponent(gameService = gameService)
+            ComputerComponent(gameService = gameService, gameManager = gameManager)
         }
+
         NavIcons(
             isComputerVisible = isComputerViewVisible,
             setComputerViewVisibility = { visible -> setComputerViewVisibility(visible) }
         )
     }
 }
-
-
-
-
-
