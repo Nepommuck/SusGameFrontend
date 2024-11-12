@@ -59,6 +59,5 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
         hostId: NodeId,
         packetPath: List<NodeId>,
         packetsSentPerTick: Int,
-    ) {
-    }
+    ) {}
 }

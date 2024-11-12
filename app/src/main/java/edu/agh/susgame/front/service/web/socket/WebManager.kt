@@ -17,7 +17,7 @@ class WebManager(val gameManager: GameManager) {
 
     fun handleGameState(decodedMessage: ServerSocketMessage.GameState) {
         // TODO Change to single server
-        gameManager.packetsReceived.value = decodedMessage.servers[0].packetsReceived
+        gameManager.packetsReceived.value = decodedMessage.server.packetsReceived
     }
 
     fun handleServerError(decodedMessage: ServerSocketMessage.ServerError) {

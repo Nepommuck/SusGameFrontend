@@ -7,6 +7,7 @@ import edu.agh.susgame.dto.rest.games.model.GameCreationApiResponse
 import edu.agh.susgame.dto.rest.games.model.GameCreationRequest
 import edu.agh.susgame.dto.rest.games.model.GetAllGamesApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameApiResult
+import edu.agh.susgame.dto.rest.games.model.GetGameMapApiResult
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.utils.AppConfig.WebConfig
@@ -15,6 +16,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.net.HttpURLConnection
 import java.util.concurrent.CompletableFuture
+
 
 class GamesRestImpl(webConfig: WebConfig) : GamesRest,
     AbstractRest(webConfig, endpointName = "games") {
@@ -68,6 +70,10 @@ class GamesRestImpl(webConfig: WebConfig) : GamesRest,
                 else -> GetGameApiResult.OtherError
             }
         }
+
+    override fun getGameMap(gameId: LobbyId): CompletableFuture<GetGameMapApiResult> {
+        TODO("Not yet implemented")
+    }
 
     override fun createGame(
         gameName: String,

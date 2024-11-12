@@ -82,6 +82,8 @@ class GameWebSocketListener : WebSocketListener() {
                 is ServerSocketMessage.ServerError -> {
                     webManager?.handleServerError(decodedMessage)
                 }
+
+                is ServerSocketMessage.QuizQuestionDTO -> TODO()
             }
         }
     }
