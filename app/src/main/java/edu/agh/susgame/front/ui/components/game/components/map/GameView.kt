@@ -27,6 +27,7 @@ fun GameView(
     menuNavController: NavController,
     gameService: GameService
 ) {
+    // TODO Make it val
     var gameManager by remember { mutableStateOf<GameManager?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
