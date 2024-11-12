@@ -7,11 +7,13 @@ inspectionProfiles/
 libraries/
 modules/
 
-workspace.xml
+compiler.xml
+deploymentTargetSelector.xml
 deploymentTargetDropDown.xml
 gradle.xml
 runConfigurations.xml
-SusGameFrontend.iml
-deploymentTargetSelector.xml
 misc.xml
+workspace.xml
 modules.xml
+
+SusGameFrontend.iml
