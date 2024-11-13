@@ -8,7 +8,6 @@ import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.service.interfaces.ServerMapProvider
 import edu.agh.susgame.front.ui.components.game.map.GameView
 import edu.agh.susgame.front.ui.components.menu.components.createlobby.CreateLobbyView
 import edu.agh.susgame.front.ui.components.menu.components.lobby.LobbyView
