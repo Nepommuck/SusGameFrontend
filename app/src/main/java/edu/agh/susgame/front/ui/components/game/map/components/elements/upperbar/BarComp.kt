@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.front.ui.components.common.util.Calculate
-import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.GameManager
 
 @Composable
 fun BarComp(gameManager: GameManager) {

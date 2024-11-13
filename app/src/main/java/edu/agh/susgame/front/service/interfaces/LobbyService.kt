@@ -2,6 +2,7 @@ package edu.agh.susgame.front.service.interfaces
 
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.front.ui.components.common.managers.LobbyManager
 import java.util.concurrent.CompletableFuture
 
 
@@ -12,6 +13,7 @@ sealed class CreateNewGameResult {
 }
 
 interface LobbyService {
+    fun initLobbyManager(lobbyManager: LobbyManager)
     fun getAll(): CompletableFuture<Map<LobbyId, Lobby>>
 
     fun getById(lobbyId: LobbyId): CompletableFuture<Lobby?>

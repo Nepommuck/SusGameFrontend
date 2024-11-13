@@ -35,7 +35,7 @@ import edu.agh.susgame.front.ui.components.game.map.components.drawers.NodeDrawe
 import edu.agh.susgame.front.ui.components.game.map.components.elements.NodeInfoComp
 import edu.agh.susgame.front.ui.components.game.map.components.elements.ProgressBarComp
 import edu.agh.susgame.front.ui.components.game.map.components.elements.bottombar.NavIcons
-import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.GameManager
 import edu.agh.susgame.front.ui.graph.Path
 import edu.agh.susgame.front.ui.graph.PathBuilder
 import edu.agh.susgame.front.ui.graph.node.NodeId
@@ -48,7 +48,7 @@ internal fun GameGraphComponent(
     gameService: GameService
 ) {
     LaunchedEffect(Unit) {
-        gameService.initGameFront(gameManager)
+        gameService.addGameManager(gameManager)
         gameService.sendStartGame()
     }
 

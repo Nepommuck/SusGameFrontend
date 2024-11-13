@@ -2,7 +2,8 @@ package edu.agh.susgame.front.service.interfaces
 
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
-import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.LobbyManager
 import edu.agh.susgame.front.ui.graph.node.NodeId
 import kotlinx.coroutines.flow.SharedFlow
 import java.util.concurrent.CompletableFuture
@@ -12,7 +13,8 @@ interface GameService {
 
     val messagesFlow: SharedFlow<SimpleMessage>
 
-    fun initGameFront(gameManager: GameManager)
+    fun addGameManager(gameManager: GameManager)
+    fun addLobbyManager(lobbyManager: LobbyManager)
 
     fun isPlayerInLobby(lobbyId: LobbyId): Boolean
 

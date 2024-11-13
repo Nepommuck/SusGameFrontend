@@ -19,7 +19,7 @@ import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.mock.createCustomMapState
 import edu.agh.susgame.front.ui.components.game.map.components.GameGraphComponent
-import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.GameManager
 
 @Composable
 fun GameView(

@@ -23,7 +23,7 @@ import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.ui.components.common.Header
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS
-import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.GameManager
 
 @Composable
 fun ComputerComponent(

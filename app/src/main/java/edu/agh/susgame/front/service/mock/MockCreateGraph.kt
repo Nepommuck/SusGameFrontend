@@ -6,7 +6,7 @@ import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.front.ui.components.common.util.Coordinates
 import edu.agh.susgame.front.ui.graph.Edge
 import edu.agh.susgame.front.ui.graph.EdgeId
-import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.GameManager
 import edu.agh.susgame.front.ui.graph.node.Host
 import edu.agh.susgame.front.ui.graph.node.NodeId
 import edu.agh.susgame.front.ui.graph.node.Router

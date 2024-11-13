@@ -18,7 +18,7 @@ import edu.agh.susgame.front.ui.components.common.util.Calculate
 import edu.agh.susgame.front.ui.components.game.map.components.elements.upperbar.BarComp
 import edu.agh.susgame.front.ui.components.game.map.components.elements.upperbar.CoinAnim
 import edu.agh.susgame.front.ui.components.game.map.components.elements.upperbar.LoadAnim
-import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.GameManager
 import kotlin.math.roundToInt
 
 private const val HEIGHT: Float = 0.17f

@@ -9,6 +9,7 @@ import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.Config
 import edu.agh.susgame.front.service.interfaces.CreateNewGameResult
 import edu.agh.susgame.front.service.interfaces.LobbyService
+import edu.agh.susgame.front.ui.components.common.managers.LobbyManager
 
 import java.util.concurrent.CompletableFuture
 
@@ -19,6 +20,10 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
 
     init {
         createCustomLobbies()
+    }
+
+    override fun initLobbyManager(lobbyManager: LobbyManager) {
+
     }
 
     override fun getAll(): CompletableFuture<Map<LobbyId, Lobby>> =

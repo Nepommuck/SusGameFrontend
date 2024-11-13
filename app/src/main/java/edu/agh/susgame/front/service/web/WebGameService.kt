@@ -7,7 +7,8 @@ import edu.agh.susgame.dto.socket.common.GameStatus
 import edu.agh.susgame.front.rest.AbstractRest
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.web.socket.GameWebSocketListener
-import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.LobbyManager
 import edu.agh.susgame.front.ui.graph.node.NodeId
 import edu.agh.susgame.front.utils.AppConfig
 import kotlinx.coroutines.CoroutineScope
@@ -35,6 +36,7 @@ class WebGameService(
     private var playerNickname: PlayerNickname? = null
 
     private var gameManager: GameManager? = null
+    private var lobbyManager: LobbyManager? = null
 
     override val messagesFlow = listener.messagesFlow
 
@@ -53,10 +55,15 @@ class WebGameService(
         }
     }
 
-    override fun initGameFront(gameManager: GameManager) {
+    override fun addGameManager(gameManager: GameManager) {
         this.gameManager = gameManager
-        listener.initWebManager(gameManager)
+        listener.initWebGameManager(gameManager)
     }
+    override fun addLobbyManager(lobbyManager: LobbyManager) {
+        this.lobbyManager = lobbyManager
+        listener.initWebLobbyManager(lobbyManager)
+    }
+
 
     override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
         this.currentLobbyId == lobbyId && this.socket != null

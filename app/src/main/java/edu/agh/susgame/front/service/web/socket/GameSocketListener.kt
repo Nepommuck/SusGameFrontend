@@ -2,7 +2,8 @@ package edu.agh.susgame.front.service.web.socket
 
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
-import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.LobbyManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,11 +30,19 @@ class GameWebSocketListener : WebSocketListener() {
 
     val messagesFlow: SharedFlow<SimpleMessage> = _messagesFlow.asSharedFlow()
 
-    private var webManager: WebManager? = null
+    private var webGameManager: WebGameManager? = null
 
-    fun initWebManager(gameManager: GameManager) {
-        this.webManager = WebManager(gameManager)
+    private var webLobbyManager: WebLobbyManager? = null
+
+    fun initWebGameManager(gameManager: GameManager) {
+        this.webGameManager = WebGameManager(gameManager)
     }
+
+    fun initWebLobbyManager(lobbyManager: LobbyManager) {
+        this.webLobbyManager = WebLobbyManager(lobbyManager)
+        this.webLobbyManager!!.test()
+    }
+
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
         println("WebSocket opened: ${response.message}")
@@ -72,16 +81,17 @@ class GameWebSocketListener : WebSocketListener() {
 
             when (decodedMessage) {
                 is ServerSocketMessage.ChatMessage -> {
-                    webManager?.handleChatMessage(decodedMessage)
+                    webGameManager?.handleChatMessage(decodedMessage)
                 }
 
                 is ServerSocketMessage.GameState -> {
-                    webManager?.handleGameState(decodedMessage)
+                    webGameManager?.handleGameState(decodedMessage)
                 }
 
                 is ServerSocketMessage.ServerError -> {
-                    webManager?.handleServerError(decodedMessage)
+                    webGameManager?.handleServerError(decodedMessage)
                 }
+
 
                 is ServerSocketMessage.QuizQuestionDTO -> TODO()
             }

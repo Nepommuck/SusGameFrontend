@@ -6,7 +6,8 @@ import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
-import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.LobbyManager
 import edu.agh.susgame.front.ui.graph.node.NodeId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +23,8 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
 
     override val messagesFlow = _messagesFlow.asSharedFlow()
 
-    override fun initGameFront(gameManager: GameManager) {}
+    override fun addGameManager(gameManager: GameManager) {}
+    override fun addLobbyManager(lobbyManager: LobbyManager){}
 
     override fun sendStartGame() {}
 

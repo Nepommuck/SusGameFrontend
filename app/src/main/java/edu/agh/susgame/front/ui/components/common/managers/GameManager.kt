@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.graph
+package edu.agh.susgame.front.ui.components.common.managers
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
@@ -6,6 +6,9 @@ import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.ui.components.common.util.Coordinates
+import edu.agh.susgame.front.ui.graph.Edge
+import edu.agh.susgame.front.ui.graph.EdgeId
+import edu.agh.susgame.front.ui.graph.Path
 import edu.agh.susgame.front.ui.graph.node.Host
 import edu.agh.susgame.front.ui.graph.node.Node
 import edu.agh.susgame.front.ui.graph.node.NodeId

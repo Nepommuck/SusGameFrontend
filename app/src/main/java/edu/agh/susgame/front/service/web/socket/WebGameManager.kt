@@ -3,9 +3,11 @@ package edu.agh.susgame.front.service.web.socket
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.service.interfaces.GameService
-import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.ui.components.common.managers.GameManager
 
-class WebManager(val gameManager: GameManager) {
+class WebGameManager(
+    val gameManager: GameManager
+) {
     fun handleChatMessage(decodedMessage: ServerSocketMessage.ChatMessage) {
         gameManager.addMessage(
             GameService.SimpleMessage(
