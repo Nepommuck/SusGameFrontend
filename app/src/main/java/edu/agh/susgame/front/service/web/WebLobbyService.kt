@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture
 class WebLobbyService(private val gamesRest: GamesRest) : LobbyService {
     var lobbyManager: LobbyManager? = null
 
-    override fun initLobbyManager(lobbyManager: LobbyManager){
+    override fun addLobbyManager(lobbyManager: LobbyManager){
         this.lobbyManager=lobbyManager
     }
 

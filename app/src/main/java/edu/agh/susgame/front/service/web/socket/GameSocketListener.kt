@@ -40,9 +40,7 @@ class GameWebSocketListener : WebSocketListener() {
 
     fun initWebLobbyManager(lobbyManager: LobbyManager) {
         this.webLobbyManager = WebLobbyManager(lobbyManager)
-        this.webLobbyManager!!.test()
     }
-
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
         println("WebSocket opened: ${response.message}")
@@ -51,7 +49,6 @@ class GameWebSocketListener : WebSocketListener() {
             _socketOpenedFlow.emit(webSocket)
         }
     }
-
 
     override fun onMessage(webSocket: WebSocket, text: String) {
         println("WebSocket Receiving text: $text")
@@ -92,8 +89,21 @@ class GameWebSocketListener : WebSocketListener() {
                     webGameManager?.handleServerError(decodedMessage)
                 }
 
+                is ServerSocketMessage.PlayerChangeReadinessResponse -> {
+                    webLobbyManager?.handlePlayerChangingReadinessResponse(decodedMessage)
+                }
 
-                is ServerSocketMessage.QuizQuestionDTO -> TODO()
+                is ServerSocketMessage.PlayerJoiningResponse -> {
+                    webLobbyManager?.handlePlayerJoiningResponse(decodedMessage)
+                }
+
+                is ServerSocketMessage.PlayerLeavingResponse -> {
+                    webLobbyManager?.handlePlayerLeavingResponse(decodedMessage)
+                }
+
+                is ServerSocketMessage.QuizQuestionDTO -> {
+                    webGameManager?.handlerQuizQuestion(decodedMessage)
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 package edu.agh.susgame.front.service.web
 
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ClientSocketMessage
 import edu.agh.susgame.dto.socket.common.GameStatus
@@ -9,6 +10,7 @@ import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.web.socket.GameWebSocketListener
 import edu.agh.susgame.front.ui.components.common.managers.GameManager
 import edu.agh.susgame.front.ui.components.common.managers.LobbyManager
+import edu.agh.susgame.front.ui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.ui.graph.node.NodeId
 import edu.agh.susgame.front.utils.AppConfig
 import kotlinx.coroutines.CoroutineScope
@@ -59,6 +61,7 @@ class WebGameService(
         this.gameManager = gameManager
         listener.initWebGameManager(gameManager)
     }
+
     override fun addLobbyManager(lobbyManager: LobbyManager) {
         this.lobbyManager = lobbyManager
         listener.initWebLobbyManager(lobbyManager)
@@ -93,6 +96,32 @@ class WebGameService(
     override fun sendSimpleMessage(message: String) {
         sendClientSocketMessage(
             clientSocketMessage = ClientSocketMessage.ChatMessage(message)
+        )
+    }
+
+    override fun sendJoiningRequest(nickname: PlayerNickname) {
+        sendClientSocketMessage(
+            clientSocketMessage = ClientSocketMessage.PlayerJoiningRequest(nickname.value)
+        )
+    }
+
+    override fun sendLeavingRequest(playerId: PlayerId) {
+        sendClientSocketMessage(
+            clientSocketMessage = ClientSocketMessage.PlayerLeavingRequest(playerId.value)
+        )
+    }
+
+    override fun sendChangingStateRequest(playerId: PlayerId, status: PlayerStatus) {
+        val stateValue: Boolean = when (status) {
+            PlayerStatus.READY -> true
+            PlayerStatus.NOT_READY -> false
+            PlayerStatus.CONNECTING -> false
+        }
+        sendClientSocketMessage(
+            clientSocketMessage = ClientSocketMessage.PlayerChangeReadinessRequest(
+                playerId.value,
+                stateValue
+            )
         )
     }
 

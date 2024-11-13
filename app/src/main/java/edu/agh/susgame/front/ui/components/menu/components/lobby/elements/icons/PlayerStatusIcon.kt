@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import edu.agh.susgame.R
-import edu.agh.susgame.front.ui.components.common.managers.PlayerStatus
+import edu.agh.susgame.front.ui.components.common.util.player.PlayerStatus
 
 @Composable
 internal fun PlayerStatusIcon(

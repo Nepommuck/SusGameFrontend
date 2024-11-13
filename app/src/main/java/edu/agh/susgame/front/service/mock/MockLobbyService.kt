@@ -13,6 +13,7 @@ import edu.agh.susgame.front.ui.components.common.managers.LobbyManager
 
 import java.util.concurrent.CompletableFuture
 
+// IGNORE THIS, ITS GONNA BE DELETED
 class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
     private val delayMs = mockDelayMs ?: 0
     private var freeGameId: Int = 0
@@ -22,7 +23,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         createCustomLobbies()
     }
 
-    override fun initLobbyManager(lobbyManager: LobbyManager) {
+    override fun addLobbyManager(lobbyManager: LobbyManager) {
 
     }
 

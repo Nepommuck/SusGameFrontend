@@ -25,4 +25,8 @@ class WebGameManager(
     fun handleServerError(decodedMessage: ServerSocketMessage.ServerError) {
         println("Server error: ${decodedMessage.errorMessage}")
     }
+
+    fun handlerQuizQuestion(decodedMessage: ServerSocketMessage.QuizQuestionDTO){
+
+    }
 }

@@ -13,7 +13,7 @@ sealed class CreateNewGameResult {
 }
 
 interface LobbyService {
-    fun initLobbyManager(lobbyManager: LobbyManager)
+    fun addLobbyManager(lobbyManager: LobbyManager)
     fun getAll(): CompletableFuture<Map<LobbyId, Lobby>>
 
     fun getById(lobbyId: LobbyId): CompletableFuture<Lobby?>
