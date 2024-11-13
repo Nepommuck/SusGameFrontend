@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.game.components.computer
+package edu.agh.susgame.front.ui.components.game.computer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

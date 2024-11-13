@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.game.components.map
+package edu.agh.susgame.front.ui.components.game.map
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +18,7 @@ import edu.agh.susgame.front.Translation
 import edu.agh.susgame.front.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.mock.createCustomMapState
-import edu.agh.susgame.front.ui.components.game.components.map.components.GameGraphComponent
+import edu.agh.susgame.front.ui.components.game.map.components.GameGraphComponent
 import edu.agh.susgame.front.ui.graph.GameManager
 
 @Composable

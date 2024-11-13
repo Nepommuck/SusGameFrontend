@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.game.components.map.components.elements
+package edu.agh.susgame.front.ui.components.game.map.components.elements
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -15,9 +15,9 @@ import androidx.compose.ui.Modifier
 import edu.agh.susgame.front.ui.components.common.theme.PaddingL
 import edu.agh.susgame.front.ui.components.common.theme.TextStyler
 import edu.agh.susgame.front.ui.components.common.util.Calculate
-import edu.agh.susgame.front.ui.components.game.components.map.components.elements.upperbar.BarComp
-import edu.agh.susgame.front.ui.components.game.components.map.components.elements.upperbar.CoinAnim
-import edu.agh.susgame.front.ui.components.game.components.map.components.elements.upperbar.LoadAnim
+import edu.agh.susgame.front.ui.components.game.map.components.elements.upperbar.BarComp
+import edu.agh.susgame.front.ui.components.game.map.components.elements.upperbar.CoinAnim
+import edu.agh.susgame.front.ui.components.game.map.components.elements.upperbar.LoadAnim
 import edu.agh.susgame.front.ui.graph.GameManager
 import kotlin.math.roundToInt
 

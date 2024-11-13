@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.game.components.map.components.drawers
+package edu.agh.susgame.front.ui.components.game.map.components.drawers
 
 import android.content.Context
 import android.graphics.BitmapFactory

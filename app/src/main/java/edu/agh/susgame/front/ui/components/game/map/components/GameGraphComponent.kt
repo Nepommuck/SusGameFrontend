@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.game.components.map.components
+package edu.agh.susgame.front.ui.components.game.map.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -29,12 +29,12 @@ import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS
 import edu.agh.susgame.front.ui.components.common.util.Calculate
 import edu.agh.susgame.front.ui.components.common.util.ZoomState
-import edu.agh.susgame.front.ui.components.game.components.computer.ComputerComponent
-import edu.agh.susgame.front.ui.components.game.components.map.components.drawers.EdgeDrawer
-import edu.agh.susgame.front.ui.components.game.components.map.components.drawers.NodeDrawer
-import edu.agh.susgame.front.ui.components.game.components.map.components.elements.NodeInfoComp
-import edu.agh.susgame.front.ui.components.game.components.map.components.elements.ProgressBarComp
-import edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar.NavIcons
+import edu.agh.susgame.front.ui.components.game.computer.ComputerComponent
+import edu.agh.susgame.front.ui.components.game.map.components.drawers.EdgeDrawer
+import edu.agh.susgame.front.ui.components.game.map.components.drawers.NodeDrawer
+import edu.agh.susgame.front.ui.components.game.map.components.elements.NodeInfoComp
+import edu.agh.susgame.front.ui.components.game.map.components.elements.ProgressBarComp
+import edu.agh.susgame.front.ui.components.game.map.components.elements.bottombar.NavIcons
 import edu.agh.susgame.front.ui.graph.GameManager
 import edu.agh.susgame.front.ui.graph.Path
 import edu.agh.susgame.front.ui.graph.PathBuilder

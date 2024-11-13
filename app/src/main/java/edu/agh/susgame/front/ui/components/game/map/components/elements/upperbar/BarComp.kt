@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.game.components.map.components.elements.upperbar
+package edu.agh.susgame.front.ui.components.game.map.components.elements.upperbar
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize

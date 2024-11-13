@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.game.components.map.components.elements.bottombar
+package edu.agh.susgame.front.ui.components.game.map.components.elements.bottombar
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
