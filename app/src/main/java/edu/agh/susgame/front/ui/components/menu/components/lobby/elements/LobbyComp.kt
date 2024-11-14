@@ -1,12 +1,16 @@
 package edu.agh.susgame.front.ui.component.menu.components.lobby.elements
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -16,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
@@ -62,119 +67,147 @@ internal fun LobbyComp(
     var isLeaveButtonLoading by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.padding(PaddingL)) {
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f)
-        ) {
-            Header(title = lobby.name)
+        Header(title = lobby.name)
 
-            Text(
-                text = "${Translation.Lobby.nPlayersAwaiting(lobby.playersWaiting.size)}:",
-                Modifier.padding(vertical = PaddingS)
-            )
+
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                Text(
+                    text = "${Translation.Lobby.nPlayersAwaiting(lobby.playersWaiting.size)}:",
+                    Modifier.padding(vertical = PaddingS)
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .padding(PaddingL)
+                        .background(Color.Cyan),
+                ) {
+                    lobbyManager.playersMap.forEach { (_, player) ->
+                        Row(
+                            modifier = Modifier
+                                .weight(1f),
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(4f)
+                                    .wrapContentHeight()
+                                    .align(Alignment.CenterVertically)
+                            ) {
+                                Text(text = player.name.value)
+                            }
+
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wrapContentHeight()
+                                    .align(Alignment.CenterVertically)
+
+                            ) {
+                                PlayerStatusIcon(playerStatus = player.status)
+                            }
+                        }
+                    }
+                }
+            }
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(PaddingL)
+                    .weight(1f),
+                verticalArrangement = Arrangement.Center
             ) {
-                lobbyManager.playersMap.forEach() { (_, player) ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(0.4f)
-                            .padding(vertical = PaddingS)
-                    ) {
-                        Text(text = player.name.value)
-                        PlayerStatusIcon(playerStatus = player.status)
+                if (!hasPlayerJoined) {
+                    if (isNicknameError(currentNickname, playerNicknameInputValue)) {
+                        Text(text = Translation.Lobby.NICKNAME_ERROR_MESSAGE, color = Color.Red)
                     }
-                }
-            }
-        }
 
-
-        if (!hasPlayerJoined) {
-            if (isNicknameError(currentNickname, playerNicknameInputValue)) {
-                Text(text = Translation.Lobby.NICKNAME_ERROR_MESSAGE, color = Color.Red)
-            }
-
-            OutlinedTextField(
-                label = { Text(text = Translation.Lobby.CHOOSE_NICKNAME) },
-                modifier = Modifier.fillMaxWidth(),
-                value = playerNicknameInputValue,
-                onValueChange = {
-                    playerNicknameInputValue = it
-                    updateNicknameIfValid(it) { updatedNickname ->
-                        currentNickname = updatedNickname
-                    }
-                },
-                isError = isNicknameError(currentNickname, playerNicknameInputValue),
-                singleLine = true,
-            )
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Button(
-                enabled = !isLeaveButtonLoading,
-                onClick = {
-                    handleLeaveButtonClick(
-                        navController = navController,
-                        lobbyManager = lobbyManager,
-                        gameService = gameService,
-                        hasPlayerJoined = hasPlayerJoined,
-                        setLeaveButtonLoading = { isLeaveButtonLoading = it },
-                        setHasPlayerJoined = { hasPlayerJoined = it }
+                    OutlinedTextField(
+                        label = { Text(text = Translation.Lobby.CHOOSE_NICKNAME) },
+                        modifier = Modifier.fillMaxWidth(),
+                        value = playerNicknameInputValue,
+                        onValueChange = {
+                            playerNicknameInputValue = it
+                            updateNicknameIfValid(it) { updatedNickname ->
+                                currentNickname = updatedNickname
+                            }
+                        },
+                        isError = isNicknameError(currentNickname, playerNicknameInputValue),
+                        singleLine = true,
                     )
                 }
-            ) {
-                Text(
-                    text = if (isLeaveButtonLoading) Translation.Button.LOADING
-                    else Translation.Button.LEAVE
-                )
-            }
 
-            if (hasPlayerJoined) {
-                Button(onClick = {
-                    lobbyManager.localId?.let {
-                        gameService.sendChangingStateRequest(
-                            it,
-                            PlayerStatus.READY
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Button(
+                        enabled = !isLeaveButtonLoading,
+                        onClick = {
+                            handleLeaveButtonClick(
+                                navController = navController,
+                                lobbyManager = lobbyManager,
+                                gameService = gameService,
+                                hasPlayerJoined = hasPlayerJoined,
+                                setLeaveButtonLoading = { isLeaveButtonLoading = it },
+                                setHasPlayerJoined = { hasPlayerJoined = it }
+                            )
+                        }
+                    ) {
+                        Text(
+                            text = if (isLeaveButtonLoading) Translation.Button.LOADING
+                            else Translation.Button.LEAVE
                         )
-                    } // SOCKET
+                    }
+
+                    if (hasPlayerJoined) {
+                        Button(onClick = {
+                            lobbyManager.localId?.let {
+                                gameService.sendChangingStateRequest(
+                                    it,
+                                    PlayerStatus.READY
+                                )
+                            } // SOCKET
 //                    navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
 //                    gameService.sendJoiningRequest(PlayerNickname("wow"))
-                }) {
-                    Text(text = Translation.Button.PLAY)
+                        }) {
+                            Text(text = Translation.Button.PLAY)
+                        }
+                    } else {
+                        var isJoinButtonLoading by remember { mutableStateOf(false) }
+                        Button(
+                            enabled = !isJoinButtonLoading && currentNickname != null,
+                            onClick = {
+                                handleJoinButtonClick(
+                                    lobby = lobby,
+                                    currentNickname = currentNickname,
+                                    gameService = gameService,
+                                    lobbyService = lobbyService,
+                                    lobbyManager = lobbyManager,
+                                    setJoinButtonLoading = { isJoinButtonLoading = it },
+                                    setLobby = { lobby = it },
+                                    setHasPlayerJoined = { hasPlayerJoined = it }
+                                )
+                            },
+                        ) {
+                            Text(
+                                text = if (isJoinButtonLoading) Translation.Button.LOADING
+                                else Translation.Button.JOIN
+                            )
+                        }
+                    }
                 }
-            } else {
-                var isJoinButtonLoading by remember { mutableStateOf(false) }
-                Button(
-                    enabled = !isJoinButtonLoading && currentNickname != null,
-                    onClick = {
-                        handleJoinButtonClick(
-                            lobby = lobby,
-                            currentNickname = currentNickname,
-                            gameService = gameService,
-                            lobbyService = lobbyService,
-                            lobbyManager = lobbyManager,
-                            setJoinButtonLoading = { isJoinButtonLoading = it },
-                            setLobby = { lobby = it },
-                            setHasPlayerJoined = { hasPlayerJoined = it }
-                        )
-                    },
-                ) {
-                    Text(
-                        text = if (isJoinButtonLoading) Translation.Button.LOADING
-                        else Translation.Button.JOIN
-                    )
-                }
-
             }
         }
     }
 }
+
 
 fun isNicknameError(currentNickname: PlayerNickname?, playerNicknameInputValue: String) =
     currentNickname == null && playerNicknameInputValue.isNotEmpty()
