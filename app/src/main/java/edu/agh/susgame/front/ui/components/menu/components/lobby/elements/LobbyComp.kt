@@ -5,12 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -23,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.PlayerNickname
@@ -59,22 +58,14 @@ internal fun LobbyComp(
     }
 
     var lobby by remember { mutableStateOf(lobbyInitialState) }
-    var hasPlayerJoined by remember {
-        mutableStateOf(gameService.isPlayerInLobby(lobbyInitialState.id))
-    }
+    var hasPlayerJoined by remember { mutableStateOf(gameService.isPlayerInLobby(lobbyInitialState.id)) }
     var playerNicknameInputValue by remember { mutableStateOf("") }
     var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
     var isLeaveButtonLoading by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.padding(PaddingL)) {
         Header(title = lobby.name)
-
-
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-
+        Row {
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -85,30 +76,35 @@ internal fun LobbyComp(
                 )
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth(0.8f)
+//                        .fillMaxWidth(0.8f)
                         .padding(PaddingL)
                         .background(Color.Cyan),
                 ) {
                     lobbyManager.playersMap.forEach { (_, player) ->
                         Row(
                             modifier = Modifier
-                                .weight(1f),
+                                .padding(PaddingS)
+                                .fillMaxWidth()
+                                .height(30.dp),
+                            verticalAlignment = Alignment.CenterVertically
+
                         ) {
                             Box(
                                 modifier = Modifier
                                     .weight(4f)
-                                    .wrapContentHeight()
+                                    .fillMaxSize()
                                     .align(Alignment.CenterVertically)
                             ) {
-                                Text(text = player.name.value)
+                                Text(
+                                    text = player.name.value,
+                                            modifier = Modifier.align(Alignment.CenterStart)
+                                )
                             }
 
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .wrapContentHeight()
-                                    .align(Alignment.CenterVertically)
-
+                                    .fillMaxSize()
                             ) {
                                 PlayerStatusIcon(playerStatus = player.status)
                             }
@@ -119,7 +115,7 @@ internal fun LobbyComp(
 
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+//                    .fillMaxSize()
                     .weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
@@ -130,7 +126,8 @@ internal fun LobbyComp(
 
                     OutlinedTextField(
                         label = { Text(text = Translation.Lobby.CHOOSE_NICKNAME) },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth(),
                         value = playerNicknameInputValue,
                         onValueChange = {
                             playerNicknameInputValue = it
@@ -145,7 +142,7 @@ internal fun LobbyComp(
 
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth(),
+//                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Button(
                         enabled = !isLeaveButtonLoading,

@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
 
     private val services = when (Config.providers) {
         ProviderType.MockLocal -> {
-            val mockLobbiesProvider = MockLobbyService(mockDelayMs = 1_000)
+            val mockLobbiesProvider = MockLobbyService(mockDelayMs = 0)
             Services(
                 mockLobbiesProvider,
                 MockGameService(mockLobbiesProvider),
