@@ -3,14 +3,13 @@ package edu.agh.susgame.front.service.mock
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
-import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
+import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.front.Config
 import edu.agh.susgame.front.service.interfaces.CreateNewGameResult
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.ui.components.common.managers.LobbyManager
-
 import java.util.concurrent.CompletableFuture
 
 // IGNORE THIS, ITS GONNA BE DELETED
@@ -23,8 +22,10 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         createCustomLobbies()
     }
 
-    override fun addLobbyManager(lobbyManager: LobbyManager) {
+    var lobbyManager: LobbyManager? = null
 
+    override fun addLobbyManager(lobbyManager: LobbyManager) {
+        this.lobbyManager = lobbyManager
     }
 
     override fun getAll(): CompletableFuture<Map<LobbyId, Lobby>> =
@@ -73,26 +74,32 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
     /**
      * This method exists for a compatibility of `MockGameService` with `GameService` interface
      */
-    fun joinLobby(lobbyId: LobbyId, player: PlayerREST): CompletableFuture<Unit> =
-        CompletableFuture.supplyAsync {
+    fun joinLobby(lobbyId: LobbyId, player: PlayerREST): CompletableFuture<Unit> {
+        lobbyManager?.addPlayerRest(player)
+        println(lobbyManager?.playersMap)
+        return CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
 
             currentLobbies[lobbyId]?.let {
                 currentLobbies[lobbyId] = lobbyWithPlayerAdded(it, player)
             }
         }
+    }
 
     /**
      * This method exists for a compatibility of `MockGameService` with `GameService` interface
      */
-    fun leaveLobby(lobbyId: LobbyId, playerNickname: PlayerNickname): CompletableFuture<Unit> =
-        CompletableFuture.supplyAsync {
+    fun leaveLobby(lobbyId: LobbyId, playerNickname: PlayerNickname): CompletableFuture<Unit> {
+
+        return CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
 
             currentLobbies[lobbyId]?.let {
                 currentLobbies[lobbyId] = lobbyWithPlayerRemoved(it, playerNickname)
             }
         }
+
+    }
 
     /**
      * This function is only for testing, it shows logic behind creating new lobbies

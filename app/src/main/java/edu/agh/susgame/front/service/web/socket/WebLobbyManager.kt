@@ -11,8 +11,14 @@ class WebLobbyManager(
     private val lobbyManager: LobbyManager
 ) {
     fun handlePlayerChangingReadinessResponse(decodedMessage: ServerSocketMessage.PlayerChangeReadinessResponse) {
-        lobbyManager.playersMap[PlayerId(decodedMessage.playerId)]?.status?.value =
-            if (decodedMessage.state) PlayerStatus.READY else PlayerStatus.NOT_READY
+        if (decodedMessage.state) {
+            lobbyManager.updatePlayerStatus(PlayerId(decodedMessage.playerId), PlayerStatus.READY)
+        } else {
+            lobbyManager.updatePlayerStatus(PlayerId(decodedMessage.playerId), PlayerStatus.NOT_READY)
+        }
+
+//        lobbyManager.playersMap[PlayerId(decodedMessage.playerId)]?.status?.value =
+//            if (decodedMessage.state) PlayerStatus.READY else PlayerStatus.NOT_READY
     }
 
     fun handlePlayerJoiningResponse(decodedMessage: ServerSocketMessage.PlayerJoiningResponse) {

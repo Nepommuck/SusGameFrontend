@@ -5,10 +5,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -58,7 +61,9 @@ internal fun LobbyComp(
     }
 
     var lobby by remember { mutableStateOf(lobbyInitialState) }
-    var hasPlayerJoined by remember { mutableStateOf(gameService.isPlayerInLobby(lobbyInitialState.id)) }
+    var hasPlayerJoined by remember {
+        mutableStateOf(gameService.isPlayerInLobby(lobbyInitialState.id))
+    }
     var playerNicknameInputValue by remember { mutableStateOf("") }
     var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
     var isLeaveButtonLoading by remember { mutableStateOf(false) }
@@ -76,35 +81,31 @@ internal fun LobbyComp(
                 )
                 Column(
                     modifier = Modifier
-//                        .fillMaxWidth(0.8f)
+                        .fillMaxSize()
                         .padding(PaddingL)
                         .background(Color.Cyan),
                 ) {
+                    println(lobbyManager.playersMap.size)
                     lobbyManager.playersMap.forEach { (_, player) ->
                         Row(
-                            modifier = Modifier
-                                .padding(PaddingS)
-                                .fillMaxWidth()
-                                .height(30.dp),
-                            verticalAlignment = Alignment.CenterVertically
-
+                            modifier = Modifier.padding(PaddingS).fillMaxWidth().height(40.dp)
                         ) {
                             Box(
                                 modifier = Modifier
                                     .weight(4f)
+                                    .background(Color.Gray)
                                     .fillMaxSize()
                                     .align(Alignment.CenterVertically)
                             ) {
-                                Text(
-                                    text = player.name.value,
-                                            modifier = Modifier.align(Alignment.CenterStart)
-                                )
+                                Text(text = player.name.value)
                             }
 
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
+                                    .background(Color.DarkGray)
                                     .fillMaxSize()
+                                    .align(Alignment.CenterVertically)
                             ) {
                                 PlayerStatusIcon(playerStatus = player.status)
                             }
@@ -126,8 +127,8 @@ internal fun LobbyComp(
 
                     OutlinedTextField(
                         label = { Text(text = Translation.Lobby.CHOOSE_NICKNAME) },
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier,
+//                            .fillMaxWidth(),
                         value = playerNicknameInputValue,
                         onValueChange = {
                             playerNicknameInputValue = it
@@ -281,7 +282,7 @@ fun handleJoinButtonClick(
 
         gameService.sendJoiningRequest(nickname) // SOCKET
     }
-    lobbyManager.updateFromRest(lobby)
+
 }
 
 
