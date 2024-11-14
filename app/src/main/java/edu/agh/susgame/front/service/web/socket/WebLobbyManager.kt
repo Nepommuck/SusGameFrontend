@@ -35,6 +35,10 @@ class WebLobbyManager(
         lobbyManager.deletePlayer(PlayerId(decodedMessage.playerId))
     }
 
+    fun handleIdConfig(decodedMessage: ServerSocketMessage.IdConfig){
+        lobbyManager.localId=PlayerId(decodedMessage.id)
+    }
+
     fun test() {
         lobbyManager.addPlayerRest(PlayerREST(PlayerNickname("TEST"), PlayerId(2), 123432))
     }

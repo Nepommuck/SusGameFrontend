@@ -1,17 +1,15 @@
 package edu.agh.susgame.front.ui.component.menu.components.lobby.elements
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -61,9 +59,11 @@ internal fun LobbyComp(
     }
 
     var lobby by remember { mutableStateOf(lobbyInitialState) }
+
     var hasPlayerJoined by remember {
         mutableStateOf(gameService.isPlayerInLobby(lobbyInitialState.id))
     }
+
     var playerNicknameInputValue by remember { mutableStateOf("") }
     var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
     var isLeaveButtonLoading by remember { mutableStateOf(false) }
@@ -86,9 +86,12 @@ internal fun LobbyComp(
                         .background(Color.Cyan),
                 ) {
                     println(lobbyManager.playersMap.size)
-                    lobbyManager.playersMap.forEach { (_, player) ->
+                    lobbyManager.playersMap.forEach { (id, player) ->
                         Row(
-                            modifier = Modifier.padding(PaddingS).fillMaxWidth().height(40.dp)
+                            modifier = Modifier
+                                .padding(PaddingS)
+                                .fillMaxWidth()
+                                .height(40.dp)
                         ) {
                             Box(
                                 modifier = Modifier
@@ -97,7 +100,10 @@ internal fun LobbyComp(
                                     .fillMaxSize()
                                     .align(Alignment.CenterVertically)
                             ) {
-                                Text(text = player.name.value)
+                                Text(
+                                    modifier = Modifier.align(Alignment.CenterStart),
+                                    text = player.name.value
+                                )
                             }
 
                             Box(
@@ -106,8 +112,24 @@ internal fun LobbyComp(
                                     .background(Color.DarkGray)
                                     .fillMaxSize()
                                     .align(Alignment.CenterVertically)
+                                    .let {
+                                        if (id == lobbyManager.localId) it.clickable {
+                                            lobbyManager.localId?.let { id ->
+                                                gameService.sendChangingStateRequest(
+                                                    id,
+                                                    PlayerStatus.READY
+                                                )
+
+                                            } // SOCKET
+                                            lobbyManager.updatePlayerStatus(lobbyManager.localId!!,PlayerStatus.READY)
+                                        }
+                                        else it
+                                    }
                             ) {
-                                PlayerStatusIcon(playerStatus = player.status)
+                                PlayerStatusIcon(
+
+                                    playerStatus = player.status
+                                )
                             }
                         }
                     }
@@ -173,7 +195,6 @@ internal fun LobbyComp(
                                 )
                             } // SOCKET
 //                    navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
-//                    gameService.sendJoiningRequest(PlayerNickname("wow"))
                         }) {
                             Text(text = Translation.Button.PLAY)
                         }

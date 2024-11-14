@@ -75,4 +75,5 @@ sealed class ClientSocketMessage {
     data class PlayerLeavingRequest(
         val playerId: Int
     ) : ClientSocketMessage()
+
 }

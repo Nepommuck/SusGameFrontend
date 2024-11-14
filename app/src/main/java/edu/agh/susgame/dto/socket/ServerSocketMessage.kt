@@ -78,4 +78,9 @@ sealed class ServerSocketMessage {
     data class PlayerLeavingResponse(
         val playerId: Int
     ) : ServerSocketMessage()
+
+    @Serializable
+    data class IdConfig(
+        val id: Int
+    ) : ServerSocketMessage()
 }

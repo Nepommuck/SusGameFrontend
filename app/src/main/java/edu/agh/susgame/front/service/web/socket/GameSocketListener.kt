@@ -100,6 +100,9 @@ class GameWebSocketListener : WebSocketListener() {
                 is ServerSocketMessage.PlayerLeavingResponse -> {
                     webLobbyManager?.handlePlayerLeavingResponse(decodedMessage)
                 }
+                is ServerSocketMessage.IdConfig -> {
+                    webLobbyManager?.handleIdConfig(decodedMessage)
+                }
 
                 is ServerSocketMessage.QuizQuestionDTO -> {
                     webGameManager?.handlerQuizQuestion(decodedMessage)
