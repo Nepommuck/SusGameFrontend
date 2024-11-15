@@ -4,6 +4,8 @@ import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.LobbyManager
+import edu.agh.susgame.front.service.web.socket.webmanagers.WebGameManager
+import edu.agh.susgame.front.service.web.socket.webmanagers.WebLobbyManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow

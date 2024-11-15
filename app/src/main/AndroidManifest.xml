@@ -16,7 +16,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".front.ui.MainActivity"
+            android:name=".front.gui.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.SusGame">
             <intent-filter>

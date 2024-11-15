@@ -10,9 +10,9 @@ import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.web.socket.GameWebSocketListener
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.LobbyManager
-import edu.agh.susgame.front.ui.components.common.util.player.PlayerStatus
-import edu.agh.susgame.front.ui.components.common.graph.node.NodeId
-import edu.agh.susgame.front.config.AppConfig
+import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
+import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
+import edu.agh.susgame.front.config.utils.Configuration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,9 +26,9 @@ import okio.ByteString.Companion.toByteString
 import java.util.concurrent.CompletableFuture
 
 class WebGameService(
-    webConfig: AppConfig.WebConfig,
+    webConfiguration: Configuration.WebConfig,
 ) : GameService,
-    AbstractRest(webConfig, "games") {
+    AbstractRest(webConfiguration, "games") {
 
     private val client = OkHttpClient()
     private val listener = GameWebSocketListener()

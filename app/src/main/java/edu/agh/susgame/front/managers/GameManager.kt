@@ -5,13 +5,13 @@ import androidx.compose.runtime.mutableIntStateOf
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.front.service.interfaces.GameService
-import edu.agh.susgame.front.ui.components.common.util.Coordinates
-import edu.agh.susgame.front.ui.components.common.graph.edge.Edge
-import edu.agh.susgame.front.ui.components.common.graph.edge.EdgeId
-import edu.agh.susgame.front.ui.components.common.graph.edge.Path
-import edu.agh.susgame.front.ui.components.common.graph.node.Host
-import edu.agh.susgame.front.ui.components.common.graph.node.Node
-import edu.agh.susgame.front.ui.components.common.graph.node.NodeId
+import edu.agh.susgame.front.gui.components.common.util.Coordinates
+import edu.agh.susgame.front.gui.components.common.graph.edge.Edge
+import edu.agh.susgame.front.gui.components.common.graph.edge.EdgeId
+import edu.agh.susgame.front.gui.components.common.graph.edge.Path
+import edu.agh.susgame.front.gui.components.common.graph.node.Host
+import edu.agh.susgame.front.gui.components.common.graph.node.Node
+import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 
 class GameManager(
     val hosts: Map<PlayerId, NodeId>,

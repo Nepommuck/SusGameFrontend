@@ -5,8 +5,8 @@ import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.LobbyManager
-import edu.agh.susgame.front.ui.components.common.util.player.PlayerStatus
-import edu.agh.susgame.front.ui.components.common.graph.node.NodeId
+import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
+import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import kotlinx.coroutines.flow.SharedFlow
 import java.util.concurrent.CompletableFuture
 

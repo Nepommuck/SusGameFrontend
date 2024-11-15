@@ -1,45 +1,33 @@
 package edu.agh.susgame.front.config
 
-import kotlin.time.Duration
+import edu.agh.susgame.front.config.utils.Configuration
+import edu.agh.susgame.front.config.utils.Configuration.GameConfig
+import edu.agh.susgame.front.config.utils.Configuration.GameConfig.GameTimeMinutes
+import edu.agh.susgame.front.config.utils.Configuration.GameConfig.PlayersPerGame
+import edu.agh.susgame.front.config.utils.Configuration.WebConfig
+import edu.agh.susgame.front.config.utils.ProviderType
+import kotlin.time.Duration.Companion.seconds
 
-enum class ProviderType {
-    MockLocal,
-    Web,
-}
+object AppConfig : Configuration {
+    override val providers = ProviderType.WEB
 
+    override val webConfig = WebConfig(
+        domain = "192.168.1.13",
 
-interface AppConfig {
-    val providers: ProviderType
-
-    class WebConfig(
-        val protocol: String,
-        /**
-         * NOTE: This value must be changed in `app/src/main/res/xml/network_security_config.xml` as well
-         */
-        val domain: String,
-        val port: Int,
-
-        val timeout: Duration,
+        protocol = "http",
+        port = 8080,
+        timeout = 5.seconds,
     )
 
-    val webConfig: WebConfig
-
-    class GameConfig(
-        val maxPinLength: Int,
-        val gameTimeMinutes: GameTimeMinutes,
-        val playersPerGame: PlayersPerGame,
-    ) {
-        data class GameTimeMinutes(
-            val min: Int,
-            val max: Int,
-        )
-
-        data class PlayersPerGame(
-            val min: Int,
-            val max: Int,
-        )
-    }
-
-    val gameConfig : GameConfig
+    override val gameConfig = GameConfig(
+        maxPinLength = 6,
+        gameTimeMinutes = GameTimeMinutes(
+            min = 5,
+            max = 15
+        ),
+        playersPerGame = PlayersPerGame(
+            min = 2,
+            max = 6
+        ),
+    )
 }
-

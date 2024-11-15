@@ -1,6 +1,6 @@
 package edu.agh.susgame.front.service.web.rest
 
-import edu.agh.susgame.front.config.AppConfig.WebConfig
+import edu.agh.susgame.front.config.utils.Configuration.WebConfig
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import kotlin.time.toJavaDuration

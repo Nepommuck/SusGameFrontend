@@ -7,8 +7,8 @@ import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerREST
-import edu.agh.susgame.front.ui.components.common.util.player.PlayerLobby
-import edu.agh.susgame.front.ui.components.common.util.player.PlayerStatus
+import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
+import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 
 
 class LobbyManager(
@@ -38,7 +38,7 @@ class LobbyManager(
         )
     }
 
-    fun getHowManyPlayersinLobby() = playersMap.size
+    fun getHowManyPlayersInLobby() = playersMap.size
 
     fun setId(id: PlayerId) {
         this.localId = id

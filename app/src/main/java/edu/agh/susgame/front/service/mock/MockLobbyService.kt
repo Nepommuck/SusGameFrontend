@@ -6,7 +6,7 @@ import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
-import edu.agh.susgame.front.config.Config
+import edu.agh.susgame.front.config.AppConfig
 import edu.agh.susgame.front.service.interfaces.CreateNewGameResult
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.managers.LobbyManager
@@ -122,7 +122,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
             lobbyIdValue1, Lobby(
                 id = lobbyIdValue1,
                 name = "Gra dodana statycznie 1",
-                maxNumOfPlayers = Config.gameConfig.playersPerGame.max,
+                maxNumOfPlayers = AppConfig.gameConfig.playersPerGame.max,
                 gameTime = 10,
                 playersWaiting = emptyList(),
             )
