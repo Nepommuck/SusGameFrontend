@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.common.graph
+package edu.agh.susgame.front.ui.components.common.graph.edge
 
 import edu.agh.susgame.front.ui.components.common.graph.node.NodeId
 

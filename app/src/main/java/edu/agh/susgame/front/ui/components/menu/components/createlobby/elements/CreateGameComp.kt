@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import edu.agh.susgame.front.ui.components.common.navigation.MenuRoute
+import edu.agh.susgame.front.ui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.ui.components.common.util.Translation
 import edu.agh.susgame.front.service.interfaces.CreateNewGameResult

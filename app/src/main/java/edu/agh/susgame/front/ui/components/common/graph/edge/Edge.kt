@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.common.graph
+package edu.agh.susgame.front.ui.components.common.graph.edge
 
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.PlayerId

@@ -19,7 +19,7 @@ import edu.agh.susgame.front.service.mock.MockLobbyService
 import edu.agh.susgame.front.service.web.webservices.WebGameService
 import edu.agh.susgame.front.service.web.webservices.WebLobbyService
 import edu.agh.susgame.front.ui.components.common.theme.SusGameTheme
-import edu.agh.susgame.front.ui.components.menu.MenuNavigationHost
+import edu.agh.susgame.front.ui.components.menu.navigation.MenuNavigationHost
 import edu.agh.susgame.front.config.ProviderType
 
 

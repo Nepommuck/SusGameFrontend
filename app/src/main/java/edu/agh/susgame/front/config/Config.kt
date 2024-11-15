@@ -1,9 +1,9 @@
 package edu.agh.susgame.front.config
 
-import edu.agh.susgame.front.config.AppConfig
-import edu.agh.susgame.front.config.AppConfig.*
-import edu.agh.susgame.front.config.AppConfig.GameConfig.*
-import edu.agh.susgame.front.config.ProviderType
+import edu.agh.susgame.front.config.AppConfig.GameConfig
+import edu.agh.susgame.front.config.AppConfig.GameConfig.GameTimeMinutes
+import edu.agh.susgame.front.config.AppConfig.GameConfig.PlayersPerGame
+import edu.agh.susgame.front.config.AppConfig.WebConfig
 import kotlin.time.Duration.Companion.seconds
 
 object Config : AppConfig {

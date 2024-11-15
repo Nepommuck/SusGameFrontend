@@ -36,8 +36,8 @@ import edu.agh.susgame.front.ui.components.game.components.elements.NodeInfoComp
 import edu.agh.susgame.front.ui.components.game.components.elements.ProgressBarComp
 import edu.agh.susgame.front.ui.components.game.components.elements.bottombar.NavIcons
 import edu.agh.susgame.front.managers.GameManager
-import edu.agh.susgame.front.ui.components.common.graph.Path
-import edu.agh.susgame.front.ui.components.common.graph.PathBuilder
+import edu.agh.susgame.front.ui.components.common.graph.edge.Path
+import edu.agh.susgame.front.ui.components.common.graph.edge.PathBuilder
 import edu.agh.susgame.front.ui.components.common.graph.node.NodeId
 
 private val SIZE_DP = 50.dp

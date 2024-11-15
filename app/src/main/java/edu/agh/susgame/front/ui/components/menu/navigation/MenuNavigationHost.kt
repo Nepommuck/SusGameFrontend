@@ -1,11 +1,10 @@
-package edu.agh.susgame.front.ui.components.menu
+package edu.agh.susgame.front.ui.components.menu.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import edu.agh.susgame.dto.rest.model.LobbyId
-import edu.agh.susgame.front.ui.components.common.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.ui.components.game.GameView

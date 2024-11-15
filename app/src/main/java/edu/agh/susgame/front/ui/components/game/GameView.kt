@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.ui.components.common.util.Translation
-import edu.agh.susgame.front.ui.components.common.navigation.MenuRoute
+import edu.agh.susgame.front.ui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.mock.createCustomMapState
 import edu.agh.susgame.front.ui.components.game.components.GameGraphComponent

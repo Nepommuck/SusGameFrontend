@@ -4,8 +4,8 @@ import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.front.ui.components.common.util.Coordinates
-import edu.agh.susgame.front.ui.components.common.graph.Edge
-import edu.agh.susgame.front.ui.components.common.graph.EdgeId
+import edu.agh.susgame.front.ui.components.common.graph.edge.Edge
+import edu.agh.susgame.front.ui.components.common.graph.edge.EdgeId
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.ui.components.common.graph.node.Host
 import edu.agh.susgame.front.ui.components.common.graph.node.NodeId

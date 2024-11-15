@@ -22,7 +22,7 @@ import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.ui.components.common.graph.node.Node
-import edu.agh.susgame.front.ui.components.common.graph.PathBuilder
+import edu.agh.susgame.front.ui.components.common.graph.edge.PathBuilder
 import edu.agh.susgame.front.ui.components.common.graph.node.Host
 import edu.agh.susgame.front.ui.components.common.theme.PaddingM
 import edu.agh.susgame.front.ui.components.common.theme.TextStyler
