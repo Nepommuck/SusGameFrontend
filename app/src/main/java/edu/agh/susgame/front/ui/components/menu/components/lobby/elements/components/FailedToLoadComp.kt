@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.menu.components.lobby.elements
+package edu.agh.susgame.front.ui.components.menu.components.lobby.elements.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button

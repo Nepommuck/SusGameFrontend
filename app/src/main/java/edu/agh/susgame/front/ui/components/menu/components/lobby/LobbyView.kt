@@ -15,7 +15,7 @@ import edu.agh.susgame.front.ui.components.common.util.Translation
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.ui.component.menu.components.lobby.elements.LobbyComp
-import edu.agh.susgame.front.ui.components.menu.components.lobby.elements.FailedToLoadComp
+import edu.agh.susgame.front.ui.components.menu.components.lobby.elements.components.FailedToLoadComp
 
 
 @Composable

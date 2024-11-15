@@ -1,14 +1,11 @@
 package edu.agh.susgame.front.ui.component.menu.components.lobby.elements
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
@@ -19,23 +16,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.PlayerNickname
-import edu.agh.susgame.front.ui.components.common.util.Translation
-import edu.agh.susgame.front.ui.components.menu.navigation.MenuRoute
+import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.ui.components.common.theme.Header
-import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.ui.components.common.theme.PaddingL
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS
-import edu.agh.susgame.front.ui.components.common.util.player.PlayerStatus
-import edu.agh.susgame.front.ui.components.menu.components.lobby.elements.icons.PlayerStatusIcon
+import edu.agh.susgame.front.ui.components.common.util.Translation
+import edu.agh.susgame.front.ui.components.menu.components.lobby.elements.components.PlayerRow
+import edu.agh.susgame.front.ui.components.menu.navigation.MenuRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -71,6 +65,7 @@ internal fun LobbyComp(
     Column(modifier = Modifier.padding(PaddingL)) {
         Header(title = lobby.name)
         Row {
+
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -85,81 +80,43 @@ internal fun LobbyComp(
                         .padding(PaddingL)
                         .background(Color.Cyan),
                 ) {
-                    println(lobbyManager.playersMap.size)
                     lobbyManager.playersMap.forEach { (id, player) ->
-                        Row(
-                            modifier = Modifier
-                                .padding(PaddingS)
-                                .fillMaxWidth()
-                                .height(40.dp)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .weight(4f)
-                                    .background(Color.Gray)
-                                    .fillMaxSize()
-                                    .align(Alignment.CenterVertically)
-                            ) {
-                                Text(
-                                    modifier = Modifier.align(Alignment.CenterStart),
-                                    text = player.name.value
-                                )
-                            }
-
-                            Box(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .background(Color.DarkGray)
-                                    .fillMaxSize()
-                                    .align(Alignment.CenterVertically)
-                                    .let {
-                                        if (id == lobbyManager.localId) it.clickable {
-                                            lobbyManager.localId?.let { id ->
-                                                gameService.sendChangingStateRequest(
-                                                    id,
-                                                    PlayerStatus.READY
-                                                )
-
-                                            } // SOCKET
-                                            lobbyManager.updatePlayerStatus(lobbyManager.localId!!,PlayerStatus.READY)
-                                        }
-                                        else it
-                                    }
-                            ) {
-                                PlayerStatusIcon(
-
-                                    playerStatus = player.status
-                                )
-                            }
-                        }
+                        PlayerRow(
+                            id = id,
+                            player = player,
+                            lobbyManager = lobbyManager,
+                            gameService = gameService
+                        )
                     }
                 }
             }
 
             Column(
                 modifier = Modifier
-//                    .fillMaxSize()
                     .weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
                 if (!hasPlayerJoined) {
-                    if (isNicknameError(currentNickname, playerNicknameInputValue)) {
-                        Text(text = Translation.Lobby.NICKNAME_ERROR_MESSAGE, color = Color.Red)
+                    val isError = isNicknameError(currentNickname, playerNicknameInputValue)
+                    if (isError) {
+                        Text(
+                            text = Translation.Lobby.NICKNAME_ERROR_MESSAGE,
+                            color = Color.Red,
+                        )
                     }
-
                     OutlinedTextField(
-                        label = { Text(text = Translation.Lobby.CHOOSE_NICKNAME) },
-                        modifier = Modifier,
-//                            .fillMaxWidth(),
                         value = playerNicknameInputValue,
-                        onValueChange = {
-                            playerNicknameInputValue = it
-                            updateNicknameIfValid(it) { updatedNickname ->
+                        onValueChange = { newValue ->
+                            playerNicknameInputValue = newValue
+                            updateNicknameIfValid(newValue) { updatedNickname ->
                                 currentNickname = updatedNickname
                             }
                         },
-                        isError = isNicknameError(currentNickname, playerNicknameInputValue),
+                        label = { Text(text = Translation.Lobby.CHOOSE_NICKNAME) },
+                        isError = isError,
                         singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
                     )
                 }
 
@@ -188,13 +145,7 @@ internal fun LobbyComp(
 
                     if (hasPlayerJoined) {
                         Button(onClick = {
-                            lobbyManager.localId?.let {
-                                gameService.sendChangingStateRequest(
-                                    it,
-                                    PlayerStatus.READY
-                                )
-                            } // SOCKET
-                    navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
+                            navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
                         }) {
                             Text(text = Translation.Button.PLAY)
                         }

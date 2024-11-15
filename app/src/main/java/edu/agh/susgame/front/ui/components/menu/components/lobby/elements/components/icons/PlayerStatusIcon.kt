@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.ui.components.menu.components.lobby.elements.icons
+package edu.agh.susgame.front.ui.components.menu.components.lobby.elements.components.icons
 
 
 import androidx.compose.foundation.Image
