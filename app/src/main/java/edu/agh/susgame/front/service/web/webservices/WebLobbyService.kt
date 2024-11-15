@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.service.web
+package edu.agh.susgame.front.service.web.webservices
 
 import edu.agh.susgame.dto.rest.games.GamesRest
 import edu.agh.susgame.dto.rest.games.model.CreateGameApiResult

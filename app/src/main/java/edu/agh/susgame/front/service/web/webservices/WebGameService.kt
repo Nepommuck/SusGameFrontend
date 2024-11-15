@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.service.web
+package edu.agh.susgame.front.service.web.webservices
 
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
