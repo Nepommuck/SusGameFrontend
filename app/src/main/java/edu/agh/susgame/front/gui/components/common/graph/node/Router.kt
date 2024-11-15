@@ -1,7 +1,7 @@
 package edu.agh.susgame.front.gui.components.common.graph.node
 
-import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.common.util.Coordinates
+import edu.agh.susgame.front.gui.components.common.util.Translation
 
 class Router(
     id: NodeId,

@@ -29,7 +29,7 @@ fun GamePinComp(
     onShowPasswordChange: (Boolean) -> Unit,
     isGamePinEnabled: Boolean,
     onGamePinEnabledChange: (Boolean) -> Unit
-){
+) {
     Row(
         Modifier
             .fillMaxWidth(),
@@ -38,9 +38,7 @@ fun GamePinComp(
     ) {
         OutlinedTextField(
             label = {
-                Text(
-                    Translation.CreateGame.ENTER_GAME_PIN
-                )
+                Text(text = Translation.CreateGame.ENTER_GAME_PIN)
             },
             visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
@@ -68,5 +66,4 @@ fun GamePinComp(
             }
         )
     }
-
 }

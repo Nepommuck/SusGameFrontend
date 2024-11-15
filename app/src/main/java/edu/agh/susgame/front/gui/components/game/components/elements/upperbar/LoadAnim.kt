@@ -37,7 +37,10 @@ fun LoadAnim() {
             Text(text = "(", style = TextStyler.TerminalLarge)
         }
         Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.Center) {
-            Text(text = ANIMATION_SYMBOLS[animFrameIndex].toString(), style = TextStyler.TerminalLarge)
+            Text(
+                text = ANIMATION_SYMBOLS[animFrameIndex].toString(),
+                style = TextStyler.TerminalLarge
+            )
         }
         Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.Center) {
             Text(text = ")", style = TextStyler.TerminalLarge)

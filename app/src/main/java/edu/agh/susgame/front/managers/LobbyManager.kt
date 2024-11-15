@@ -29,6 +29,7 @@ class LobbyManager(
             addPlayerRest(it)
         }
     }
+
     fun getPlayerStatus(id: PlayerId) = playersMap[id]?.status?.value
 
     fun addPlayerRest(player: PlayerREST) {

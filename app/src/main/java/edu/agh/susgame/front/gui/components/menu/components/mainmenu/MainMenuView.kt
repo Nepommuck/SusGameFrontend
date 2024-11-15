@@ -11,12 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
-import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.common.theme.Header
-import edu.agh.susgame.front.gui.components.menu.components.mainmenu.elements.MainMenuButton
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.theme.PaddingM
+import edu.agh.susgame.front.gui.components.common.util.Translation
+import edu.agh.susgame.front.gui.components.menu.components.mainmenu.elements.MainMenuButton
+import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 
 @Composable
 fun MainMenuView(
@@ -43,7 +43,8 @@ fun MainMenuView(
                 text = Translation.Menu.CREATE_GAME,
                 onClick = {
                     navController.navigate(MenuRoute.CreateLobby.route)
-                })
+                }
+            )
         }
     }
 }

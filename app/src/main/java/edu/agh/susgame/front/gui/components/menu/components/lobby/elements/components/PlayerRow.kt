@@ -15,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.front.managers.LobbyManager
-import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.icons.PlayerStatusIcon
+import edu.agh.susgame.front.managers.LobbyManager
+import edu.agh.susgame.front.service.interfaces.GameService
 
 @Composable
 fun PlayerRow(

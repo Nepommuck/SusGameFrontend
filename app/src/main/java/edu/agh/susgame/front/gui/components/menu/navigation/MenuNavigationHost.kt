@@ -5,13 +5,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import edu.agh.susgame.dto.rest.model.LobbyId
-import edu.agh.susgame.front.service.interfaces.GameService
-import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.gui.components.game.GameView
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.CreateLobbyView
 import edu.agh.susgame.front.gui.components.menu.components.lobby.LobbyView
 import edu.agh.susgame.front.gui.components.menu.components.mainmenu.MainMenuView
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.SearchLobbiesView
+import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.LobbyService
 
 @Composable
 fun MenuNavigationHost(

@@ -23,15 +23,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.PlayerNickname
-import edu.agh.susgame.front.managers.LobbyManager
-import edu.agh.susgame.front.service.interfaces.GameService
-import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.PlayerRow
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
+import edu.agh.susgame.front.managers.LobbyManager
+import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.LobbyService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -208,22 +208,19 @@ fun handleLeaveButtonClick(
     setHasPlayerJoined: (Boolean) -> Unit
 ) {
     setLeaveButtonLoading(true)
-
     if (!hasPlayerJoined) {
         CoroutineScope(Dispatchers.Main).launch {
             navController.navigate(MenuRoute.SearchLobby.route)
         }
     } else {
         lobbyManager.localId?.let { gameService.sendLeavingRequest(it) } // SOCKET
-
-        gameService.leaveLobby()
-            .thenRun {
-                setHasPlayerJoined(false)
-                CoroutineScope(Dispatchers.Main).launch {
-                    navController.navigate(MenuRoute.SearchLobby.route)
-                }
-                setLeaveButtonLoading(false)
+        gameService.leaveLobby().thenRun {
+            setHasPlayerJoined(false)
+            CoroutineScope(Dispatchers.Main).launch {
+                navController.navigate(MenuRoute.SearchLobby.route)
             }
+            setLeaveButtonLoading(false)
+        }
     }
 }
 
@@ -238,10 +235,8 @@ fun handleJoinButtonClick(
     setHasPlayerJoined: (Boolean) -> Unit
 ) {
     setJoinButtonLoading(true)
-
     currentNickname?.let { nickname ->
         gameService.joinLobby(lobby.id, nickname).thenRun {
-
             // TODO: Await server socket response instead
             // Explicit wait to ensure server updates with new player info
             Thread.sleep(1000)
@@ -254,10 +249,5 @@ fun handleJoinButtonClick(
             }
             setHasPlayerJoined(true)
         }
-
-        gameService.sendJoiningRequest(nickname) // SOCKET
     }
-
 }
-
-

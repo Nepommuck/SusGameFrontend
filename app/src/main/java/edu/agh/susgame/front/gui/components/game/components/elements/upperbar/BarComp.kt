@@ -29,4 +29,3 @@ fun BarComp(gameManager: GameManager) {
         )
     }
 }
-

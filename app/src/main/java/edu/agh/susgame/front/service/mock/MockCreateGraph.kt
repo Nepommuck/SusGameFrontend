@@ -3,14 +3,14 @@ package edu.agh.susgame.front.service.mock
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
-import edu.agh.susgame.front.gui.components.common.util.Coordinates
 import edu.agh.susgame.front.gui.components.common.graph.edge.Edge
 import edu.agh.susgame.front.gui.components.common.graph.edge.EdgeId
-import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.gui.components.common.graph.node.Host
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.graph.node.Router
 import edu.agh.susgame.front.gui.components.common.graph.node.Server
+import edu.agh.susgame.front.gui.components.common.util.Coordinates
+import edu.agh.susgame.front.managers.GameManager
 
 fun createCustomMapState(): GameManager {
 

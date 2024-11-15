@@ -13,11 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
-import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.gui.components.common.util.Translation
-import edu.agh.susgame.front.service.interfaces.CreateNewGameResult
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
+import edu.agh.susgame.front.gui.components.common.util.Translation
+import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
+import edu.agh.susgame.front.service.interfaces.CreateNewGameResult
+import edu.agh.susgame.front.service.interfaces.LobbyService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +30,7 @@ fun CreateGameComp(
     gameTime: Int,
     lobbyService: LobbyService,
     navController: NavController
-){
+) {
     Row(
         Modifier
             .padding(PaddingL)
@@ -56,6 +56,7 @@ fun CreateGameComp(
         }
     }
 }
+
 private fun createGameHandler(
     gameName: String,
     androidContext: Context,

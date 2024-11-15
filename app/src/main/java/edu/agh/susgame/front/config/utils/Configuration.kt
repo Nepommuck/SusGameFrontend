@@ -34,6 +34,6 @@ interface Configuration {
         )
     }
 
-    val gameConfig : GameConfig
+    val gameConfig: GameConfig
 }
 
