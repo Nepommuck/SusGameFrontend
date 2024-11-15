@@ -33,7 +33,7 @@ fun PlayerRow(
         modifier = Modifier
             .padding(PaddingS)
             .fillMaxWidth()
-            .height(40.dp)
+            .height(70.dp)
     ) {
         Box(
             modifier = Modifier

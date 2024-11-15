@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -71,16 +73,16 @@ internal fun LobbyComp(
                     .weight(1f)
             ) {
                 Text(
-                    text = "${Translation.Lobby.nPlayersAwaiting(lobby.playersWaiting.size)}:",
+                    text = "${Translation.Lobby.nPlayersAwaiting(lobbyManager.getHowManyPlayersinLobby())}:",
                     Modifier.padding(vertical = PaddingS)
                 )
-                Column(
+                LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(PaddingL)
                         .background(Color.Cyan),
                 ) {
-                    lobbyManager.playersMap.forEach { (id, player) ->
+                    items(lobbyManager.playersMap.toList()) { (id, player) ->
                         PlayerRow(
                             id = id,
                             player = player,
@@ -145,7 +147,8 @@ internal fun LobbyComp(
 
                     if (hasPlayerJoined) {
                         Button(onClick = {
-                            navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
+                            gameService.sendStartGame()
+//                            navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
                         }) {
                             Text(text = Translation.Button.PLAY)
                         }

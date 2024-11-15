@@ -38,6 +38,8 @@ class LobbyManager(
         )
     }
 
+    fun getHowManyPlayersinLobby() = playersMap.size
+
     fun setId(id: PlayerId) {
         this.localId = id
     }
