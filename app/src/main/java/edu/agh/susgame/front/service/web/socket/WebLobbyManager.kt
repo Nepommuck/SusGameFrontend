@@ -4,7 +4,7 @@ import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.dto.socket.ServerSocketMessage
-import edu.agh.susgame.front.ui.components.common.managers.LobbyManager
+import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.ui.components.common.util.player.PlayerStatus
 
 class WebLobbyManager(

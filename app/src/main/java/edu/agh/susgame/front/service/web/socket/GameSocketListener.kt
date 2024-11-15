@@ -2,8 +2,8 @@ package edu.agh.susgame.front.service.web.socket
 
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
-import edu.agh.susgame.front.ui.components.common.managers.GameManager
-import edu.agh.susgame.front.ui.components.common.managers.LobbyManager
+import edu.agh.susgame.front.managers.GameManager
+import edu.agh.susgame.front.managers.LobbyManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow

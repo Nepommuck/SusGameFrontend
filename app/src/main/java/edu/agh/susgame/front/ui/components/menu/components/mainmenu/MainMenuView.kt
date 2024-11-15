@@ -11,9 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import edu.agh.susgame.front.navigation.MenuRoute
-import edu.agh.susgame.front.Translation
-import edu.agh.susgame.front.ui.components.common.Header
+import edu.agh.susgame.front.ui.components.common.navigation.MenuRoute
+import edu.agh.susgame.front.ui.components.common.util.Translation
+import edu.agh.susgame.front.ui.components.common.theme.Header
 import edu.agh.susgame.front.ui.components.menu.components.mainmenu.elements.MainMenuButton
 import edu.agh.susgame.front.ui.components.common.theme.PaddingL
 import edu.agh.susgame.front.ui.components.common.theme.PaddingM

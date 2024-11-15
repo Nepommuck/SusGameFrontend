@@ -3,7 +3,7 @@ package edu.agh.susgame.front.service.web.socket
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.service.interfaces.GameService
-import edu.agh.susgame.front.ui.components.common.managers.GameManager
+import edu.agh.susgame.front.managers.GameManager
 
 class WebGameManager(
     val gameManager: GameManager

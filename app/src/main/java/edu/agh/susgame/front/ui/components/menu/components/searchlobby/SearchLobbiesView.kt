@@ -19,10 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
-import edu.agh.susgame.front.navigation.MenuRoute
+import edu.agh.susgame.front.ui.components.common.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.Translation
-import edu.agh.susgame.front.ui.components.common.Header
+import edu.agh.susgame.front.ui.components.common.util.Translation
+import edu.agh.susgame.front.ui.components.common.theme.Header
 import edu.agh.susgame.front.ui.components.menu.components.searchlobby.elements.LobbyRow
 
 

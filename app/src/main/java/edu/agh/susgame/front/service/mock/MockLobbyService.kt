@@ -6,10 +6,10 @@ import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
-import edu.agh.susgame.front.Config
+import edu.agh.susgame.front.config.Config
 import edu.agh.susgame.front.service.interfaces.CreateNewGameResult
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.ui.components.common.managers.LobbyManager
+import edu.agh.susgame.front.managers.LobbyManager
 import java.util.concurrent.CompletableFuture
 
 // IGNORE THIS, ITS GONNA BE DELETED

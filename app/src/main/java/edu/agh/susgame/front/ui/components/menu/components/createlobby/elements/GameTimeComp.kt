@@ -11,8 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import edu.agh.susgame.front.Config
-import edu.agh.susgame.front.Translation
+import edu.agh.susgame.front.config.Config
+import edu.agh.susgame.front.ui.components.common.util.Translation
 import edu.agh.susgame.front.ui.components.common.theme.PaddingL
 import java.util.Locale
 

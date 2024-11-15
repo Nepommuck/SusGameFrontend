@@ -26,12 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.PlayerNickname
-import edu.agh.susgame.front.Translation
-import edu.agh.susgame.front.navigation.MenuRoute
+import edu.agh.susgame.front.ui.components.common.util.Translation
+import edu.agh.susgame.front.ui.components.common.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.ui.components.common.Header
-import edu.agh.susgame.front.ui.components.common.managers.LobbyManager
+import edu.agh.susgame.front.ui.components.common.theme.Header
+import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.ui.components.common.theme.PaddingL
 import edu.agh.susgame.front.ui.components.common.theme.PaddingS
 import edu.agh.susgame.front.ui.components.common.util.player.PlayerStatus

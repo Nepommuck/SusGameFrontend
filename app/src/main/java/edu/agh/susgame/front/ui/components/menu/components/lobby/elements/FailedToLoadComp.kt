@@ -6,8 +6,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.LobbyId
-import edu.agh.susgame.front.Translation
-import edu.agh.susgame.front.navigation.MenuRoute
+import edu.agh.susgame.front.ui.components.common.util.Translation
+import edu.agh.susgame.front.ui.components.common.navigation.MenuRoute
 
 @Composable
 fun FailedToLoadComp(lobbyId: LobbyId, navController: NavController) {

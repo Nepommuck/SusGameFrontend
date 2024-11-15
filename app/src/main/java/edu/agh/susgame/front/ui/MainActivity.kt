@@ -10,8 +10,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import edu.agh.susgame.dto.rest.games.GamesRest
-import edu.agh.susgame.front.Config
-import edu.agh.susgame.front.rest.GamesRestImpl
+import edu.agh.susgame.front.config.Config
+import edu.agh.susgame.front.service.web.rest.GamesRestImpl
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.service.mock.MockGameService
@@ -19,8 +19,8 @@ import edu.agh.susgame.front.service.mock.MockLobbyService
 import edu.agh.susgame.front.service.web.WebGameService
 import edu.agh.susgame.front.service.web.WebLobbyService
 import edu.agh.susgame.front.ui.components.common.theme.SusGameTheme
-import edu.agh.susgame.front.ui.components.menu.navigation.MenuNavigationHost
-import edu.agh.susgame.front.utils.ProviderType
+import edu.agh.susgame.front.ui.components.menu.MenuNavigationHost
+import edu.agh.susgame.front.config.ProviderType
 
 
 class MainActivity : ComponentActivity() {
