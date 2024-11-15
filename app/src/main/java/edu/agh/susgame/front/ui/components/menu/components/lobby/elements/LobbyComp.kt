@@ -194,7 +194,7 @@ internal fun LobbyComp(
                                     PlayerStatus.READY
                                 )
                             } // SOCKET
-//                    navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
+                    navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
                         }) {
                             Text(text = Translation.Button.PLAY)
                         }

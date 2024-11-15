@@ -27,21 +27,20 @@ fun GameView(
     menuNavController: NavController,
     gameService: GameService
 ) {
-    // TODO Make it val
-    var gameManager by remember { mutableStateOf<GameManager?>(null) }
-    var isLoading by remember { mutableStateOf(true) }
+    val gameManager = remember { mutableStateOf<GameManager?>(null) }
+    val isLoading = remember { mutableStateOf(true) }
 
     LaunchedEffect(lobbyId) {
         // TODO LOAD MAP FROM THE SERVER AND INIT GameManager
-        gameManager = createCustomMapState()
-        isLoading = false
+        gameManager.value = createCustomMapState()
+        isLoading.value = false
     }
 
     Column {
-        if (isLoading) {
+        if (isLoading.value) {
             Text(text = "${Translation.Button.LOADING}...")
         } else {
-            gameManager?.let {
+            gameManager.value?.let {
                 Box(modifier = Modifier.fillMaxSize()) {
                     GameGraphComponent(gameManager = it, gameService = gameService)
                 }
