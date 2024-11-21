@@ -71,8 +71,35 @@ class GamesRestImpl(webConfig: WebConfig) : GamesRest,
             }
         }
 
-    override fun getGameMap(gameId: LobbyId): CompletableFuture<GetGameMapApiResult> {
-        TODO("Not yet implemented")
+    override fun getGameMap(
+        gameId: LobbyId,
+    ): CompletableFuture<GetGameMapApiResult> = CompletableFuture.supplyAsync {
+        val request = Request.Builder()
+            .get()
+            .url(
+                baseUrlBuilder()
+                    .addPathSegment(gameId.value.toString())
+                    .build()
+            ).build()
+
+        val response = httpClient.newCall(request)
+            .execute()
+
+        when (response.code) {
+            HttpURLConnection.HTTP_OK -> Gson().fromJson(
+                response.body?.string(),
+                GetGameMapApiResult.Success::class.java,
+                // TODO Should work, but if fail for a started game, try this instead:
+                // GetGameMapApiResult::class.java,
+            )
+
+            HttpURLConnection.HTTP_NOT_FOUND -> GetGameMapApiResult.GameDoesNotExist
+
+            // TODO Use that once DTO is upgraded
+            // HttpURLConnection.HTTP_BAD_REQUEST -> GetGameMapApiResult.GameNotYetStarted
+
+            else -> GetGameMapApiResult.OtherError
+        }
     }
 
     override fun createGame(
