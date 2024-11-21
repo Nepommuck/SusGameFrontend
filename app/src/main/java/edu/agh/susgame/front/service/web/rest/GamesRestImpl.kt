@@ -79,6 +79,7 @@ class GamesRestImpl(webConfig: WebConfig) : GamesRest,
             .get()
             .url(
                 baseUrlBuilder()
+                    .addPathSegment("map")
                     .addPathSegment(gameId.value.toString())
                     .build()
             ).build()
