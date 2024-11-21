@@ -8,6 +8,7 @@ import edu.agh.susgame.dto.rest.games.model.GameCreationRequest
 import edu.agh.susgame.dto.rest.games.model.GetAllGamesApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameMapApiResult
+import edu.agh.susgame.dto.rest.model.GameMapDTO
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.config.utils.Configuration.WebConfig
@@ -86,17 +87,16 @@ class GamesRestImpl(webConfig: WebConfig) : GamesRest,
             .execute()
 
         when (response.code) {
-            HttpURLConnection.HTTP_OK -> Gson().fromJson(
-                response.body?.string(),
-//                GetGameMapApiResult.Success::class.java,
-                // TODO Should work, but if fail for a started game, try this instead:
-                 GetGameMapApiResult::class.java,
+            HttpURLConnection.HTTP_OK -> GetGameMapApiResult.Success(
+                gameMap = Gson().fromJson(
+                    response.body?.string(),
+                    GameMapDTO::class.java,
+                )
             )
 
             HttpURLConnection.HTTP_NOT_FOUND -> GetGameMapApiResult.GameDoesNotExist
 
-            // TODO Use that once DTO is upgraded
-            // HttpURLConnection.HTTP_BAD_REQUEST -> GetGameMapApiResult.GameNotYetStarted
+            HttpURLConnection.HTTP_BAD_REQUEST -> GetGameMapApiResult.GameNotYetStarted
 
             else -> GetGameMapApiResult.OtherError
         }

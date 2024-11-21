@@ -27,18 +27,12 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
     override val messagesFlow = _messagesFlow.asSharedFlow()
 
     override fun addGameManager(gameManager: GameManager) {}
+
     override fun addLobbyManager(lobbyManager: LobbyManager) {}
-    override fun sendJoiningRequest(nickname: PlayerNickname) {
 
-    }
+    override fun sendLeavingRequest(playerId: PlayerId) {}
 
-    override fun sendLeavingRequest(playerId: PlayerId) {
-
-    }
-
-    override fun sendChangingStateRequest(playerId: PlayerId, status: PlayerStatus) {
-
-    }
+    override fun sendChangingStateRequest(playerId: PlayerId, status: PlayerStatus) {}
 
     override fun sendStartGame() {}
 

@@ -66,7 +66,6 @@ internal fun LobbyComp(
     var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
     var isLeaveButtonLoading by remember { mutableStateOf(false) }
 
-    // TODO fix it
     if (isGameStarted) {
         println("SUCCESS")
         lobbyManager.id?.let { id ->

@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.service.interfaces
 
+import edu.agh.susgame.dto.rest.model.GameMapDTO
 import edu.agh.susgame.dto.rest.model.GameMapEdgeDTO
 import edu.agh.susgame.dto.rest.model.GameMapNodeDTO
 import edu.agh.susgame.dto.rest.model.Lobby
@@ -12,7 +13,7 @@ interface LobbyService {
     fun getAll(): CompletableFuture<Map<LobbyId, Lobby>>
 
     fun getById(lobbyId: LobbyId): CompletableFuture<Lobby?>
-    fun getGameMap(lobbyId: LobbyId): CompletableFuture<List<GameMapNodeDTO>>
+    fun getGameMap(lobbyId: LobbyId): CompletableFuture<GameMapDTO?>
     fun createNewGame(
         gameName: String,
         gamePin: String,

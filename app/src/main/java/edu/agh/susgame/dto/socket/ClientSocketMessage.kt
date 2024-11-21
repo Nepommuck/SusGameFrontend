@@ -47,16 +47,13 @@ sealed class ClientSocketMessage {
         val message: String,
     ) : ClientSocketMessage()
 
+    /**
+     * Used for answering the quiz question
+     */
     @Serializable
     data class QuizAnswerDTO(
         val questionId: Int,
         val answer: Int,
-    ) : ClientSocketMessage()
-
-
-    @Serializable
-    data class PlayerJoining(
-        val playerName: String
     ) : ClientSocketMessage()
 
     /**

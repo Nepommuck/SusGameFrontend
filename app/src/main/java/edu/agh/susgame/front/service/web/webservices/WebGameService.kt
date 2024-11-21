@@ -100,12 +100,6 @@ class WebGameService(
         )
     }
 
-    override fun sendJoiningRequest(nickname: PlayerNickname) {
-        sendClientSocketMessage(
-            clientSocketMessage = ClientSocketMessage.PlayerJoining(nickname.value)
-        )
-    }
-
     override fun sendLeavingRequest(playerId: PlayerId) {
         sendClientSocketMessage(
             clientSocketMessage = ClientSocketMessage.PlayerLeaving(playerId.value)

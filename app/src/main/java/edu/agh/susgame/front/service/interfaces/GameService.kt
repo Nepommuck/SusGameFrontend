@@ -20,8 +20,6 @@ interface GameService {
     fun addLobbyManager(lobbyManager: LobbyManager)
 
     // SOCKETS
-    fun sendJoiningRequest(nickname: PlayerNickname)
-
     fun sendLeavingRequest(playerId: PlayerId)
 
     fun sendChangingStateRequest(playerId: PlayerId, status: PlayerStatus)
