@@ -4,6 +4,8 @@ import edu.agh.susgame.dto.rest.games.GamesRest
 import edu.agh.susgame.dto.rest.games.model.CreateGameApiResult
 import edu.agh.susgame.dto.rest.games.model.GetAllGamesApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameApiResult
+import edu.agh.susgame.dto.rest.games.model.GetGameMapApiResult
+import edu.agh.susgame.dto.rest.model.GameMapEdgeDTO
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.managers.LobbyManager
@@ -41,6 +43,16 @@ class WebLobbyService(private val gamesRest: GamesRest) : LobbyService {
             }
 
         }
+
+    override fun getGameMap(lobbyId: LobbyId): CompletableFuture<List<GameMapEdgeDTO>> =
+        gamesRest.getGameMap(lobbyId).thenApply { response ->
+            when (response) {
+                GetGameMapApiResult.GameDoesNotExist -> null
+                GetGameMapApiResult.OtherError -> null
+                is GetGameMapApiResult.Success -> response.edges
+            }
+        }
+
 
     override fun createNewGame(
         gameName: String,

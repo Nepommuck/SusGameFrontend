@@ -88,9 +88,9 @@ class GamesRestImpl(webConfig: WebConfig) : GamesRest,
         when (response.code) {
             HttpURLConnection.HTTP_OK -> Gson().fromJson(
                 response.body?.string(),
-                GetGameMapApiResult.Success::class.java,
+//                GetGameMapApiResult.Success::class.java,
                 // TODO Should work, but if fail for a started game, try this instead:
-                // GetGameMapApiResult::class.java,
+                 GetGameMapApiResult::class.java,
             )
 
             HttpURLConnection.HTTP_NOT_FOUND -> GetGameMapApiResult.GameDoesNotExist

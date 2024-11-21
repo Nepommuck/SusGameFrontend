@@ -1,6 +1,7 @@
 package edu.agh.susgame.front.service.mock
 
 import androidx.compose.ui.graphics.Color
+import edu.agh.susgame.dto.rest.model.GameMapEdgeDTO
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
@@ -37,6 +38,12 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
     override fun getById(lobbyId: LobbyId): CompletableFuture<Lobby?> =
         this.getAll().thenApply { allGames ->
             allGames[lobbyId]
+        }
+
+    override fun getGameMap(lobbyId: LobbyId): CompletableFuture<List<GameMapEdgeDTO>> =
+        CompletableFuture.supplyAsync {
+            listOf()
+
         }
 
     override fun createNewGame(

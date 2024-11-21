@@ -148,6 +148,12 @@ internal fun LobbyComp(
                     if (hasPlayerJoined) {
                         Button(onClick = {
                             gameService.sendStartGame()
+                            lobbyManager.id?.let { id ->
+                                lobbyService.getGameMap(id)
+                                    .thenApply { result -> println(result) }
+                            }
+
+//                            gameService.sendStartGame()
 //                            navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
                         }) {
                             Text(text = Translation.Button.PLAY)
