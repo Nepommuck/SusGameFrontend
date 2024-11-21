@@ -67,7 +67,7 @@ internal fun LobbyComp(
     var isLeaveButtonLoading by remember { mutableStateOf(false) }
 
     // TODO fix it
-    if (lobbyManager.isGameStarted.value) {
+    if (isGameStarted) {
         println("SUCCESS")
         lobbyManager.id?.let { id ->
             lobbyService.getGameMap(id)
