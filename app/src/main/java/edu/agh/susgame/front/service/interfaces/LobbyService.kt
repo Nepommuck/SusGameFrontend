@@ -1,8 +1,6 @@
 package edu.agh.susgame.front.service.interfaces
 
 import edu.agh.susgame.dto.rest.model.GameMapDTO
-import edu.agh.susgame.dto.rest.model.GameMapEdgeDTO
-import edu.agh.susgame.dto.rest.model.GameMapNodeDTO
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.managers.LobbyManager
