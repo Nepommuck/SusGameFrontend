@@ -66,14 +66,14 @@ internal fun LobbyComp(
     var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
     var isLeaveButtonLoading by remember { mutableStateOf(false) }
 
-
-        if (lobbyManager.isGameStarted.value) {
-            println("SUCCESS")
-            lobbyManager.id?.let { id ->
-                lobbyService.getGameMap(id)
-                    .thenApply { result -> println(result) }
-            }
+    // TODO fix it
+    if (lobbyManager.isGameStarted.value) {
+        println("SUCCESS")
+        lobbyManager.id?.let { id ->
+            lobbyService.getGameMap(id)
+                .thenApply { result -> println(result) }
         }
+    }
 
 
     Column(modifier = Modifier.padding(PaddingL)) {
