@@ -11,6 +11,7 @@ import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.service.web.rest.AbstractRest
 import edu.agh.susgame.front.service.web.socket.GameWebSocketListener
 import kotlinx.coroutines.CoroutineScope
@@ -101,13 +102,13 @@ class WebGameService(
 
     override fun sendJoiningRequest(nickname: PlayerNickname) {
         sendClientSocketMessage(
-            clientSocketMessage = ClientSocketMessage.PlayerJoiningRequest(nickname.value)
+            clientSocketMessage = ClientSocketMessage.PlayerJoining(nickname.value)
         )
     }
 
     override fun sendLeavingRequest(playerId: PlayerId) {
         sendClientSocketMessage(
-            clientSocketMessage = ClientSocketMessage.PlayerLeavingRequest(playerId.value)
+            clientSocketMessage = ClientSocketMessage.PlayerLeaving(playerId.value)
         )
     }
 
@@ -118,7 +119,7 @@ class WebGameService(
             PlayerStatus.CONNECTING -> false
         }
         sendClientSocketMessage(
-            clientSocketMessage = ClientSocketMessage.PlayerChangeReadinessRequest(
+            clientSocketMessage = ClientSocketMessage.PlayerChangeReadiness(
                 playerId.value,
                 stateValue
             )

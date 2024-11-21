@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.managers
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
@@ -20,6 +21,7 @@ class LobbyManager(
     var localId: PlayerId? = PlayerId(5)
 
 ) {
+    val isGameStarted: MutableState<Boolean> = mutableStateOf(false)
     fun updateFromRest(lobby: Lobby) {
         this.id = lobby.id
         this.name = lobby.name

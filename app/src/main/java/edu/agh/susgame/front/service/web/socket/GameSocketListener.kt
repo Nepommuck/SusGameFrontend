@@ -4,8 +4,10 @@ import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.LobbyManager
+import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.service.web.socket.webmanagers.WebGameManager
 import edu.agh.susgame.front.service.web.socket.webmanagers.WebLobbyManager
+import edu.agh.susgame.front.service.web.webservices.WebLobbyService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -35,6 +37,7 @@ class GameWebSocketListener : WebSocketListener() {
     private var webGameManager: WebGameManager? = null
 
     private var webLobbyManager: WebLobbyManager? = null
+
 
     fun initWebGameManager(gameManager: GameManager) {
         this.webGameManager = WebGameManager(gameManager)
@@ -91,15 +94,15 @@ class GameWebSocketListener : WebSocketListener() {
                     webGameManager?.handleServerError(decodedMessage)
                 }
 
-                is ServerSocketMessage.PlayerChangeReadinessResponse -> {
+                is ServerSocketMessage.PlayerChangeReadiness -> {
                     webLobbyManager?.handlePlayerChangingReadinessResponse(decodedMessage)
                 }
 
-                is ServerSocketMessage.PlayerJoiningResponse -> {
+                is ServerSocketMessage.PlayerJoining -> {
                     webLobbyManager?.handlePlayerJoiningResponse(decodedMessage)
                 }
 
-                is ServerSocketMessage.PlayerLeavingResponse -> {
+                is ServerSocketMessage.PlayerLeaving -> {
                     webLobbyManager?.handlePlayerLeavingResponse(decodedMessage)
                 }
                 is ServerSocketMessage.IdConfig -> {
@@ -108,6 +111,9 @@ class GameWebSocketListener : WebSocketListener() {
 
                 is ServerSocketMessage.QuizQuestionDTO -> {
                     webGameManager?.handlerQuizQuestion(decodedMessage)
+                }
+                is ServerSocketMessage.GameStarted -> {
+                    webLobbyManager?.handleGameStarted(decodedMessage)
                 }
             }
         }

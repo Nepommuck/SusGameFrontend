@@ -6,11 +6,13 @@ import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.managers.LobbyManager
+import edu.agh.susgame.front.service.interfaces.LobbyService
+import edu.agh.susgame.front.service.web.webservices.WebLobbyService
 
 class WebLobbyManager(
     private val lobbyManager: LobbyManager
 ) {
-    fun handlePlayerChangingReadinessResponse(decodedMessage: ServerSocketMessage.PlayerChangeReadinessResponse) {
+    fun handlePlayerChangingReadinessResponse(decodedMessage: ServerSocketMessage.PlayerChangeReadiness) {
         if (decodedMessage.state) {
             lobbyManager.updatePlayerStatus(PlayerId(decodedMessage.playerId), PlayerStatus.READY)
         } else {
@@ -21,7 +23,7 @@ class WebLobbyManager(
         }
     }
 
-    fun handlePlayerJoiningResponse(decodedMessage: ServerSocketMessage.PlayerJoiningResponse) {
+    fun handlePlayerJoiningResponse(decodedMessage: ServerSocketMessage.PlayerJoining) {
         lobbyManager.addPlayerRest(
             PlayerREST(
                 PlayerNickname(decodedMessage.playerName),
@@ -31,7 +33,7 @@ class WebLobbyManager(
         )
     }
 
-    fun handlePlayerLeavingResponse(decodedMessage: ServerSocketMessage.PlayerLeavingResponse) {
+    fun handlePlayerLeavingResponse(decodedMessage: ServerSocketMessage.PlayerLeaving) {
         lobbyManager.deletePlayer(PlayerId(decodedMessage.playerId))
     }
 
@@ -41,5 +43,9 @@ class WebLobbyManager(
 
     fun test() {
         lobbyManager.addPlayerRest(PlayerREST(PlayerNickname("TEST"), PlayerId(2), 123432))
+    }
+
+    fun handleGameStarted(decodedMessage: ServerSocketMessage.GameStarted) {
+        lobbyManager.isGameStarted.value = true
     }
 }

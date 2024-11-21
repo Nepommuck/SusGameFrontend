@@ -15,6 +15,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class ServerSocketMessage {
     /**
+     *
+     */
+    @Serializable
+    data class GameStarted(
+        val id: Int
+    ) : ServerSocketMessage()
+    /**
      * Information about the whole game state that is coming periodically from the server
      */
     @Serializable
@@ -57,7 +64,7 @@ sealed class ServerSocketMessage {
      * Used for handling new player joining to lobby
      */
     @Serializable
-    data class PlayerJoiningResponse(
+    data class PlayerJoining(
         val playerId: Int,
         val playerName: String
     ) : ServerSocketMessage()
@@ -66,7 +73,7 @@ sealed class ServerSocketMessage {
      * Used for handling player changing state in lobby
      */
     @Serializable
-    data class PlayerChangeReadinessResponse(
+    data class PlayerChangeReadiness(
         val playerId: Int,
         val state: Boolean
     ) : ServerSocketMessage()
@@ -75,7 +82,7 @@ sealed class ServerSocketMessage {
      * Used for handling player leaving lobby
      */
     @Serializable
-    data class PlayerLeavingResponse(
+    data class PlayerLeaving(
         val playerId: Int
     ) : ServerSocketMessage()
 

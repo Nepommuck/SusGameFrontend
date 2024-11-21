@@ -43,6 +43,7 @@ internal fun LobbyComp(
     gameService: GameService,
     navController: NavController,
 ) {
+
     // TODO move logic and web communication to this class
     val lobbyManager by remember {
         mutableStateOf(LobbyManager())
@@ -54,6 +55,7 @@ internal fun LobbyComp(
         gameService.addLobbyManager(lobbyManager)
     }
 
+    val isGameStarted by lobbyManager.isGameStarted
     var lobby by remember { mutableStateOf(lobbyInitialState) }
 
     var hasPlayerJoined by remember {
@@ -63,6 +65,16 @@ internal fun LobbyComp(
     var playerNicknameInputValue by remember { mutableStateOf("") }
     var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
     var isLeaveButtonLoading by remember { mutableStateOf(false) }
+
+
+        if (lobbyManager.isGameStarted.value) {
+            println("SUCCESS")
+            lobbyManager.id?.let { id ->
+                lobbyService.getGameMap(id)
+                    .thenApply { result -> println(result) }
+            }
+        }
+
 
     Column(modifier = Modifier.padding(PaddingL)) {
         Header(title = lobby.name)
@@ -148,13 +160,7 @@ internal fun LobbyComp(
                     if (hasPlayerJoined) {
                         Button(onClick = {
                             gameService.sendStartGame()
-                            lobbyManager.id?.let { id ->
-                                lobbyService.getGameMap(id)
-                                    .thenApply { result -> println(result) }
-                            }
 
-//                            gameService.sendStartGame()
-//                            navController.navigate("${MenuRoute.Game.route}/${lobby.id.value}")
                         }) {
                             Text(text = Translation.Button.PLAY)
                         }
