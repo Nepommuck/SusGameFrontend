@@ -161,7 +161,7 @@ internal fun LobbyComp(
                             if (!isGameReady) {
                                 Text(text = Translation.Button.PLAY)
                             } else{
-                                Text(text = "Przejdź do GRY!")
+                                Text(text = Translation.Button.MOVE_TO_GAME)
                             }
                         }
                     } else {
