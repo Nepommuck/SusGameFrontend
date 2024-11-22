@@ -57,10 +57,10 @@ fun createCustomMapState(): GameManager {
     )
     val mapSize = Coordinates(1000, 1000)
 
-    val gameManagerState = GameManager.fromLists(
-        nodes = nodes,
-        edges = edges,
-        players = players,
+    val gameManagerState = GameManager(
+        nodesList = nodes,
+        edgesList = edges,
+        playersList = players,
         serverId = serverId,
         mapSize = mapSize
     )

@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.PlayerNickname
@@ -64,12 +65,8 @@ internal fun LobbyComp(
     var playerNicknameInputValue by remember { mutableStateOf("") }
     var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
     var isLeaveButtonLoading by remember { mutableStateOf(false) }
+    val isGameReady by lobbyManager.isGameReady
 
-//    LaunchedEffect(lobbyManager.gameManager.value) {
-//        if (lobbyManager.gameManager.value != null) {
-//            navController.navigate("${MenuRoute.Game.route}/${lobbyManager.id}")
-//        }
-//    }
 
     Column(modifier = Modifier.padding(PaddingL)) {
         Header(title = lobby.name)
@@ -154,11 +151,18 @@ internal fun LobbyComp(
 
                     if (hasPlayerJoined) {
                         Button(onClick = {
-                            gameService.sendStartGame()
-                            navController.navigate("${MenuRoute.Game.route}/${lobbyManager.id}")
+                            if (!isGameReady) {
+                                gameService.sendStartGame()
+                            } else{
+                                navController.navigate("${MenuRoute.Game.route}/${lobbyManager.id?.value}")
+                            }
 
                         }) {
-                            Text(text = Translation.Button.PLAY)
+                            if (!isGameReady) {
+                                Text(text = Translation.Button.PLAY)
+                            } else{
+                                Text(text = "Przejdź do GRY!")
+                            }
                         }
                     } else {
                         var isJoinButtonLoading by remember { mutableStateOf(false) }

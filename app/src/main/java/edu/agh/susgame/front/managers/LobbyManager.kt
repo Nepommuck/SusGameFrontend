@@ -20,6 +20,7 @@ import edu.agh.susgame.front.gui.components.common.util.Coordinates
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.service.interfaces.LobbyService
+import edu.agh.susgame.front.service.mock.createCustomMapState
 
 
 class LobbyManager(
@@ -31,7 +32,8 @@ class LobbyManager(
     var playersMap: SnapshotStateMap<PlayerId, PlayerLobby> = mutableStateMapOf(),
     var playersRest: MutableMap<PlayerId, PlayerREST> = mutableMapOf(),
     var localId: PlayerId? = PlayerId(5),
-    var gameManager: MutableState<GameManager?> = mutableStateOf(null)
+    var gameManager: MutableState<GameManager?> = mutableStateOf(null),
+    var isGameReady: MutableState<Boolean> = mutableStateOf(false)
 
 ) {
     fun updateFromRest(lobby: Lobby) {
@@ -72,8 +74,13 @@ class LobbyManager(
     fun getMapFromServer() {
         this.id?.let { id ->
             lobbyService.getGameMap(id)
-                .thenApply { result -> parseMap(result) }
+                .thenApply { result -> customMap() }
         }
+    }
+    private fun customMap(){
+        gameManager.value = createCustomMapState()
+        isGameReady.value = true
+        println("FROM LM"+isGameReady.value)
     }
 
     private fun parseMap(gameMapDTO: GameMapDTO?) {
@@ -132,13 +139,15 @@ class LobbyManager(
 
         val serverId = gameMapDTO.server.id.let { NodeId(it) }
 
-        gameManager.value = GameManager.fromLists(
-            nodes = nodes,
-            edges = edges,
-            players = playersRest.values.toList(),
+        gameManager.value = GameManager(
+            nodesList = nodes,
+            edgesList = edges,
+            playersList = playersRest.values.toList(),
             serverId = serverId,
             mapSize = mapSize
         )
 
+        isGameReady.value = true
+        println("FROM LM"+isGameReady.value)
     }
 }
