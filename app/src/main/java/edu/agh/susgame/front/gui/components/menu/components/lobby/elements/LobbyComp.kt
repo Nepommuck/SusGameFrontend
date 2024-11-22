@@ -20,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.PlayerNickname
@@ -28,7 +27,6 @@ import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.Translation
-import edu.agh.susgame.front.gui.components.game.GameView
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.PlayerRow
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.managers.LobbyManager
@@ -40,7 +38,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 internal fun LobbyComp(
-    lobbyInitialState: Lobby,
+    lobbyInit: Lobby,
     lobbyService: LobbyService,
     gameService: GameService,
     navController: NavController,
@@ -48,19 +46,25 @@ internal fun LobbyComp(
 
     // TODO move logic and web communication to this class
     val lobbyManager by remember {
-        mutableStateOf(LobbyManager(lobbyService))
+        mutableStateOf(
+            LobbyManager(
+                lobbyService = lobbyService,
+                id = lobbyInit.id,
+                name = lobbyInit.name,
+                maxNumOfPlayers = lobbyInit.maxNumOfPlayers,
+                gameTime = lobbyInit.gameTime
+            )
+        )
     }
 
-    LaunchedEffect(lobbyInitialState) {
-        lobbyManager.updateFromRest(lobbyInitialState)
+    LaunchedEffect(lobbyManager) {
+        lobbyManager.updateFromRest(lobbyInit)
         lobbyService.addLobbyManager(lobbyManager)
         gameService.addLobbyManager(lobbyManager)
     }
 
-    var lobby by remember { mutableStateOf(lobbyInitialState) }
-
     var hasPlayerJoined by remember {
-        mutableStateOf(gameService.isPlayerInLobby(lobbyInitialState.id))
+        mutableStateOf(gameService.isPlayerInLobby(lobbyInit.id))
     }
     var playerNicknameInputValue by remember { mutableStateOf("") }
     var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
@@ -69,7 +73,7 @@ internal fun LobbyComp(
 
 
     Column(modifier = Modifier.padding(PaddingL)) {
-        Header(title = lobby.name)
+        Header(title = lobbyManager.name)
         Row {
 
             Column(
@@ -128,7 +132,6 @@ internal fun LobbyComp(
 
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
-//                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Button(
                         enabled = !isLeaveButtonLoading,
@@ -153,14 +156,14 @@ internal fun LobbyComp(
                         Button(onClick = {
                             if (!isGameReady) {
                                 gameService.sendStartGame()
-                            } else{
+                            } else {
                                 navController.navigate("${MenuRoute.Game.route}/${lobbyManager.id?.value}")
                             }
 
                         }) {
                             if (!isGameReady) {
                                 Text(text = Translation.Button.PLAY)
-                            } else{
+                            } else {
                                 Text(text = Translation.Button.MOVE_TO_GAME)
                             }
                         }
@@ -169,16 +172,15 @@ internal fun LobbyComp(
                         Button(
                             enabled = !isJoinButtonLoading && currentNickname != null,
                             onClick = {
-                                handleJoinButtonClick(
-                                    lobby = lobby,
-                                    currentNickname = currentNickname,
-                                    gameService = gameService,
-                                    lobbyService = lobbyService,
-                                    lobbyManager = lobbyManager,
-                                    setJoinButtonLoading = { isJoinButtonLoading = it },
-                                    setLobby = { lobby = it },
-                                    setHasPlayerJoined = { hasPlayerJoined = it }
-                                )
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    handleJoinButtonClick(
+                                        currentNickname = currentNickname,
+                                        gameService = gameService,
+                                        lobbyManager = lobbyManager,
+                                        setJoinButtonLoading = { isJoinButtonLoading = it },
+                                        setHasPlayerJoined = { hasPlayerJoined = it }
+                                    )
+                                }
                             },
                         ) {
                             Text(
@@ -225,7 +227,7 @@ fun handleLeaveButtonClick(
             navController.navigate(MenuRoute.SearchLobby.route)
         }
     } else {
-        lobbyManager.localId?.let { gameService.sendLeavingRequest(it) } // SOCKET
+        lobbyManager.localPlayer.id?.let { gameService.sendLeavingRequest(it) } // SOCKET
         gameService.leaveLobby().thenRun {
             setHasPlayerJoined(false)
             CoroutineScope(Dispatchers.Main).launch {
@@ -237,29 +239,20 @@ fun handleLeaveButtonClick(
 }
 
 fun handleJoinButtonClick(
-    lobby: Lobby,
     currentNickname: PlayerNickname?,
     gameService: GameService,
-    lobbyService: LobbyService,
     lobbyManager: LobbyManager,
     setJoinButtonLoading: (Boolean) -> Unit,
-    setLobby: (Lobby) -> Unit,
     setHasPlayerJoined: (Boolean) -> Unit
 ) {
     setJoinButtonLoading(true)
     currentNickname?.let { nickname ->
-        gameService.joinLobby(lobby.id, nickname).thenRun {
-            // TODO: Await server socket response instead
-            // Explicit wait to ensure server updates with new player info
-            Thread.sleep(1000)
-            lobbyService.getById(lobby.id).thenAccept { updatedLobby ->
-                if (updatedLobby != null) {
-                    setLobby(updatedLobby)
-                    lobbyManager.updateFromRest(updatedLobby)
-                }
-                setJoinButtonLoading(false)
-            }
+        lobbyManager.localPlayer.name = currentNickname
+        gameService.joinLobby(lobbyManager.id, nickname).thenRun {
+            setJoinButtonLoading(false)
             setHasPlayerJoined(true)
         }
     }
 }
+
+

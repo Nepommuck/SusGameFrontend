@@ -55,7 +55,7 @@ fun PlayerRow(
                 .fillMaxSize()
                 .align(Alignment.CenterVertically)
                 .let {
-                    if (id == lobbyManager.localId) {
+                    if (id == lobbyManager.localPlayer.id) {
                         it.clickable { handlePlayerStatusChange(id, lobbyManager, gameService) }
                     } else it
                 }
@@ -70,7 +70,7 @@ private fun handlePlayerStatusChange(
     lobbyManager: LobbyManager,
     gameService: GameService
 ) {
-    lobbyManager.localId?.let { localId ->
+    lobbyManager.localPlayer.id?.let { localId ->
         if (id == localId) {
             val currentStatus = lobbyManager.getPlayerStatus(localId)
             val newStatus = if (currentStatus == PlayerStatus.READY) {

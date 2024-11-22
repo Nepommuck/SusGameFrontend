@@ -38,7 +38,8 @@ class WebLobbyManager(
     }
 
     fun handleIdConfig(decodedMessage: ServerSocketMessage.IdConfig) {
-        lobbyManager.localId = PlayerId(decodedMessage.id)
+        lobbyManager.localPlayer.id = PlayerId(decodedMessage.id)
+        lobbyManager.addLocalPlayer()
     }
 
     fun test() {
