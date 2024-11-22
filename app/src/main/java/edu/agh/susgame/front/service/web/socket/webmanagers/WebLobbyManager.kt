@@ -46,6 +46,6 @@ class WebLobbyManager(
     }
 
     fun handleGameStarted(decodedMessage: ServerSocketMessage.GameStarted) {
-        lobbyManager.isGameStarted.value = true
+        lobbyManager.getMapFromServer()
     }
 }

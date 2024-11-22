@@ -27,6 +27,7 @@ import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.Translation
+import edu.agh.susgame.front.gui.components.game.GameView
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.PlayerRow
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.managers.LobbyManager
@@ -46,7 +47,7 @@ internal fun LobbyComp(
 
     // TODO move logic and web communication to this class
     val lobbyManager by remember {
-        mutableStateOf(LobbyManager())
+        mutableStateOf(LobbyManager(lobbyService))
     }
 
     LaunchedEffect(lobbyInitialState) {
@@ -55,25 +56,20 @@ internal fun LobbyComp(
         gameService.addLobbyManager(lobbyManager)
     }
 
-    val isGameStarted by lobbyManager.isGameStarted
     var lobby by remember { mutableStateOf(lobbyInitialState) }
 
     var hasPlayerJoined by remember {
         mutableStateOf(gameService.isPlayerInLobby(lobbyInitialState.id))
     }
-
     var playerNicknameInputValue by remember { mutableStateOf("") }
     var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
     var isLeaveButtonLoading by remember { mutableStateOf(false) }
 
-    if (isGameStarted) {
-        println("SUCCESS")
-        lobbyManager.id?.let { id ->
-            lobbyService.getGameMap(id)
-                .thenApply { result -> println(result) }
-        }
-    }
-
+//    LaunchedEffect(lobbyManager.gameManager.value) {
+//        if (lobbyManager.gameManager.value != null) {
+//            navController.navigate("${MenuRoute.Game.route}/${lobbyManager.id}")
+//        }
+//    }
 
     Column(modifier = Modifier.padding(PaddingL)) {
         Header(title = lobby.name)
@@ -159,6 +155,7 @@ internal fun LobbyComp(
                     if (hasPlayerJoined) {
                         Button(onClick = {
                             gameService.sendStartGame()
+                            navController.navigate("${MenuRoute.Game.route}/${lobbyManager.id}")
 
                         }) {
                             Text(text = Translation.Button.PLAY)

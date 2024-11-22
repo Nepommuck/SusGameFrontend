@@ -23,7 +23,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         createCustomLobbies()
     }
 
-    var lobbyManager: LobbyManager? = null
+    override var lobbyManager: LobbyManager? = null
 
     override fun addLobbyManager(lobbyManager: LobbyManager) {
         this.lobbyManager = lobbyManager

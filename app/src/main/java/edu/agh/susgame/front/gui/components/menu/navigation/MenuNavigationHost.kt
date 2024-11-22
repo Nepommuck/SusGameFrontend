@@ -18,7 +18,8 @@ fun MenuNavigationHost(
     menuNavController: NavHostController,
     lobbyService: LobbyService,
     gameService: GameService,
-) {
+
+    ) {
     NavHost(
         navController = menuNavController,
         startDestination = MenuRoute.MainMenu.route,
@@ -63,12 +64,15 @@ fun MenuNavigationHost(
                 ?.run {
                     LobbyId(this)
                 }
+            println("NAVCONTROLLER")
+            if (lobbyId != null) lobbyService.lobbyManager?.let {
+                GameView(
+                    menuNavController,
+                    gameService,
+                    lobbyManager = it
+                )
+            }
 
-            if (lobbyId != null) GameView(
-                lobbyId,
-                menuNavController,
-                gameService
-            )
         }
     }
 }
