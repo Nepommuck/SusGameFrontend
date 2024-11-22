@@ -44,7 +44,6 @@ internal fun LobbyComp(
     navController: NavController,
 ) {
 
-    // TODO move logic and web communication to this class
     val lobbyManager by remember {
         mutableStateOf(
             LobbyManager(
@@ -57,12 +56,6 @@ internal fun LobbyComp(
         )
     }
 
-    LaunchedEffect(lobbyManager) {
-        lobbyManager.updateFromRest(lobbyInit)
-        lobbyService.addLobbyManager(lobbyManager)
-        gameService.addLobbyManager(lobbyManager)
-    }
-
     var hasPlayerJoined by remember {
         mutableStateOf(gameService.isPlayerInLobby(lobbyInit.id))
     }
@@ -71,6 +64,11 @@ internal fun LobbyComp(
     var isLeaveButtonLoading by remember { mutableStateOf(false) }
     val isGameReady by lobbyManager.isGameReady
 
+    LaunchedEffect(lobbyManager) {
+        lobbyManager.updateFromRest(lobbyInit)
+        lobbyService.addLobbyManager(lobbyManager)
+        gameService.addLobbyManager(lobbyManager)
+    }
 
     Column(modifier = Modifier.padding(PaddingL)) {
         Header(title = lobbyManager.name)
@@ -254,5 +252,3 @@ fun handleJoinButtonClick(
         }
     }
 }
-
-
