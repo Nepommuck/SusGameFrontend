@@ -24,10 +24,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.front.gui.components.common.util.Translation
-import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.gui.components.common.graph.edge.Path
+import edu.agh.susgame.front.gui.components.common.graph.edge.PathBuilder
+import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.Calculate
+import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.common.util.ZoomState
 import edu.agh.susgame.front.gui.components.game.components.console.ComputerComponent
 import edu.agh.susgame.front.gui.components.game.components.drawers.EdgeDrawer
@@ -36,9 +38,7 @@ import edu.agh.susgame.front.gui.components.game.components.elements.NodeInfoCom
 import edu.agh.susgame.front.gui.components.game.components.elements.ProgressBarComp
 import edu.agh.susgame.front.gui.components.game.components.elements.bottombar.NavIcons
 import edu.agh.susgame.front.managers.GameManager
-import edu.agh.susgame.front.gui.components.common.graph.edge.Path
-import edu.agh.susgame.front.gui.components.common.graph.edge.PathBuilder
-import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
+import edu.agh.susgame.front.service.interfaces.GameService
 
 private val SIZE_DP = 50.dp
 

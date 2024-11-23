@@ -13,24 +13,24 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.gui.components.common.util.Translation
+import edu.agh.susgame.front.gui.components.game.components.GameGraphComponent
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
+import edu.agh.susgame.front.managers.GameManager
+import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.mock.createCustomMapState
-import edu.agh.susgame.front.gui.components.game.components.GameGraphComponent
-import edu.agh.susgame.front.managers.GameManager
 
 @Composable
 fun GameView(
-    lobbyId: LobbyId,
     menuNavController: NavController,
-    gameService: GameService
+    gameService: GameService,
+    lobbyManager: LobbyManager
 ) {
     val gameManager = remember { mutableStateOf<GameManager?>(null) }
     val isLoading = remember { mutableStateOf(true) }
 
-    LaunchedEffect(lobbyId) {
-        // TODO LOAD MAP FROM THE SERVER AND INIT GameManager
-        gameManager.value = createCustomMapState()
+    LaunchedEffect(lobbyManager.gameManager) {
+        gameManager.value = lobbyManager.gameManager.value
         isLoading.value = false
     }
 

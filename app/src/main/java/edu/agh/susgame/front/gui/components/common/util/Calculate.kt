@@ -7,8 +7,8 @@ object Calculate {
     fun incrementAnimIndex(currentIndex: Int, maxIndex: Int): Int {
         return (currentIndex + 1) % maxIndex
     }
+
     fun getAlpha(isVisible: Boolean): Float {
         return if (isVisible) 1f else 0.5f
     }
-
 }

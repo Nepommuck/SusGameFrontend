@@ -28,7 +28,6 @@ class ZoomState(
         scale.floatValue = max(min(scale.floatValue * zoom, maxZoomIn), maxZoomOut)
     }
 
-
     fun move(offset: Offset) { // TODO GAME-47 it doesn't work as it should, right now i don't have any idea how to implement it :(
         val scaledWidth = totalSize.x * scale.floatValue * 2
         val scaledHeight = totalSize.y * scale.floatValue * 2

@@ -53,7 +53,8 @@ fun MainMenuView(
                     text = Translation.Menu.CREATE_GAME,
                     onClick = {
                         navController.navigate(MenuRoute.CreateLobby.route)
-                    })
+                    }
+            )
             }
         }
     }

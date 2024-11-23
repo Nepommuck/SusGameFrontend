@@ -8,6 +8,7 @@ import edu.agh.susgame.dto.rest.games.model.GameCreationRequest
 import edu.agh.susgame.dto.rest.games.model.GetAllGamesApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameMapApiResult
+import edu.agh.susgame.dto.rest.model.GameMapDTO
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.config.utils.Configuration.WebConfig
@@ -74,8 +75,35 @@ class GamesRestImpl(
             }
         }
 
-    override fun getGameMap(gameId: LobbyId): CompletableFuture<GetGameMapApiResult> {
-        TODO("Not yet implemented")
+    override fun getGameMap(
+        gameId: LobbyId,
+    ): CompletableFuture<GetGameMapApiResult> = CompletableFuture.supplyAsync {
+        val request = Request.Builder()
+            .get()
+            .url(
+                baseUrlBuilder()
+                    .addPathSegment("map")
+                    .addPathSegment(gameId.value.toString())
+                    .build()
+            ).build()
+
+        val response = httpClient.newCall(request)
+            .execute()
+
+        when (response.code) {
+            HttpURLConnection.HTTP_OK -> GetGameMapApiResult.Success(
+                gameMap = Gson().fromJson(
+                    response.body?.string(),
+                    GameMapDTO::class.java,
+                )
+            )
+
+            HttpURLConnection.HTTP_NOT_FOUND -> GetGameMapApiResult.GameDoesNotExist
+
+            HttpURLConnection.HTTP_BAD_REQUEST -> GetGameMapApiResult.GameNotYetStarted
+
+            else -> GetGameMapApiResult.OtherError
+        }
     }
 
     override fun createGame(

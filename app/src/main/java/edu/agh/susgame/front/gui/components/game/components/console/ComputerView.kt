@@ -19,11 +19,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.PlayerNickname
-import edu.agh.susgame.front.gui.components.common.util.Translation
-import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
+import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.managers.GameManager
+import edu.agh.susgame.front.service.interfaces.GameService
 
 @Composable
 fun ComputerComponent(
@@ -31,16 +31,13 @@ fun ComputerComponent(
     gameManager: GameManager
 ) {
     var newMessageInputValue by remember { mutableStateOf("") }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(Color.Cyan)
-
     ) {
         Header(title = Translation.Game.COMPUTER)
-
         Row(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -53,7 +50,6 @@ fun ComputerComponent(
                 onValueChange = { newMessageInputValue = it },
                 singleLine = true,
             )
-
             Button(onClick = {
                 gameService.sendSimpleMessage(newMessageInputValue)
                 gameManager.addMessage(
@@ -67,12 +63,9 @@ fun ComputerComponent(
                 Text(text = Translation.Button.SEND)
             }
         }
-
         gameManager.chatMessages.forEach { message ->
             Text(text = message)
         }
-
     }
-
     // TODO GAME-54
 }

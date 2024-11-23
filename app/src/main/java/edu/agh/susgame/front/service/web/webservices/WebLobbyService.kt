@@ -4,19 +4,21 @@ import edu.agh.susgame.dto.rest.games.GamesRest
 import edu.agh.susgame.dto.rest.games.model.CreateGameApiResult
 import edu.agh.susgame.dto.rest.games.model.GetAllGamesApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameApiResult
+import edu.agh.susgame.dto.rest.games.model.GetGameMapApiResult
+import edu.agh.susgame.dto.rest.model.GameMapDTO
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.service.interfaces.CreateNewGameResult
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.managers.LobbyManager
 import java.util.concurrent.CompletableFuture
 
 
 class WebLobbyService(private val gamesRest: GamesRest) : LobbyService {
-    var lobbyManager: LobbyManager? = null
+    override var lobbyManager: LobbyManager? = null
 
-    override fun addLobbyManager(lobbyManager: LobbyManager){
-        this.lobbyManager=lobbyManager
+    override fun addLobbyManager(lobbyManager: LobbyManager) {
+        this.lobbyManager = lobbyManager
     }
 
     override fun getAll(): CompletableFuture<Map<LobbyId, Lobby>> =
@@ -40,6 +42,14 @@ class WebLobbyService(private val gamesRest: GamesRest) : LobbyService {
                 is GetGameApiResult.Success -> response.lobby
             }
 
+        }
+
+    override fun getGameMap(lobbyId: LobbyId): CompletableFuture<GameMapDTO?> =
+        gamesRest.getGameMap(lobbyId).thenApply { response ->
+            when (response) {
+                is GetGameMapApiResult.Success -> response.gameMap
+                else -> null
+            }
         }
 
     override fun createNewGame(

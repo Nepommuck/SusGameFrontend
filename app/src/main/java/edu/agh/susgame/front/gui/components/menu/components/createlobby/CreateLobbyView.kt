@@ -14,16 +14,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
-import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.common.theme.Header
+import edu.agh.susgame.front.gui.components.common.theme.PaddingL
+import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.CreateGameComp
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.GameNameComp
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.GamePinComp
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.GameTimeComp
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.NumberOfPlayersComp
-import edu.agh.susgame.front.gui.components.common.theme.PaddingL
+import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
+import edu.agh.susgame.front.service.interfaces.LobbyService
 
 
 private const val DEFAULT_PLAYERS_AMOUNT = 4
@@ -96,5 +96,3 @@ fun CreateLobbyView(
         }
     }
 }
-
-

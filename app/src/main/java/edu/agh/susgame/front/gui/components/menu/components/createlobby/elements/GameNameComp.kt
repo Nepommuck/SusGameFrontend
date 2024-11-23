@@ -12,17 +12,13 @@ fun GameNameComp(
     gameName: String,
     onGameNameChange: (String) -> Unit
 ) {
-//    var gameName by remember { mutableStateOf(Translation.CreateGame.DEFAULT_GAME_NAME) }
     OutlinedTextField(
         label = {
-            Text(
-                text = Translation.CreateGame.ENTER_GAME_NAME + ": "
-            )
+            Text(text = Translation.CreateGame.ENTER_GAME_NAME + ": ")
         },
         value = gameName,
         onValueChange = { onGameNameChange(it) },
         modifier = Modifier.fillMaxWidth(),
         singleLine = true
     )
-
 }

@@ -1,15 +1,16 @@
 package edu.agh.susgame.front.service.mock
 
 import androidx.compose.ui.graphics.Color
+import edu.agh.susgame.dto.rest.model.GameMapDTO
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.front.config.AppConfig
+import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.service.interfaces.CreateNewGameResult
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.managers.LobbyManager
 import java.util.concurrent.CompletableFuture
 
 // IGNORE THIS, ITS GONNA BE DELETED
@@ -22,7 +23,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         createCustomLobbies()
     }
 
-    var lobbyManager: LobbyManager? = null
+    override var lobbyManager: LobbyManager? = null
 
     override fun addLobbyManager(lobbyManager: LobbyManager) {
         this.lobbyManager = lobbyManager
@@ -38,6 +39,10 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         this.getAll().thenApply { allGames ->
             allGames[lobbyId]
         }
+
+    override fun getGameMap(lobbyId: LobbyId): CompletableFuture<GameMapDTO?> =
+        // TODO Return some mock map
+        CompletableFuture.supplyAsync { null }
 
     override fun createNewGame(
         gameName: String,

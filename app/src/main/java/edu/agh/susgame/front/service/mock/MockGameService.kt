@@ -4,12 +4,12 @@ import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
-import edu.agh.susgame.front.service.interfaces.GameService
-import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
+import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
+import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.LobbyManager
-import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
-import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
+import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,18 +27,12 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
     override val messagesFlow = _messagesFlow.asSharedFlow()
 
     override fun addGameManager(gameManager: GameManager) {}
+
     override fun addLobbyManager(lobbyManager: LobbyManager) {}
-    override fun sendJoiningRequest(nickname: PlayerNickname) {
 
-    }
+    override fun sendLeavingRequest(playerId: PlayerId) {}
 
-    override fun sendLeavingRequest(playerId: PlayerId) {
-
-    }
-
-    override fun sendChangingStateRequest(playerId: PlayerId, status: PlayerStatus) {
-
-    }
+    override fun sendChangingStateRequest(playerId: PlayerId, status: PlayerStatus) {}
 
     override fun sendStartGame() {}
 
