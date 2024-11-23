@@ -7,6 +7,8 @@ object Translation {
 
     object Button {
         const val GO_BACK = "Wróć"
+        const val EDIT = "Edytuj"
+        const val ACCEPT = "Zatwierdź"
         const val BACK_TO_MAIN_MENU = "Wróć do menu głównego"
         const val LEAVE = "Opuść"
         const val JOIN = "Dołącz"
@@ -20,6 +22,7 @@ object Translation {
     object Menu {
         const val JOIN_GAME = "Dołącz do gry"
         const val CREATE_GAME = "Stwórz nową grę"
+        const val IP_ADDRESS = "Adres IP serwera"
     }
 
     object Lobby {

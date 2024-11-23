@@ -1,14 +1,15 @@
 package edu.agh.susgame.front.service.web
 
+import edu.agh.susgame.front.config.AppConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.net.InetAddress
 
 class IpAddressProvider {
-    private val _isIpAddressDefined = MutableStateFlow(false)
-    val isIpAddressDefined: StateFlow<Boolean> get() = _isIpAddressDefined
+    private var currentIpAddress: String? = AppConfig.webConfig.defaultIpAddress
 
-    private var currentIpAddress: String? = null
+    private val _isIpAddressDefined = MutableStateFlow(currentIpAddress != null)
+    val isIpAddressDefined: StateFlow<Boolean> get() = _isIpAddressDefined
 
     fun isIpAddressDefined(): Boolean = currentIpAddress != null
 
@@ -19,6 +20,11 @@ class IpAddressProvider {
             currentIpAddress = newValue
             _isIpAddressDefined.value = true
         }
+    }
+
+    fun setEmptyIpAddress() {
+        currentIpAddress = null
+        _isIpAddressDefined.value = false
     }
 
     companion object {
