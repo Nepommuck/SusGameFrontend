@@ -12,19 +12,21 @@ import edu.agh.susgame.front.gui.components.menu.components.createlobby.CreateLo
 import edu.agh.susgame.front.gui.components.menu.components.lobby.LobbyView
 import edu.agh.susgame.front.gui.components.menu.components.mainmenu.MainMenuView
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.SearchLobbiesView
+import edu.agh.susgame.front.service.web.IpAddressProvider
 
 @Composable
 fun MenuNavigationHost(
     menuNavController: NavHostController,
     lobbyService: LobbyService,
     gameService: GameService,
+    ipAddressProvider: IpAddressProvider,
 ) {
     NavHost(
         navController = menuNavController,
         startDestination = MenuRoute.MainMenu.route,
     ) {
         composable(route = MenuRoute.MainMenu.route) {
-            MainMenuView(menuNavController)
+            MainMenuView(menuNavController, ipAddressProvider)
         }
 
         composable(route = MenuRoute.SearchLobby.route) {

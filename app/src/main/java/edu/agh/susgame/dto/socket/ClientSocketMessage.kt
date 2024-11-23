@@ -53,7 +53,6 @@ sealed class ClientSocketMessage {
         val answer: Int,
     ) : ClientSocketMessage()
 
-
     @Serializable
     data class PlayerJoiningRequest(
         val playerName: String
