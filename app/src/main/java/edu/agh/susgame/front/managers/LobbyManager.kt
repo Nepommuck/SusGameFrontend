@@ -74,7 +74,7 @@ class LobbyManager(
     fun getMapFromServer() {
         this.id.let { id ->
             lobbyService.getGameMap(id)
-                .thenApply { result -> customMap() }
+                .thenApply { result -> parseMap(result) }
         }
     }
     private fun customMap(){
@@ -110,7 +110,7 @@ class LobbyManager(
                     id = NodeId(host.id),
                     name = "H${host.id}",
                     position = Coordinates(host.coordinates.x, host.coordinates.y),
-                    playerId = PlayerId(0)
+                    playerId = PlayerId(0) // TODO change when DTO will be updated
                 )
             )
         }

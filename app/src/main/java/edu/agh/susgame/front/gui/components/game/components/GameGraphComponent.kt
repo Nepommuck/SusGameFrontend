@@ -166,7 +166,7 @@ internal fun GameGraphComponent(
                                     if (pathBuilderState.isPathValid(serverId = gameManager.serverId)) {
                                         val path = Path(pathBuilderState.path)
                                         gameService.sendHostUpdate(
-                                            NodeId(3), path.path, 2
+                                            path.path[0], path.path.drop(1), 2
                                         )
 
                                         playerIdChangingPath = null
