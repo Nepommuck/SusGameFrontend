@@ -26,7 +26,8 @@ class GameManager(
     val mapSize: Coordinates,
     val packetsToWin: Int = 100,
     val localPlayerId: PlayerId,
-    private var gameService: GameService? = null
+    private var gameService: GameService? = null,
+    val changingPath: MutableState<Boolean> = mutableStateOf(false)
 ) {
     // ADDERS
     fun addGameService(gameService: GameService) {
@@ -126,11 +127,13 @@ class GameManager(
         decodedMessage.hosts.forEach() { host ->
             val path = listOf(host.id) + host.packetRoute
             for (i in 0 until path.size - 1) {
-                updateEdge(
-                    NodeId(path[i]),
-                    NodeId(path[i + 1]),
-                    playerIdByHostId[NodeId(host.id)]
-                )
+                if (playerIdByHostId[NodeId(host.id)] != localPlayerId) {
+                    updateEdge(
+                        NodeId(path[i]),
+                        NodeId(path[i + 1]),
+                        playerIdByHostId[NodeId(host.id)]
+                    )
+                }
             }
         }
     }

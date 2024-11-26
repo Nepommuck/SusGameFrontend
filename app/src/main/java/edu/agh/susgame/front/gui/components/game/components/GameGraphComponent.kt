@@ -52,7 +52,7 @@ internal fun GameGraphComponent(
     }
 
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
-    var changingPath by remember { mutableStateOf(false) }
+    var changingPath by gameManager.changingPath
     val pathBuilder by gameManager.pathBuilder
     val isPathValid by gameManager.pathBuilder.value.isPathValid
     var isComputerViewVisible by remember { mutableStateOf(false) }
