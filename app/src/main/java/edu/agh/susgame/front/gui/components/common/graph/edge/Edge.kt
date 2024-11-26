@@ -1,9 +1,6 @@
 package edu.agh.susgame.front.gui.components.common.graph.edge
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
@@ -20,7 +17,9 @@ class Edge(
     var playersIdsUsingEdge = mutableStateListOf<PlayerId>()
 
     fun addPlayer(playerId: PlayerId) {
-        playersIdsUsingEdge.add(playerId)
+        if (!playersIdsUsingEdge.contains(playerId)) { // this should be a set, but theres problem with recompositon
+            playersIdsUsingEdge.add(playerId)
+        }
     }
 
     fun removePlayer(playerId: PlayerId) {

@@ -70,7 +70,7 @@ class GameManager(
 
     var pathBuilder: MutableState<PathBuilder> = mutableStateOf(PathBuilder(serverId))
 
-
+    // METHODS
     fun addFirstNodeToPathBuilder(nodeId: NodeId){
         pathBuilder.value.addNode(nodeId)
     }
@@ -116,7 +116,7 @@ class GameManager(
         println("Updating path from local$path")
         pathsByPlayerId[localPlayerId] = path
         gameService?.sendHostUpdate(
-            path.path[0], path.path, 2
+            path.path[0], path.path.drop(1), 2
         )
     }
 
@@ -125,8 +125,8 @@ class GameManager(
             val path = listOf(host.id) + host.packetRoute
             for (i in 0 until path.size - 2) {
                 updateEdge(
-                    NodeId(value = i),
-                    NodeId(value = i + 1),
+                    NodeId(path[i]),
+                    NodeId(path[i+1]),
                     playerIdByHostId[NodeId(host.id)]
                 )
             }

@@ -75,7 +75,7 @@ class LobbyManager(
     fun getMapFromServer() {
         this.id.let { id ->
             lobbyService.getGameMap(id)
-                .thenApply { result -> customMap() }
+                .thenApply { result -> parseMap(result) }
         }
     }
 

@@ -25,7 +25,7 @@ class PathBuilder(val serverId: NodeId) {
         return !path.contains(nodeId)
     }
 
-    fun checkValidity() {
+    private fun checkValidity() {
         this.isPathValid.value = path.lastOrNull() == serverId
     }
 
