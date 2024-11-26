@@ -3,6 +3,7 @@ package edu.agh.susgame.front.gui.components.game.components.drawers
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -23,10 +24,10 @@ fun EdgeDrawer(gameManager: GameManager) {
     val density = LocalDensity.current
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        gameManager.edges.forEach { (_, edge) ->
+        gameManager.edgesList.forEach { edge ->
 
-            val startXY = gameManager.nodes[edge.firstNodeId]
-            val endXY = gameManager.nodes[edge.secondNodeId]
+            val startXY = gameManager.nodesById[edge.firstNodeId]
+            val endXY = gameManager.nodesById[edge.secondNodeId]
 
             if (startXY != null && endXY != null) {
                 val startOffset = with(density) {
@@ -71,7 +72,7 @@ fun EdgeDrawer(gameManager: GameManager) {
                 )
 
                 edge.playersIdsUsingEdge.forEachIndexed { index, playerId ->
-                    gameManager.players[playerId]?.colorHex?.let { hexColor ->
+                    gameManager.playersById[playerId]?.colorHex?.let { hexColor ->
                         val playerOffset = index * 10
 
 
@@ -83,7 +84,7 @@ fun EdgeDrawer(gameManager: GameManager) {
 
                         drawPath(
                             path = playerPath,
-                            color = Color(hexColor),
+                            color = Color.Red,
                             style = Stroke(
                                 width = 7f,
                                 pathEffect = PathEffect.dashPathEffect(

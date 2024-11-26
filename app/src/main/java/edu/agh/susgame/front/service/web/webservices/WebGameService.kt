@@ -134,8 +134,8 @@ class WebGameService(
     ) {
         sendClientSocketMessage(
             clientSocketMessage = ClientSocketMessage.HostDTO(
-                id = 1,
-                packetPath = listOf(2, 3),
+                id = hostId.value,
+                packetPath = packetPath.map {it.value},
                 packetsSentPerTick = packetsSentPerTick,
             )
         )
