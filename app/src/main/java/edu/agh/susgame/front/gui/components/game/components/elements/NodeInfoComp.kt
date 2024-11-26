@@ -19,8 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
-import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.front.gui.components.common.graph.edge.PathBuilder
 import edu.agh.susgame.front.gui.components.common.graph.node.Host
 import edu.agh.susgame.front.gui.components.common.graph.node.Node
 import edu.agh.susgame.front.gui.components.common.theme.PaddingM
@@ -33,8 +31,7 @@ private val SIZE_DP = 50.dp
 fun NodeInfoComp(
     node: Node,
     onExit: () -> Unit,
-    playerIdChangingPath: (PlayerId) -> Unit,
-    pathBuilderState: PathBuilder,
+    changingPath: (Boolean) -> Unit,
     gameManager: GameManager
 ) {
     Box(
@@ -75,19 +72,21 @@ fun NodeInfoComp(
 
                     }
                     val hostNode = node as? Host
-                    hostNode?.let { host ->
 
-                        Box(modifier = Modifier.size(SIZE_DP)) {
-                            Image(
-                                painter = painterResource(id = R.drawable.shuffle),
-                                contentDescription = "Exit",
-                                modifier = Modifier.clickable {
-                                    gameManager.edges.forEach { (_, edge) -> edge.removePlayer(host.playerId) }
-                                    playerIdChangingPath(host.playerId)
-                                    pathBuilderState.addNodeToPath(nodeId = node.id)
-                                    onExit()
-                                }
-                            )
+                    hostNode?.let { host ->
+                        if (gameManager.localPlayerId == host.playerId) {
+                            Box(modifier = Modifier.size(SIZE_DP)) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.shuffle),
+                                    contentDescription = "Exit",
+                                    modifier = Modifier.clickable {
+                                        gameManager.clearEdgesLocal()
+                                        changingPath(true)
+                                        gameManager.addFirstNodeToPathBuilder(nodeId = host.id)
+                                        onExit()
+                                    }
+                                )
+                            }
                         }
                     }
                 }

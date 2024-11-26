@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.runtime.toMutableStateList
 import edu.agh.susgame.dto.rest.model.GameMapDTO
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
@@ -74,21 +75,16 @@ class LobbyManager(
     fun getMapFromServer() {
         this.id.let { id ->
             lobbyService.getGameMap(id)
-                .thenApply { result -> parseMap(result) }
+                .thenApply { result -> customMap() }
         }
     }
-    private fun customMap(){
-        gameManager.value = createCustomMapState()
-        isGameReady.value = true
-        println("FROM LM"+isGameReady.value)
-    }
+
 
     private fun parseMap(gameMapDTO: GameMapDTO?) {
         if (gameMapDTO == null) {
             println("GameMapDTO is null")
             return
         }
-
         println("Parsing GameMapDTO: $gameMapDTO")
 
         val nodes = mutableListOf<Node>()
@@ -110,7 +106,7 @@ class LobbyManager(
                     id = NodeId(host.id),
                     name = "H${host.id}",
                     position = Coordinates(host.coordinates.x, host.coordinates.y),
-                    playerId = PlayerId(0) // TODO change when DTO will be updated
+                    playerId = PlayerId(host.playerId)
                 )
             )
         }
@@ -139,14 +135,21 @@ class LobbyManager(
 
         val serverId = gameMapDTO.server.id.let { NodeId(it) }
 
-        gameManager.value = GameManager(
-            nodesList = nodes,
-            edgesList = edges,
-            playersList = playersRest.values.toList(),
-            serverId = serverId,
-            mapSize = mapSize
-        )
+        gameManager.value = this.localPlayer.id?.let {
+            GameManager(
+                nodesList = nodes,
+                edgesList = edges,
+                playersList = playersRest.values.toList(),
+                serverId = serverId,
+                mapSize = mapSize,
+                localPlayerId = it
+            )
+        }
 
+        isGameReady.value = true
+    }
+    private fun customMap(){
+        gameManager.value = createCustomMapState()
         isGameReady.value = true
         println("FROM LM"+isGameReady.value)
     }

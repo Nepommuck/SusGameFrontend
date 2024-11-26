@@ -18,8 +18,8 @@ class WebGameManager(
     }
 
     fun handleGameState(decodedMessage: ServerSocketMessage.GameState) {
-        // TODO Change to single server
         gameManager.packetsReceived.value = decodedMessage.server.packetsReceived
+        gameManager.updatePathsFromServer(decodedMessage)
     }
 
     fun handleServerError(decodedMessage: ServerSocketMessage.ServerError) {

@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.service.mock
 
+import androidx.compose.runtime.toMutableStateList
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
@@ -59,10 +60,11 @@ fun createCustomMapState(): GameManager {
 
     val gameManagerState = GameManager(
         nodesList = nodes,
-        edgesList = edges,
+        edgesList = edges.toMutableStateList(),
         playersList = players,
         serverId = serverId,
-        mapSize = mapSize
+        mapSize = mapSize,
+        localPlayerId = PlayerId(0)
     )
 
     return gameManagerState

@@ -23,9 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
-import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.gui.components.common.graph.edge.Path
-import edu.agh.susgame.front.gui.components.common.graph.edge.PathBuilder
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.Calculate
@@ -49,14 +47,19 @@ internal fun GameGraphComponent(
 ) {
     LaunchedEffect(Unit) {
         gameService.addGameManager(gameManager)
+        gameManager.addGameService(gameService)
         gameService.sendStartGame()
     }
 
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
-    var playerIdChangingPath by remember { mutableStateOf<PlayerId?>(null) }
-    var pathBuilderState by remember { mutableStateOf(PathBuilder()) }
+    var changingPath by remember { mutableStateOf(false) }
+    val pathBuilder by gameManager.pathBuilder
+    val isPathValid by gameManager.pathBuilder.value.isPathValid
     var isComputerViewVisible by remember { mutableStateOf(false) }
 
+    fun setComputerViewVisibility(visible: Boolean) {
+        isComputerViewVisible = visible
+    }
 
     val zoomState = remember {
         ZoomState(
@@ -64,10 +67,6 @@ internal fun GameGraphComponent(
             maxZoomOut = 0.5f,
             totalSize = gameManager.mapSize,
         )
-    }
-
-    fun setComputerViewVisibility(visible: Boolean) {
-        isComputerViewVisible = visible
     }
 
     Box(
@@ -105,19 +104,17 @@ internal fun GameGraphComponent(
 
             NodeDrawer(
                 gameManager = gameManager,
-                playerIdChangingPath = playerIdChangingPath,
-                pathBuilderState = pathBuilderState,
+                changingPath = changingPath,
                 onInspectedNodeChange = { newId -> inspectedNodeId = newId },
             )
         }
 
         inspectedNodeId?.let { nodeId ->
-            gameManager.nodes[nodeId]?.takeIf { playerIdChangingPath == null }?.let { node ->
+            gameManager.nodesById[nodeId]?.takeIf { !changingPath }?.let { node ->
                 NodeInfoComp(
                     node = node,
                     onExit = { inspectedNodeId = null },
-                    playerIdChangingPath = { newId -> playerIdChangingPath = newId },
-                    pathBuilderState = pathBuilderState,
+                    changingPath = { state -> changingPath = state },
                     gameManager = gameManager
                 )
             }
@@ -127,7 +124,7 @@ internal fun GameGraphComponent(
             modifier = Modifier
                 .align(Alignment.CenterStart)
         ) {
-            playerIdChangingPath?.let {
+            if (changingPath) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -140,11 +137,9 @@ internal fun GameGraphComponent(
                             painter = painterResource(id = R.drawable.cross),
                             contentDescription = Translation.Game.ABORT_PATH,
                             modifier = Modifier.clickable {
-                                gameManager.edges.forEach { (_, edge) ->
-                                    edge.removePlayer(playerIdChangingPath!!)
-                                }
-                                playerIdChangingPath = null
-                                pathBuilderState = PathBuilder()
+                                gameManager.clearEdgesLocal()
+                                changingPath = false
+                                pathBuilder.reset()
                             }
                         )
                     }
@@ -154,24 +149,20 @@ internal fun GameGraphComponent(
                             .padding(PaddingS)
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.accept), // Drawable for accept
+                            painter = painterResource(id = R.drawable.accept),
                             contentDescription = Translation.Game.ACCEPT_PATH,
                             modifier = Modifier
-                                .alpha(Calculate.getAlpha(pathBuilderState.isPathValid(serverId = gameManager.serverId)))
+                                .alpha(
+                                    Calculate.getAlpha(isPathValid)
+                                )
                                 .clickable(
-                                    enabled = pathBuilderState.isPathValid(
-                                        serverId = gameManager.serverId
-                                    )
+                                    enabled = isPathValid
                                 ) {
-                                    if (pathBuilderState.isPathValid(serverId = gameManager.serverId)) {
-                                        val path = Path(pathBuilderState.path)
-                                        gameService.sendHostUpdate(
-                                            path.path[0], path.path.drop(1), 2
-                                        )
-
-                                        playerIdChangingPath = null
+                                    if (isPathValid) {
+                                        gameManager.updatePathFromLocal(Path(pathBuilder.path))
+                                        changingPath = false
                                         inspectedNodeId = null
-                                        pathBuilderState = PathBuilder()
+                                        pathBuilder.reset()
                                     }
                                 }
                         )
@@ -190,5 +181,7 @@ internal fun GameGraphComponent(
             isComputerVisible = isComputerViewVisible,
             setComputerViewVisibility = { visible -> setComputerViewVisibility(visible) }
         )
+
     }
 }
+

@@ -16,14 +16,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
-import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.front.managers.GameManager
-import edu.agh.susgame.front.gui.components.common.graph.edge.PathBuilder
 import edu.agh.susgame.front.gui.components.common.graph.node.Host
 import edu.agh.susgame.front.gui.components.common.graph.node.Node
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.graph.node.Router
 import edu.agh.susgame.front.gui.components.common.graph.node.Server
+import edu.agh.susgame.front.managers.GameManager
 
 
 private const val SCALE_FACTOR = 0.04f
@@ -31,8 +29,7 @@ private const val SCALE_FACTOR = 0.04f
 @Composable
 fun NodeDrawer(
     gameManager: GameManager,
-    playerIdChangingPath: PlayerId?,
-    pathBuilderState: PathBuilder,
+    changingPath: Boolean,
     onInspectedNodeChange: (NodeId?) -> Unit,
 ) {
     Box(
@@ -40,7 +37,7 @@ fun NodeDrawer(
             .fillMaxSize()
     ) {
         val context = LocalContext.current
-        gameManager.nodes.forEach { (_, node) ->
+        gameManager.nodesById.forEach { (_, node) ->
 
             val imageResourceId = nodeToResourceId(node)
 
@@ -63,16 +60,11 @@ fun NodeDrawer(
 
                 )
                 .clickable {
-
-                    playerIdChangingPath?.let {
-                        addNodeToPath(
-                            nodeId = node.id,
-                            pathBuilderState = pathBuilderState,
-                            playerId = playerIdChangingPath,
-                            gameManager = gameManager
-                        )
+                    if (changingPath) {
+                        gameManager.addNodeToPathBuilder(node.id)
+                    } else {
+                        onInspectedNodeChange(node.id)
                     }
-                    onInspectedNodeChange(node.id)
                 }) {
                 Image(
                     painter = painterResource(id = imageResourceId),
@@ -90,25 +82,6 @@ fun getImageSize(context: Context, resId: Int): IntSize {
     }
     BitmapFactory.decodeResource(context.resources, resId, options)
     return IntSize(options.outWidth, options.outHeight)
-}
-
-private fun addNodeToPath(
-    nodeId: NodeId,
-    pathBuilderState: PathBuilder,
-    playerId: PlayerId,
-    gameManager: GameManager,
-) {
-    val edgeId = pathBuilderState.path.lastOrNull()?.let { lastNode ->
-        gameManager.getEdgeId(lastNode, nodeId)
-    }
-
-    edgeId?.let {
-        if (pathBuilderState.isNodeValid(nodeId)) {
-            pathBuilderState.addNodeToPath(nodeId)
-            gameManager.edges[edgeId]?.addPlayer(playerId)
-        }
-    }
-
 }
 
 private fun nodeToResourceId(node: Node): Int = when (node) {

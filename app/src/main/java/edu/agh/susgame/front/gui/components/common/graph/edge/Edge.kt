@@ -1,5 +1,9 @@
 package edu.agh.susgame.front.gui.components.common.graph.edge
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
@@ -12,8 +16,9 @@ class Edge(
     val secondNodeId: NodeId,
     var bandwidth: Int,
     var color: Color = Color.Black,
-    val playersIdsUsingEdge: MutableSet<PlayerId> = mutableSetOf()
 ) {
+    var playersIdsUsingEdge = mutableStateListOf<PlayerId>()
+
     fun addPlayer(playerId: PlayerId) {
         playersIdsUsingEdge.add(playerId)
     }
