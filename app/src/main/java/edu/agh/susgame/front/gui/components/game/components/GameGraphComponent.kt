@@ -170,7 +170,6 @@ internal fun GameGraphComponent(
                 }
             }
         }
-
         ProgressBarComp(gameManager = gameManager)
 
         if (isComputerViewVisible) {
@@ -181,7 +180,5 @@ internal fun GameGraphComponent(
             isComputerVisible = isComputerViewVisible,
             setComputerViewVisibility = { visible -> setComputerViewVisibility(visible) }
         )
-
     }
 }
-

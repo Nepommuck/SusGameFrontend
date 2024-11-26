@@ -4,7 +4,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerREST
@@ -70,10 +69,26 @@ class GameManager(
 
     var pathBuilder: MutableState<PathBuilder> = mutableStateOf(PathBuilder(serverId))
 
-    // METHODS
-    fun addFirstNodeToPathBuilder(nodeId: NodeId){
+    // PRIVATE METHODS
+    private fun getEdgeId(from: NodeId, to: NodeId): EdgeId? {
+        return this.nodesIdsToEdgeId[Pair(from, to)]
+    }
+
+    private fun updateEdge(from: NodeId, to: NodeId, playerId: PlayerId?) {
+        println("Updating edge$playerId")
+        playerId?.let { edgesById[getEdgeId(from, to)]?.addPlayer(playerId) }
+    }
+
+    private fun updateEdge(edgeId: EdgeId) {
+        println("Updating edge from id$edgeId")
+        edgesById[edgeId]?.addPlayer(localPlayerId)
+    }
+
+    // PUBLIC METHODS
+    fun addFirstNodeToPathBuilder(nodeId: NodeId) {
         pathBuilder.value.addNode(nodeId)
     }
+
     fun addNodeToPathBuilder(nodeId: NodeId) {
         println("addNodeToPathBuilder")
         val edgeId = pathBuilder.value.getLastNode()?.let { lastNodeId ->
@@ -94,23 +109,10 @@ class GameManager(
         }
     }
 
-    private fun getEdgeId(from: NodeId, to: NodeId): EdgeId? {
-        return this.nodesIdsToEdgeId[Pair(from, to)]
-    }
-
     fun addMessage(message: GameService.SimpleMessage) {
         chatMessages.add("[${message.author.value}]: ${message.message}")
     }
 
-    private fun updateEdge(from: NodeId, to: NodeId, playerId: PlayerId?) {
-        println("Updating edge$playerId")
-        playerId?.let { edgesById[getEdgeId(from, to)]?.addPlayer(playerId) }
-    }
-
-    private fun updateEdge(edgeId: EdgeId) {
-        println("Updating edge from id$edgeId")
-        edgesById[edgeId]?.addPlayer(localPlayerId)
-    }
 
     fun updatePathFromLocal(path: Path) {
         println("Updating path from local$path")
@@ -123,10 +125,10 @@ class GameManager(
     fun updatePathsFromServer(decodedMessage: ServerSocketMessage.GameState) {
         decodedMessage.hosts.forEach() { host ->
             val path = listOf(host.id) + host.packetRoute
-            for (i in 0 until path.size - 2) {
+            for (i in 0 until path.size - 1) {
                 updateEdge(
                     NodeId(path[i]),
-                    NodeId(path[i+1]),
+                    NodeId(path[i + 1]),
                     playerIdByHostId[NodeId(host.id)]
                 )
             }
