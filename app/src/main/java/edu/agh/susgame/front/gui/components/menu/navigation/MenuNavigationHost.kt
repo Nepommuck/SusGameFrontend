@@ -5,11 +5,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.PlayerId
+import edu.agh.susgame.dto.rest.model.PlayerREST
+import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
+import edu.agh.susgame.front.gui.components.common.util.Coordinates
 import edu.agh.susgame.front.gui.components.game.GameView
+import edu.agh.susgame.front.gui.components.game.components.computer.ComputerComponent
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.CreateLobbyView
 import edu.agh.susgame.front.gui.components.menu.components.lobby.LobbyView
 import edu.agh.susgame.front.gui.components.menu.components.mainmenu.MainMenuView
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.SearchLobbiesView
+import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.service.web.IpAddressProvider
@@ -26,7 +32,19 @@ fun MenuNavigationHost(
         startDestination = MenuRoute.MainMenu.route,
     ) {
         composable(route = MenuRoute.MainMenu.route) {
-            MainMenuView(menuNavController, ipAddressProvider)
+
+            // TODO GAME-54 Undo this
+//            MainMenuView(menuNavController, ipAddressProvider)
+            ComputerComponent(
+                gameService, GameManager(
+                    nodesList = emptyList(),
+                    edgesList = emptyList(),
+                    playersList = emptyList(),
+                    serverId = NodeId(1),
+                    mapSize = Coordinates(100, 100),
+                    localPlayerId = PlayerId(21),
+                )
+            )
         }
 
         composable(route = MenuRoute.SearchLobby.route) {

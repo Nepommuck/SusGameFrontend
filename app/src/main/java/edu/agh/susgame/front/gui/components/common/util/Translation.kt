@@ -51,8 +51,7 @@ object Translation {
     }
 
     object Game {
-        const val MAP = "Mapa"
-        const val COMPUTER = "Komputer"
+        const val CHAT = "Chat"
         const val BUFFER_SIZE = "Rozmiar bufora"
         const val BUFFER_CURRENT_PACKETS = "Liczba pakietów w buforze"
         const val PACKETS_TO_SEND = "Liczba pakietów do wysłania"
