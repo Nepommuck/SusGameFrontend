@@ -2,10 +2,12 @@ package edu.agh.susgame.front.managers
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import edu.agh.susgame.dto.rest.model.PlayerId
+import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.gui.components.common.graph.edge.Edge
@@ -17,6 +19,7 @@ import edu.agh.susgame.front.gui.components.common.graph.node.Node
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.util.Coordinates
 import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 
 class GameManager(
     val nodesList: List<Node>,
@@ -63,24 +66,20 @@ class GameManager(
     val pathsByPlayerId: SnapshotStateMap<PlayerId, Path> = mutableStateMapOf()
 
     // TODO GAME-54 Undo this
-    val chatMessages: MutableSet<String> = mutableSetOf(
-        "Hello there",
-        "You all",
-        "You all",
-        "You all",
-        "You all",
-        "You all",
-        "You all",
-        "You all",
-        "You all",
-        "You all",
-        "You all",
-        "You all",
-        "You all",
-        "You all",
-        "You all",
-        "You all",
-        "You all",
+    val chatMessages = mutableStateListOf(
+        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
+        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
+        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
+        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
+        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
+        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
+        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
+        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
+        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
+        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
+        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
+        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
+        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
     )
 //    val chatMessages: MutableSet<String> = mutableSetOf()
 
@@ -130,8 +129,8 @@ class GameManager(
         }
     }
 
-    fun addMessage(message: GameService.SimpleMessage) {
-        chatMessages.add("[${message.author.value}]: ${message.message}")
+    fun addMessage(message: SimpleMessage) {
+        chatMessages.add(message)
     }
 
     fun updatePathFromLocal(path: Path) {

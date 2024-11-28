@@ -67,8 +67,12 @@ fun ChatComponent(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            Text(
+                text = if (scrollState.value > 0) "!" else "",
+                color = Color.Green
+            )
             Button(
                 onClick = {
                     gameService.sendSimpleMessage(newMessageInputValue)
@@ -95,8 +99,11 @@ fun ChatComponent(
                 .fillMaxSize()
                 .verticalScroll(scrollState)
         ) {
-            gameManager.chatMessages.forEach { message ->
-                Text("> $message", color = Color.Green)
+            gameManager.chatMessages.reversed().forEach { message ->
+                Text(
+                    text = "> [${message.author.value}]: ${message.message}",
+                    color = Color.Green,
+                )
             }
         }
     }
