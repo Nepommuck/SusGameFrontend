@@ -18,6 +18,7 @@ import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
+import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.icons.PlayerColorIcon
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.icons.PlayerStatusIcon
 import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.service.interfaces.GameService
@@ -29,16 +30,18 @@ fun PlayerRow(
     lobbyManager: LobbyManager,
     gameService: GameService,
 ) {
+
     Row(
         modifier = Modifier
             .padding(PaddingS)
             .fillMaxWidth()
             .height(70.dp)
+            .background(Color.Gray)
     ) {
         Box(
             modifier = Modifier
-                .weight(4f)
-                .background(Color.Gray)
+                .weight(2f)
+
                 .fillMaxSize()
                 .align(Alignment.CenterVertically)
         ) {
@@ -47,20 +50,41 @@ fun PlayerRow(
                 text = player.name.value
             )
         }
-
-        Box(
+        Row(
             modifier = Modifier
                 .weight(1f)
-                .background(Color.DarkGray)
                 .fillMaxSize()
-                .align(Alignment.CenterVertically)
-                .let {
-                    if (id == lobbyManager.localPlayer.id) {
-                        it.clickable { handlePlayerStatusChange(id, lobbyManager, gameService) }
-                    } else it
-                }
-        ) {
-            PlayerStatusIcon(playerStatus = player.status)
+        )
+        {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .let {
+                        if (id == lobbyManager.localPlayer.id) {
+                            println("clicked!")
+                            it.clickable { lobbyManager.isColorBeingChanged.value = true }
+                        } else it
+                    }
+            ) {
+                PlayerColorIcon(
+                    playerColor = lobbyManager.localPlayer.color,
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .background(Color.DarkGray)
+                    .fillMaxSize()
+                    .align(Alignment.CenterVertically)
+                    .let {
+                        if (id == lobbyManager.localPlayer.id) {
+                            it.clickable { handlePlayerStatusChange(id, lobbyManager, gameService) }
+                        } else it
+                    }
+            ) {
+                PlayerStatusIcon(playerStatus = player.status)
+            }
+
         }
     }
 }

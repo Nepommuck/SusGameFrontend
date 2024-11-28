@@ -3,6 +3,7 @@ package edu.agh.susgame.front.managers
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
@@ -29,6 +30,8 @@ class LobbyManager(
     val playersMap: SnapshotStateMap<PlayerId, PlayerLobby> = mutableStateMapOf()
     val gameManager: MutableState<GameManager?> = mutableStateOf(null)
     val isGameReady: MutableState<Boolean> = mutableStateOf(false)
+
+    val isColorBeingChanged: MutableState<Boolean> = mutableStateOf(false)
 
     val colorProvider: ColorProvider = ColorProvider()
     fun updateFromRest(lobby: Lobby) {

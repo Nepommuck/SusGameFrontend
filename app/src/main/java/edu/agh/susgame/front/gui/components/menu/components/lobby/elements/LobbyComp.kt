@@ -2,6 +2,7 @@ package edu.agh.susgame.front.gui.component.menu.components.lobby.elements
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +28,7 @@ import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.Translation
+import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.ColorMenuComp
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.PlayerRow
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.managers.LobbyManager
@@ -63,6 +65,7 @@ internal fun LobbyComp(
     var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
     var isLeaveButtonLoading by remember { mutableStateOf(false) }
     val isGameReady by lobbyManager.isGameReady
+    val isColorBeingChanged by lobbyManager.isColorBeingChanged
 
     LaunchedEffect(lobbyManager) {
         lobbyManager.updateFromRest(lobbyInit)
@@ -97,13 +100,24 @@ internal fun LobbyComp(
                         )
                     }
                 }
+
             }
+
 
             Column(
                 modifier = Modifier
                     .weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
+                if (isColorBeingChanged) {
+                    Box(modifier = Modifier.fillMaxSize().background(Color.Gray)) {
+                        ColorMenuComp(
+                            onColorSelected = { newColor ->
+                                lobbyManager.localPlayer.color.value = newColor
+                                lobbyManager.isColorBeingChanged.value = false
+                            })
+                    }
+                }
                 if (!hasPlayerJoined) {
                     val isError = isNicknameError(currentNickname, playerNicknameInputValue)
                     if (isError) {
