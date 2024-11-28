@@ -21,7 +21,9 @@ fun MainMenuButton(
 
     Button(
         onClick,
-        modifier = Modifier.defaultMinSize(minWidth = 160.dp).scale(1.3f),
+        modifier = Modifier
+            .defaultMinSize(minWidth = 160.dp)
+            .scale(1.3f),
         enabled = isIpAddressDefined,
     ) {
         Text(text)
