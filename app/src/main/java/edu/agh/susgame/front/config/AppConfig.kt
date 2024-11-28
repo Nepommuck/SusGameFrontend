@@ -12,7 +12,7 @@ object AppConfig : Configuration {
     override val providers = ProviderType.WEB
 
     override val webConfig = WebConfig(
-        domain = "192.168.1.13",
+        domain = "192.168.1.26",
 
         protocol = "http",
         port = 8080,

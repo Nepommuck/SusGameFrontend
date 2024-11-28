@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    Box() {
+                    Box {
                         MenuNavigationHost(
                             navController,
                             services.lobbyService,

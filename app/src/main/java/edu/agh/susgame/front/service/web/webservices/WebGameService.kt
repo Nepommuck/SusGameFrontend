@@ -11,7 +11,6 @@ import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.service.interfaces.GameService
-import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.service.web.rest.AbstractRest
 import edu.agh.susgame.front.service.web.socket.GameWebSocketListener
 import kotlinx.coroutines.CoroutineScope
@@ -38,9 +37,6 @@ class WebGameService(
     private var currentLobbyId: LobbyId? = null
     private var playerNickname: PlayerNickname? = null
 
-    private var gameManager: GameManager? = null
-    private var lobbyManager: LobbyManager? = null
-
     override val messagesFlow = listener.messagesFlow
 
     init {
@@ -58,13 +54,11 @@ class WebGameService(
         }
     }
 
-    override fun addGameManager(gameManager: GameManager) {
-        this.gameManager = gameManager
+    override fun initGameManager(gameManager: GameManager) {
         listener.initWebGameManager(gameManager)
     }
 
-    override fun addLobbyManager(lobbyManager: LobbyManager) {
-        this.lobbyManager = lobbyManager
+    override fun initLobbyManager(lobbyManager: LobbyManager) {
         listener.initWebLobbyManager(lobbyManager)
     }
 
@@ -106,7 +100,7 @@ class WebGameService(
         )
     }
 
-    override fun sendChangingStateRequest(playerId: PlayerId, status: PlayerStatus) {
+    override fun sendChangePlayerReadinessRequest(playerId: PlayerId, status: PlayerStatus) {
         val stateValue: Boolean = when (status) {
             PlayerStatus.READY -> true
             PlayerStatus.NOT_READY -> false
@@ -134,7 +128,7 @@ class WebGameService(
         sendClientSocketMessage(
             clientSocketMessage = ClientSocketMessage.HostDTO(
                 id = hostId.value,
-                packetPath = packetPath.map {it.value},
+                packetPath = packetPath.map { it.value },
                 packetsSentPerTick = packetsSentPerTick,
             )
         )

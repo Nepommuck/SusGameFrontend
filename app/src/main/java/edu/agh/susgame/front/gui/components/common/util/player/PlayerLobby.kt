@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 
-data class PlayerLobby(
+class PlayerLobby(
     var name: PlayerNickname = PlayerNickname("default"),
-    var status: MutableState<PlayerStatus> = mutableStateOf(PlayerStatus.NOT_READY),
-    var id: PlayerId? = null
-)
+    var id: PlayerId = PlayerId(2137)
+) {
+    var status: MutableState<PlayerStatus> = mutableStateOf(PlayerStatus.NOT_READY)
+
+}

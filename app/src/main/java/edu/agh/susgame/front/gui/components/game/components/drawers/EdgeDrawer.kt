@@ -3,7 +3,6 @@ package edu.agh.susgame.front.gui.components.game.components.drawers
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -84,7 +83,7 @@ fun EdgeDrawer(gameManager: GameManager) {
 
                         drawPath(
                             path = playerPath,
-                            color = Color.Red,
+                            color = Color(0xFF000000 or hexColor),
                             style = Stroke(
                                 width = 7f,
                                 pathEffect = PathEffect.dashPathEffect(

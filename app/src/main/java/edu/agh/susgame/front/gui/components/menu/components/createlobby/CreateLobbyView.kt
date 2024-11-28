@@ -60,10 +60,10 @@ fun CreateLobbyView(
 
             GamePinComp(
                 gamePin = gamePin,
-                onGamePinChange = { gamePin = it },
                 showPassword = showPassword,
-                onShowPasswordChange = { showPassword = it },
                 isGamePinEnabled = isGamePinEnabled,
+                onGamePinChange = { gamePin = it },
+                onShowPasswordChange = { showPassword = it },
                 onGamePinEnabledChange = { isGamePinEnabled = it }
             )
 

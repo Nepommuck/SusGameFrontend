@@ -70,16 +70,12 @@ private fun handlePlayerStatusChange(
     lobbyManager: LobbyManager,
     gameService: GameService
 ) {
-    lobbyManager.localPlayer.id?.let { localId ->
-        if (id == localId) {
-            val currentStatus = lobbyManager.getPlayerStatus(localId)
-            val newStatus = if (currentStatus == PlayerStatus.READY) {
-                PlayerStatus.NOT_READY
-            } else {
-                PlayerStatus.READY
-            }
-            gameService.sendChangingStateRequest(localId, newStatus)
-            lobbyManager.updatePlayerStatus(localId, newStatus)
-        }
+    val localId = lobbyManager.localPlayer.id
+    if (id == localId) {
+        val currentStatus = lobbyManager.getPlayerStatus(localId)
+        val newStatus =
+            if (currentStatus == PlayerStatus.READY) PlayerStatus.NOT_READY else PlayerStatus.READY
+        gameService.sendChangePlayerReadinessRequest(localId, newStatus)
+        lobbyManager.updatePlayerStatus(localId, newStatus)
     }
 }

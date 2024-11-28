@@ -64,7 +64,6 @@ fun MenuNavigationHost(
                 ?.run {
                     LobbyId(this)
                 }
-            println("NAVCONTROLLER")
             if (lobbyId != null) lobbyService.lobbyManager?.let {
                 GameView(
                     menuNavController,

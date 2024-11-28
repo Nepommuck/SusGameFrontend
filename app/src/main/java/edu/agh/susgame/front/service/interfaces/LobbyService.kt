@@ -7,7 +7,7 @@ import edu.agh.susgame.front.managers.LobbyManager
 import java.util.concurrent.CompletableFuture
 
 interface LobbyService {
-    abstract val lobbyManager: LobbyManager?
+    val lobbyManager: LobbyManager?
 
     fun addLobbyManager(lobbyManager: LobbyManager)
     fun getAll(): CompletableFuture<Map<LobbyId, Lobby>>

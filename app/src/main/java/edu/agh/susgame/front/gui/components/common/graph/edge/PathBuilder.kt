@@ -11,7 +11,7 @@ class PathBuilder(val serverId: NodeId) {
     fun addNode(nodeId: NodeId) {
         if (isNodeValid(nodeId)) {
             path.add(nodeId)
-            checkValidity()
+            updateValidity()
         }
     }
 
@@ -25,16 +25,14 @@ class PathBuilder(val serverId: NodeId) {
         return !path.contains(nodeId)
     }
 
-    private fun checkValidity() {
+    private fun updateValidity() {
         this.isPathValid.value = path.lastOrNull() == serverId
     }
 
-    fun getPathString(): String {
-        return path.joinToString(", ") { it.value.toString() }
-    }
+    override fun toString(): String = path.joinToString(", ") { it.value.toString() }
 
     fun reset() {
         this.path.clear()
-        this.isPathValid.value=false
+        this.isPathValid.value = false
     }
 }

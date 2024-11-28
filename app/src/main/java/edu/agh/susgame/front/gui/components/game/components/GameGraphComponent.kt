@@ -46,13 +46,13 @@ internal fun GameGraphComponent(
     gameService: GameService
 ) {
     LaunchedEffect(Unit) {
-        gameService.addGameManager(gameManager)
+        gameService.initGameManager(gameManager)
         gameManager.addGameService(gameService)
         gameService.sendStartGame()
     }
 
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
-    var changingPath by gameManager.changingPath
+    var changingPath by gameManager.isPathBeingChanged
     val pathBuilder by gameManager.pathBuilder
     val isPathValid by gameManager.pathBuilder.value.isPathValid
     var isComputerViewVisible by remember { mutableStateOf(false) }

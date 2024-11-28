@@ -15,14 +15,14 @@ interface GameService {
 
     val messagesFlow: SharedFlow<SimpleMessage>
 
-    fun addGameManager(gameManager: GameManager)
+    fun initGameManager(gameManager: GameManager)
 
-    fun addLobbyManager(lobbyManager: LobbyManager)
+    fun initLobbyManager(lobbyManager: LobbyManager)
 
     // SOCKETS
     fun sendLeavingRequest(playerId: PlayerId)
 
-    fun sendChangingStateRequest(playerId: PlayerId, status: PlayerStatus)
+    fun sendChangePlayerReadinessRequest(playerId: PlayerId, status: PlayerStatus)
 
     fun sendSimpleMessage(message: String)
 

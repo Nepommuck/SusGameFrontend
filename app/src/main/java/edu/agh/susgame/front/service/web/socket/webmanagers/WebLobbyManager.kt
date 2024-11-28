@@ -6,8 +6,6 @@ import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.managers.LobbyManager
-import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.service.web.webservices.WebLobbyService
 
 class WebLobbyManager(
     private val lobbyManager: LobbyManager
@@ -34,7 +32,7 @@ class WebLobbyManager(
     }
 
     fun handlePlayerLeavingResponse(decodedMessage: ServerSocketMessage.PlayerLeaving) {
-        lobbyManager.deletePlayer(PlayerId(decodedMessage.playerId))
+        lobbyManager.removePlayer(PlayerId(decodedMessage.playerId))
     }
 
     fun handleIdConfig(decodedMessage: ServerSocketMessage.IdConfig) {

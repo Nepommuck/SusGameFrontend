@@ -27,7 +27,7 @@ class GameManager(
     val packetsToWin: Int = 100,
     val localPlayerId: PlayerId,
     private var gameService: GameService? = null,
-    val changingPath: MutableState<Boolean> = mutableStateOf(false)
+    val isPathBeingChanged: MutableState<Boolean> = mutableStateOf(false)
 ) {
     // ADDERS
     fun addGameService(gameService: GameService) {
@@ -39,7 +39,7 @@ class GameManager(
         .associateBy { it.playerId }
         .mapValues { it.value.id }
 
-    val playerIdByHostId: Map<NodeId, PlayerId> =
+    private val playerIdByHostId: Map<NodeId, PlayerId> =
         hostIdByPlayerId.entries.associate { (playerId, nodeId) -> nodeId to playerId }
 
     val nodesById: Map<NodeId, Node> = nodesList.associateBy { it.id }
@@ -124,7 +124,7 @@ class GameManager(
     }
 
     fun updatePathsFromServer(decodedMessage: ServerSocketMessage.GameState) {
-        decodedMessage.hosts.forEach() { host ->
+        decodedMessage.hosts.forEach { host ->
             val path = listOf(host.id) + host.packetRoute
             for (i in 0 until path.size - 1) {
                 if (playerIdByHostId[NodeId(host.id)] != localPlayerId) {
