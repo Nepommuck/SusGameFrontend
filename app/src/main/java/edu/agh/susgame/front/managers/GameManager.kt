@@ -63,7 +63,25 @@ class GameManager(
     val pathsByPlayerId: SnapshotStateMap<PlayerId, Path> = mutableStateMapOf()
 
     // TODO GAME-54 Undo this
-    val chatMessages: MutableSet<String> = mutableSetOf("Hello there", "You all")
+    val chatMessages: MutableSet<String> = mutableSetOf(
+        "Hello there",
+        "You all",
+        "You all",
+        "You all",
+        "You all",
+        "You all",
+        "You all",
+        "You all",
+        "You all",
+        "You all",
+        "You all",
+        "You all",
+        "You all",
+        "You all",
+        "You all",
+        "You all",
+        "You all",
+    )
 //    val chatMessages: MutableSet<String> = mutableSetOf()
 
     val packetsReceived: MutableState<Int> = mutableIntStateOf(0)
