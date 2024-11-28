@@ -10,5 +10,4 @@ class PlayerLobby(
     var id: PlayerId = PlayerId(2137)
 ) {
     var status: MutableState<PlayerStatus> = mutableStateOf(PlayerStatus.NOT_READY)
-
 }

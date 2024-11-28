@@ -12,6 +12,7 @@ import edu.agh.susgame.dto.rest.model.GameMapDTO
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.config.utils.Configuration.WebConfig
+import edu.agh.susgame.front.service.web.IpAddressProvider
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -19,8 +20,10 @@ import java.net.HttpURLConnection
 import java.util.concurrent.CompletableFuture
 
 
-class GamesRestImpl(webConfig: WebConfig) : GamesRest,
-    AbstractRest(webConfig, endpointName = "games") {
+class GamesRestImpl(
+    override val webConfig: WebConfig,
+    override val ipAddressProvider: IpAddressProvider
+) : GamesRest, AbstractRest(endpointName = "games") {
 
     override fun getAllGames(): CompletableFuture<GetAllGamesApiResult> =
         CompletableFuture.supplyAsync {

@@ -18,6 +18,7 @@ import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.service.mock.MockGameService
 import edu.agh.susgame.front.service.mock.MockLobbyService
+import edu.agh.susgame.front.service.web.IpAddressProvider
 import edu.agh.susgame.front.service.web.rest.GamesRestImpl
 import edu.agh.susgame.front.service.web.webservices.WebGameService
 import edu.agh.susgame.front.service.web.webservices.WebLobbyService
@@ -29,7 +30,12 @@ class MainActivity : ComponentActivity() {
         val gameService: GameService,
     )
 
-    private val gamesRest: GamesRest = GamesRestImpl(webConfig = AppConfig.webConfig)
+    private val ipAddressProvider: IpAddressProvider = IpAddressProvider()
+
+    private val gamesRest: GamesRest = GamesRestImpl(
+        webConfig = AppConfig.webConfig,
+        ipAddressProvider = ipAddressProvider
+    )
 
     private val services = when (AppConfig.providers) {
         ProviderType.LOCAL -> {
@@ -42,7 +48,7 @@ class MainActivity : ComponentActivity() {
 
         ProviderType.WEB -> Services(
             WebLobbyService(gamesRest),
-            WebGameService(webConfiguration = AppConfig.webConfig),
+            WebGameService(AppConfig.webConfig, ipAddressProvider),
         )
     }
 
@@ -63,6 +69,7 @@ class MainActivity : ComponentActivity() {
                             navController,
                             services.lobbyService,
                             services.gameService,
+                            ipAddressProvider,
                         )
                     }
                 }

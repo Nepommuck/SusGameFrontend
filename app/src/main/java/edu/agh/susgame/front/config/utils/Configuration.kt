@@ -1,19 +1,12 @@
 package edu.agh.susgame.front.config.utils
 
-import kotlin.time.Duration
-
 interface Configuration {
     val providers: ProviderType
 
     class WebConfig(
         val protocol: String,
-        /**
-         * NOTE: This value must be changed in `app/src/main/res/xml/network_security_config.xml` as well
-         */
-        val domain: String,
+        val defaultIpAddress: String?,
         val port: Int,
-
-        val timeout: Duration,
     )
 
     val webConfig: WebConfig
@@ -36,4 +29,3 @@ interface Configuration {
 
     val gameConfig: GameConfig
 }
-

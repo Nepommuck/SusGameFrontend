@@ -114,7 +114,6 @@ class GameManager(
         chatMessages.add("[${message.author.value}]: ${message.message}")
     }
 
-
     fun updatePathFromLocal(path: Path) {
         println("Updating path from local$path")
         pathsByPlayerId[localPlayerId] = path

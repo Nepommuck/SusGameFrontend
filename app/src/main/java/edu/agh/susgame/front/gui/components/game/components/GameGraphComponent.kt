@@ -180,5 +180,6 @@ internal fun GameGraphComponent(
             isComputerVisible = isComputerViewVisible,
             setComputerViewVisibility = { visible -> setComputerViewVisibility(visible) }
         )
+
     }
 }
