@@ -5,7 +5,5 @@ import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 class Path(
     val path: List<NodeId>
 ) {
-    fun getPathString(): String {
-        return path.joinToString(", ") { it.value.toString() }
-    }
+    override fun toString() = path.joinToString(", ") { it.value.toString() }
 }

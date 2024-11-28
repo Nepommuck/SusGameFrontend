@@ -27,7 +27,8 @@ class GameManager(
     val mapSize: Coordinates,
     val packetsToWin: Int = 100,
     val localPlayerId: PlayerId,
-    private var gameService: GameService? = null
+    private var gameService: GameService? = null,
+    val isPathBeingChanged: MutableState<Boolean> = mutableStateOf(false)
 ) {
     // ADDERS
     fun addGameService(gameService: GameService) {
@@ -39,7 +40,7 @@ class GameManager(
         .associateBy { it.playerId }
         .mapValues { it.value.id }
 
-    val playerIdByHostId: Map<NodeId, PlayerId> =
+    private val playerIdByHostId: Map<NodeId, PlayerId> =
         hostIdByPlayerId.entries.associate { (playerId, nodeId) -> nodeId to playerId }
 
     val nodesById: Map<NodeId, Node> = nodesList.associateBy { it.id }
@@ -70,10 +71,26 @@ class GameManager(
 
     var pathBuilder: MutableState<PathBuilder> = mutableStateOf(PathBuilder(serverId))
 
-    // METHODS
-    fun addFirstNodeToPathBuilder(nodeId: NodeId){
+    // PRIVATE METHODS
+    private fun getEdgeId(from: NodeId, to: NodeId): EdgeId? {
+        return this.nodesIdsToEdgeId[Pair(from, to)]
+    }
+
+    private fun updateEdge(from: NodeId, to: NodeId, playerId: PlayerId?) {
+        println("Updating edge$playerId")
+        playerId?.let { edgesById[getEdgeId(from, to)]?.addPlayer(playerId) }
+    }
+
+    private fun updateEdge(edgeId: EdgeId) {
+        println("Updating edge from id$edgeId")
+        edgesById[edgeId]?.addPlayer(localPlayerId)
+    }
+
+    // PUBLIC METHODS
+    fun addFirstNodeToPathBuilder(nodeId: NodeId) {
         pathBuilder.value.addNode(nodeId)
     }
+
     fun addNodeToPathBuilder(nodeId: NodeId) {
         println("addNodeToPathBuilder")
         val edgeId = pathBuilder.value.getLastNode()?.let { lastNodeId ->
@@ -94,22 +111,8 @@ class GameManager(
         }
     }
 
-    private fun getEdgeId(from: NodeId, to: NodeId): EdgeId? {
-        return this.nodesIdsToEdgeId[Pair(from, to)]
-    }
-
     fun addMessage(message: GameService.SimpleMessage) {
         chatMessages.add("[${message.author.value}]: ${message.message}")
-    }
-
-    private fun updateEdge(from: NodeId, to: NodeId, playerId: PlayerId?) {
-        println("Updating edge$playerId")
-        playerId?.let { edgesById[getEdgeId(from, to)]?.addPlayer(playerId) }
-    }
-
-    private fun updateEdge(edgeId: EdgeId) {
-        println("Updating edge from id$edgeId")
-        edgesById[edgeId]?.addPlayer(localPlayerId)
     }
 
     fun updatePathFromLocal(path: Path) {
@@ -121,14 +124,16 @@ class GameManager(
     }
 
     fun updatePathsFromServer(decodedMessage: ServerSocketMessage.GameState) {
-        decodedMessage.hosts.forEach() { host ->
+        decodedMessage.hosts.forEach { host ->
             val path = listOf(host.id) + host.packetRoute
-            for (i in 0 until path.size - 2) {
-                updateEdge(
-                    NodeId(path[i]),
-                    NodeId(path[i+1]),
-                    playerIdByHostId[NodeId(host.id)]
-                )
+            for (i in 0 until path.size - 1) {
+                if (playerIdByHostId[NodeId(host.id)] != localPlayerId) {
+                    updateEdge(
+                        NodeId(path[i]),
+                        NodeId(path[i + 1]),
+                        playerIdByHostId[NodeId(host.id)]
+                    )
+                }
             }
         }
     }

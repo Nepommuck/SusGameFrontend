@@ -24,10 +24,10 @@ import edu.agh.susgame.front.gui.components.common.util.Translation
 @Composable
 fun GamePinComp(
     gamePin: String,
-    onGamePinChange: (String) -> Unit,
     showPassword: Boolean,
-    onShowPasswordChange: (Boolean) -> Unit,
     isGamePinEnabled: Boolean,
+    onGamePinChange: (String) -> Unit,
+    onShowPasswordChange: (Boolean) -> Unit,
     onGamePinEnabledChange: (Boolean) -> Unit
 ) {
     Row(

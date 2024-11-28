@@ -29,4 +29,3 @@ interface Configuration {
 
     val gameConfig: GameConfig
 }
-

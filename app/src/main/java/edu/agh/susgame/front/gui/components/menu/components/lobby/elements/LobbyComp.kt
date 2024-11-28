@@ -50,8 +50,8 @@ internal fun LobbyComp(
                 lobbyService = lobbyService,
                 id = lobbyInit.id,
                 name = lobbyInit.name,
-                maxNumOfPlayers = lobbyInit.maxNumOfPlayers,
-                gameTime = lobbyInit.gameTime
+//                maxNumOfPlayers = lobbyInit.maxNumOfPlayers,
+//                gameTime = lobbyInit.gameTime
             )
         )
     }
@@ -67,7 +67,7 @@ internal fun LobbyComp(
     LaunchedEffect(lobbyManager) {
         lobbyManager.updateFromRest(lobbyInit)
         lobbyService.addLobbyManager(lobbyManager)
-        gameService.addLobbyManager(lobbyManager)
+        gameService.initLobbyManager(lobbyManager)
     }
 
     Column(modifier = Modifier.padding(PaddingL)) {
@@ -79,7 +79,7 @@ internal fun LobbyComp(
                     .weight(1f)
             ) {
                 Text(
-                    text = "${Translation.Lobby.nPlayersAwaiting(lobbyManager.getHowManyPlayersInLobby())}:",
+                    text = "${Translation.Lobby.nPlayersAwaiting(lobbyManager.countPlayers())}:",
                     Modifier.padding(vertical = PaddingS)
                 )
                 LazyColumn(
@@ -116,8 +116,8 @@ internal fun LobbyComp(
                         value = playerNicknameInputValue,
                         onValueChange = { newValue ->
                             playerNicknameInputValue = newValue
-                            updateNicknameIfValid(newValue) { updatedNickname ->
-                                currentNickname = updatedNickname
+                            updateNicknameOrInvalidate(newValue) { validatedNicknameOrNull ->
+                                currentNickname = validatedNicknameOrNull
                             }
                         },
                         label = { Text(text = Translation.Lobby.CHOOSE_NICKNAME) },
@@ -155,7 +155,7 @@ internal fun LobbyComp(
                             if (!isGameReady) {
                                 gameService.sendStartGame()
                             } else {
-                                navController.navigate("${MenuRoute.Game.route}/${lobbyManager.id?.value}")
+                                navController.navigate("${MenuRoute.Game.route}/${lobbyManager.id.value}")
                             }
 
                         }) {
@@ -197,17 +197,13 @@ internal fun LobbyComp(
 fun isNicknameError(currentNickname: PlayerNickname?, playerNicknameInputValue: String) =
     currentNickname == null && playerNicknameInputValue.isNotEmpty()
 
-fun updateNicknameIfValid(
-    newNickname: String,
+fun updateNicknameOrInvalidate(
+    newNicknameInputValue: String,
     onNicknameChanged: (PlayerNickname?) -> Unit
 ) {
-    val trimmedNickname = newNickname.trim()
+    val trimmedNickname = newNicknameInputValue.trim()
     onNicknameChanged(
-        if (trimmedNickname.any { it.isWhitespace() }) {
-            null
-        } else {
-            PlayerNickname(trimmedNickname)
-        }
+        if (trimmedNickname.any { it.isWhitespace() }) null else PlayerNickname(trimmedNickname)
     )
 }
 
@@ -225,7 +221,7 @@ fun handleLeaveButtonClick(
             navController.navigate(MenuRoute.SearchLobby.route)
         }
     } else {
-        lobbyManager.localPlayer.id?.let { gameService.sendLeavingRequest(it) } // SOCKET
+        gameService.sendLeavingRequest(lobbyManager.localPlayer.id)
         gameService.leaveLobby().thenRun {
             setHasPlayerJoined(false)
             CoroutineScope(Dispatchers.Main).launch {

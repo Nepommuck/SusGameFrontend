@@ -1,13 +1,11 @@
 package edu.agh.susgame.front.service.web.socket
 
 import edu.agh.susgame.dto.socket.ServerSocketMessage
-import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.LobbyManager
-import edu.agh.susgame.front.service.interfaces.LobbyService
+import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 import edu.agh.susgame.front.service.web.socket.webmanagers.WebGameManager
 import edu.agh.susgame.front.service.web.socket.webmanagers.WebLobbyManager
-import edu.agh.susgame.front.service.web.webservices.WebLobbyService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -105,6 +103,7 @@ class GameWebSocketListener : WebSocketListener() {
                 is ServerSocketMessage.PlayerLeaving -> {
                     webLobbyManager?.handlePlayerLeavingResponse(decodedMessage)
                 }
+
                 is ServerSocketMessage.IdConfig -> {
                     webLobbyManager?.handleIdConfig(decodedMessage)
                 }
@@ -112,6 +111,7 @@ class GameWebSocketListener : WebSocketListener() {
                 is ServerSocketMessage.QuizQuestionDTO -> {
                     webGameManager?.handlerQuizQuestion(decodedMessage)
                 }
+
                 is ServerSocketMessage.GameStarted -> {
                     webLobbyManager?.handleGameStarted(decodedMessage)
                 }

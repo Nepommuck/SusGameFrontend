@@ -29,8 +29,7 @@ import java.util.concurrent.CompletableFuture
 class WebGameService(
     override val webConfig: Configuration.WebConfig,
     override val ipAddressProvider: IpAddressProvider
-) : GameService,
-    AbstractRest(endpointName = "games") {
+) : GameService, AbstractRest(endpointName = "games") {
 
     private val client = OkHttpClient()
     private val listener = GameWebSocketListener()
@@ -38,9 +37,6 @@ class WebGameService(
     private var socket: WebSocket? = null
     private var currentLobbyId: LobbyId? = null
     private var playerNickname: PlayerNickname? = null
-
-    private var gameManager: GameManager? = null
-    private var lobbyManager: LobbyManager? = null
 
     override val messagesFlow = listener.messagesFlow
 
@@ -59,13 +55,11 @@ class WebGameService(
         }
     }
 
-    override fun addGameManager(gameManager: GameManager) {
-        this.gameManager = gameManager
+    override fun initGameManager(gameManager: GameManager) {
         listener.initWebGameManager(gameManager)
     }
 
-    override fun addLobbyManager(lobbyManager: LobbyManager) {
-        this.lobbyManager = lobbyManager
+    override fun initLobbyManager(lobbyManager: LobbyManager) {
         listener.initWebLobbyManager(lobbyManager)
     }
 
@@ -107,7 +101,7 @@ class WebGameService(
         )
     }
 
-    override fun sendChangingStateRequest(playerId: PlayerId, status: PlayerStatus) {
+    override fun sendChangePlayerReadinessRequest(playerId: PlayerId, status: PlayerStatus) {
         val stateValue: Boolean = when (status) {
             PlayerStatus.READY -> true
             PlayerStatus.NOT_READY -> false
@@ -135,7 +129,7 @@ class WebGameService(
         sendClientSocketMessage(
             clientSocketMessage = ClientSocketMessage.HostDTO(
                 id = hostId.value,
-                packetPath = packetPath.map {it.value},
+                packetPath = packetPath.map { it.value },
                 packetsSentPerTick = packetsSentPerTick,
             )
         )

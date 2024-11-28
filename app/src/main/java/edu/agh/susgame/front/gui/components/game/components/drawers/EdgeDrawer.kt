@@ -84,7 +84,7 @@ fun EdgeDrawer(gameManager: GameManager) {
 
                         drawPath(
                             path = playerPath,
-                            color = Color.Red,
+                            color = Color(0xFF000000 or hexColor),
                             style = Stroke(
                                 width = 7f,
                                 pathEffect = PathEffect.dashPathEffect(
