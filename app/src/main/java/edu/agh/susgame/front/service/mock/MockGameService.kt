@@ -4,10 +4,12 @@ import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
+import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
+import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
+import edu.agh.susgame.front.managers.GameManager
+import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
-import edu.agh.susgame.front.ui.graph.GameManager
-import edu.agh.susgame.front.ui.graph.node.NodeId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,6 +17,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.util.concurrent.CompletableFuture
 
+
+// IGNORE THIS, ITS GONNA BE DELETED
 class MockGameService(private val lobbyService: MockLobbyService) : GameService {
     private val _messagesFlow = MutableSharedFlow<SimpleMessage>()
 
@@ -22,7 +26,13 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
 
     override val messagesFlow = _messagesFlow.asSharedFlow()
 
-    override fun initGameFront(gameManager: GameManager) {}
+    override fun initGameManager(gameManager: GameManager) {}
+
+    override fun initLobbyManager(lobbyManager: LobbyManager) {}
+
+    override fun sendLeavingRequest(playerId: PlayerId) {}
+
+    override fun sendChangePlayerReadinessRequest(playerId: PlayerId, status: PlayerStatus) {}
 
     override fun sendStartGame() {}
 
@@ -59,5 +69,6 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
         hostId: NodeId,
         packetPath: List<NodeId>,
         packetsSentPerTick: Int,
-    ) {}
+    ) {
+    }
 }

@@ -1,8 +1,11 @@
 package edu.agh.susgame.front.service.web.socket
 
 import edu.agh.susgame.dto.socket.ServerSocketMessage
+import edu.agh.susgame.front.managers.GameManager
+import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
-import edu.agh.susgame.front.ui.graph.GameManager
+import edu.agh.susgame.front.service.web.socket.webmanagers.WebGameManager
+import edu.agh.susgame.front.service.web.socket.webmanagers.WebLobbyManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,10 +32,17 @@ class GameWebSocketListener : WebSocketListener() {
 
     val messagesFlow: SharedFlow<SimpleMessage> = _messagesFlow.asSharedFlow()
 
-    private var webManager: WebManager? = null
+    private var webGameManager: WebGameManager? = null
 
-    fun initWebManager(gameManager: GameManager) {
-        this.webManager = WebManager(gameManager)
+    private var webLobbyManager: WebLobbyManager? = null
+
+
+    fun initWebGameManager(gameManager: GameManager) {
+        this.webGameManager = WebGameManager(gameManager)
+    }
+
+    fun initWebLobbyManager(lobbyManager: LobbyManager) {
+        this.webLobbyManager = WebLobbyManager(lobbyManager)
     }
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
@@ -42,7 +52,6 @@ class GameWebSocketListener : WebSocketListener() {
             _socketOpenedFlow.emit(webSocket)
         }
     }
-
 
     override fun onMessage(webSocket: WebSocket, text: String) {
         println("WebSocket Receiving text: $text")
@@ -72,18 +81,40 @@ class GameWebSocketListener : WebSocketListener() {
 
             when (decodedMessage) {
                 is ServerSocketMessage.ChatMessage -> {
-                    webManager?.handleChatMessage(decodedMessage)
+                    webGameManager?.handleChatMessage(decodedMessage)
                 }
 
                 is ServerSocketMessage.GameState -> {
-                    webManager?.handleGameState(decodedMessage)
+                    webGameManager?.handleGameState(decodedMessage)
                 }
 
                 is ServerSocketMessage.ServerError -> {
-                    webManager?.handleServerError(decodedMessage)
+                    webGameManager?.handleServerError(decodedMessage)
                 }
 
-                is ServerSocketMessage.QuizQuestionDTO -> TODO()
+                is ServerSocketMessage.PlayerChangeReadiness -> {
+                    webLobbyManager?.handlePlayerChangingReadinessResponse(decodedMessage)
+                }
+
+                is ServerSocketMessage.PlayerJoining -> {
+                    webLobbyManager?.handlePlayerJoiningResponse(decodedMessage)
+                }
+
+                is ServerSocketMessage.PlayerLeaving -> {
+                    webLobbyManager?.handlePlayerLeavingResponse(decodedMessage)
+                }
+
+                is ServerSocketMessage.IdConfig -> {
+                    webLobbyManager?.handleIdConfig(decodedMessage)
+                }
+
+                is ServerSocketMessage.QuizQuestionDTO -> {
+                    webGameManager?.handlerQuizQuestion(decodedMessage)
+                }
+
+                is ServerSocketMessage.GameStarted -> {
+                    webLobbyManager?.handleGameStarted(decodedMessage)
+                }
             }
         }
     }

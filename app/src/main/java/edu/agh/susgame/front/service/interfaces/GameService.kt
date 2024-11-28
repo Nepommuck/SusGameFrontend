@@ -1,9 +1,12 @@
 package edu.agh.susgame.front.service.interfaces
 
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
-import edu.agh.susgame.front.ui.graph.GameManager
-import edu.agh.susgame.front.ui.graph.node.NodeId
+import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
+import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
+import edu.agh.susgame.front.managers.GameManager
+import edu.agh.susgame.front.managers.LobbyManager
 import kotlinx.coroutines.flow.SharedFlow
 import java.util.concurrent.CompletableFuture
 
@@ -12,13 +15,14 @@ interface GameService {
 
     val messagesFlow: SharedFlow<SimpleMessage>
 
-    fun initGameFront(gameManager: GameManager)
+    fun initGameManager(gameManager: GameManager)
 
-    fun isPlayerInLobby(lobbyId: LobbyId): Boolean
+    fun initLobbyManager(lobbyManager: LobbyManager)
 
-    fun joinLobby(lobbyId: LobbyId, nickname: PlayerNickname): CompletableFuture<Unit>
+    // SOCKETS
+    fun sendLeavingRequest(playerId: PlayerId)
 
-    fun leaveLobby(): CompletableFuture<Unit>
+    fun sendChangePlayerReadinessRequest(playerId: PlayerId, status: PlayerStatus)
 
     fun sendSimpleMessage(message: String)
 
@@ -26,6 +30,12 @@ interface GameService {
 
     fun sendStartGame()
 
+    // REST
+    fun isPlayerInLobby(lobbyId: LobbyId): Boolean
+
+    fun joinLobby(lobbyId: LobbyId, nickname: PlayerNickname): CompletableFuture<Unit>
+
+    fun leaveLobby(): CompletableFuture<Unit>
 
     // TODO GAME-79 All specific methods like
     //  `sendRouterUpdate(routerId, newRouterParams), `notifyAboutCreditChange(int)` etc.
