@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.gui.components.common.graph.edge.Edge
@@ -65,23 +64,7 @@ class GameManager(
     // MUTABLE
     val pathsByPlayerId: SnapshotStateMap<PlayerId, Path> = mutableStateMapOf()
 
-    // TODO GAME-54 Undo this
-    val chatMessages = mutableStateListOf(
-        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
-        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
-        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
-        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
-        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
-        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
-        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
-        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
-        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
-        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
-        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
-        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
-        SimpleMessage(PlayerNickname("Ignacy"), "Hello there"),
-    )
-//    val chatMessages: MutableSet<String> = mutableSetOf()
+    val chatMessages = mutableStateListOf<SimpleMessage>()
 
     val packetsReceived: MutableState<Int> = mutableIntStateOf(0)
 

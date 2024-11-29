@@ -34,6 +34,6 @@ fun DesktopIconButton(
 }
 
 @Composable
-fun DesktopIconMock() {
+fun DesktopIconPlaceholder() {
     Box(modifier = Modifier.size(BUTTON_SIZE))
 }

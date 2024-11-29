@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,9 +17,11 @@ import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.theme.PaddingM
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.game.components.computer.chat.components.ChatButtons
+import edu.agh.susgame.front.gui.components.game.components.computer.chat.components.ChatMessages
 import edu.agh.susgame.front.gui.components.game.components.computer.chat.components.NewChatMessageInput
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.service.interfaces.GameService
+
 
 object ChatColors {
     val TEXT = Color.Green
@@ -54,17 +54,9 @@ fun ChatComponent(
             newMessageInputValue, gameService, gameManager
         )
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-        ) {
-            gameManager.chatMessages.reversed().forEach { message ->
-                Text(
-                    text = "> [${message.author.value}]: ${message.message}",
-                    color = Color.Green,
-                )
-            }
-        }
+        ChatMessages(
+            chatMessages = gameManager.chatMessages,
+            chatScrollState = scrollState,
+        )
     }
 }

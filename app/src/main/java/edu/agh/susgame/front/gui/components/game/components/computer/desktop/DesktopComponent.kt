@@ -7,22 +7,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import edu.agh.susgame.R
+import edu.agh.susgame.front.gui.components.game.components.computer.ComputerState
+import edu.agh.susgame.front.gui.components.game.components.computer.MiniGame
 import edu.agh.susgame.front.gui.components.game.components.computer.desktop.components.DesktopIconButton
-import edu.agh.susgame.front.gui.components.game.components.computer.desktop.components.DesktopIconMock
+import edu.agh.susgame.front.gui.components.game.components.computer.desktop.components.DesktopIconPlaceholder
 
 
 @Composable
-fun DesktopComponent() {
-    var msg by remember { mutableStateOf("") }
-
+fun DesktopComponent(computerState: MutableState<ComputerState>) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -36,13 +33,17 @@ fun DesktopComponent() {
             DesktopIconButton(
                 painter = painterResource(id = R.drawable.computer_icon_tree),
                 imageDescription = "icon-tree",
-                onClick = { msg = "$msg#" },
+                onClick = {
+                    computerState.value = ComputerState.MiniGameOpened(MiniGame.MiniGame1)
+                },
             )
 
             DesktopIconButton(
                 painter = painterResource(id = R.drawable.computer_icon_gear),
                 imageDescription = "icon-gear",
-                onClick = { msg = "$msg#" },
+                onClick = {
+                    computerState.value = ComputerState.MiniGameOpened(MiniGame.MiniGame2)
+                },
             )
         }
 
@@ -51,12 +52,12 @@ fun DesktopComponent() {
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
             DesktopIconButton(
-                painter = painterResource(id = R.drawable.computer_icon_themes),
-                imageDescription = "icon-themes",
-                onClick = { msg = "$msg#" },
+                painter = painterResource(id = R.drawable.computer_icon_envelope),
+                imageDescription = "icon-envelope",
+                onClick = { computerState.value = ComputerState.ChatOpened },
             )
 
-            DesktopIconMock()
+            DesktopIconPlaceholder()
         }
     }
 }
