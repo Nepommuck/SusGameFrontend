@@ -30,7 +30,7 @@ fun MenuNavigationHost(
             MainMenuView(menuNavController, ipAddressProvider)
 
             // TODO Cleanup one day
-            //  VeryUseful for development
+            // Very useful for development purposes
 //            ComputerComponent(
 //                gameService, GameManager(
 //                    nodesList = emptyList(),
