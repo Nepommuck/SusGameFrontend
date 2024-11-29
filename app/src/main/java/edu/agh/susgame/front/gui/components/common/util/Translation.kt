@@ -62,7 +62,6 @@ object Translation {
         const val SERVER = "Serwer"
         const val ACCEPT_PATH = "Zatwierdź ścieżkę"
         const val ABORT_PATH = "Anuluj ścieżkę"
-        const val CHANGE_PATH = "Zmień ścieżkę"
     }
 
     object Error {

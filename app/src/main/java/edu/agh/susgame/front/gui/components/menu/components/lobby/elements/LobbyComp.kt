@@ -1,6 +1,5 @@
 package edu.agh.susgame.front.gui.component.menu.components.lobby.elements
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -85,8 +84,7 @@ internal fun LobbyComp(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(PaddingL)
-                        .background(Color.Cyan),
+                        .padding(PaddingL),
                 ) {
                     items(lobbyManager.playersMap.toList()) { (id, player) ->
                         PlayerRow(
