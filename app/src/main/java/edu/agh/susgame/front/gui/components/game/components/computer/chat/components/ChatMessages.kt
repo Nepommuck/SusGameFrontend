@@ -8,7 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import edu.agh.susgame.front.gui.components.game.components.computer.chat.ChatColors
 import edu.agh.susgame.front.service.interfaces.GameService
 
 
@@ -25,7 +25,7 @@ fun ChatMessages(
         chatMessages.reversed().forEach { message ->
             Text(
                 text = "> [${message.author.value}]: ${message.message}",
-                color = Color.Green,
+                color = ChatColors.TEXT,
             )
         }
     }

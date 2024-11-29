@@ -14,6 +14,7 @@ import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.service.web.IpAddressProvider
 
+
 @Composable
 fun MenuNavigationHost(
     menuNavController: NavHostController,

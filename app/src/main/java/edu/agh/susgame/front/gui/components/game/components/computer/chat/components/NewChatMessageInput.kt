@@ -7,8 +7,8 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
+import edu.agh.susgame.front.gui.components.game.components.computer.chat.ChatColors
 
 
 @Composable
@@ -23,11 +23,11 @@ fun NewChatMessageInput(
         onValueChange = { inputValue.value = it },
         singleLine = true,
         colors = OutlinedTextFieldDefaults.colors().copy(
-            focusedTextColor = Color.Green,
-            unfocusedTextColor = Color.Green,
-            cursorColor = Color.Green,
-            focusedIndicatorColor = Color.Green,
-            unfocusedIndicatorColor = Color.Green,
+            focusedTextColor = ChatColors.TEXT,
+            unfocusedTextColor = ChatColors.TEXT,
+            cursorColor = ChatColors.TEXT,
+            focusedIndicatorColor = ChatColors.TEXT,
+            unfocusedIndicatorColor = ChatColors.TEXT,
         )
     )
 }

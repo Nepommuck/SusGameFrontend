@@ -8,11 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import edu.agh.susgame.front.gui.components.game.components.computer.chat.ChatColors
 import edu.agh.susgame.front.gui.components.game.components.computer.chat.ChatComponent
 import edu.agh.susgame.front.gui.components.game.components.computer.desktop.DesktopComponent
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.service.interfaces.GameService
+
 
 @Composable
 fun ComputerComponent(
@@ -23,7 +24,7 @@ fun ComputerComponent(
 
     Row(
         modifier = Modifier
-            .background(Color.Black)
+            .background(ChatColors.BACKGROUND)
     ) {
         Box(modifier = Modifier.weight(1f)) {
             DesktopComponent(computerState)

@@ -44,7 +44,7 @@ fun ChatComponent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(PaddingM),
     ) {
-        Header(title = Translation.Game.CHAT, color = Color.Green)
+        Header(title = Translation.Game.CHAT, color = ChatColors.TEXT)
 
         NewChatMessageInput(inputValue = newMessageInputValue)
 
