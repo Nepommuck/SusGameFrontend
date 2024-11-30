@@ -2,6 +2,7 @@ package edu.agh.susgame.front.managers
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
@@ -17,6 +18,7 @@ import edu.agh.susgame.front.gui.components.common.graph.node.Node
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.util.Coordinates
 import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 
 class GameManager(
     val nodesList: List<Node>,
@@ -62,7 +64,7 @@ class GameManager(
     // MUTABLE
     val pathsByPlayerId: SnapshotStateMap<PlayerId, Path> = mutableStateMapOf()
 
-    val chatMessages: MutableSet<String> = mutableSetOf()
+    val chatMessages = mutableStateListOf<SimpleMessage>()
 
     val packetsReceived: MutableState<Int> = mutableIntStateOf(0)
 
@@ -110,8 +112,8 @@ class GameManager(
         }
     }
 
-    fun addMessage(message: GameService.SimpleMessage) {
-        chatMessages.add("[${message.author.value}]: ${message.message}")
+    fun addMessage(message: SimpleMessage) {
+        chatMessages.add(message)
     }
 
     fun updatePathFromLocal(path: Path) {
