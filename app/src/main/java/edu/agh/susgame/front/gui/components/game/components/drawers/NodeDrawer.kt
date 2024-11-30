@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.front.gui.components.common.graph.node.Host
 import edu.agh.susgame.front.gui.components.common.graph.node.Node
-import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.graph.node.Router
 import edu.agh.susgame.front.gui.components.common.graph.node.Server
 import edu.agh.susgame.front.managers.GameManager
@@ -29,10 +28,7 @@ import edu.agh.susgame.front.managers.GameManager
 private const val SCALE_FACTOR = 0.04f
 
 @Composable
-fun NodeDrawer(
-    gameManager: GameManager,
-    onInspectedNodeChange: (NodeId?) -> Unit,
-) {
+fun NodeDrawer(gameManager: GameManager) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -63,7 +59,7 @@ fun NodeDrawer(
                     if (gameManager.gameStateManager.isPathBeingChanged.value) {
                         gameManager.addNodeToPathBuilder(node.id)
                     } else {
-                        onInspectedNodeChange(node.id)
+                        gameManager.gameStateManager.currentlyInspectedNode.value = node
                     }
                 }) {
                 Image(

@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.socket.common.GameStatus
-import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.Calculate
 import edu.agh.susgame.front.gui.components.common.util.Translation
@@ -56,7 +55,6 @@ internal fun GameGraphComponent(
     }
 
     val gameState = gameManager.gameStateManager
-    var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
     val isPathValid by gameManager.pathBuilder.isPathValid
     var isComputerViewVisible by remember { mutableStateOf(false) }
 
@@ -103,26 +101,21 @@ internal fun GameGraphComponent(
 
         ) {
 
-            EdgeDrawer(gameManager = gameManager)
+            EdgeDrawer(gameManager)
 
-            NodeDrawer(
-                gameManager = gameManager,
-                onInspectedNodeChange = { newId -> inspectedNodeId = newId },
-            )
+            NodeDrawer(gameManager)
         }
 
-        inspectedNodeId?.let { nodeId ->
-            gameManager.nodesById[nodeId]
-                ?.takeIf { !gameState.isPathBeingChanged.value }
-                ?.let { node ->
-                    NodeInfoComp(
-                        node = node,
-                        onExit = { inspectedNodeId = null },
-                        changingPath = { state -> gameState.isPathBeingChanged.value = state },
-                        gameManager = gameManager
-                    )
-                }
-        }
+        gameState.currentlyInspectedNode.value
+            ?.takeIf { !gameState.isPathBeingChanged.value }
+            ?.let { node ->
+                NodeInfoComp(
+                    node = node,
+                    onExit = { gameState.currentlyInspectedNode.value = null },
+                    changingPath = { state -> gameState.isPathBeingChanged.value = state },
+                    gameManager = gameManager,
+                )
+            }
 
         Box(
             modifier = Modifier
@@ -165,7 +158,7 @@ internal fun GameGraphComponent(
                                     if (isPathValid) {
                                         gameManager.handlePathChange()
                                         gameState.isPathBeingChanged.value = false
-                                        inspectedNodeId = null
+                                        gameState.currentlyInspectedNode.value = null
                                     }
                                 }
                         )
