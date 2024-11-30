@@ -5,7 +5,9 @@ import edu.agh.susgame.front.gui.components.common.graph.node.Node
 
 
 class GameStateManager {
+    val currentlyInspectedNode = mutableStateOf<Node?>(null)
+
     val isPathBeingChanged = mutableStateOf(false)
 
-    val currentlyInspectedNode = mutableStateOf<Node?>(null)
+    val isComputerViewVisible = mutableStateOf(false)
 }

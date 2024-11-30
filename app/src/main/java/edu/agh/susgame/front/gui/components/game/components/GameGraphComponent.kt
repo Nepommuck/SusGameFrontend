@@ -13,9 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -56,11 +54,6 @@ internal fun GameGraphComponent(
 
     val gameState = gameManager.gameStateManager
     val isPathValid by gameManager.pathBuilder.isPathValid
-    var isComputerViewVisible by remember { mutableStateOf(false) }
-
-    fun setComputerViewVisibility(visible: Boolean) {
-        isComputerViewVisible = visible
-    }
 
     val zoomState = remember {
         ZoomState(
@@ -168,13 +161,12 @@ internal fun GameGraphComponent(
         }
         ProgressBarComp(gameManager = gameManager)
 
-        if (isComputerViewVisible) {
+        if (gameState.isComputerViewVisible.value) {
             ComputerComponent(gameService = gameService, gameManager = gameManager)
         }
 
         NavIcons(
-            isComputerVisible = isComputerViewVisible,
-            setComputerViewVisibility = { visible -> setComputerViewVisibility(visible) }
+            isComputerVisible = gameState.isComputerViewVisible,
         )
     }
 
