@@ -31,7 +31,6 @@ private const val SCALE_FACTOR = 0.04f
 @Composable
 fun NodeDrawer(
     gameManager: GameManager,
-    changingPath: Boolean,
     onInspectedNodeChange: (NodeId?) -> Unit,
 ) {
     Box(
@@ -61,7 +60,7 @@ fun NodeDrawer(
 
                 )
                 .clickable {
-                    if (changingPath) {
+                    if (gameManager.gameStateManager.isPathBeingChanged.value) {
                         gameManager.addNodeToPathBuilder(node.id)
                     } else {
                         onInspectedNodeChange(node.id)

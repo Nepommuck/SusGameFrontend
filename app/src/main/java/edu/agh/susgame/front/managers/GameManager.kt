@@ -35,6 +35,9 @@ class GameManager(
     val packetsToWin: Int,
     val localPlayerId: PlayerId,
 ) {
+    // Shared game state
+    val gameStateManager = GameStateManager()
+
     // ATTRIBUTES - DEFAULT
     private var gameService: GameService? = null
     private val pathsByPlayerId: SnapshotStateMap<PlayerId, Path> = mutableStateMapOf()

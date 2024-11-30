@@ -52,14 +52,12 @@ internal fun GameGraphComponent(
 ) {
     LaunchedEffect(Unit) {
         gameService.initGameManager(gameManager)
-        gameManager.addGameService(gameService)
         gameService.sendStartGame()
     }
 
+    val gameState = gameManager.gameStateManager
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
-    var changingPath by remember { gameManager.isPathBeingChanged }
-
-    val isPathValid by remember { gameManager.pathBuilder.isPathValid }
+    val isPathValid by gameManager.pathBuilder.isPathValid
     var isComputerViewVisible by remember { mutableStateOf(false) }
 
     fun setComputerViewVisibility(visible: Boolean) {
@@ -109,27 +107,28 @@ internal fun GameGraphComponent(
 
             NodeDrawer(
                 gameManager = gameManager,
-                changingPath = changingPath,
                 onInspectedNodeChange = { newId -> inspectedNodeId = newId },
             )
         }
 
         inspectedNodeId?.let { nodeId ->
-            gameManager.nodesById[nodeId]?.takeIf { !changingPath }?.let { node ->
-                NodeInfoComp(
-                    node = node,
-                    onExit = { inspectedNodeId = null },
-                    changingPath = { state -> changingPath = state },
-                    gameManager = gameManager
-                )
-            }
+            gameManager.nodesById[nodeId]
+                ?.takeIf { !gameState.isPathBeingChanged.value }
+                ?.let { node ->
+                    NodeInfoComp(
+                        node = node,
+                        onExit = { inspectedNodeId = null },
+                        changingPath = { state -> gameState.isPathBeingChanged.value = state },
+                        gameManager = gameManager
+                    )
+                }
         }
 
         Box(
             modifier = Modifier
                 .align(Alignment.CenterStart)
         ) {
-            if (changingPath) {
+            if (gameState.isPathBeingChanged.value) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -143,9 +142,8 @@ internal fun GameGraphComponent(
                             contentDescription = Translation.Game.ABORT_PATH,
                             modifier = Modifier.clickable {
                                 gameManager.clearEdges(gameManager.localPlayerId)
-                                changingPath = false
+                                gameState.isPathBeingChanged.value = false
                                 gameManager.pathBuilder.reset()
-
                             }
                         )
                     }
@@ -166,7 +164,7 @@ internal fun GameGraphComponent(
                                 ) {
                                     if (isPathValid) {
                                         gameManager.handlePathChange()
-                                        changingPath = false
+                                        gameState.isPathBeingChanged.value = false
                                         inspectedNodeId = null
                                     }
                                 }
