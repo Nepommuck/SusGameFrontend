@@ -52,7 +52,7 @@ internal fun GameGraphComponent(
         gameService.sendStartGame()
     }
 
-    val gameState = gameManager.gameStateManager
+    val gameState = gameManager.gameState
     val isPathValid by gameManager.pathBuilder.isPathValid
 
     val zoomState = remember {

@@ -36,7 +36,7 @@ class GameManager(
     val localPlayerId: PlayerId,
 ) {
     // Shared game state
-    val gameStateManager = GameStateManager()
+    val gameState = GameStateManager()
 
     // ATTRIBUTES - DEFAULT
     private var gameService: GameService? = null

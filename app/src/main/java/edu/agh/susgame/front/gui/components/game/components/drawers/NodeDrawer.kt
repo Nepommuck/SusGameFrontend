@@ -56,10 +56,10 @@ fun NodeDrawer(gameManager: GameManager) {
 
                 )
                 .clickable {
-                    if (gameManager.gameStateManager.isPathBeingChanged.value) {
+                    if (gameManager.gameState.isPathBeingChanged.value) {
                         gameManager.addNodeToPathBuilder(node.id)
                     } else {
-                        gameManager.gameStateManager.currentlyInspectedNode.value = node
+                        gameManager.gameState.currentlyInspectedNode.value = node
                     }
                 }) {
                 Image(
