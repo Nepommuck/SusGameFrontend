@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,7 +37,7 @@ fun PlayerRow(
             .padding(PaddingS)
             .fillMaxWidth()
             .height(70.dp)
-            .background(Color.Gray)
+            .background(Color.Gray,shape = RoundedCornerShape(20.dp))
     ) {
         Box(
             modifier = Modifier
@@ -59,15 +60,10 @@ fun PlayerRow(
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .let {
-                        if (id == lobbyManager.localPlayer.id) {
-                            println("clicked!")
-                            it.clickable { lobbyManager.isColorBeingChanged.value = true }
-                        } else it
-                    }
             ) {
                 PlayerColorIcon(
-                    playerColor = lobbyManager.localPlayer.color,
+                    playerId = id,
+                    lobbyManager = lobbyManager
                 )
             }
             Box(

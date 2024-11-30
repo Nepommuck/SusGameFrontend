@@ -3,7 +3,6 @@ package edu.agh.susgame.front.managers
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
@@ -41,7 +40,7 @@ class LobbyManager(
     }
 
     fun addLocalPlayer() {
-        val localPlayerRest = PlayerREST(localPlayer.name, localPlayer.id, colorProvider.getColor())
+        val localPlayerRest = PlayerREST(localPlayer.name, localPlayer.id, colorProvider.getUniqueRandomColor())
         addPlayerRest(localPlayerRest)
     }
 
