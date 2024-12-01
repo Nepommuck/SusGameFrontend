@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
@@ -55,6 +56,13 @@ class LobbyManager(
     }
 
     fun countPlayers(): Int = playersMap.size
+
+    fun getPlayerColor(id: PlayerId): MutableState<Color> =
+        playersMap[id]?.color ?: mutableStateOf(Color.Gray)
+
+    fun setPlayerColor(id:PlayerId, color: Color){
+        playersMap[id]?.color?.value = color
+    }
 
 
     fun updatePlayerStatus(id: PlayerId, status: PlayerStatus) {

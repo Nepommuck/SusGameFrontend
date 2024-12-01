@@ -8,16 +8,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.dto.rest.model.PlayerId
+import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.managers.LobbyManager
 
 @Composable
 fun PlayerColorIcon(
-    playerId: PlayerId,
+    player: PlayerLobby,
     lobbyManager: LobbyManager
 ) {
     Box(
@@ -28,10 +30,10 @@ fun PlayerColorIcon(
     ) {
         Box(modifier = Modifier
             .fillMaxSize(0.9f)
-            .background(lobbyManager.localPlayer.color.value, shape = RoundedCornerShape(20.dp))
+            .background(player.color.value, shape = RoundedCornerShape(20.dp))
             .border(2.dp, Color.Black, shape = RoundedCornerShape(20.dp))
             .let {
-                if (playerId == lobbyManager.localPlayer.id) {
+                if (player.id == lobbyManager.localPlayer.id) {
                     it.clickable { lobbyManager.isColorBeingChanged.value = !lobbyManager.isColorBeingChanged.value }
                 } else it
             }

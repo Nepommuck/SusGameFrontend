@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.service.web.socket.webmanagers
 
+import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
@@ -40,11 +41,11 @@ class WebLobbyManager(
         lobbyManager.addLocalPlayer()
     }
 
-    fun test() {
-        lobbyManager.addPlayerRest(PlayerREST(PlayerNickname("TEST"), PlayerId(2), 123432))
-    }
-
     fun handleGameStarted(decodedMessage: ServerSocketMessage.GameStarted) {
         lobbyManager.getMapFromServer()
+    }
+
+    fun handleColorChange(){
+//        lobbyManager.setPlayerColor(PlayerId(0), Color.Gray)
     }
 }

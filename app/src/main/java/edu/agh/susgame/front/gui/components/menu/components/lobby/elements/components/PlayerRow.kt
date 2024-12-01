@@ -26,7 +26,6 @@ import edu.agh.susgame.front.service.interfaces.GameService
 
 @Composable
 fun PlayerRow(
-    id: PlayerId,
     player: PlayerLobby,
     lobbyManager: LobbyManager,
     gameService: GameService,
@@ -62,7 +61,7 @@ fun PlayerRow(
                     .weight(1f)
             ) {
                 PlayerColorIcon(
-                    playerId = id,
+                    player = player,
                     lobbyManager = lobbyManager
                 )
             }
@@ -73,8 +72,8 @@ fun PlayerRow(
                     .fillMaxSize()
                     .align(Alignment.CenterVertically)
                     .let {
-                        if (id == lobbyManager.localPlayer.id) {
-                            it.clickable { handlePlayerStatusChange(id, lobbyManager, gameService) }
+                        if (player.id == lobbyManager.localPlayer.id) {
+                            it.clickable { handlePlayerStatusChange(player.id, lobbyManager, gameService) }
                         } else it
                     }
             ) {

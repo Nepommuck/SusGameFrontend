@@ -92,7 +92,6 @@ internal fun LobbyComp(
                 ) {
                     items(lobbyManager.playersMap.toList()) { (id, player) ->
                         PlayerRow(
-                            id = id,
                             player = player,
                             lobbyManager = lobbyManager,
                             gameService = gameService
@@ -112,7 +111,7 @@ internal fun LobbyComp(
                     Box(modifier = Modifier.fillMaxSize().background(Color.Gray)) {
                         ColorMenuComp(
                             onColorSelected = { newColor ->
-                                lobbyManager.localPlayer.color.value = newColor
+                                lobbyManager.setPlayerColor(lobbyManager.localPlayer.id, newColor)
                                 lobbyManager.isColorBeingChanged.value = false
                             })
                     }

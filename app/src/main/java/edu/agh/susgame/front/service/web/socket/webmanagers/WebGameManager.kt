@@ -22,6 +22,10 @@ class WebGameManager(
         gameManager.updatePathsFromServer(decodedMessage)
     }
 
+    fun handlePathUpdate(){
+//        gameManager.updatePathsFromServer(decodedMessage)
+    }
+
     fun handleServerError(decodedMessage: ServerSocketMessage.ServerError) {
         println("Server error: ${decodedMessage.errorMessage}")
     }
