@@ -26,9 +26,13 @@ interface GameService {
 
     fun sendSimpleMessage(message: String)
 
-    fun sendHostUpdate(hostId: NodeId, packetPath: List<NodeId>, packetsSentPerTick: Int)
+    fun sendHostRouteUpdate(hostId: NodeId, packetPath: List<NodeId>)
+
+    fun sendHostFlow(hostId: NodeId, packets: Int)
 
     fun sendStartGame()
+
+    fun sendPlayerChangeColor(playerId: PlayerId,color: ULong)
 
     // REST
     fun isPlayerInLobby(lobbyId: LobbyId): Boolean

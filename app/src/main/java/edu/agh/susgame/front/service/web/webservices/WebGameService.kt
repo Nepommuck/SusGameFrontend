@@ -121,19 +121,36 @@ class WebGameService(
         )
     }
 
-    override fun sendHostUpdate(
-        hostId: NodeId,
-        packetPath: List<NodeId>,
-        packetsSentPerTick: Int,
-    ) {
+    override fun sendPlayerChangeColor(playerId: PlayerId, color: ULong) {
         sendClientSocketMessage(
-            clientSocketMessage = ClientSocketMessage.HostDTO(
-                id = hostId.value,
-                packetPath = packetPath.map { it.value },
-                packetsSentPerTick = packetsSentPerTick,
+            clientSocketMessage = ClientSocketMessage.PlayerChangeColor(
+                playerId = playerId.value,
+                color = color
             )
         )
     }
+
+    override fun sendHostRouteUpdate(
+        hostId: NodeId,
+        packetPath: List<NodeId>,
+    ) {
+        sendClientSocketMessage(
+            clientSocketMessage = ClientSocketMessage.HostRouteDTO(
+                id = hostId.value,
+                packetPath = packetPath.map { it.value },
+            )
+        )
+    }
+
+    override fun sendHostFlow(hostId: NodeId, packets: Int) {
+        sendClientSocketMessage(
+            clientSocketMessage = ClientSocketMessage.HostFlowDTO(
+                id = hostId.value,
+                packetsSentPerTick = packets
+            )
+        )
+    }
+
 
     @OptIn(ExperimentalSerializationApi::class)
     private fun sendClientSocketMessage(clientSocketMessage: ClientSocketMessage) {

@@ -70,7 +70,10 @@ fun NodeInfoComp(
                             Slider(
                                 value = host.packetsToSend.value.toFloat(),
                                 onValueChange = { newValue ->
-                                    host.packetsToSend.value = newValue.toInt()
+                                    gameManager.setHostFlow(
+                                        hostId = host.id,
+                                        flow = newValue.toInt()
+                                    )
                                 },
                                 valueRange = 0f..host.maxPacketsToSend.value.toFloat(),
                                 steps = 7,

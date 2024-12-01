@@ -114,6 +114,7 @@ internal fun LobbyComp(
                         ColorMenuComp(
                             onColorSelected = { newColor ->
                                 lobbyManager.setPlayerColor(lobbyManager.localPlayer.id, newColor)
+                                gameService.sendPlayerChangeColor(lobbyManager.localPlayer.id, newColor.value)
                                 lobbyManager.isColorBeingChanged.value = false
                             })
                     }

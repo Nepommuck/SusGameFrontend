@@ -35,6 +35,9 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
     override fun sendChangePlayerReadinessRequest(playerId: PlayerId, status: PlayerStatus) {}
 
     override fun sendStartGame() {}
+    override fun sendPlayerChangeColor(playerId: PlayerId, color: ULong) {
+
+    }
 
     override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
         when (val lobbyInfo = joinedLobbyInfo) {
@@ -65,10 +68,13 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
         }
     }
 
-    override fun sendHostUpdate(
-        hostId: NodeId,
-        packetPath: List<NodeId>,
-        packetsSentPerTick: Int,
-    ) {
+    override fun sendHostRouteUpdate(hostId: NodeId, packetPath: List<NodeId>) {
+
     }
+
+    override fun sendHostFlow(hostId: NodeId, packets: Int) {
+
+    }
+
+
 }

@@ -69,8 +69,6 @@ class GameManager(
 
     val chatMessages = mutableStateListOf<SimpleMessage>()
 
-    val playerMoney: MutableState<Int> = mutableIntStateOf(0)
-
     var pathBuilder: MutableState<PathBuilder> = mutableStateOf(PathBuilder(serverId))
 
     // PRIVATE METHODS
@@ -119,6 +117,13 @@ class GameManager(
         pathBuilder.value.addNode(nodeId)
     }
 
+    fun setHostFlow(hostId: NodeId, flow: Int) {
+        if (nodesById[hostId] is Host) {
+            (nodesById[hostId] as Host).packetsToSend.value = flow
+            gameService?.sendHostFlow(hostId, flow)
+        }
+    }
+
     fun repairRouter(nodeId: NodeId) {
         print("repairing router!")
         (nodesById[nodeId] as? Router?)?.isOverloaded?.value = false
@@ -155,8 +160,8 @@ class GameManager(
     fun updatePathFromLocal(path: Path) {
         println("Updating path from local$path")
         pathsByPlayerId[localPlayerId] = path
-        gameService?.sendHostUpdate(
-            path.path[0], path.path.drop(1), 2
+        gameService?.sendHostRouteUpdate(
+            path.path[0], path.path.drop(1)
         )
     }
 

@@ -67,6 +67,7 @@ class LobbyManager(
     }
 
 
+
     fun updatePlayerStatus(id: PlayerId, status: PlayerStatus) {
         playersMap[id]?.status?.value = status
     }
