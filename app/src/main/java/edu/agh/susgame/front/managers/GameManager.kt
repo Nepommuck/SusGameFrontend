@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.managers
 
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -7,7 +8,6 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.gui.components.common.graph.edge.Edge
 import edu.agh.susgame.front.gui.components.common.graph.edge.EdgeId
@@ -16,17 +16,20 @@ import edu.agh.susgame.front.gui.components.common.graph.edge.PathBuilder
 import edu.agh.susgame.front.gui.components.common.graph.node.Host
 import edu.agh.susgame.front.gui.components.common.graph.node.Node
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
+import edu.agh.susgame.front.gui.components.common.graph.node.Router
+import edu.agh.susgame.front.gui.components.common.graph.node.Server
 import edu.agh.susgame.front.gui.components.common.util.Coordinates
+import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 
 class GameManager(
     val nodesList: List<Node>,
     val edgesList: List<Edge>,
-    val playersList: List<PlayerREST>,
+    val playersList: List<PlayerLobby>,
     val serverId: NodeId,
     val mapSize: Coordinates,
-    val packetsToWin: Int = 100,
+    val packetsToWin: Int = 400,
     val localPlayerId: PlayerId,
     private var gameService: GameService? = null,
     val isPathBeingChanged: MutableState<Boolean> = mutableStateOf(false)
@@ -37,7 +40,7 @@ class GameManager(
     }
 
     // MAPS
-    private val hostIdByPlayerId: Map<PlayerId, NodeId> = nodesList.filterIsInstance<Host>()
+    val hostIdByPlayerId: Map<PlayerId, NodeId> = nodesList.filterIsInstance<Host>()
         .associateBy { it.playerId }
         .mapValues { it.value.id }
 
@@ -48,7 +51,7 @@ class GameManager(
 
     val edgesById: Map<EdgeId, Edge> = edgesList.associateBy { it.id }
 
-    val playersById: Map<PlayerId, PlayerREST> = playersList.associateBy { it.id }
+    val playersById: Map<PlayerId, PlayerLobby> = playersList.associateBy { it.id }
 
     private val nodesIdsToEdgeId = edgesList
         .associate { Pair(it.firstNodeId, it.secondNodeId) to it.id }
@@ -65,8 +68,6 @@ class GameManager(
     val pathsByPlayerId: SnapshotStateMap<PlayerId, Path> = mutableStateMapOf()
 
     val chatMessages = mutableStateListOf<SimpleMessage>()
-
-    val packetsReceived: MutableState<Int> = mutableIntStateOf(0)
 
     val playerMoney: MutableState<Int> = mutableIntStateOf(0)
 
@@ -88,8 +89,43 @@ class GameManager(
     }
 
     // PUBLIC METHODS
+    fun setServerReceivedPackets(packets: Int) {
+        (nodesById[serverId] as? Server)?.packetsReceived?.intValue = packets
+    }
+
+    fun getServerReceivedPackets(): MutableIntState =
+        (nodesById[serverId] as? Server)?.packetsReceived ?: mutableIntStateOf(2137)
+
+    fun setPlayerTokens(playerId: PlayerId, tokens: Int) {
+        playersById[playerId]?.tokens?.intValue = tokens
+    }
+
+    fun getPlayerTokens(playerId: PlayerId): MutableIntState =
+        playersById[playerId]?.tokens ?: mutableIntStateOf(2137)
+
+    fun setRouterBufferSize(nodeId: NodeId, size: Int) {
+        (nodesById[nodeId] as? Router?)?.bufferSize?.value = size
+    }
+
+    fun setRouterCurrentPackets(nodeId: NodeId, packets: Int) {
+        (nodesById[nodeId] as? Router?)?.bufferCurrentPackets?.value = packets
+    }
+
+    fun setRouterUpgradeCost(nodeId: NodeId, cost: Int) {
+        (nodesById[nodeId] as? Router?)?.upgradeCost?.value = cost
+    }
+
     fun addFirstNodeToPathBuilder(nodeId: NodeId) {
         pathBuilder.value.addNode(nodeId)
+    }
+
+    fun repairRouter(nodeId: NodeId) {
+        print("repairing router!")
+        (nodesById[nodeId] as? Router?)?.isOverloaded?.value = false
+    }
+
+    fun upgradeRouter(nodeId: NodeId) {
+        print("upgrading router!")
     }
 
     fun addNodeToPathBuilder(nodeId: NodeId) {

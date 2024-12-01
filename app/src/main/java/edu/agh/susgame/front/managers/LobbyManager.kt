@@ -14,7 +14,8 @@ import edu.agh.susgame.front.gui.components.common.util.ParserDTO
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.service.mock.createCustomMapState
+
+//import edu.agh.susgame.front.service.mock.createCustomMapState
 
 
 class LobbyManager(
@@ -83,7 +84,7 @@ class LobbyManager(
                         gameManager.value = ParserDTO.gameMapDtoToGameManager(
                             gameMapDTO = gameMapDTO,
                             localPlayerId = this.localPlayer.id,
-                            players = playersRest.values.toList()
+                            players = playersMap.values.toList()
                         )
                         isGameReady.value = true
                     } else {
@@ -93,9 +94,9 @@ class LobbyManager(
         }
     }
 
-    private fun customMap() {
-        gameManager.value = createCustomMapState()
-        isGameReady.value = true
-        println("FROM LM" + isGameReady.value)
-    }
+//    private fun customMap() {
+//        gameManager.value = createCustomMapState()
+//        isGameReady.value = true
+//        println("FROM LM" + isGameReady.value)
+//    }
 }

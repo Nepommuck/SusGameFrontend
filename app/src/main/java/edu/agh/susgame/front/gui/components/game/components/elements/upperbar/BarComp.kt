@@ -12,7 +12,7 @@ import edu.agh.susgame.front.managers.GameManager
 
 @Composable
 fun BarComp(gameManager: GameManager) {
-    val packetsReceived by gameManager.packetsReceived
+    val packetsReceived by gameManager.getServerReceivedPackets()
 
     Canvas(modifier = Modifier.fillMaxSize()) {
         val progressWidth =

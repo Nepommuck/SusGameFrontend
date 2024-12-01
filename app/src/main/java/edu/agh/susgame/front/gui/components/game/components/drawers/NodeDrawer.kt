@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -50,6 +52,9 @@ fun NodeDrawer(
             val positionX = with(density) { node.position.x.dp.toPx() }
             val positionY = with(density) { node.position.y.dp.toPx() }
 
+            val host = node as? Host?
+            val router = node as? Router?
+
 
             Box(modifier = Modifier
                 .size(width = with(density) { width.toDp() } * SCALE_FACTOR,
@@ -69,7 +74,8 @@ fun NodeDrawer(
                 Image(
                     painter = painterResource(id = imageResourceId),
                     contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    colorFilter = getColorFilterForNode(host, router, gameManager)
                 )
             }
         }
@@ -89,3 +95,40 @@ private fun nodeToResourceId(node: Node): Int = when (node) {
     is Router -> R.drawable.router
     is Server -> R.drawable.server
 }
+
+fun getColorFilterForNode(
+    host: Host?,
+    router: Router?,
+    gameManager: GameManager
+): ColorFilter? {
+    return when {
+        host != null -> {
+            val hostColor = gameManager.playersById[host.playerId]?.color?.value ?: Color.Gray
+            ColorFilter.tint(color = hostColor.copy(alpha = 0.8f))
+        }
+
+        router != null -> {
+            val load = if (router.bufferSize.value != 0) {
+                router.bufferCurrentPackets.value.toFloat() / router.bufferSize.value.toFloat()
+            } else {
+                0f
+            }
+
+            val routerColor = if (router.isOverloaded.value) {
+                Color.Gray
+            } else {
+                Color(
+                    red = (load * 255).toInt(),
+                    green = ((1 - load) * 255).toInt(),
+                    blue = 0,
+                    alpha = (0.8f * 255).toInt()
+                )
+            }
+
+            ColorFilter.tint(color = routerColor)
+        }
+
+        else -> null
+    }
+}
+

@@ -10,14 +10,13 @@ class Server(
     name: String,
     position: Coordinates,
     val packetsToWin: Int,
-    var packetsReceived: MutableIntState = mutableIntStateOf(0)
+    val packetsReceived: MutableIntState = mutableIntStateOf(0)
 ) : Node(id, name, position) {
 
     override fun getInfo(): String {
         return """
             ${Translation.Game.SERVER}
-            ${Translation.Game.PACKETS_TO_WIN}: $packetsToWin
-            ${Translation.Game.PACKETS_RECEIVED}: ${packetsReceived.intValue}
+            ${Translation.Game.RECEIVED_DATA}: ${packetsReceived.intValue}/$packetsToWin
         """.trimIndent()
     }
 }
