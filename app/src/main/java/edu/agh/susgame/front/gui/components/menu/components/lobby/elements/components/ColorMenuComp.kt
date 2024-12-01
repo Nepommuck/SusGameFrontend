@@ -15,8 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import edu.agh.susgame.front.gui.components.common.theme.PaddingM
-import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.theme.PaddingXS
 import edu.agh.susgame.front.gui.components.common.util.ColorProvider
 
@@ -27,7 +25,9 @@ fun ColorMenuComp(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 64.dp),
-        modifier = Modifier.fillMaxSize().background(Color.Gray)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Gray)
     ) {
         items(ColorProvider.colors) { color ->
             Box(

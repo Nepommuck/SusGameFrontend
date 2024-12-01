@@ -41,7 +41,8 @@ class LobbyManager(
     }
 
     fun addLocalPlayer() {
-        val localPlayerRest = PlayerREST(localPlayer.name, localPlayer.id, colorProvider.getUniqueRandomColor())
+        val localPlayerRest =
+            PlayerREST(localPlayer.name, localPlayer.id, colorProvider.getUniqueRandomColor())
         addPlayerRest(localPlayerRest)
     }
 
@@ -60,7 +61,7 @@ class LobbyManager(
     fun getPlayerColor(id: PlayerId): MutableState<Color> =
         playersMap[id]?.color ?: mutableStateOf(Color.Gray)
 
-    fun setPlayerColor(id:PlayerId, color: Color){
+    fun setPlayerColor(id: PlayerId, color: Color) {
         playersMap[id]?.color?.value = color
     }
 

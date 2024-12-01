@@ -36,7 +36,7 @@ fun PlayerRow(
             .padding(PaddingS)
             .fillMaxWidth()
             .height(70.dp)
-            .background(Color.Gray,shape = RoundedCornerShape(20.dp))
+            .background(Color.Gray, shape = RoundedCornerShape(20.dp))
     ) {
         Box(
             modifier = Modifier
@@ -73,7 +73,13 @@ fun PlayerRow(
                     .align(Alignment.CenterVertically)
                     .let {
                         if (player.id == lobbyManager.localPlayer.id) {
-                            it.clickable { handlePlayerStatusChange(player.id, lobbyManager, gameService) }
+                            it.clickable {
+                                handlePlayerStatusChange(
+                                    player.id,
+                                    lobbyManager,
+                                    gameService
+                                )
+                            }
                         } else it
                     }
             ) {
