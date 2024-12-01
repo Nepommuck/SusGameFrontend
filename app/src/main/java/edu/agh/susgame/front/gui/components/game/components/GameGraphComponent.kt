@@ -29,7 +29,7 @@ import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.Calculate
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.common.util.ZoomState
-import edu.agh.susgame.front.gui.components.game.components.console.ComputerComponent
+import edu.agh.susgame.front.gui.components.game.components.computer.ComputerComponent
 import edu.agh.susgame.front.gui.components.game.components.drawers.EdgeDrawer
 import edu.agh.susgame.front.gui.components.game.components.drawers.NodeDrawer
 import edu.agh.susgame.front.gui.components.game.components.elements.NodeInfoComp
@@ -180,6 +180,5 @@ internal fun GameGraphComponent(
             isComputerVisible = isComputerViewVisible,
             setComputerViewVisibility = { visible -> setComputerViewVisibility(visible) }
         )
-
     }
 }

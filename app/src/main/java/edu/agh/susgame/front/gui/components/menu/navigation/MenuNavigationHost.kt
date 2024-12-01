@@ -14,6 +14,7 @@ import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import edu.agh.susgame.front.service.web.IpAddressProvider
 
+
 @Composable
 fun MenuNavigationHost(
     menuNavController: NavHostController,
@@ -26,7 +27,21 @@ fun MenuNavigationHost(
         startDestination = MenuRoute.MainMenu.route,
     ) {
         composable(route = MenuRoute.MainMenu.route) {
+
             MainMenuView(menuNavController, ipAddressProvider)
+
+            // TODO Cleanup one day
+            // Very useful for development purposes
+//            ComputerComponent(
+//                gameService, GameManager(
+//                    nodesList = emptyList(),
+//                    edgesList = emptyList(),
+//                    playersList = emptyList(),
+//                    serverId = NodeId(1),
+//                    mapSize = Coordinates(100, 100),
+//                    localPlayerId = PlayerId(21),
+//                )
+//            )
         }
 
         composable(route = MenuRoute.SearchLobby.route) {

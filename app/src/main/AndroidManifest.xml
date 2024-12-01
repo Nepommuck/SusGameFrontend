@@ -18,7 +18,9 @@
         <activity
             android:name=".front.gui.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.SusGame">
+            android:theme="@style/Theme.SusGame"
+            android:screenOrientation="landscape"
+            tools:ignore="DiscouragedApi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
