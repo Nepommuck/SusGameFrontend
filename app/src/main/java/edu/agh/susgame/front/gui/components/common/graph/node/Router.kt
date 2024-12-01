@@ -14,7 +14,7 @@ class Router(
 ) : Node(id, name, position) {
     val bufferCurrentPackets: MutableState<Int> = mutableIntStateOf(0)
     val upgradeCost: MutableState<Int> = mutableIntStateOf(0)
-    val isOverloaded: MutableState<Boolean> = mutableStateOf(true)
+    val isOverloaded: MutableState<Boolean> = mutableStateOf(false)
     override fun getInfo(): String {
         return """
             ${Translation.Game.ROUTER}

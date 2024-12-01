@@ -137,9 +137,10 @@ internal fun GameGraphComponent(
                             painter = painterResource(id = R.drawable.cross),
                             contentDescription = Translation.Game.ABORT_PATH,
                             modifier = Modifier.clickable {
-                                gameManager.clearEdgesLocal()
+                                gameManager.clearEdgesLocal(gameManager.localPlayerId)
                                 changingPath = false
                                 pathBuilder.reset()
+
                             }
                         )
                     }

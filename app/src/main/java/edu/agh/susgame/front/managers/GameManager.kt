@@ -64,6 +64,17 @@ class GameManager(
             it.first to it.second
         }
 
+    init {
+        hostIdByPlayerId.values.forEach { hostId ->
+            val matchingEdges = edgesList.filter { edge ->
+                edge.firstNodeId == hostId || edge.secondNodeId == hostId
+            }
+            if (matchingEdges.isNotEmpty()) {
+                (nodesById[hostId] as? Host?)?.maxPacketsToSend?.value = matchingEdges[0].bandwidth
+            }
+        }
+    }
+
     // MUTABLE
     val pathsByPlayerId: SnapshotStateMap<PlayerId, Path> = mutableStateMapOf()
 
@@ -125,16 +136,14 @@ class GameManager(
     }
 
     fun repairRouter(nodeId: NodeId) {
-        print("repairing router!")
         (nodesById[nodeId] as? Router?)?.isOverloaded?.value = false
     }
 
     fun upgradeRouter(nodeId: NodeId) {
-        print("upgrading router!")
+        gameService?.sendUpgradeRouter(nodeId)
     }
 
     fun addNodeToPathBuilder(nodeId: NodeId) {
-        println("addNodeToPathBuilder")
         val edgeId = pathBuilder.value.getLastNode()?.let { lastNodeId ->
             getEdgeId(lastNodeId, nodeId)
         }
@@ -146,10 +155,12 @@ class GameManager(
         }
     }
 
-    fun clearEdgesLocal() {
+    fun clearEdgesLocal(playerId: PlayerId?) {
         println("ClearEdges")
-        edgesList.forEach { edge ->
-            edge.removePlayer(localPlayerId)
+        if (playerId != null) {
+            edgesList.forEach { edge ->
+                edge.removePlayer(playerId)
+            }
         }
     }
 
@@ -167,14 +178,16 @@ class GameManager(
 
     fun updatePathsFromServer(decodedMessage: ServerSocketMessage.GameState) {
         decodedMessage.hosts.forEach { host ->
-            val path = listOf(host.id) + host.packetRoute
-            for (i in 0 until path.size - 1) {
-                if (playerIdByHostId[NodeId(host.id)] != localPlayerId) {
+            if (playerIdByHostId[NodeId(host.id)] != localPlayerId) {
+                clearEdgesLocal(playerIdByHostId[NodeId(host.id)])
+                val path = listOf(host.id) + host.packetRoute
+                for (i in 0 until path.size - 1) {
                     updateEdge(
                         NodeId(path[i]),
                         NodeId(path[i + 1]),
                         playerIdByHostId[NodeId(host.id)]
                     )
+
                 }
             }
         }

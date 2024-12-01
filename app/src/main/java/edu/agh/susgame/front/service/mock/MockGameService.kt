@@ -39,6 +39,10 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
 
     }
 
+    override fun sendUpgradeRouter(routerId: NodeId) {
+
+    }
+
     override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
         when (val lobbyInfo = joinedLobbyInfo) {
             null -> false

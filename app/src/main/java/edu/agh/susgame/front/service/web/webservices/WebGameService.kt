@@ -151,6 +151,10 @@ class WebGameService(
         )
     }
 
+    override fun sendUpgradeRouter(routerId: NodeId) {
+        sendClientSocketMessage(clientSocketMessage = ClientSocketMessage.UpgradeDTO(deviceId = routerId.value))
+    }
+
 
     @OptIn(ExperimentalSerializationApi::class)
     private fun sendClientSocketMessage(clientSocketMessage: ClientSocketMessage) {

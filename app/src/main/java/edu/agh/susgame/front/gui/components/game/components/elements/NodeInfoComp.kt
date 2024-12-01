@@ -76,7 +76,7 @@ fun NodeInfoComp(
                                     )
                                 },
                                 valueRange = 0f..host.maxPacketsToSend.value.toFloat(),
-                                steps = 7,
+                                steps = host.maxPacketsToSend.value,
                                 modifier = Modifier.padding(top = 16.dp)
                             )
                         }
@@ -106,7 +106,7 @@ fun NodeInfoComp(
                                     painter = painterResource(id = R.drawable.shuffle),
                                     contentDescription = "Exit",
                                     modifier = Modifier.clickable {
-                                        gameManager.clearEdgesLocal()
+                                        gameManager.clearEdgesLocal(gameManager.localPlayerId)
                                         changingPath(true)
                                         gameManager.addFirstNodeToPathBuilder(nodeId = host.id)
                                         onExit()
@@ -132,8 +132,7 @@ fun NodeInfoComp(
                                     painter = painterResource(id = R.drawable.plus),
                                     contentDescription = "Upgrade",
                                     modifier = Modifier.clickable {
-                                        gameManager.repairRouter(router.id)
-                                        onExit()
+                                        gameManager.upgradeRouter(router.id)
                                     }
                                 )
 

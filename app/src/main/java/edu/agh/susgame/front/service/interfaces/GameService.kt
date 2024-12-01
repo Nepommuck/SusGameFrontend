@@ -33,6 +33,7 @@ interface GameService {
     fun sendStartGame()
 
     fun sendPlayerChangeColor(playerId: PlayerId,color: ULong)
+    fun sendUpgradeRouter(routerId: NodeId)
 
     // REST
     fun isPlayerInLobby(lobbyId: LobbyId): Boolean
