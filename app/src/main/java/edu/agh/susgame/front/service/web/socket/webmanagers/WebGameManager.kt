@@ -22,7 +22,7 @@ class WebGameManager(
         gameManager.updatePathsFromServer(decodedMessage)
     }
 
-    fun handlePathUpdate(){
+    fun handlePathUpdate() {
 //        gameManager.updatePathsFromServer(decodedMessage)
     }
 

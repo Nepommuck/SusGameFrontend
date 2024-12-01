@@ -1,6 +1,5 @@
 package edu.agh.susgame.front.service.web.socket.webmanagers
 
-import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.rest.model.PlayerREST
@@ -45,7 +44,7 @@ class WebLobbyManager(
         lobbyManager.getMapFromServer()
     }
 
-    fun handleColorChange(){
+    fun handleColorChange() {
 //        lobbyManager.setPlayerColor(PlayerId(0), Color.Gray)
     }
 }
