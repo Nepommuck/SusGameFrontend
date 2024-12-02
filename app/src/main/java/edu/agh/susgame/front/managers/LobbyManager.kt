@@ -91,10 +91,4 @@ class LobbyManager(
                 }
         }
     }
-
-//    private fun customMap() {
-//        gameManager.value = createCustomMapState()
-//        isGameReady.value = true
-//        println("FROM LM" + isGameReady.value)
-//    }
 }

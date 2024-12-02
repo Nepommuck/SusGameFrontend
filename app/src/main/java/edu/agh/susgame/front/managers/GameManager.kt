@@ -114,6 +114,10 @@ class GameManager(
         }
     }
 
+    fun updateHostFlow(hostId: NodeId, flow: Int) {
+        (nodesById[hostId] as? Host?)?.packetsToSend?.value = flow
+    }
+
     fun setServerReceivedPackets(packets: Int) {
         server.packetsReceived.intValue = packets
     }

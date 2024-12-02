@@ -43,7 +43,12 @@ class WebGameManager(
                 cost = routerDTO.upgradeCost
             )
         }
+        decodedMessage.hosts.forEach() { host ->
+            gameManager.updateHostFlow(NodeId(host.id), host.packetsSentPerTick)
+        }
+
         gameManager.gameStatus.value = decodedMessage.gameStatus
+        gameManager.gameTimeLeft.intValue = decodedMessage.remainingSeconds
     }
 
     fun handlePathUpdate() {
