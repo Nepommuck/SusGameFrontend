@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.dto.rest.model.PlayerNickname
+import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.dto.socket.common.GameStatus
 import edu.agh.susgame.front.gui.components.common.graph.edge.Edge
 import edu.agh.susgame.front.gui.components.common.graph.edge.EdgeId
