@@ -2,6 +2,8 @@ package edu.agh.susgame.front.managers
 
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
@@ -23,6 +25,7 @@ import edu.agh.susgame.front.gui.components.common.util.Coordinates
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
+import java.util.Locale
 
 class GameManager(
     val nodesList: List<Node>,
@@ -30,12 +33,13 @@ class GameManager(
     val playersList: List<PlayerLobby>,
     val serverId: NodeId,
     val mapSize: Coordinates,
-    val packetsToWin: Int = 400,
+    val packetsToWin: Int = 400, // TODO get this from server
     val localPlayerId: PlayerId,
     private var gameService: GameService? = null,
-    val isPathBeingChanged: MutableState<Boolean> = mutableStateOf(false),
-    val gameStatus: MutableState<GameStatus> = mutableStateOf(GameStatus.WAITING)
 ) {
+    val isPathBeingChanged: MutableState<Boolean> = mutableStateOf(false)
+    val gameStatus: MutableState<GameStatus> = mutableStateOf(GameStatus.WAITING)
+    val gameTimeLeft: MutableIntState = mutableIntStateOf(0)
     // ADDERS
     fun addGameService(gameService: GameService) {
         this.gameService = gameService
@@ -65,6 +69,8 @@ class GameManager(
         }.associate {
             it.first to it.second
         }
+    private val server: Server = nodesById[serverId] as? Server?
+        ?: throw IllegalStateException("Server could not be initialized using id ${serverId.value}")
 
     init {
         hostIdByPlayerId.values.forEach { hostId ->
@@ -100,19 +106,28 @@ class GameManager(
     }
 
     // PUBLIC METHODS
+    fun getTime(): State<String> {
+        return derivedStateOf {
+            val minutes = this.gameTimeLeft.intValue / 60
+            val remainingSeconds = this.gameTimeLeft.intValue % 60
+            String.format(Locale.US, "%02d:%02d", minutes, remainingSeconds)
+        }
+    }
+
     fun setServerReceivedPackets(packets: Int) {
-        (nodesById[serverId] as? Server)?.packetsReceived?.intValue = packets
+        server.packetsReceived.intValue = packets
     }
 
     fun getServerReceivedPackets(): MutableIntState =
-        (nodesById[serverId] as? Server)?.packetsReceived ?: mutableIntStateOf(2137)
+        server.packetsReceived
 
     fun setPlayerTokens(playerId: PlayerId, tokens: Int) {
         playersById[playerId]?.tokens?.intValue = tokens
     }
 
     fun getPlayerTokens(playerId: PlayerId): MutableIntState =
-        playersById[playerId]?.tokens ?: mutableIntStateOf(2137)
+        playersById[playerId]?.tokens
+            ?: throw IllegalStateException("Player ${playerId.value} doesn't exist in the map")
 
     fun setRouterBufferSize(nodeId: NodeId, size: Int) {
         (nodesById[nodeId] as? Router?)?.bufferSize?.value = size
@@ -130,12 +145,11 @@ class GameManager(
         pathBuilder.value.addNode(nodeId)
     }
 
-    fun setHostFlow(hostId: NodeId, flow: Int) {
-        if (nodesById[hostId] is Host) {
-            (nodesById[hostId] as Host).packetsToSend.value = flow
+    fun setHostFlow(hostId: NodeId, flow: Int) = (nodesById[hostId] as? Host)
+        ?.let { host ->
+            host.packetsToSend.value = flow
             gameService?.sendHostFlow(hostId, flow)
         }
-    }
 
     fun repairRouter(nodeId: NodeId) {
         (nodesById[nodeId] as? Router?)?.isOverloaded?.value = false
@@ -174,7 +188,7 @@ class GameManager(
         println("Updating path from local$path")
         pathsByPlayerId[localPlayerId] = path
         gameService?.sendHostRouteUpdate(
-            path.path[0], path.path.drop(1)
+            path.path.first(), path.path.drop(1)
         )
     }
 
@@ -183,13 +197,12 @@ class GameManager(
             if (playerIdByHostId[NodeId(host.id)] != localPlayerId) {
                 clearEdgesLocal(playerIdByHostId[NodeId(host.id)])
                 val path = listOf(host.id) + host.packetRoute
-                for (i in 0 until path.size - 1) {
+                path.zipWithNext { host1, host2 ->
                     updateEdge(
-                        NodeId(path[i]),
-                        NodeId(path[i + 1]),
+                        NodeId(host1),
+                        NodeId(host2),
                         playerIdByHostId[NodeId(host.id)]
                     )
-
                 }
             }
         }

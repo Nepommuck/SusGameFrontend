@@ -52,10 +52,6 @@ fun NodeDrawer(
             val positionX = with(density) { node.position.x.dp.toPx() }
             val positionY = with(density) { node.position.y.dp.toPx() }
 
-            val host = node as? Host?
-            val router = node as? Router?
-
-
             Box(modifier = Modifier
                 .size(width = with(density) { width.toDp() } * SCALE_FACTOR,
                     height = with(density) { height.toDp() } * SCALE_FACTOR)
@@ -75,7 +71,7 @@ fun NodeDrawer(
                     painter = painterResource(id = imageResourceId),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
-                    colorFilter = getColorFilterForNode(host, router, gameManager)
+                    colorFilter = getColorFilterForNode(node, gameManager)
                 )
             }
         }
@@ -97,38 +93,32 @@ private fun nodeToResourceId(node: Node): Int = when (node) {
 }
 
 fun getColorFilterForNode(
-    host: Host?,
-    router: Router?,
+    node: Node,
     gameManager: GameManager
 ): ColorFilter? {
-    return when {
-        host != null -> {
-            val hostColor = gameManager.playersById[host.playerId]?.color?.value ?: Color.Gray
+    return when (node) {
+        is Host -> {
+            val hostColor = gameManager.playersById[node.playerId]?.color?.value ?: Color.Gray
             ColorFilter.tint(color = hostColor.copy(alpha = 0.8f))
         }
 
-        router != null -> {
-            val load = if (router.bufferSize.value != 0) {
-                router.bufferCurrentPackets.value.toFloat() / router.bufferSize.value.toFloat()
-            } else {
-                0f
-            }
+        is Router -> {
+            val load = if (node.bufferSize.value != 0)
+                    node.bufferCurrentPackets.value.toFloat() / node.bufferSize.value.toFloat()
+                else
+                    0f
 
-            val routerColor = if (router.isOverloaded.value) {
-                Color.Gray
-            } else {
-                Color(
-                    red = (load * 255).toInt(),
-                    green = ((1 - load) * 255).toInt(),
-                    blue = 0,
-                    alpha = (0.8f * 255).toInt()
-                )
-            }
-
+            val routerColor = if (node.isOverloaded.value)
+                    Color.Gray
+                else
+                    Color(
+                        red = (load * 255).toInt(),
+                        green = ((1 - load) * 255).toInt(),
+                        blue = 0,
+                        alpha = (0.8f * 255).toInt()
+                    )
             ColorFilter.tint(color = routerColor)
         }
-
         else -> null
     }
 }
-

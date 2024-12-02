@@ -102,6 +102,17 @@ fun ProgressBarComp(
                         "$playerTokens ByteTokens",
                         style = TextStyler.TerminalMedium
                     )
+
+                }
+                Box(
+                    modifier = Modifier.fillMaxHeight(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        "     " +
+                                gameManager.getTime().value,
+                        style = TextStyler.TerminalMedium
+                    )
                 }
             }
         }

@@ -15,9 +15,6 @@ import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.service.interfaces.LobbyService
 
-//import edu.agh.susgame.front.service.mock.createCustomMapState
-
-
 class LobbyManager(
     val lobbyService: LobbyService,
     val id: LobbyId,
