@@ -43,8 +43,7 @@ class WebGameManager(
                 cost = routerDTO.upgradeCost
             )
         }
-
-
+        gameManager.gameStatus.value = decodedMessage.gameStatus
     }
 
     fun handlePathUpdate() {

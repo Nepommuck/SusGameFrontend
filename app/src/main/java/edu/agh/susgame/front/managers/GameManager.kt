@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.socket.ServerSocketMessage
+import edu.agh.susgame.dto.socket.common.GameStatus
 import edu.agh.susgame.front.gui.components.common.graph.edge.Edge
 import edu.agh.susgame.front.gui.components.common.graph.edge.EdgeId
 import edu.agh.susgame.front.gui.components.common.graph.edge.Path
@@ -32,7 +33,8 @@ class GameManager(
     val packetsToWin: Int = 400,
     val localPlayerId: PlayerId,
     private var gameService: GameService? = null,
-    val isPathBeingChanged: MutableState<Boolean> = mutableStateOf(false)
+    val isPathBeingChanged: MutableState<Boolean> = mutableStateOf(false),
+    val gameStatus: MutableState<GameStatus> = mutableStateOf(GameStatus.WAITING)
 ) {
     // ADDERS
     fun addGameService(gameService: GameService) {

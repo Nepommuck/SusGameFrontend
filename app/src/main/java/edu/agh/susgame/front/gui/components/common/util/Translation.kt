@@ -51,6 +51,8 @@ object Translation {
     }
 
     object Game {
+        const val YOU_WON = "Wygrałeś!"
+        const val YOU_LOST = "Przegrałeś!"
         const val CHAT = "Chat"
         const val STATE = "Stan"
         const val SHUTDOWN = "Wyłączony"

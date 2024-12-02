@@ -38,7 +38,7 @@ fun GameView(
         } else {
             gameManager.value?.let {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    GameGraphComponent(gameManager = it, gameService = gameService)
+                    GameGraphComponent(gameManager = it, gameService = gameService, navController = menuNavController)
                 }
             } ?: run {
                 Column {
