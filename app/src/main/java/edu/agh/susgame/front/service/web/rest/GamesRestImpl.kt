@@ -134,7 +134,7 @@ class GamesRestImpl(
                     GameCreationApiResponse::class.java,
                 )
                 CreateGameApiResult.Success(
-                    createdLobbyId = LobbyId(gameCreationApiResponse.gameId),
+                    createdLobbyId = gameCreationApiResponse.lobbyId,
                 )
             }
 
