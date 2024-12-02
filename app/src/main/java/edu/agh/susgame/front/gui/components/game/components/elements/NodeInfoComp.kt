@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,8 +22,11 @@ import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.front.gui.components.common.graph.node.Host
 import edu.agh.susgame.front.gui.components.common.graph.node.Node
+import edu.agh.susgame.front.gui.components.common.graph.node.Router
+import edu.agh.susgame.front.gui.components.common.graph.node.Server
 import edu.agh.susgame.front.gui.components.common.theme.PaddingM
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
+import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.managers.GameManager
 
 private val SIZE_DP = 50.dp
@@ -55,6 +59,26 @@ fun NodeInfoComp(
                         .padding(PaddingM),
                 ) {
                     Text(node.getInfo(), style = TextStyler.TerminalMedium)
+                    if (node is Host) {
+                        Text(
+                            Translation.Game.TOKENS + ": " + gameManager.playersById[node.playerId]?.tokens?.intValue.toString(),
+                            style = TextStyler.TerminalMedium
+                        )
+                        if (node.id == gameManager.hostIdByPlayerId[gameManager.localPlayerId]) {
+                            Slider(
+                                value = node.packetsToSend.value.toFloat(),
+                                onValueChange = { newValue ->
+                                    gameManager.setHostFlow(
+                                        hostId = node.id,
+                                        flow = newValue.toInt()
+                                    )
+                                },
+                                valueRange = 0f..node.maxPacketsToSend.value.toFloat(),
+                                steps = node.maxPacketsToSend.value,
+                                modifier = Modifier.padding(top = 16.dp)
+                            )
+                        }
+                    }
                 }
                 Column(
                     modifier = Modifier
@@ -71,23 +95,49 @@ fun NodeInfoComp(
                         )
 
                     }
-                    val hostNode = node as? Host
-
-                    hostNode?.let { host ->
-                        if (gameManager.localPlayerId == host.playerId) {
+                    when (node) {
+                        is Host -> {
+                            if (gameManager.localPlayerId == node.playerId) {
                             Box(modifier = Modifier.size(SIZE_DP)) {
                                 Image(
                                     painter = painterResource(id = R.drawable.shuffle),
                                     contentDescription = "Exit",
                                     modifier = Modifier.clickable {
-                                        gameManager.clearEdgesLocal()
+                                        gameManager.clearEdgesLocal(gameManager.localPlayerId)
                                         changingPath(true)
-                                        gameManager.addFirstNodeToPathBuilder(nodeId = host.id)
+                                        gameManager.addFirstNodeToPathBuilder(nodeId = node.id)
                                         onExit()
                                     }
                                 )
                             }
+                            }
                         }
+
+                        is Router -> {
+                            val router = node as Router
+                            Box(modifier = Modifier.size(SIZE_DP)) {
+                                if (router.isOverloaded.value) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.repair_tools),
+                                        contentDescription = "Repair",
+                                        modifier = Modifier.clickable {
+                                            gameManager.repairRouter(router.id)
+                                            onExit()
+                                        }
+                                    )
+                                } else {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.plus),
+                                        contentDescription = "Upgrade",
+                                        modifier = Modifier.clickable {
+                                            gameManager.upgradeRouter(router.id)
+                                        }
+                                    )
+
+                                }
+                            }
+                        }
+                        is Server -> {}
                     }
                 }
             }

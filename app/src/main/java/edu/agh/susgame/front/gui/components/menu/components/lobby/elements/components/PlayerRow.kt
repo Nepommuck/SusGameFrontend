@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,27 +19,29 @@ import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
+import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.icons.PlayerColorIcon
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.icons.PlayerStatusIcon
 import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.service.interfaces.GameService
 
 @Composable
 fun PlayerRow(
-    id: PlayerId,
     player: PlayerLobby,
     lobbyManager: LobbyManager,
     gameService: GameService,
 ) {
+
     Row(
         modifier = Modifier
             .padding(PaddingS)
             .fillMaxWidth()
             .height(70.dp)
+            .background(Color.Gray, shape = RoundedCornerShape(20.dp))
     ) {
         Box(
             modifier = Modifier
-                .weight(4f)
-                .background(Color.Gray)
+                .weight(2f)
+
                 .fillMaxSize()
                 .align(Alignment.CenterVertically)
         ) {
@@ -47,20 +50,42 @@ fun PlayerRow(
                 text = player.name.value
             )
         }
-
-        Box(
+        Row(
             modifier = Modifier
                 .weight(1f)
-                .background(Color.DarkGray)
                 .fillMaxSize()
-                .align(Alignment.CenterVertically)
-                .let {
-                    if (id == lobbyManager.localPlayer.id) {
-                        it.clickable { handlePlayerStatusChange(id, lobbyManager, gameService) }
-                    } else it
-                }
-        ) {
-            PlayerStatusIcon(playerStatus = player.status)
+        )
+        {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                PlayerColorIcon(
+                    player = player,
+                    lobbyManager = lobbyManager
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .background(Color.DarkGray)
+                    .fillMaxSize()
+                    .align(Alignment.CenterVertically)
+                    .let {
+                        if (player.id == lobbyManager.localPlayer.id) {
+                            it.clickable {
+                                handlePlayerStatusChange(
+                                    player.id,
+                                    lobbyManager,
+                                    gameService
+                                )
+                            }
+                        } else it
+                    }
+            ) {
+                PlayerStatusIcon(playerStatus = player.status)
+            }
+
         }
     }
 }

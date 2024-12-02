@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
@@ -13,8 +14,6 @@ import edu.agh.susgame.front.gui.components.common.util.ParserDTO
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.service.mock.createCustomMapState
-
 
 class LobbyManager(
     val lobbyService: LobbyService,
@@ -30,6 +29,8 @@ class LobbyManager(
     val gameManager: MutableState<GameManager?> = mutableStateOf(null)
     val isGameReady: MutableState<Boolean> = mutableStateOf(false)
 
+    val isColorBeingChanged: MutableState<Boolean> = mutableStateOf(false)
+
     val colorProvider: ColorProvider = ColorProvider()
     fun updateFromRest(lobby: Lobby) {
         lobby.playersWaiting.forEach {
@@ -38,7 +39,8 @@ class LobbyManager(
     }
 
     fun addLocalPlayer() {
-        val localPlayerRest = PlayerREST(localPlayer.name, localPlayer.id, colorProvider.getColor())
+        val localPlayerRest =
+            PlayerREST(localPlayer.name, localPlayer.id, colorProvider.getUniqueRandomColor())
         addPlayerRest(localPlayerRest)
     }
 
@@ -53,6 +55,14 @@ class LobbyManager(
     }
 
     fun countPlayers(): Int = playersMap.size
+
+    fun getPlayerColor(id: PlayerId): MutableState<Color> =
+        playersMap[id]?.color ?: mutableStateOf(Color.Gray)
+
+    fun setPlayerColor(id: PlayerId, color: Color) {
+        playersMap[id]?.color?.value = color
+    }
+
 
 
     fun updatePlayerStatus(id: PlayerId, status: PlayerStatus) {
@@ -72,7 +82,7 @@ class LobbyManager(
                         gameManager.value = ParserDTO.gameMapDtoToGameManager(
                             gameMapDTO = gameMapDTO,
                             localPlayerId = this.localPlayer.id,
-                            players = playersRest.values.toList()
+                            players = playersMap.values.toList()
                         )
                         isGameReady.value = true
                     } else {
@@ -82,9 +92,9 @@ class LobbyManager(
         }
     }
 
-    private fun customMap() {
-        gameManager.value = createCustomMapState()
-        isGameReady.value = true
-        println("FROM LM" + isGameReady.value)
-    }
+//    private fun customMap() {
+//        gameManager.value = createCustomMapState()
+//        isGameReady.value = true
+//        println("FROM LM" + isGameReady.value)
+//    }
 }

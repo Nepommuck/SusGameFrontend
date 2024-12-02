@@ -12,9 +12,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.managers.GameManager
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
+import kotlin.math.sqrt
 
 private const val CIRCLE_RADIUS = 50f
 
@@ -39,20 +37,28 @@ fun EdgeDrawer(gameManager: GameManager) {
                 val dx = endOffset.x - startOffset.x
                 val dy = endOffset.y - startOffset.y
 
+                // Oblicz długość linii
+                val length = sqrt(dx * dx + dy * dy)
 
-                val angle = atan2(dy, dx)
+                // Oblicz współczynniki jednostkowe
+                val unitX = dx / length
+                val unitY = dy / length
 
+                // Określ offset, który usunie końce linii
+                val offset = 50f  // Możesz dostosować ten parametr
 
+                // Przesuń punkty startowy i końcowy
                 val newStartOffset = Offset(
-                    startOffset.x + cos(angle) * CIRCLE_RADIUS,
-                    startOffset.y + sin(angle) * CIRCLE_RADIUS
+                    startOffset.x + unitX * offset,
+                    startOffset.y + unitY * offset
                 )
 
                 val newEndOffset = Offset(
-                    endOffset.x - cos(angle) * CIRCLE_RADIUS,
-                    endOffset.y - sin(angle) * CIRCLE_RADIUS
+                    endOffset.x - unitX * offset,
+                    endOffset.y - unitY * offset
                 )
 
+                // Rysuj główną linię
                 val path = Path().apply {
                     moveTo(newStartOffset.x, newStartOffset.y)
                     lineTo(newEndOffset.x, newEndOffset.y)
@@ -70,20 +76,34 @@ fun EdgeDrawer(gameManager: GameManager) {
                     )
                 )
 
+                // Rysuj linie graczy
                 edge.playersIdsUsingEdge.forEachIndexed { index, playerId ->
-                    gameManager.playersById[playerId]?.colorHex?.let { hexColor ->
+                    gameManager.playersById[playerId]?.color?.let { color ->
+
+                        // Dodaj offset w zależności od indeksu gracza
                         val playerOffset = index * 10
 
+                        // Przesuń punkty startowy i końcowy w zależności od gracza
+                        val playerStartOffset = Offset(
+                            newStartOffset.x + playerOffset,
+                            newStartOffset.y + playerOffset
+                        )
 
+                        val playerEndOffset = Offset(
+                            newEndOffset.x + playerOffset,
+                            newEndOffset.y + playerOffset
+                        )
+
+                        // Stwórz ścieżkę gracza
                         val playerPath = Path().apply {
-                            moveTo(startOffset.x + playerOffset, startOffset.y + playerOffset)
-                            lineTo(endOffset.x + playerOffset, endOffset.y + playerOffset)
+                            moveTo(playerStartOffset.x, playerStartOffset.y)
+                            lineTo(playerEndOffset.x, playerEndOffset.y)
                         }
 
-
+                        // Rysuj ścieżkę gracza
                         drawPath(
                             path = playerPath,
-                            color = Color(0xFF000000 or hexColor),
+                            color = color.value,
                             style = Stroke(
                                 width = 7f,
                                 pathEffect = PathEffect.dashPathEffect(

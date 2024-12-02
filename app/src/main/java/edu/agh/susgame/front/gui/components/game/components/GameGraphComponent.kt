@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,7 +24,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import edu.agh.susgame.R
+import edu.agh.susgame.dto.socket.common.GameStatus
 import edu.agh.susgame.front.gui.components.common.graph.edge.Path
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
@@ -35,6 +39,7 @@ import edu.agh.susgame.front.gui.components.game.components.drawers.NodeDrawer
 import edu.agh.susgame.front.gui.components.game.components.elements.NodeInfoComp
 import edu.agh.susgame.front.gui.components.game.components.elements.ProgressBarComp
 import edu.agh.susgame.front.gui.components.game.components.elements.bottombar.NavIcons
+import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.service.interfaces.GameService
 
@@ -43,7 +48,8 @@ private val SIZE_DP = 50.dp
 @Composable
 internal fun GameGraphComponent(
     gameManager: GameManager,
-    gameService: GameService
+    gameService: GameService,
+    navController: NavController
 ) {
     LaunchedEffect(Unit) {
         gameService.initGameManager(gameManager)
@@ -137,9 +143,10 @@ internal fun GameGraphComponent(
                             painter = painterResource(id = R.drawable.cross),
                             contentDescription = Translation.Game.ABORT_PATH,
                             modifier = Modifier.clickable {
-                                gameManager.clearEdgesLocal()
+                                gameManager.clearEdgesLocal(gameManager.localPlayerId)
                                 changingPath = false
                                 pathBuilder.reset()
+
                             }
                         )
                     }
@@ -180,5 +187,24 @@ internal fun GameGraphComponent(
             isComputerVisible = isComputerViewVisible,
             setComputerViewVisibility = { visible -> setComputerViewVisibility(visible) }
         )
+    }
+
+    when (gameManager.gameStatus.value) {
+        GameStatus.FINISHED_WON, GameStatus.FINISHED_LOST -> {
+            val message =
+                if (gameManager.gameStatus.value == GameStatus.FINISHED_WON) Translation.Game.YOU_WON else Translation.Game.YOU_LOST
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Button(onClick = { navController.navigate(MenuRoute.SearchLobby.route) }) {
+                    Text(message)
+                }
+            }
+        }
+
+        else -> { /* Do nothing for other states */
+        }
     }
 }

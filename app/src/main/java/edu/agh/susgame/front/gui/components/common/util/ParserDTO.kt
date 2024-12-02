@@ -1,8 +1,8 @@
 package edu.agh.susgame.front.gui.components.common.util
 
+import androidx.compose.runtime.mutableIntStateOf
 import edu.agh.susgame.dto.rest.model.GameMapDTO
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.front.gui.components.common.graph.edge.Edge
 import edu.agh.susgame.front.gui.components.common.graph.edge.EdgeId
 import edu.agh.susgame.front.gui.components.common.graph.node.Host
@@ -10,13 +10,14 @@ import edu.agh.susgame.front.gui.components.common.graph.node.Node
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.graph.node.Router
 import edu.agh.susgame.front.gui.components.common.graph.node.Server
+import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.managers.GameManager
 
 object ParserDTO {
     fun gameMapDtoToGameManager(
         gameMapDTO: GameMapDTO,
         localPlayerId: PlayerId,
-        players: List<PlayerREST>,
+        players: List<PlayerLobby>,
     ): GameManager {
         println("Parsing GameMapDTO: $gameMapDTO")
         val nodes = mutableListOf<Node>()
@@ -36,7 +37,7 @@ object ParserDTO {
             nodes.add(
                 Host(
                     id = NodeId(host.id),
-                    name = "H${host.id}",
+                    name = players[host.playerId].name.value,
                     position = Coordinates(host.coordinates.x, host.coordinates.y),
                     playerId = PlayerId(host.playerId)
                 )
@@ -49,7 +50,7 @@ object ParserDTO {
                     id = NodeId(router.id),
                     name = "R${router.id}",
                     position = Coordinates(router.coordinates.x, router.coordinates.y),
-                    bufferSize = router.bufferSize
+                    bufferSize = mutableIntStateOf(router.bufferSize)
                 )
             )
         }

@@ -1,7 +1,9 @@
 package edu.agh.susgame.front.service.web.socket.webmanagers
 
+import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ServerSocketMessage
+import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.service.interfaces.GameService
 
@@ -18,8 +20,34 @@ class WebGameManager(
     }
 
     fun handleGameState(decodedMessage: ServerSocketMessage.GameState) {
-        gameManager.packetsReceived.value = decodedMessage.server.packetsReceived
+        gameManager.setServerReceivedPackets(decodedMessage.server.packetsReceived)
         gameManager.updatePathsFromServer(decodedMessage)
+
+        decodedMessage.players.forEach { playerDTO ->
+            gameManager.setPlayerTokens(
+                playerId = PlayerId(playerDTO.id),
+                tokens = playerDTO.currentMoney
+            )
+        }
+        decodedMessage.routers.forEach { routerDTO ->
+            gameManager.setRouterBufferSize(
+                nodeId = NodeId(routerDTO.id),
+                size = routerDTO.bufferSize
+            )
+            gameManager.setRouterCurrentPackets(
+                nodeId = NodeId(routerDTO.id),
+                packets = routerDTO.bufferSize - routerDTO.spaceLeft
+            )
+            gameManager.setRouterUpgradeCost(
+                nodeId = NodeId(routerDTO.id),
+                cost = routerDTO.upgradeCost
+            )
+        }
+        gameManager.gameStatus.value = decodedMessage.gameStatus
+    }
+
+    fun handlePathUpdate() {
+//        gameManager.updatePathsFromServer(decodedMessage)
     }
 
     fun handleServerError(decodedMessage: ServerSocketMessage.ServerError) {

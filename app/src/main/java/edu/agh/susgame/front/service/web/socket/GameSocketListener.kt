@@ -115,6 +115,10 @@ class GameWebSocketListener : WebSocketListener() {
                 is ServerSocketMessage.GameStarted -> {
                     webLobbyManager?.handleGameStarted(decodedMessage)
                 }
+
+                is ServerSocketMessage.PlayerChangeColor -> {
+                    webLobbyManager?.handleColorChange(decodedMessage)
+                }
             }
         }
     }

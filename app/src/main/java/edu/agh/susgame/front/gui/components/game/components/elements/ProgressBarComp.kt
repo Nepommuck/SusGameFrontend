@@ -27,7 +27,8 @@ private const val HEIGHT: Float = 0.17f
 fun ProgressBarComp(
     gameManager: GameManager
 ) {
-    val packetsReceived by gameManager.packetsReceived
+    val packetsReceived by gameManager.getServerReceivedPackets()
+    val playerTokens by gameManager.getPlayerTokens(gameManager.localPlayerId)
 
     Row(
         modifier = Modifier
@@ -68,7 +69,6 @@ fun ProgressBarComp(
             ) {
                 val percentage: String = (Calculate.getFloatProgress(
                     packetsReceived,
-
                     gameManager.packetsToWin
                 ) * 100).roundToInt().toString()
 
@@ -99,7 +99,18 @@ fun ProgressBarComp(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        "${gameManager.playerMoney.value} ByteTokens",
+                        "$playerTokens ByteTokens",
+                        style = TextStyler.TerminalMedium
+                    )
+
+                }
+                Box(
+                    modifier = Modifier.fillMaxHeight(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        "     " +
+                                gameManager.getTime().value,
                         style = TextStyler.TerminalMedium
                     )
                 }
