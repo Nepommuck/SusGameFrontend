@@ -22,6 +22,7 @@ import edu.agh.susgame.front.gui.components.common.graph.node.Router
 import edu.agh.susgame.front.gui.components.common.graph.node.Server
 import edu.agh.susgame.front.gui.components.common.util.Coordinates
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
+import edu.agh.susgame.front.managers.state.GameStateManager
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 

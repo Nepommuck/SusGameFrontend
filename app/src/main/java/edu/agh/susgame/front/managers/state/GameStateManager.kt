@@ -1,9 +1,8 @@
-package edu.agh.susgame.front.managers
+package edu.agh.susgame.front.managers.state
 
 import androidx.compose.runtime.mutableStateOf
 import edu.agh.susgame.dto.socket.common.GameStatus
 import edu.agh.susgame.front.gui.components.common.graph.node.Node
-import edu.agh.susgame.front.gui.components.game.components.computer.ComputerState
 
 
 class GameStateManager {

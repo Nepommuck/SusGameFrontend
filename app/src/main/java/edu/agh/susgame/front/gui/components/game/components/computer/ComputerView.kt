@@ -10,6 +10,7 @@ import edu.agh.susgame.front.gui.components.game.components.computer.chat.ChatCo
 import edu.agh.susgame.front.gui.components.game.components.computer.chat.ChatComponent
 import edu.agh.susgame.front.gui.components.game.components.computer.desktop.DesktopComponent
 import edu.agh.susgame.front.managers.GameManager
+import edu.agh.susgame.front.managers.state.ComputerState
 import edu.agh.susgame.front.service.interfaces.GameService
 
 

@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.gui.components.game.components.computer
+package edu.agh.susgame.front.managers.state
 
 
 enum class MiniGame {
