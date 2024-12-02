@@ -170,10 +170,12 @@ internal fun GameGraphComponent(
         )
     }
 
-    when (gameManager.gameStatus.value) {
+    when (gameState.gameStatus.value) {
         GameStatus.FINISHED_WON, GameStatus.FINISHED_LOST -> {
             val message =
-                if (gameManager.gameStatus.value == GameStatus.FINISHED_WON) Translation.Game.YOU_WON else Translation.Game.YOU_LOST
+                if (gameState.gameStatus.value == GameStatus.FINISHED_WON) Translation.Game.YOU_WON
+                else Translation.Game.YOU_LOST
+
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -185,7 +187,7 @@ internal fun GameGraphComponent(
             }
         }
 
-        else -> { /* Do nothing for other states */
-        }
+        // Do nothing for other states
+        else -> {}
     }
 }
