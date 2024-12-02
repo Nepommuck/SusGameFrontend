@@ -27,7 +27,6 @@ class WebLobbyManager(
             PlayerREST(
                 PlayerNickname(decodedMessage.playerName),
                 PlayerId(decodedMessage.playerId),
-                12233
             )
         )
     }

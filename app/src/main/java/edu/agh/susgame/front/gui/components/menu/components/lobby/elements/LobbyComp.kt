@@ -122,7 +122,7 @@ internal fun LobbyComp(
                                 lobbyManager.setPlayerColor(lobbyManager.localPlayer.id, newColor)
                                 gameService.sendPlayerChangeColor(
                                     lobbyManager.localPlayer.id,
-                                    newColor.value
+                                    newColor.value,
                                 )
                                 lobbyManager.isColorBeingChanged.value = false
                             })

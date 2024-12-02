@@ -1,6 +1,5 @@
 package edu.agh.susgame.front.service.mock
 
-import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.GameMapDTO
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
@@ -114,12 +113,10 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         val player0 = PlayerREST(
             nickname = PlayerNickname("Player_0"),
             id = PlayerId(0),
-            colorHex = Color.Red.value.toLong(),
         )
         val player1 = PlayerREST(
             nickname = PlayerNickname("Player_1"),
             id = PlayerId(1),
-            colorHex = Color.Green.value.toLong(),
         )
 
         val lobbyIdValue1 = LobbyId(freeGameId++)
@@ -140,12 +137,10 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         val player2 = PlayerREST(
             nickname = PlayerNickname("Player_0"),
             id = PlayerId(0),
-            colorHex = Color.Red.value.toLong(),
         )
         val player3 = PlayerREST(
             nickname = PlayerNickname("Player_1"),
             id = PlayerId(1),
-            colorHex = Color.Green.value.toLong(),
         )
 
         val lobbyIdValue2 = LobbyId(freeGameId++)
@@ -160,7 +155,6 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
                     PlayerREST(
                         nickname = PlayerNickname("Nonexistent-PlayerREST"),
                         id = PlayerId(99),
-                        colorHex = 0xFF0000,
                     ),
                 ),
             ),

@@ -11,8 +11,7 @@ class Host(
     name: String,
     position: Coordinates,
     val playerId: PlayerId,
-
-    ) : Node(id, name, position) {
+) : Node(id, name, position) {
 
     val packetsToSend: MutableIntState = mutableIntStateOf(0)
     val maxPacketsToSend: MutableIntState = mutableIntStateOf(5)
