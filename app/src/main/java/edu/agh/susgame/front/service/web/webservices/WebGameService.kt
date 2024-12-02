@@ -154,6 +154,9 @@ class WebGameService(
     override fun sendUpgradeRouter(routerId: NodeId) {
         sendClientSocketMessage(clientSocketMessage = ClientSocketMessage.UpgradeDTO(deviceId = routerId.value))
     }
+    override fun sendFixRouter(routerId: NodeId){
+        sendClientSocketMessage(clientSocketMessage = ClientSocketMessage.FixRouterDTO(deviceId = routerId.value))
+    }
 
 
     @OptIn(ExperimentalSerializationApi::class)

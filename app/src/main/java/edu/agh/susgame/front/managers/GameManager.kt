@@ -33,13 +33,15 @@ class GameManager(
     val playersList: List<PlayerLobby>,
     val serverId: NodeId,
     val mapSize: Coordinates,
-    val packetsToWin: Int = 400, // TODO get this from server
+    val criticalBufferOverheatLevel: Int,
+    val packetsToWin: Int,
     val localPlayerId: PlayerId,
     private var gameService: GameService? = null,
 ) {
     val isPathBeingChanged: MutableState<Boolean> = mutableStateOf(false)
     val gameStatus: MutableState<GameStatus> = mutableStateOf(GameStatus.WAITING)
     val gameTimeLeft: MutableIntState = mutableIntStateOf(0)
+
     // ADDERS
     fun addGameService(gameService: GameService) {
         this.gameService = gameService
@@ -156,12 +158,19 @@ class GameManager(
         }
 
     fun repairRouter(nodeId: NodeId) {
-        (nodesById[nodeId] as? Router?)?.isOverloaded?.value = false
+        gameService?.sendFixRouter(nodeId)
+        (nodesById[nodeId] as? Router?)?.isWorking?.value = false
+    }
+
+    fun updateRouter(nodeId: NodeId, isWorking: Boolean, overheatLevel: Int ){
+        (nodesById[nodeId] as? Router?)?.isWorking?.value = isWorking
+        (nodesById[nodeId] as? Router?)?.overheatLevel?.value = overheatLevel
     }
 
     fun upgradeRouter(nodeId: NodeId) {
         gameService?.sendUpgradeRouter(nodeId)
     }
+
 
     fun addNodeToPathBuilder(nodeId: NodeId) {
         val edgeId = pathBuilder.value.getLastNode()?.let { lastNodeId ->

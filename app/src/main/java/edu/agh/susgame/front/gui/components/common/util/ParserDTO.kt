@@ -75,7 +75,9 @@ object ParserDTO {
                 playersList = players,
                 serverId = serverId,
                 mapSize = mapSize,
-                localPlayerId = localPlayerId
+                localPlayerId = localPlayerId,
+                packetsToWin = gameMapDTO.gameGoal,
+                criticalBufferOverheatLevel = gameMapDTO.criticalBufferOverheatLevel
             )
 
         return gameManager

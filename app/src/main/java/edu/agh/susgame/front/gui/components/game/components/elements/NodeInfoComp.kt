@@ -116,7 +116,7 @@ fun NodeInfoComp(
                         is Router -> {
                             val router = node as Router
                             Box(modifier = Modifier.size(SIZE_DP)) {
-                                if (router.isOverloaded.value) {
+                                if (!router.isWorking.value) {
                                     Image(
                                         painter = painterResource(id = R.drawable.repair_tools),
                                         contentDescription = "Repair",

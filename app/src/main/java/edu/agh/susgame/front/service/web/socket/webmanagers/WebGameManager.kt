@@ -42,6 +42,11 @@ class WebGameManager(
                 nodeId = NodeId(routerDTO.id),
                 cost = routerDTO.upgradeCost
             )
+            gameManager.updateRouter(
+                NodeId(routerDTO.id),
+                routerDTO.isWorking,
+                routerDTO.overheatLevel
+            )
         }
         decodedMessage.hosts.forEach() { host ->
             gameManager.updateHostFlow(NodeId(host.id), host.packetsSentPerTick)

@@ -36,6 +36,11 @@ sealed class ClientSocketMessage {
         val deviceId: Int,
     ) : ClientSocketMessage()
 
+    @Serializable
+    data class FixRouterDTO(
+        val deviceId: Int
+    ) : ClientSocketMessage()
+
     /**
      * Used to initialize a game
      */
