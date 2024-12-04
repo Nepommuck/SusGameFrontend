@@ -114,7 +114,7 @@ fun NodeInfoComp(
                         }
 
                         is Router -> {
-                            val router = node as Router
+                            val router = node
                             Box(modifier = Modifier.size(SIZE_DP)) {
                                 if (!router.isWorking.value) {
                                     Image(
@@ -137,6 +137,7 @@ fun NodeInfoComp(
                                 }
                             }
                         }
+
                         is Server -> {}
                     }
                 }

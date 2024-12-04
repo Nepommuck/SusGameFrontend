@@ -108,13 +108,18 @@ internal fun LobbyComp(
                 verticalArrangement = Arrangement.Center
             ) {
                 if (isColorBeingChanged) {
-                    Box(modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Gray)) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Gray)
+                    ) {
                         ColorMenuComp(
                             onColorSelected = { newColor ->
                                 lobbyManager.setPlayerColor(lobbyManager.localPlayer.id, newColor)
-                                gameService.sendPlayerChangeColor(lobbyManager.localPlayer.id, newColor.value)
+                                gameService.sendPlayerChangeColor(
+                                    lobbyManager.localPlayer.id,
+                                    newColor.value
+                                )
                                 lobbyManager.isColorBeingChanged.value = false
                             })
                     }

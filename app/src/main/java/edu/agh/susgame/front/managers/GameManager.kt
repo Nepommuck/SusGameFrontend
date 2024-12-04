@@ -164,7 +164,7 @@ class GameManager(
             pathBuilder.addNode(nodeId)
         } else {
             val edgeId = pathBuilder.getLastNode()?.let { lastNodeId ->
-            getEdgeId(lastNodeId, nodeId)
+                getEdgeId(lastNodeId, nodeId)
             }
             edgeId?.let {
                 if (pathBuilder.isNodeValid(nodeId)) {

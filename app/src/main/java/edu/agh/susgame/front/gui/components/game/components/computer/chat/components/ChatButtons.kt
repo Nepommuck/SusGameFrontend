@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.service.interfaces.GameService

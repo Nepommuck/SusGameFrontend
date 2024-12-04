@@ -1,7 +1,6 @@
 package edu.agh.susgame.front.gui.components.common.graph.node
 
 import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.gui.components.common.util.Coordinates
@@ -13,7 +12,7 @@ class Host(
     position: Coordinates,
     val playerId: PlayerId,
 
-) : Node(id, name, position) {
+    ) : Node(id, name, position) {
 
     val packetsToSend: MutableIntState = mutableIntStateOf(0)
     val maxPacketsToSend: MutableIntState = mutableIntStateOf(5)
