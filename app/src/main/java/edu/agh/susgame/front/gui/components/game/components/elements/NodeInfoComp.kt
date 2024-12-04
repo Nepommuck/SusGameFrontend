@@ -74,7 +74,7 @@ fun NodeInfoComp(
                                     )
                                 },
                                 valueRange = 0f..node.maxPacketsToSend.intValue.toFloat(),
-                                steps = node.maxPacketsToSend.value,
+                                steps = node.maxPacketsToSend.intValue,
                                 modifier = Modifier.padding(top = 16.dp)
                             )
                         }

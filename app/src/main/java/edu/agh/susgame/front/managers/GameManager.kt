@@ -117,11 +117,12 @@ class GameManager(
     }
 
     // HANDLE GUI INPUT
-    fun handleHostFlowChange(hostId: NodeId, flow: Int) = (nodesById[hostId] as? Host)
-        ?.let { host ->
+    fun handleHostFlowChange(hostId: NodeId, flow: Int) {
+        (nodesById[hostId] as? Host)?.let { host ->
             host.packetsToSend.intValue = flow
             gameService?.sendHostFlow(hostId, flow)
         }
+    }
 
     fun handleRouterRepair(nodeId: NodeId) {
         (nodesById[nodeId] as? Router?)?.isWorking?.value = false
