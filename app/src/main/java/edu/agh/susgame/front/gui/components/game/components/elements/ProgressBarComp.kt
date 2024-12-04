@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
@@ -19,6 +20,7 @@ import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.Ba
 import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.CoinAnim
 import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.LoadAnim
 import edu.agh.susgame.front.managers.GameManager
+import java.util.Locale
 import kotlin.math.roundToInt
 
 private const val HEIGHT: Float = 0.17f
@@ -27,8 +29,9 @@ private const val HEIGHT: Float = 0.17f
 fun ProgressBarComp(
     gameManager: GameManager
 ) {
-    val packetsReceived by gameManager.getServerReceivedPackets()
-    val playerTokens by gameManager.getPlayerTokens(gameManager.localPlayerId)
+    val packetsReceived by remember { gameManager.getServerReceivedPackets() }
+    val playerTokens by remember { gameManager.getPlayerTokens(gameManager.localPlayerId) }
+    val timeLeft by remember { gameManager.gameTimeLeft }
 
     Row(
         modifier = Modifier
@@ -110,11 +113,17 @@ fun ProgressBarComp(
                 ) {
                     Text(
                         "     " +
-                                gameManager.getTime().value,
+                                getTime(timeLeft),
                         style = TextStyler.TerminalMedium
                     )
                 }
             }
         }
     }
+}
+
+fun getTime(gameTimeLeft: Int): String {
+    val minutes = gameTimeLeft / 60
+    val remainingSeconds = gameTimeLeft % 60
+    return String.format(Locale.US, "%02d:%02d", minutes, remainingSeconds)
 }

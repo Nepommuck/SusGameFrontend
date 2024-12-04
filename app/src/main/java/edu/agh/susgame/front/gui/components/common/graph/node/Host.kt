@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.gui.components.common.graph.node
 
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import edu.agh.susgame.dto.rest.model.PlayerId
@@ -14,12 +15,12 @@ class Host(
 
 ) : Node(id, name, position) {
 
-    val packetsToSend: MutableState<Int> = mutableIntStateOf(0)
-    val maxPacketsToSend: MutableState<Int> = mutableIntStateOf(5)
+    val packetsToSend: MutableIntState = mutableIntStateOf(0)
+    val maxPacketsToSend: MutableIntState = mutableIntStateOf(5)
     override fun getInfo(): String {
         return """
             ${Translation.Game.HOST}: $name
-            ${Translation.Game.PACKETS_TO_SEND}: ${packetsToSend.value}/${maxPacketsToSend.value}
+            ${Translation.Game.PACKETS_TO_SEND}: ${packetsToSend.intValue}/${maxPacketsToSend.intValue}
         """.trimIndent()
     }
 }

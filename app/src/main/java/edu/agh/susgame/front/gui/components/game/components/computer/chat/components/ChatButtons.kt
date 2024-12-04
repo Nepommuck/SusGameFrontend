@@ -44,13 +44,7 @@ fun ChatButtons(
         ChatButton(
             text = Translation.Button.SEND,
             onClick = {
-                gameService.sendSimpleMessage(newMessageInputValue.value)
-                gameManager.addMessage(
-                    GameService.SimpleMessage(
-                        author = PlayerNickname("You"),
-                        message = newMessageInputValue.value
-                    )
-                )
+                gameManager.handleSendingMessage(text = newMessageInputValue.value)
                 newMessageInputValue.value = ""
             },
         )

@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 
-class PathBuilder(val serverId: NodeId) {
+class PathBuilder(private val serverId: NodeId) {
     val path: MutableList<NodeId> = mutableListOf()
     val isPathValid: MutableState<Boolean> = mutableStateOf(false)
 
@@ -14,6 +14,7 @@ class PathBuilder(val serverId: NodeId) {
             updateValidity()
         }
     }
+    fun getSize():Int = path.size
 
     fun getLastNode(): NodeId? = path.lastOrNull()
 

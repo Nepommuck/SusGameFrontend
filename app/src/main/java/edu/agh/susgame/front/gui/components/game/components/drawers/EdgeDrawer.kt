@@ -20,6 +20,7 @@ private const val CIRCLE_RADIUS = 50f
 fun EdgeDrawer(gameManager: GameManager) {
     val density = LocalDensity.current
 
+
     Canvas(modifier = Modifier.fillMaxSize()) {
         gameManager.edgesList.forEach { edge ->
 
@@ -37,17 +38,13 @@ fun EdgeDrawer(gameManager: GameManager) {
                 val dx = endOffset.x - startOffset.x
                 val dy = endOffset.y - startOffset.y
 
-                // Oblicz długość linii
                 val length = sqrt(dx * dx + dy * dy)
 
-                // Oblicz współczynniki jednostkowe
                 val unitX = dx / length
                 val unitY = dy / length
 
-                // Określ offset, który usunie końce linii
-                val offset = 50f  // Możesz dostosować ten parametr
+                val offset = 50f
 
-                // Przesuń punkty startowy i końcowy
                 val newStartOffset = Offset(
                     startOffset.x + unitX * offset,
                     startOffset.y + unitY * offset
