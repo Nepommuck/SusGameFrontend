@@ -93,7 +93,6 @@ private fun createGameHandler(
                     ).show()
 
                     if (creationResult is CreateNewGameResult.Success) {
-                        println(creationResult.lobbyId)
                         navController.navigate(
                             MenuRoute.Lobby.routeWithArgument(lobbyId = creationResult.lobbyId),
                         )
