@@ -28,7 +28,7 @@ object ParserDTO {
                     id = NodeId(server.id),
                     name = "S${server.id}",
                     position = Coordinates(server.coordinates.x, server.coordinates.y),
-                    packetsToWin = 300
+                    packetsToWin = gameMapDTO.gameGoal
                 )
             )
         }

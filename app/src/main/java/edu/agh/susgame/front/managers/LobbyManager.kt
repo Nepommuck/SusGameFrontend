@@ -78,7 +78,7 @@ class LobbyManager(
             lobbyService.getGameMap(id)
                 .thenApply { gameMapDTO ->
                     if (gameMapDTO != null) {
-                        gameManager.value = ParserDTO.gameMapDtoToGameManager(
+                        this.gameManager.value = ParserDTO.gameMapDtoToGameManager(
                             gameMapDTO = gameMapDTO,
                             localPlayerId = this.localPlayer.id,
                             players = playersMap.values.toList()

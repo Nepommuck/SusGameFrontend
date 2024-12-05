@@ -36,22 +36,23 @@ class GameManager(
     val localPlayerId: PlayerId,
 ) {
     // ATTRIBUTES - DEFAULT
+    private var gameService: GameService? = null
+    private val pathsByPlayerId: SnapshotStateMap<PlayerId, Path> = mutableStateMapOf()
     val isPathBeingChanged: MutableState<Boolean> = mutableStateOf(false)
     val gameStatus: MutableState<GameStatus> = mutableStateOf(GameStatus.WAITING)
     val gameTimeLeft: MutableIntState = mutableIntStateOf(0)
-    private var gameService: GameService? = null
-    private val pathsByPlayerId: SnapshotStateMap<PlayerId, Path> = mutableStateMapOf()
     val chatMessages: SnapshotStateList<SimpleMessage> = mutableStateListOf()
     val pathBuilder: PathBuilder = PathBuilder(serverId)
 
     // ATTRIBUTES - WITH INIT
-    val hostIdByPlayerId: Map<PlayerId, NodeId> = initHostIdByPlayerId()
     private val playerIdByHostId: Map<NodeId, PlayerId> = initPlayerIdByHostId()
-    val nodesById: Map<NodeId, Node> = initNodesById()
     private val edgesById: Map<EdgeId, Edge> = initEdgesById()
-    val playersById: Map<PlayerId, PlayerLobby> = initPlayersById()
     private val nodesIdsToEdgeId: Map<Pair<NodeId, NodeId>, EdgeId> = initNodesIdsToEdgeId()
     private val server: Server = initServer()
+    val hostIdByPlayerId: Map<PlayerId, NodeId> = initHostIdByPlayerId()
+    val nodesById: Map<NodeId, Node> = initNodesById()
+    val playersById: Map<PlayerId, PlayerLobby> = initPlayersById()
+
 
     init {
         initHostMaxPackets()
@@ -160,7 +161,7 @@ class GameManager(
 
     // UTILS
     fun addNodeToPathBuilder(nodeId: NodeId) {
-        if (pathBuilder.getSize() == 0) {
+        if (pathBuilder.getCurrentNumberOfNodes() == 0) {
             pathBuilder.addNode(nodeId)
         } else {
             val edgeId = pathBuilder.getLastNode()?.let { lastNodeId ->
@@ -197,6 +198,7 @@ class GameManager(
         edgesById[edgeId]?.addPlayer(localPlayerId)
     }
 
+    // INIT
     private fun initHostIdByPlayerId(): Map<PlayerId, NodeId> {
         return nodesList.filterIsInstance<Host>()
             .associateBy { it.playerId }
@@ -233,17 +235,17 @@ class GameManager(
     }
 
     private fun initServer(): Server {
-        return nodesById[serverId] as? Server
+        return initNodesById()[serverId] as? Server
             ?: throw IllegalStateException("Server could not be initialized using id ${serverId.value}")
     }
 
     private fun initHostMaxPackets() {
-        hostIdByPlayerId.values.forEach { hostId ->
+        initHostIdByPlayerId().values.forEach { hostId ->
             val matchingEdges = edgesList.filter { edge ->
                 edge.firstNodeId == hostId || edge.secondNodeId == hostId
             }
             if (matchingEdges.isNotEmpty()) {
-                (nodesById[hostId] as? Host?)?.maxPacketsToSend?.intValue =
+                (initNodesById()[hostId] as? Host?)?.maxPacketsToSend?.intValue =
                     matchingEdges[0].bandwidth
             }
         }

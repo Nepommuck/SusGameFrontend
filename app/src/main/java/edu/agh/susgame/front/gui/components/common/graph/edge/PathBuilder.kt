@@ -15,7 +15,7 @@ class PathBuilder(private val serverId: NodeId) {
         }
     }
 
-    fun getSize(): Int = path.size
+    fun getCurrentNumberOfNodes(): Int = path.size
 
     fun getLastNode(): NodeId? = path.lastOrNull()
 

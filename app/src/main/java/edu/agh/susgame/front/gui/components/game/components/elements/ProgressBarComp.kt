@@ -112,9 +112,8 @@ fun ProgressBarComp(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        "     " +
-                                getTime(timeLeft),
-                        style = TextStyler.TerminalMedium
+                        text = "     ${getTime(timeLeft)}",
+                        style = TextStyler.TerminalMedium,
                     )
                 }
             }

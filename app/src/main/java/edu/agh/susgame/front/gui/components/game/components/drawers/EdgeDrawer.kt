@@ -77,10 +77,8 @@ fun EdgeDrawer(gameManager: GameManager) {
                 edge.playersIdsUsingEdge.forEachIndexed { index, playerId ->
                     gameManager.playersById[playerId]?.color?.let { color ->
 
-                        // Dodaj offset w zależności od indeksu gracza
                         val playerOffset = index * 10
 
-                        // Przesuń punkty startowy i końcowy w zależności od gracza
                         val playerStartOffset = Offset(
                             newStartOffset.x + playerOffset,
                             newStartOffset.y + playerOffset
@@ -91,13 +89,11 @@ fun EdgeDrawer(gameManager: GameManager) {
                             newEndOffset.y + playerOffset
                         )
 
-                        // Stwórz ścieżkę gracza
                         val playerPath = Path().apply {
                             moveTo(playerStartOffset.x, playerStartOffset.y)
                             lineTo(playerEndOffset.x, playerEndOffset.y)
                         }
 
-                        // Rysuj ścieżkę gracza
                         drawPath(
                             path = playerPath,
                             color = color.value,
