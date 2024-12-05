@@ -28,7 +28,7 @@ object ParserDTO {
                     id = NodeId(server.id),
                     name = "S${server.id}",
                     position = Coordinates(server.coordinates.x, server.coordinates.y),
-                    packetsToWin = 300
+                    packetsToWin = gameMapDTO.gameGoal
                 )
             )
         }
@@ -75,7 +75,9 @@ object ParserDTO {
                 playersList = players,
                 serverId = serverId,
                 mapSize = mapSize,
-                localPlayerId = localPlayerId
+                localPlayerId = localPlayerId,
+                packetsToWin = gameMapDTO.gameGoal,
+                criticalBufferOverheatLevel = gameMapDTO.criticalBufferOverheatLevel
             )
 
         return gameManager

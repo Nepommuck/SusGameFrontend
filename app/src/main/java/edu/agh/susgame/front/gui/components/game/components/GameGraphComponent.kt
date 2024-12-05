@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.socket.common.GameStatus
-import edu.agh.susgame.front.gui.components.common.graph.edge.Path
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.Calculate
@@ -58,9 +57,9 @@ internal fun GameGraphComponent(
     }
 
     var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
-    var changingPath by gameManager.isPathBeingChanged
-    val pathBuilder by gameManager.pathBuilder
-    val isPathValid by gameManager.pathBuilder.value.isPathValid
+    var changingPath by remember { gameManager.isPathBeingChanged }
+
+    val isPathValid by remember { gameManager.pathBuilder.isPathValid }
     var isComputerViewVisible by remember { mutableStateOf(false) }
 
     fun setComputerViewVisibility(visible: Boolean) {
@@ -143,9 +142,9 @@ internal fun GameGraphComponent(
                             painter = painterResource(id = R.drawable.cross),
                             contentDescription = Translation.Game.ABORT_PATH,
                             modifier = Modifier.clickable {
-                                gameManager.clearEdgesLocal(gameManager.localPlayerId)
+                                gameManager.clearEdges(gameManager.localPlayerId)
                                 changingPath = false
-                                pathBuilder.reset()
+                                gameManager.pathBuilder.reset()
 
                             }
                         )
@@ -166,10 +165,9 @@ internal fun GameGraphComponent(
                                     enabled = isPathValid
                                 ) {
                                     if (isPathValid) {
-                                        gameManager.updatePathFromLocal(Path(pathBuilder.path))
+                                        gameManager.handlePathChange()
                                         changingPath = false
                                         inspectedNodeId = null
-                                        pathBuilder.reset()
                                     }
                                 }
                         )

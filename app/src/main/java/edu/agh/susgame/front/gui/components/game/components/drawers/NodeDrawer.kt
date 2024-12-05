@@ -39,7 +39,7 @@ fun NodeDrawer(
             .fillMaxSize()
     ) {
         val context = LocalContext.current
-        gameManager.nodesById.forEach { (_, node) ->
+        gameManager.nodesList.forEach { node ->
 
             val imageResourceId = nodeToResourceId(node)
 
@@ -103,22 +103,23 @@ fun getColorFilterForNode(
         }
 
         is Router -> {
-            val load = if (node.bufferSize.value != 0)
-                    node.bufferCurrentPackets.value.toFloat() / node.bufferSize.value.toFloat()
-                else
-                    0f
+            val load = if (node.overheat.value > 0)
+                node.overheat.value.toFloat() / gameManager.criticalBufferOverheatLevel
+            else
+                0f
 
-            val routerColor = if (node.isOverloaded.value)
-                    Color.Gray
-                else
-                    Color(
-                        red = (load * 255).toInt(),
-                        green = ((1 - load) * 255).toInt(),
-                        blue = 0,
-                        alpha = (0.8f * 255).toInt()
-                    )
+            val routerColor = if (!node.isWorking.value)
+                Color.Gray
+            else
+                Color(
+                    red = (load * 255).toInt(),
+                    green = ((1 - load) * 255).toInt(),
+                    blue = 0,
+                    alpha = (0.8f * 255).toInt()
+                )
             ColorFilter.tint(color = routerColor)
         }
+
         else -> null
     }
 }

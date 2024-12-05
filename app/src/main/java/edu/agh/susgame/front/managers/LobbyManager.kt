@@ -64,7 +64,6 @@ class LobbyManager(
     }
 
 
-
     fun updatePlayerStatus(id: PlayerId, status: PlayerStatus) {
         playersMap[id]?.status?.value = status
     }
@@ -79,7 +78,7 @@ class LobbyManager(
             lobbyService.getGameMap(id)
                 .thenApply { gameMapDTO ->
                     if (gameMapDTO != null) {
-                        gameManager.value = ParserDTO.gameMapDtoToGameManager(
+                        this.gameManager.value = ParserDTO.gameMapDtoToGameManager(
                             gameMapDTO = gameMapDTO,
                             localPlayerId = this.localPlayer.id,
                             players = playersMap.values.toList()
@@ -91,10 +90,4 @@ class LobbyManager(
                 }
         }
     }
-
-//    private fun customMap() {
-//        gameManager.value = createCustomMapState()
-//        isGameReady.value = true
-//        println("FROM LM" + isGameReady.value)
-//    }
 }

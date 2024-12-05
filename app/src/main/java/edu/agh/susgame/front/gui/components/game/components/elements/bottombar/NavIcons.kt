@@ -21,7 +21,6 @@ private val SIZE_DP = 50.dp
 
 @Composable
 fun NavIcons(isComputerVisible: Boolean, setComputerViewVisibility: (Boolean) -> Unit) {
-
     Row(
         modifier = Modifier
             .fillMaxSize()

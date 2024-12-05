@@ -91,51 +91,49 @@ class WebGameService(
 
     override fun sendSimpleMessage(message: String) {
         sendClientSocketMessage(
-            clientSocketMessage = ClientSocketMessage.ChatMessage(message)
+            ClientSocketMessage.ChatMessage(
+                message = message
+            )
         )
     }
 
     override fun sendLeavingRequest(playerId: PlayerId) {
         sendClientSocketMessage(
-            clientSocketMessage = ClientSocketMessage.PlayerLeaving(playerId.value)
+            ClientSocketMessage.PlayerLeaving(
+                playerId = playerId.value
+            )
         )
     }
 
     override fun sendChangePlayerReadinessRequest(playerId: PlayerId, status: PlayerStatus) {
-        val stateValue: Boolean = when (status) {
-            PlayerStatus.READY -> true
-            PlayerStatus.NOT_READY -> false
-            PlayerStatus.CONNECTING -> false
-        }
         sendClientSocketMessage(
-            clientSocketMessage = ClientSocketMessage.PlayerChangeReadiness(
-                playerId.value,
-                stateValue
+            ClientSocketMessage.PlayerChangeReadiness(
+                playerId = playerId.value,
+                state = parseStatus(status)
             )
         )
     }
 
     override fun sendStartGame() {
         sendClientSocketMessage(
-            clientSocketMessage = ClientSocketMessage.GameState(gameStatus = GameStatus.RUNNING)
+            ClientSocketMessage.GameState(
+                gameStatus = GameStatus.RUNNING
+            )
         )
     }
 
     override fun sendPlayerChangeColor(playerId: PlayerId, color: ULong) {
         sendClientSocketMessage(
-            clientSocketMessage = ClientSocketMessage.PlayerChangeColor(
+            ClientSocketMessage.PlayerChangeColor(
                 playerId = playerId.value,
                 color = color
             )
         )
     }
 
-    override fun sendHostRouteUpdate(
-        hostId: NodeId,
-        packetPath: List<NodeId>,
-    ) {
+    override fun sendHostRouteUpdate(hostId: NodeId, packetPath: List<NodeId>) {
         sendClientSocketMessage(
-            clientSocketMessage = ClientSocketMessage.HostRouteDTO(
+            ClientSocketMessage.HostRouteDTO(
                 id = hostId.value,
                 packetPath = packetPath.map { it.value },
             )
@@ -144,7 +142,7 @@ class WebGameService(
 
     override fun sendHostFlow(hostId: NodeId, packets: Int) {
         sendClientSocketMessage(
-            clientSocketMessage = ClientSocketMessage.HostFlowDTO(
+            ClientSocketMessage.HostFlowDTO(
                 id = hostId.value,
                 packetsSentPerTick = packets
             )
@@ -152,9 +150,20 @@ class WebGameService(
     }
 
     override fun sendUpgradeRouter(routerId: NodeId) {
-        sendClientSocketMessage(clientSocketMessage = ClientSocketMessage.UpgradeDTO(deviceId = routerId.value))
+        sendClientSocketMessage(
+            ClientSocketMessage.UpgradeDTO(
+                deviceId = routerId.value
+            )
+        )
     }
 
+    override fun sendFixRouter(routerId: NodeId) {
+        sendClientSocketMessage(
+            ClientSocketMessage.FixRouterDTO(
+                deviceId = routerId.value
+            )
+        )
+    }
 
     @OptIn(ExperimentalSerializationApi::class)
     private fun sendClientSocketMessage(clientSocketMessage: ClientSocketMessage) {
@@ -162,4 +171,11 @@ class WebGameService(
             Cbor.encodeToByteArray(clientSocketMessage).toByteString()
         )
     }
+
+    private fun parseStatus(status: PlayerStatus): Boolean =
+        when (status) {
+            PlayerStatus.READY -> true
+            PlayerStatus.NOT_READY -> false
+            PlayerStatus.CONNECTING -> false
+        }
 }

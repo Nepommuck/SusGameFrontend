@@ -66,15 +66,15 @@ fun NodeInfoComp(
                         )
                         if (node.id == gameManager.hostIdByPlayerId[gameManager.localPlayerId]) {
                             Slider(
-                                value = node.packetsToSend.value.toFloat(),
+                                value = node.packetsToSend.intValue.toFloat(),
                                 onValueChange = { newValue ->
-                                    gameManager.setHostFlow(
+                                    gameManager.handleHostFlowChange(
                                         hostId = node.id,
                                         flow = newValue.toInt()
                                     )
                                 },
-                                valueRange = 0f..node.maxPacketsToSend.value.toFloat(),
-                                steps = node.maxPacketsToSend.value,
+                                valueRange = 0f..node.maxPacketsToSend.intValue.toFloat(),
+                                steps = node.maxPacketsToSend.intValue,
                                 modifier = Modifier.padding(top = 16.dp)
                             )
                         }
@@ -98,30 +98,30 @@ fun NodeInfoComp(
                     when (node) {
                         is Host -> {
                             if (gameManager.localPlayerId == node.playerId) {
-                            Box(modifier = Modifier.size(SIZE_DP)) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.shuffle),
-                                    contentDescription = "Exit",
-                                    modifier = Modifier.clickable {
-                                        gameManager.clearEdgesLocal(gameManager.localPlayerId)
-                                        changingPath(true)
-                                        gameManager.addFirstNodeToPathBuilder(nodeId = node.id)
-                                        onExit()
-                                    }
-                                )
-                            }
+                                Box(modifier = Modifier.size(SIZE_DP)) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.shuffle),
+                                        contentDescription = "Exit",
+                                        modifier = Modifier.clickable {
+                                            gameManager.clearEdges(gameManager.localPlayerId)
+                                            changingPath(true)
+                                            gameManager.addNodeToPathBuilder(nodeId = node.id)
+                                            onExit()
+                                        }
+                                    )
+                                }
                             }
                         }
 
                         is Router -> {
-                            val router = node as Router
+                            val router = node
                             Box(modifier = Modifier.size(SIZE_DP)) {
-                                if (router.isOverloaded.value) {
+                                if (!router.isWorking.value) {
                                     Image(
                                         painter = painterResource(id = R.drawable.repair_tools),
                                         contentDescription = "Repair",
                                         modifier = Modifier.clickable {
-                                            gameManager.repairRouter(router.id)
+                                            gameManager.handleRouterRepair(router.id)
                                             onExit()
                                         }
                                     )
@@ -130,13 +130,14 @@ fun NodeInfoComp(
                                         painter = painterResource(id = R.drawable.plus),
                                         contentDescription = "Upgrade",
                                         modifier = Modifier.clickable {
-                                            gameManager.upgradeRouter(router.id)
+                                            gameManager.handleRouterUpgrade(router.id)
                                         }
                                     )
 
                                 }
                             }
                         }
+
                         is Server -> {}
                     }
                 }

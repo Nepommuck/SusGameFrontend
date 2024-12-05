@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.gui.components.common.graph.node
 
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -10,17 +11,19 @@ class Router(
     id: NodeId,
     name: String,
     position: Coordinates,
-    val bufferSize: MutableState<Int>
+    val bufferSize: MutableIntState,
 ) : Node(id, name, position) {
-    val bufferCurrentPackets: MutableState<Int> = mutableIntStateOf(0)
-    val upgradeCost: MutableState<Int> = mutableIntStateOf(0)
-    val isOverloaded: MutableState<Boolean> = mutableStateOf(false)
+    val bufferCurrentPackets: MutableIntState = mutableIntStateOf(0)
+    val upgradeCost: MutableIntState = mutableIntStateOf(0)
+    val isWorking: MutableState<Boolean> = mutableStateOf(true)
+    val overheat: MutableIntState = mutableIntStateOf(0)
+
     override fun getInfo(): String {
         return """
             ${Translation.Game.ROUTER}
-            ${Translation.Game.STATE}: ${if (isOverloaded.value) Translation.Game.SHUTDOWN else Translation.Game.RUNNING}
-            ${Translation.Game.BUFFER_STATE}: ${bufferCurrentPackets.value}/${bufferSize.value}
-            ${Translation.Game.UPGRADE_COST}: ${upgradeCost.value}
+            ${Translation.Game.STATE}: ${if (isWorking.value) Translation.Game.RUNNING else Translation.Game.SHUTDOWN}
+            ${Translation.Game.BUFFER_STATE}: ${bufferCurrentPackets.intValue}/${bufferSize.intValue}
+            ${Translation.Game.UPGRADE_COST}: ${upgradeCost.intValue}
         """.trimIndent()
     }
 }

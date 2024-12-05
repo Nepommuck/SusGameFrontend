@@ -64,13 +64,17 @@ internal fun LobbyComp(
     var playerNicknameInputValue by remember { mutableStateOf("") }
     var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
     var isLeaveButtonLoading by remember { mutableStateOf(false) }
-    val isGameReady by lobbyManager.isGameReady
-    val isColorBeingChanged by lobbyManager.isColorBeingChanged
+    val isGameReady by remember { lobbyManager.isGameReady }
+    val isColorBeingChanged by remember { lobbyManager.isColorBeingChanged }
 
     LaunchedEffect(lobbyManager) {
         lobbyManager.updateFromRest(lobbyInit)
         lobbyService.addLobbyManager(lobbyManager)
         gameService.initLobbyManager(lobbyManager)
+    }
+
+    if (isGameReady) {
+        navController.navigate("${MenuRoute.Game.route}/${lobbyManager.id.value}")
     }
 
     Column(modifier = Modifier.padding(PaddingL)) {
@@ -108,13 +112,18 @@ internal fun LobbyComp(
                 verticalArrangement = Arrangement.Center
             ) {
                 if (isColorBeingChanged) {
-                    Box(modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Gray)) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Gray)
+                    ) {
                         ColorMenuComp(
                             onColorSelected = { newColor ->
                                 lobbyManager.setPlayerColor(lobbyManager.localPlayer.id, newColor)
-                                gameService.sendPlayerChangeColor(lobbyManager.localPlayer.id, newColor.value)
+                                gameService.sendPlayerChangeColor(
+                                    lobbyManager.localPlayer.id,
+                                    newColor.value
+                                )
                                 lobbyManager.isColorBeingChanged.value = false
                             })
                     }
@@ -169,16 +178,9 @@ internal fun LobbyComp(
                         Button(onClick = {
                             if (!isGameReady) {
                                 gameService.sendStartGame()
-                            } else {
-                                navController.navigate("${MenuRoute.Game.route}/${lobbyManager.id.value}")
                             }
-
                         }) {
-                            if (!isGameReady) {
-                                Text(text = Translation.Button.PLAY)
-                            } else {
-                                Text(text = Translation.Button.MOVE_TO_GAME)
-                            }
+                            Text(text = Translation.Button.PLAY)
                         }
                     } else {
                         var isJoinButtonLoading by remember { mutableStateOf(false) }

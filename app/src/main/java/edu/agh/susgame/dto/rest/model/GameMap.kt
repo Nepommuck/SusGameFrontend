@@ -14,6 +14,8 @@ data class GameMapDTO(
     val hosts: List<GameMapHostDTO>,
     val routers: List<GameMapRouterDTO>,
     val edges: List<GameMapEdgeDTO>,
+    val gameGoal: Int,
+    val criticalBufferOverheatLevel: Int,
 )
 
 @Serializable
