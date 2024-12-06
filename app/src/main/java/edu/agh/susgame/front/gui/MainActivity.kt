@@ -16,8 +16,6 @@ import edu.agh.susgame.front.gui.components.common.theme.SusGameTheme
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuNavigationHost
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
-import edu.agh.susgame.front.service.mock.MockGameService
-import edu.agh.susgame.front.service.mock.MockLobbyService
 import edu.agh.susgame.front.service.web.IpAddressProvider
 import edu.agh.susgame.front.service.web.rest.GamesRestImpl
 import edu.agh.susgame.front.service.web.webservices.WebGameService
@@ -38,14 +36,6 @@ class MainActivity : ComponentActivity() {
     )
 
     private val services = when (AppConfig.providers) {
-        ProviderType.LOCAL -> {
-            val mockLobbiesProvider = MockLobbyService(mockDelayMs = 0)
-            Services(
-                mockLobbiesProvider,
-                MockGameService(mockLobbiesProvider),
-            )
-        }
-
         ProviderType.WEB -> Services(
             WebLobbyService(gamesRest),
             WebGameService(AppConfig.webConfig, ipAddressProvider),

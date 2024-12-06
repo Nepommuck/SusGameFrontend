@@ -40,7 +40,7 @@ class WebLobbyManager(
         lobbyManager.addLocalPlayer()
     }
 
-    fun handleGameStarted(decodedMessage: ServerSocketMessage.GameStarted) {
+    fun handleGameStarted() {
         lobbyManager.getMapFromServer()
     }
 
