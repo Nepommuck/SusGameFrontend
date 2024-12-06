@@ -22,17 +22,18 @@ class LobbyManager(
 //    val maxNumOfPlayers: Int,
 //    val gameTime: Int,
 ) {
+    // ATTRIBUTES - DEFAULT
     var localPlayerId: PlayerId? = null
     val playersMap: SnapshotStateMap<PlayerId, PlayerLobby> = mutableStateMapOf()
     val gameManager: MutableState<GameManager?> = mutableStateOf(null)
     val isGameReady: MutableState<Boolean> = mutableStateOf(false)
-
     val isColorBeingChanged: MutableState<Boolean> = mutableStateOf(false)
 
+    // SERVICE MANAGEMENT - UPDATE FROM SERVER MESSAGES
     fun updateFromRest() {
         lobbyService.getById(lobbyId).thenApply { lobby ->
             lobby?.playersWaiting?.forEach { player ->
-                addPlayer(
+                updateAddPlayer(
                     playerId = player.id,
                     nickname = player.nickname,
                     color = Color(player.color),
@@ -42,18 +43,8 @@ class LobbyManager(
             println(lobby?.playersWaiting)
         }
     }
-    fun handleLocalPlayerJoin(nickname: PlayerNickname){
-        gameService.joinLobby(lobbyId, nickname)
-    }
 
-    fun handleLocalPlayerLeave(){
-        localPlayerId?.let { gameService.sendLeavingRequest(it) }
-        gameService.leaveLobby()
-    }
-
-    fun getPlayerStatus(id: PlayerId) = playersMap[id]?.status?.value
-
-    fun addPlayer(
+    fun updateAddPlayer(
         playerId: PlayerId,
         nickname: PlayerNickname,
         color: Color = Color.Red,
@@ -67,18 +58,30 @@ class LobbyManager(
         )
     }
 
-    fun countPlayers(): Int = playersMap.size
-
-    fun getPlayerColor(id: PlayerId): MutableState<Color> =
-        playersMap[id]?.color ?: mutableStateOf(Color.Gray)
-
-    fun setPlayerColor(id: PlayerId, color: Color) {
+    fun updatePlayerColor(id: PlayerId, color: Color) {
         playersMap[id]?.color?.value = color
     }
 
+    fun updatePlayerStatus(id: PlayerId, status: PlayerStatus) {
+        playersMap[id]?.status?.value = status
+    }
+
+    fun updateRemovePlayer(playerId: PlayerId) {
+        playersMap.remove(playerId)
+    }
+
+    // HANDLE GUI INPUT
+    fun handleLocalPlayerJoin(nickname: PlayerNickname) {
+        gameService.joinLobby(lobbyId, nickname)
+    }
+
+    fun handleLocalPlayerLeave() {
+        localPlayerId?.let { gameService.sendLeavingRequest(it) }
+        gameService.leaveLobby()
+    }
     fun handlePlayerColorChange(color: Color){
         localPlayerId?.let{
-            setPlayerColor(it,color)
+            updatePlayerColor(it, color)
             gameService.sendPlayerChangeColor(
                 playerId = it,
                 color = color.value
@@ -87,15 +90,20 @@ class LobbyManager(
         }
     }
 
-    fun updatePlayerStatus(id: PlayerId, status: PlayerStatus) {
-        playersMap[id]?.status?.value = status
+    fun handleLocalPlayerStatusChange() {
+        localPlayerId?.let {
+            val currentStatus = getPlayerStatus(it)
+            val newStatus =
+                if (currentStatus == PlayerStatus.READY) PlayerStatus.NOT_READY else PlayerStatus.READY
+            gameService.sendChangePlayerReadinessRequest(it, newStatus)
+            updatePlayerStatus(it, newStatus)
+        }
     }
 
-    fun removePlayer(playerId: PlayerId) {
-        playersMap.remove(playerId)
-    }
+    // UTILS
+    fun getNumberOfPlayers(): Int = playersMap.size
 
-    fun getMapFromServer() {
+    fun loadMapFromServer() {
         this.lobbyId.let { id ->
             lobbyService.getGameMap(id)
                 .thenApply { gameMapDTO ->
@@ -114,4 +122,7 @@ class LobbyManager(
                 }
         }
     }
+
+    // PRIVATE
+    private fun getPlayerStatus(id: PlayerId) = playersMap[id]?.status?.value
 }

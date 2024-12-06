@@ -3,7 +3,6 @@ package edu.agh.susgame.front.service.web.socket.webmanagers
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
-import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.managers.LobbyManager
@@ -23,14 +22,14 @@ class WebLobbyManager(
     }
 
     fun handlePlayerJoiningResponse(decodedMessage: ServerSocketMessage.PlayerJoining) {
-        lobbyManager.addPlayer(
+        lobbyManager.updateAddPlayer(
             nickname = PlayerNickname(decodedMessage.playerName),
             playerId = PlayerId(decodedMessage.playerId),
         )
     }
 
     fun handlePlayerLeavingResponse(decodedMessage: ServerSocketMessage.PlayerLeaving) {
-        lobbyManager.removePlayer(PlayerId(decodedMessage.playerId))
+        lobbyManager.updateRemovePlayer(PlayerId(decodedMessage.playerId))
     }
 
     fun handleIdConfig(decodedMessage: ServerSocketMessage.IdConfig) {
@@ -39,10 +38,13 @@ class WebLobbyManager(
     }
 
     fun handleGameStarted(decodedMessage: ServerSocketMessage.GameStarted) {
-        lobbyManager.getMapFromServer()
+        lobbyManager.loadMapFromServer()
     }
 
     fun handleColorChange(decodedMessage: ServerSocketMessage.PlayerChangeColor) {
-        lobbyManager.setPlayerColor(PlayerId(decodedMessage.playerId), Color(decodedMessage.color))
+        lobbyManager.updatePlayerColor(
+            PlayerId(decodedMessage.playerId),
+            Color(decodedMessage.color)
+        )
     }
 }

@@ -15,10 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
-import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.icons.PlayerColorIcon
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.icons.PlayerStatusIcon
 import edu.agh.susgame.front.managers.LobbyManager
@@ -74,33 +72,13 @@ fun PlayerRow(
                     .let {
                         if (player.id == lobbyManager.localPlayerId) {
                             it.clickable {
-                                handlePlayerStatusChange(
-                                    player.id,
-                                    lobbyManager,
-                                    gameService
-                                )
+                                lobbyManager.handleLocalPlayerStatusChange()
                             }
                         } else it
                     }
             ) {
                 PlayerStatusIcon(playerStatus = player.status)
             }
-
         }
-    }
-}
-
-private fun handlePlayerStatusChange(
-    id: PlayerId,
-    lobbyManager: LobbyManager,
-    gameService: GameService
-) {
-    val localId = lobbyManager.localPlayerId
-    if (id == localId) {
-        val currentStatus = lobbyManager.getPlayerStatus(localId)
-        val newStatus =
-            if (currentStatus == PlayerStatus.READY) PlayerStatus.NOT_READY else PlayerStatus.READY
-        gameService.sendChangePlayerReadinessRequest(localId, newStatus)
-        lobbyManager.updatePlayerStatus(localId, newStatus)
     }
 }

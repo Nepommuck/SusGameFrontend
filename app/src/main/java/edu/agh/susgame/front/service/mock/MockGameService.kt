@@ -54,7 +54,10 @@ class MockGameService(private val lobbyService: MockLobbyService) : GameService 
         }
 
     override fun joinLobby(lobbyId: LobbyId, nickname: PlayerNickname): CompletableFuture<Unit> =
-        lobbyService.joinLobby(lobbyId, PlayerREST(nickname, id = PlayerId(0), color = 123u, readiness = false))
+        lobbyService.joinLobby(
+            lobbyId,
+            PlayerREST(nickname, id = PlayerId(0), color = 123, readiness = false)
+        )
 
     override fun leaveLobby(): CompletableFuture<Unit> =
         when (val lobbyInfo = joinedLobbyInfo) {

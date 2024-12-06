@@ -87,7 +87,7 @@ internal fun LobbyComp(
                     .weight(1f)
             ) {
                 Text(
-                    text = "${Translation.Lobby.nPlayersAwaiting(lobbyManager.countPlayers())}:",
+                    text = "${Translation.Lobby.nPlayersAwaiting(lobbyManager.getNumberOfPlayers())}:",
                     Modifier.padding(vertical = PaddingS)
                 )
                 LazyColumn(
@@ -157,6 +157,7 @@ internal fun LobbyComp(
                             handleLeaveButtonClick(
                                 navController = navController,
                                 lobbyManager = lobbyManager,
+//                                gameService = gameService,
                                 hasPlayerJoined = hasPlayerJoined,
                                 setLeaveButtonLoading = { isLeaveButtonLoading = it },
                                 setHasPlayerJoined = { hasPlayerJoined = it }
@@ -186,6 +187,7 @@ internal fun LobbyComp(
                                     handleJoinButtonClick(
                                         currentNickname = currentNickname,
                                         lobbyManager = lobbyManager,
+//                                        gameService = gameService,
                                         setJoinButtonLoading = { isJoinButtonLoading = it },
                                         setHasPlayerJoined = { hasPlayerJoined = it }
                                     )
@@ -221,6 +223,7 @@ fun updateNicknameOrInvalidate(
 fun handleLeaveButtonClick(
     navController: NavController,
     lobbyManager: LobbyManager,
+//    gameService: GameService,
     hasPlayerJoined: Boolean,
     setLeaveButtonLoading: (Boolean) -> Unit,
     setHasPlayerJoined: (Boolean) -> Unit
@@ -232,6 +235,15 @@ fun handleLeaveButtonClick(
         }
     } else {
         lobbyManager.handleLocalPlayerLeave()
+//        lobbyManager.localPlayerId?.let { gameService.sendLeavingRequest(it) }
+//        gameService.leaveLobby().thenRun {
+//            setHasPlayerJoined(false)
+//            CoroutineScope(Dispatchers.Main).launch {
+//                navController.navigate(MenuRoute.SearchLobby.route)
+//            }
+//            setLeaveButtonLoading(false)
+//        }
+        // TODO this should be in StateManager
         CoroutineScope(Dispatchers.Main).launch {
             navController.navigate(MenuRoute.SearchLobby.route)
         }
@@ -242,6 +254,7 @@ fun handleLeaveButtonClick(
 
 fun handleJoinButtonClick(
     currentNickname: PlayerNickname?,
+//    gameService: GameService,
     lobbyManager: LobbyManager,
     setJoinButtonLoading: (Boolean) -> Unit,
     setHasPlayerJoined: (Boolean) -> Unit
@@ -249,6 +262,11 @@ fun handleJoinButtonClick(
     setJoinButtonLoading(true)
     currentNickname?.let { nickname ->
         lobbyManager.handleLocalPlayerJoin(nickname)
+//        gameService.joinLobby(lobbyManager.lobbyId, nickname).thenRun {
+//            setJoinButtonLoading(false)
+//            setHasPlayerJoined(true)
+//        }
+        // TODO this should be in StateManager
         setJoinButtonLoading(false)
         setHasPlayerJoined(true)
     }
