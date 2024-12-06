@@ -58,16 +58,20 @@ class LobbyManager(
         )
     }
 
-    fun updatePlayerColor(id: PlayerId, color: Color) {
-        playersMap[id]?.color?.value = color
+    fun updatePlayerColor(playerId: PlayerId, color: Color) {
+        playersMap[playerId]?.color?.value = color
     }
 
-    fun updatePlayerStatus(id: PlayerId, status: PlayerStatus) {
-        playersMap[id]?.status?.value = status
+    fun updatePlayerStatus(playerId: PlayerId, status: PlayerStatus) {
+        playersMap[playerId]?.status?.value = status
     }
 
     fun updateRemovePlayer(playerId: PlayerId) {
         playersMap.remove(playerId)
+    }
+
+    fun updateLocalPlayerId(playerId: PlayerId) {
+        localPlayerId = playerId
     }
 
     // HANDLE GUI INPUT

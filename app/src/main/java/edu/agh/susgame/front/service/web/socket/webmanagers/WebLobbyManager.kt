@@ -11,14 +11,15 @@ class WebLobbyManager(
     private val lobbyManager: LobbyManager
 ) {
     fun handlePlayerChangingReadinessResponse(decodedMessage: ServerSocketMessage.PlayerChangeReadiness) {
-        if (decodedMessage.state) {
-            lobbyManager.updatePlayerStatus(PlayerId(decodedMessage.playerId), PlayerStatus.READY)
-        } else {
-            lobbyManager.updatePlayerStatus(
-                PlayerId(decodedMessage.playerId),
-                PlayerStatus.NOT_READY
-            )
+        val newStatus = when(decodedMessage.state){
+            true -> PlayerStatus.READY
+            false -> PlayerStatus.NOT_READY
         }
+        lobbyManager.updatePlayerStatus(
+            playerId = PlayerId(decodedMessage.playerId),
+            status = newStatus
+        )
+
     }
 
     fun handlePlayerJoiningResponse(decodedMessage: ServerSocketMessage.PlayerJoining) {
@@ -29,11 +30,15 @@ class WebLobbyManager(
     }
 
     fun handlePlayerLeavingResponse(decodedMessage: ServerSocketMessage.PlayerLeaving) {
-        lobbyManager.updateRemovePlayer(PlayerId(decodedMessage.playerId))
+        lobbyManager.updateRemovePlayer(
+            playerId = PlayerId(decodedMessage.playerId)
+        )
     }
 
     fun handleIdConfig(decodedMessage: ServerSocketMessage.IdConfig) {
-        lobbyManager.localPlayerId = PlayerId(decodedMessage.id)
+        lobbyManager.updateLocalPlayerId(
+            playerId = PlayerId(decodedMessage.id)
+        )
         lobbyManager.updateFromRest()
     }
 
@@ -43,8 +48,8 @@ class WebLobbyManager(
 
     fun handleColorChange(decodedMessage: ServerSocketMessage.PlayerChangeColor) {
         lobbyManager.updatePlayerColor(
-            PlayerId(decodedMessage.playerId),
-            Color(decodedMessage.color)
+            playerId = PlayerId(decodedMessage.playerId),
+            color = Color(decodedMessage.color)
         )
     }
 }
