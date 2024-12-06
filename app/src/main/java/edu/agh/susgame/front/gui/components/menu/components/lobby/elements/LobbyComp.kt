@@ -50,7 +50,8 @@ internal fun LobbyComp(
         mutableStateOf(
             LobbyManager(
                 lobbyService = lobbyService,
-                id = lobbyInit.id,
+                gameService = gameService,
+                lobbyId = lobbyInit.id,
                 name = lobbyInit.name,
 //                maxNumOfPlayers = lobbyInit.maxNumOfPlayers,
 //                gameTime = lobbyInit.gameTime
@@ -68,13 +69,13 @@ internal fun LobbyComp(
     val isColorBeingChanged by remember { lobbyManager.isColorBeingChanged }
 
     LaunchedEffect(lobbyManager) {
-        lobbyManager.updateFromRest(lobbyInit)
+        lobbyManager.updateFromRest()
         lobbyService.addLobbyManager(lobbyManager)
         gameService.initLobbyManager(lobbyManager)
     }
 
     if (isGameReady) {
-        navController.navigate("${MenuRoute.Game.route}/${lobbyManager.id.value}")
+        navController.navigate("${MenuRoute.Game.route}/${lobbyManager.lobbyId.value}")
     }
 
     Column(modifier = Modifier.padding(PaddingL)) {
@@ -119,12 +120,7 @@ internal fun LobbyComp(
                     ) {
                         ColorMenuComp(
                             onColorSelected = { newColor ->
-                                lobbyManager.setPlayerColor(lobbyManager.localPlayer.id, newColor)
-                                gameService.sendPlayerChangeColor(
-                                    lobbyManager.localPlayer.id,
-                                    newColor.value
-                                )
-                                lobbyManager.isColorBeingChanged.value = false
+                                lobbyManager.handlePlayerColorChange(newColor)
                             })
                     }
                 }
@@ -161,7 +157,6 @@ internal fun LobbyComp(
                             handleLeaveButtonClick(
                                 navController = navController,
                                 lobbyManager = lobbyManager,
-                                gameService = gameService,
                                 hasPlayerJoined = hasPlayerJoined,
                                 setLeaveButtonLoading = { isLeaveButtonLoading = it },
                                 setHasPlayerJoined = { hasPlayerJoined = it }
@@ -190,7 +185,6 @@ internal fun LobbyComp(
                                 CoroutineScope(Dispatchers.Main).launch {
                                     handleJoinButtonClick(
                                         currentNickname = currentNickname,
-                                        gameService = gameService,
                                         lobbyManager = lobbyManager,
                                         setJoinButtonLoading = { isJoinButtonLoading = it },
                                         setHasPlayerJoined = { hasPlayerJoined = it }
@@ -227,7 +221,6 @@ fun updateNicknameOrInvalidate(
 fun handleLeaveButtonClick(
     navController: NavController,
     lobbyManager: LobbyManager,
-    gameService: GameService,
     hasPlayerJoined: Boolean,
     setLeaveButtonLoading: (Boolean) -> Unit,
     setHasPlayerJoined: (Boolean) -> Unit
@@ -238,30 +231,25 @@ fun handleLeaveButtonClick(
             navController.navigate(MenuRoute.SearchLobby.route)
         }
     } else {
-        gameService.sendLeavingRequest(lobbyManager.localPlayer.id)
-        gameService.leaveLobby().thenRun {
-            setHasPlayerJoined(false)
-            CoroutineScope(Dispatchers.Main).launch {
-                navController.navigate(MenuRoute.SearchLobby.route)
-            }
-            setLeaveButtonLoading(false)
+        lobbyManager.handleLocalPlayerLeave()
+        CoroutineScope(Dispatchers.Main).launch {
+            navController.navigate(MenuRoute.SearchLobby.route)
         }
+        setHasPlayerJoined(false)
+        setLeaveButtonLoading(false)
     }
 }
 
 fun handleJoinButtonClick(
     currentNickname: PlayerNickname?,
-    gameService: GameService,
     lobbyManager: LobbyManager,
     setJoinButtonLoading: (Boolean) -> Unit,
     setHasPlayerJoined: (Boolean) -> Unit
 ) {
     setJoinButtonLoading(true)
     currentNickname?.let { nickname ->
-        lobbyManager.localPlayer.name = currentNickname
-        gameService.joinLobby(lobbyManager.id, nickname).thenRun {
-            setJoinButtonLoading(false)
-            setHasPlayerJoined(true)
-        }
+        lobbyManager.handleLocalPlayerJoin(nickname)
+        setJoinButtonLoading(false)
+        setHasPlayerJoined(true)
     }
 }

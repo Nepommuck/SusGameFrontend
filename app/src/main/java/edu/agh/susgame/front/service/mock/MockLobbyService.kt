@@ -80,7 +80,7 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
      * This method exists for a compatibility of `MockGameService` with `GameService` interface
      */
     fun joinLobby(lobbyId: LobbyId, player: PlayerREST): CompletableFuture<Unit> {
-        lobbyManager?.addPlayerRest(player)
+//        lobbyManager?.addPlayer(player)
         println(lobbyManager?.playersMap)
         return CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
@@ -114,12 +114,14 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         val player0 = PlayerREST(
             nickname = PlayerNickname("Player_0"),
             id = PlayerId(0),
-            colorHex = Color.Red.value.toLong(),
+            color = 123u,
+            readiness = false
         )
         val player1 = PlayerREST(
             nickname = PlayerNickname("Player_1"),
             id = PlayerId(1),
-            colorHex = Color.Green.value.toLong(),
+            color = 123u,
+            readiness = false
         )
 
         val lobbyIdValue1 = LobbyId(freeGameId++)
@@ -140,12 +142,14 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
         val player2 = PlayerREST(
             nickname = PlayerNickname("Player_0"),
             id = PlayerId(0),
-            colorHex = Color.Red.value.toLong(),
+            color = 123u,
+            readiness = false
         )
         val player3 = PlayerREST(
             nickname = PlayerNickname("Player_1"),
             id = PlayerId(1),
-            colorHex = Color.Green.value.toLong(),
+            color = 123u,
+            readiness = false
         )
 
         val lobbyIdValue2 = LobbyId(freeGameId++)
@@ -160,7 +164,8 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
                     PlayerREST(
                         nickname = PlayerNickname("Nonexistent-PlayerREST"),
                         id = PlayerId(99),
-                        colorHex = 0xFF0000,
+                        color = 123u,
+                        readiness = false
                     ),
                 ),
             ),

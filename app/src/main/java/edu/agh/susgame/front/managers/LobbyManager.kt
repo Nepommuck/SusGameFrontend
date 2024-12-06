@@ -5,53 +5,66 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.graphics.Color
-import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
-import edu.agh.susgame.dto.rest.model.PlayerREST
-import edu.agh.susgame.front.gui.components.common.util.ColorProvider
+import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.gui.components.common.util.ParserDTO
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
+import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 
 class LobbyManager(
     val lobbyService: LobbyService,
-    val id: LobbyId,
+    val gameService: GameService,
+    val lobbyId: LobbyId,
     val name: String,
 //    val maxNumOfPlayers: Int,
 //    val gameTime: Int,
 ) {
-    val playersRest: MutableMap<PlayerId, PlayerREST> = mutableMapOf()
-    val localPlayer: PlayerLobby = PlayerLobby()
-
+    var localPlayerId: PlayerId? = null
     val playersMap: SnapshotStateMap<PlayerId, PlayerLobby> = mutableStateMapOf()
     val gameManager: MutableState<GameManager?> = mutableStateOf(null)
     val isGameReady: MutableState<Boolean> = mutableStateOf(false)
 
     val isColorBeingChanged: MutableState<Boolean> = mutableStateOf(false)
 
-    val colorProvider: ColorProvider = ColorProvider()
-    fun updateFromRest(lobby: Lobby) {
-        lobby.playersWaiting.forEach {
-            addPlayerRest(it)
+    fun updateFromRest() {
+        lobbyService.getById(lobbyId).thenApply { lobby ->
+            lobby?.playersWaiting?.forEach { player ->
+                addPlayer(
+                    playerId = player.id,
+                    nickname = player.nickname,
+                    color = Color(player.color),
+                    readiness = if (player.readiness) PlayerStatus.READY else PlayerStatus.NOT_READY
+                )
+            }
+            println(lobby?.playersWaiting)
         }
     }
+    fun handleLocalPlayerJoin(nickname: PlayerNickname){
+        gameService.joinLobby(lobbyId, nickname)
+    }
 
-    fun addLocalPlayer() {
-        val localPlayerRest =
-            PlayerREST(localPlayer.name, localPlayer.id, colorProvider.getUniqueRandomColor())
-        addPlayerRest(localPlayerRest)
+    fun handleLocalPlayerLeave(){
+        localPlayerId?.let { gameService.sendLeavingRequest(it) }
+        gameService.leaveLobby()
     }
 
     fun getPlayerStatus(id: PlayerId) = playersMap[id]?.status?.value
 
-    fun addPlayerRest(player: PlayerREST) {
-        playersMap[player.id] = PlayerLobby(
-            name = player.nickname,
-            id = player.id
+    fun addPlayer(
+        playerId: PlayerId,
+        nickname: PlayerNickname,
+        color: Color = Color.Red,
+        readiness: PlayerStatus = PlayerStatus.NOT_READY
+    ) {
+        playersMap[playerId] = PlayerLobby(
+            id = playerId,
+            name = nickname,
+            color = mutableStateOf(color),
+            status = mutableStateOf(readiness)
         )
-        playersRest[player.id] = player
     }
 
     fun countPlayers(): Int = playersMap.size
@@ -63,6 +76,16 @@ class LobbyManager(
         playersMap[id]?.color?.value = color
     }
 
+    fun handlePlayerColorChange(color: Color){
+        localPlayerId?.let{
+            setPlayerColor(it,color)
+            gameService.sendPlayerChangeColor(
+                playerId = it,
+                color = color.value
+            )
+            isColorBeingChanged.value = false
+        }
+    }
 
     fun updatePlayerStatus(id: PlayerId, status: PlayerStatus) {
         playersMap[id]?.status?.value = status
@@ -70,19 +93,20 @@ class LobbyManager(
 
     fun removePlayer(playerId: PlayerId) {
         playersMap.remove(playerId)
-        playersRest.remove(playerId)
     }
 
     fun getMapFromServer() {
-        this.id.let { id ->
+        this.lobbyId.let { id ->
             lobbyService.getGameMap(id)
                 .thenApply { gameMapDTO ->
                     if (gameMapDTO != null) {
-                        this.gameManager.value = ParserDTO.gameMapDtoToGameManager(
-                            gameMapDTO = gameMapDTO,
-                            localPlayerId = this.localPlayer.id,
-                            players = playersMap.values.toList()
-                        )
+                        this.gameManager.value = this.localPlayerId?.let {
+                            ParserDTO.gameMapDtoToGameManager(
+                                gameMapDTO = gameMapDTO,
+                                localPlayerId = it,
+                                players = playersMap.values.toList()
+                            )
+                        }
                         isGameReady.value = true
                     } else {
                         println("Failed to update map from the server for gameMapId: $id and player: $this.localPlayer.id")

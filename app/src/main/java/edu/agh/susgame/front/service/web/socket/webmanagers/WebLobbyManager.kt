@@ -23,12 +23,9 @@ class WebLobbyManager(
     }
 
     fun handlePlayerJoiningResponse(decodedMessage: ServerSocketMessage.PlayerJoining) {
-        lobbyManager.addPlayerRest(
-            PlayerREST(
-                PlayerNickname(decodedMessage.playerName),
-                PlayerId(decodedMessage.playerId),
-                12233
-            )
+        lobbyManager.addPlayer(
+            nickname = PlayerNickname(decodedMessage.playerName),
+            playerId = PlayerId(decodedMessage.playerId),
         )
     }
 
@@ -37,8 +34,8 @@ class WebLobbyManager(
     }
 
     fun handleIdConfig(decodedMessage: ServerSocketMessage.IdConfig) {
-        lobbyManager.localPlayer.id = PlayerId(decodedMessage.id)
-        lobbyManager.addLocalPlayer()
+        lobbyManager.localPlayerId = PlayerId(decodedMessage.id)
+        lobbyManager.updateFromRest()
     }
 
     fun handleGameStarted(decodedMessage: ServerSocketMessage.GameStarted) {

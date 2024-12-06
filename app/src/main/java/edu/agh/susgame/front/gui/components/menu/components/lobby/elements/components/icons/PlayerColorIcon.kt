@@ -30,7 +30,7 @@ fun PlayerColorIcon(
             .background(player.color.value, shape = RoundedCornerShape(20.dp))
             .border(2.dp, Color.Black, shape = RoundedCornerShape(20.dp))
             .let {
-                if (player.id == lobbyManager.localPlayer.id) {
+                if (player.id == lobbyManager.localPlayerId) {
                     it.clickable {
                         lobbyManager.isColorBeingChanged.value =
                             !lobbyManager.isColorBeingChanged.value

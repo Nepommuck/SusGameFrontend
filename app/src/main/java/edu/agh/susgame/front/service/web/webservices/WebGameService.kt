@@ -103,6 +103,7 @@ class WebGameService(
                 playerId = playerId.value
             )
         )
+
     }
 
     override fun sendChangePlayerReadinessRequest(playerId: PlayerId, status: PlayerStatus) {

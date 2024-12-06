@@ -10,10 +10,10 @@ import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 
 class PlayerLobby(
-    var name: PlayerNickname = PlayerNickname("default"),
-    var id: PlayerId = PlayerId(2137)
+    var name: PlayerNickname,
+    var id: PlayerId,
+    val color: MutableState<Color>,
+    val status: MutableState<PlayerStatus>
 ) {
     val tokens: MutableIntState = mutableIntStateOf(0)
-    val status: MutableState<PlayerStatus> = mutableStateOf(PlayerStatus.NOT_READY)
-    val color: MutableState<Color> = mutableStateOf(Color.Red)
 }
