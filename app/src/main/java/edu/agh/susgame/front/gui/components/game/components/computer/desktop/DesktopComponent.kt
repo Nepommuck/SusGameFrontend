@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import edu.agh.susgame.R
-import edu.agh.susgame.front.gui.components.game.components.computer.ComputerState
-import edu.agh.susgame.front.gui.components.game.components.computer.MiniGame
 import edu.agh.susgame.front.gui.components.game.components.computer.desktop.components.DesktopIconButton
 import edu.agh.susgame.front.gui.components.game.components.computer.desktop.components.DesktopIconPlaceholder
+import edu.agh.susgame.front.managers.state.ComputerState
+import edu.agh.susgame.front.managers.state.MiniGame
 
 
 @Composable

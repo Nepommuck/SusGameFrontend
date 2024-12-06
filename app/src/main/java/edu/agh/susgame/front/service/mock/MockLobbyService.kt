@@ -79,13 +79,13 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
      * This method exists for a compatibility of `MockGameService` with `GameService` interface
      */
     fun joinLobby(lobbyId: LobbyId, player: PlayerREST): CompletableFuture<Unit> {
-//        lobbyManager?.addPlayer(player)
+//        lobbyManager?.addPlayerRest(player)
         println(lobbyManager?.playersMap)
         return CompletableFuture.supplyAsync {
             Thread.sleep(delayMs)
 
             currentLobbies[lobbyId]?.let {
-                currentLobbies[lobbyId] = lobbyWithPlayerAdded(it, player)
+//                currentLobbies[lobbyId] = lobbyWithPlayerAdded(it, player)
             }
         }
     }
@@ -109,74 +109,6 @@ class MockLobbyService(mockDelayMs: Long? = null) : LobbyService {
      * This function is only for testing, it shows logic behind creating new lobbies
      */
     private fun createCustomLobbies() {
-        // game 1
-        val player0 = PlayerREST(
-            nickname = PlayerNickname("Player_0"),
-            id = PlayerId(0),
-            color = 123,
-            readiness = false
-        )
-        val player1 = PlayerREST(
-            nickname = PlayerNickname("Player_1"),
-            id = PlayerId(1),
-            color = 123,
-            readiness = false
-        )
-
-        val lobbyIdValue1 = LobbyId(freeGameId++)
-        currentLobbies.putIfAbsent(
-            lobbyIdValue1, Lobby(
-                id = lobbyIdValue1,
-                name = "Gra dodana statycznie 1",
-                maxNumOfPlayers = AppConfig.gameConfig.playersPerGame.max,
-                gameTime = 10,
-                playersWaiting = emptyList(),
-            )
-        )
-
-        this.joinLobby(lobbyIdValue1, player0)
-        this.joinLobby(lobbyIdValue1, player1)
-
-        // game 2
-        val player2 = PlayerREST(
-            nickname = PlayerNickname("Player_0"),
-            id = PlayerId(0),
-            color = 123,
-            readiness = false
-        )
-        val player3 = PlayerREST(
-            nickname = PlayerNickname("Player_1"),
-            id = PlayerId(1),
-            color = 123,
-            readiness = false
-        )
-
-        val lobbyIdValue2 = LobbyId(freeGameId++)
-        currentLobbies.putIfAbsent(
-            lobbyIdValue2,
-            Lobby(
-                id = lobbyIdValue2,
-                name = "Gra dodana statycznie 2",
-                maxNumOfPlayers = 4,
-                gameTime = 5,
-                playersWaiting = listOf(
-                    PlayerREST(
-                        nickname = PlayerNickname("Nonexistent-PlayerREST"),
-                        id = PlayerId(99),
-                        color = 123,
-                        readiness = false
-                    ),
-                ),
-            ),
-        )
-        this.joinLobby(lobbyIdValue2, player2)
-        this.joinLobby(lobbyIdValue2, player3)
-    }
-
-    private fun lobbyWithPlayerAdded(lobby: Lobby, player: PlayerREST): Lobby {
-        return lobby.copy(
-            playersWaiting = lobby.playersWaiting + player,
-        )
     }
 
     private fun lobbyWithPlayerRemoved(lobby: Lobby, playerNickname: PlayerNickname): Lobby {

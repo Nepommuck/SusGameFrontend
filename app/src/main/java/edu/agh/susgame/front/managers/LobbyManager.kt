@@ -83,8 +83,9 @@ class LobbyManager(
         localPlayerId?.let { gameService.sendLeavingRequest(it) }
         gameService.leaveLobby()
     }
-    fun handlePlayerColorChange(color: Color){
-        localPlayerId?.let{
+
+    fun handlePlayerColorChange(color: Color) {
+        localPlayerId?.let {
             updatePlayerColor(it, color)
             gameService.sendPlayerChangeColor(
                 playerId = it,

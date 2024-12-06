@@ -42,7 +42,7 @@ class WebLobbyManager(
         lobbyManager.updateFromRest()
     }
 
-    fun handleGameStarted(decodedMessage: ServerSocketMessage.GameStarted) {
+    fun handleGameStarted() {
         lobbyManager.loadMapFromServer()
     }
 

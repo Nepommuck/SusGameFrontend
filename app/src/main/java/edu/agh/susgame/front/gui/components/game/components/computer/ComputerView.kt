@@ -5,13 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import edu.agh.susgame.front.gui.components.game.components.computer.chat.ChatColors
 import edu.agh.susgame.front.gui.components.game.components.computer.chat.ChatComponent
 import edu.agh.susgame.front.gui.components.game.components.computer.desktop.DesktopComponent
 import edu.agh.susgame.front.managers.GameManager
+import edu.agh.susgame.front.managers.state.ComputerState
 import edu.agh.susgame.front.service.interfaces.GameService
 
 
@@ -20,7 +19,7 @@ fun ComputerComponent(
     gameService: GameService,
     gameManager: GameManager
 ) {
-    val computerState = remember { mutableStateOf<ComputerState>(ComputerState.NothingOpened) }
+    val computerState = gameManager.gameState.computerState
 
     Row(
         modifier = Modifier

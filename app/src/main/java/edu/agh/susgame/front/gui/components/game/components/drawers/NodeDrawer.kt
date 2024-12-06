@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.front.gui.components.common.graph.node.Host
 import edu.agh.susgame.front.gui.components.common.graph.node.Node
-import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.graph.node.Router
 import edu.agh.susgame.front.gui.components.common.graph.node.Server
 import edu.agh.susgame.front.managers.GameManager
@@ -29,11 +28,7 @@ import edu.agh.susgame.front.managers.GameManager
 private const val SCALE_FACTOR = 0.04f
 
 @Composable
-fun NodeDrawer(
-    gameManager: GameManager,
-    changingPath: Boolean,
-    onInspectedNodeChange: (NodeId?) -> Unit,
-) {
+fun NodeDrawer(gameManager: GameManager) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -61,10 +56,10 @@ fun NodeDrawer(
 
                 )
                 .clickable {
-                    if (changingPath) {
+                    if (gameManager.gameState.isPathBeingChanged.value) {
                         gameManager.addNodeToPathBuilder(node.id)
                     } else {
-                        onInspectedNodeChange(node.id)
+                        gameManager.gameState.currentlyInspectedNode.value = node
                     }
                 }) {
                 Image(
@@ -103,15 +98,15 @@ fun getColorFilterForNode(
         }
 
         is Router -> {
-            val load = if (node.overheat.value > 0)
-                node.overheat.value.toFloat() / gameManager.criticalBufferOverheatLevel
-            else
-                0f
+            val load =
+                if (node.overheat.intValue > 0)
+                    node.overheat.intValue.toFloat() / gameManager.criticalBufferOverheatLevel
+                else
+                    0f
 
-            val routerColor = if (!node.isWorking.value)
-                Color.Gray
-            else
-                Color(
+            val routerColor =
+                if (!node.isWorking.value) Color.Gray
+                else Color(
                     red = (load * 255).toInt(),
                     green = ((1 - load) * 255).toInt(),
                     blue = 0,

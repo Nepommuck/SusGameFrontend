@@ -13,9 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -27,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.socket.common.GameStatus
-import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.Calculate
 import edu.agh.susgame.front.gui.components.common.util.Translation
@@ -52,19 +49,11 @@ internal fun GameGraphComponent(
 ) {
     LaunchedEffect(Unit) {
         gameService.initGameManager(gameManager)
-        gameManager.addGameService(gameService)
         gameService.sendStartGame()
     }
 
-    var inspectedNodeId by remember { mutableStateOf<NodeId?>(null) }
-    var changingPath by remember { gameManager.isPathBeingChanged }
-
-    val isPathValid by remember { gameManager.pathBuilder.isPathValid }
-    var isComputerViewVisible by remember { mutableStateOf(false) }
-
-    fun setComputerViewVisibility(visible: Boolean) {
-        isComputerViewVisible = visible
-    }
+    val gameState = gameManager.gameState
+    val isPathValid by gameManager.pathBuilder.isPathValid
 
     val zoomState = remember {
         ZoomState(
@@ -105,31 +94,27 @@ internal fun GameGraphComponent(
 
         ) {
 
-            EdgeDrawer(gameManager = gameManager)
+            EdgeDrawer(gameManager)
 
-            NodeDrawer(
-                gameManager = gameManager,
-                changingPath = changingPath,
-                onInspectedNodeChange = { newId -> inspectedNodeId = newId },
-            )
+            NodeDrawer(gameManager)
         }
 
-        inspectedNodeId?.let { nodeId ->
-            gameManager.nodesById[nodeId]?.takeIf { !changingPath }?.let { node ->
+        gameState.currentlyInspectedNode.value
+            ?.takeIf { !gameState.isPathBeingChanged.value }
+            ?.let { node ->
                 NodeInfoComp(
                     node = node,
-                    onExit = { inspectedNodeId = null },
-                    changingPath = { state -> changingPath = state },
-                    gameManager = gameManager
+                    onExit = { gameState.currentlyInspectedNode.value = null },
+                    changingPath = { state -> gameState.isPathBeingChanged.value = state },
+                    gameManager = gameManager,
                 )
             }
-        }
 
         Box(
             modifier = Modifier
                 .align(Alignment.CenterStart)
         ) {
-            if (changingPath) {
+            if (gameState.isPathBeingChanged.value) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -143,9 +128,8 @@ internal fun GameGraphComponent(
                             contentDescription = Translation.Game.ABORT_PATH,
                             modifier = Modifier.clickable {
                                 gameManager.clearEdges(gameManager.localPlayerId)
-                                changingPath = false
+                                gameState.isPathBeingChanged.value = false
                                 gameManager.pathBuilder.reset()
-
                             }
                         )
                     }
@@ -166,8 +150,8 @@ internal fun GameGraphComponent(
                                 ) {
                                     if (isPathValid) {
                                         gameManager.handlePathChange()
-                                        changingPath = false
-                                        inspectedNodeId = null
+                                        gameState.isPathBeingChanged.value = false
+                                        gameState.currentlyInspectedNode.value = null
                                     }
                                 }
                         )
@@ -177,20 +161,21 @@ internal fun GameGraphComponent(
         }
         ProgressBarComp(gameManager = gameManager)
 
-        if (isComputerViewVisible) {
+        if (gameState.isComputerViewVisible.value) {
             ComputerComponent(gameService = gameService, gameManager = gameManager)
         }
 
         NavIcons(
-            isComputerVisible = isComputerViewVisible,
-            setComputerViewVisibility = { visible -> setComputerViewVisibility(visible) }
+            isComputerVisible = gameState.isComputerViewVisible,
         )
     }
 
-    when (gameManager.gameStatus.value) {
+    when (gameState.gameStatus.value) {
         GameStatus.FINISHED_WON, GameStatus.FINISHED_LOST -> {
             val message =
-                if (gameManager.gameStatus.value == GameStatus.FINISHED_WON) Translation.Game.YOU_WON else Translation.Game.YOU_LOST
+                if (gameState.gameStatus.value == GameStatus.FINISHED_WON) Translation.Game.YOU_WON
+                else Translation.Game.YOU_LOST
+
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -202,7 +187,7 @@ internal fun GameGraphComponent(
             }
         }
 
-        else -> { /* Do nothing for other states */
-        }
+        // Do nothing for other states
+        else -> {}
     }
 }
