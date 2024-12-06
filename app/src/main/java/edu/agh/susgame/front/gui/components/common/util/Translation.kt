@@ -13,7 +13,6 @@ object Translation {
         const val LEAVE = "Opuść"
         const val JOIN = "Dołącz"
         const val PLAY = "Rozpocznij gre!"
-        const val MOVE_TO_GAME = "Przejdź do gry!"
         const val CREATE = "Stwórz"
         const val LOADING = "Ładowanie"
         const val SEND = "Wyślij"
@@ -67,7 +66,6 @@ object Translation {
         const val SERVER = "Serwer"
         const val ACCEPT_PATH = "Zatwierdź ścieżkę"
         const val ABORT_PATH = "Anuluj ścieżkę"
-        const val YOU = "Ty"
     }
 
     object Error {
