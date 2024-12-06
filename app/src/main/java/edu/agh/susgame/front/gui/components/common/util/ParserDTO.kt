@@ -12,9 +12,11 @@ import edu.agh.susgame.front.gui.components.common.graph.node.Router
 import edu.agh.susgame.front.gui.components.common.graph.node.Server
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.managers.GameManager
+import edu.agh.susgame.front.service.interfaces.GameService
 
 object ParserDTO {
     fun gameMapDtoToGameManager(
+        gameService: GameService,
         gameMapDTO: GameMapDTO,
         localPlayerId: PlayerId,
         players: List<PlayerLobby>,
@@ -77,7 +79,8 @@ object ParserDTO {
                 mapSize = mapSize,
                 localPlayerId = localPlayerId,
                 packetsToWin = gameMapDTO.gameGoal,
-                criticalBufferOverheatLevel = gameMapDTO.criticalBufferOverheatLevel
+                criticalBufferOverheatLevel = gameMapDTO.criticalBufferOverheatLevel,
+                gameService = gameService,
             )
 
         return gameManager

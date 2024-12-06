@@ -23,14 +23,14 @@ class WebLobbyManager(
     }
 
     fun handlePlayerJoiningResponse(decodedMessage: ServerSocketMessage.PlayerJoining) {
-        lobbyManager.updateAddPlayer(
+        lobbyManager.updatePlayerJoins(
             nickname = PlayerNickname(decodedMessage.playerName),
             playerId = PlayerId(decodedMessage.playerId),
         )
     }
 
     fun handlePlayerLeavingResponse(decodedMessage: ServerSocketMessage.PlayerLeaving) {
-        lobbyManager.updateRemovePlayer(
+        lobbyManager.updatePlayerLeaves(
             playerId = PlayerId(decodedMessage.playerId)
         )
     }

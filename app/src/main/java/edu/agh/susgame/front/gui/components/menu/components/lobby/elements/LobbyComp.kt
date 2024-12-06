@@ -15,6 +15,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,14 +60,13 @@ fun LobbyComp(
         )
     }
 
-    var hasPlayerJoined by remember {
-        mutableStateOf(gameService.isPlayerInLobby(lobbyInit.id))
-    }
     var playerNicknameInputValue by remember { mutableStateOf("") }
     var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
-    var isLeaveButtonLoading by remember { mutableStateOf(false) }
-    val isGameReady by remember { lobbyManager.isGameReady }
-    val isColorBeingChanged by remember { lobbyManager.isColorBeingChanged }
+    val isLeaveButtonLoading = remember { mutableStateOf(false) }
+
+    val lobbyState = lobbyManager.lobbyState
+    val isGameReady by remember { lobbyState.isGameMapReady }
+    val isColorBeingChanged by remember { lobbyState.isColorBeingChanged }
 
     LaunchedEffect(lobbyManager) {
         lobbyManager.updateFromRest()
@@ -124,7 +124,7 @@ fun LobbyComp(
                             })
                     }
                 }
-                if (!hasPlayerJoined) {
+                if (!lobbyState.hasPlayerJoined.value) {
                     val isError = isNicknameError(currentNickname, playerNicknameInputValue)
                     if (isError) {
                         Text(
@@ -152,50 +152,49 @@ fun LobbyComp(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Button(
-                        enabled = !isLeaveButtonLoading,
+                        enabled = !isLeaveButtonLoading.value,
                         onClick = {
                             handleLeaveButtonClick(
                                 navController = navController,
                                 lobbyManager = lobbyManager,
-//                                gameService = gameService,
-                                hasPlayerJoined = hasPlayerJoined,
-                                setLeaveButtonLoading = { isLeaveButtonLoading = it },
-                                setHasPlayerJoined = { hasPlayerJoined = it }
+                                isLeaveButtonLoading = isLeaveButtonLoading,
                             )
                         }
                     ) {
                         Text(
-                            text = if (isLeaveButtonLoading) Translation.Button.LOADING
+                            text = if (isLeaveButtonLoading.value) Translation.Button.LOADING
                             else Translation.Button.LEAVE
                         )
                     }
 
-                    if (hasPlayerJoined) {
-                        Button(onClick = {
-                            if (!isGameReady) {
-                                gameService.sendStartGame()
-                            }
-                        }) {
+                    if (lobbyState.hasPlayerJoined.value) {
+                        Button(
+                            onClick = {
+                                if (!isGameReady) {
+                                    gameService.sendStartGame()
+                                }
+                            },
+                            enabled = lobbyState.areAllPlayersReady.value && lobbyManager.getNumberOfPlayers() >= 2
+                        ) {
                             Text(text = Translation.Button.PLAY)
                         }
                     } else {
-                        var isJoinButtonLoading by remember { mutableStateOf(false) }
+                        val isJoinButtonLoading = remember { mutableStateOf(false) }
+
                         Button(
-                            enabled = !isJoinButtonLoading && currentNickname != null,
+                            enabled = !isJoinButtonLoading.value && currentNickname != null,
                             onClick = {
                                 CoroutineScope(Dispatchers.Main).launch {
                                     handleJoinButtonClick(
                                         currentNickname = currentNickname,
                                         lobbyManager = lobbyManager,
-//                                        gameService = gameService,
-                                        setJoinButtonLoading = { isJoinButtonLoading = it },
-                                        setHasPlayerJoined = { hasPlayerJoined = it }
+                                        isJoinButtonLoading = isJoinButtonLoading,
                                     )
                                 }
                             },
                         ) {
                             Text(
-                                text = if (isJoinButtonLoading) Translation.Button.LOADING
+                                text = if (isJoinButtonLoading.value) Translation.Button.LOADING
                                 else Translation.Button.JOIN
                             )
                         }
@@ -223,51 +222,33 @@ fun updateNicknameOrInvalidate(
 fun handleLeaveButtonClick(
     navController: NavController,
     lobbyManager: LobbyManager,
-//    gameService: GameService,
-    hasPlayerJoined: Boolean,
-    setLeaveButtonLoading: (Boolean) -> Unit,
-    setHasPlayerJoined: (Boolean) -> Unit
+    isLeaveButtonLoading: MutableState<Boolean>,
 ) {
-    setLeaveButtonLoading(true)
-    if (!hasPlayerJoined) {
+    isLeaveButtonLoading.value = true
+
+    if (!lobbyManager.lobbyState.hasPlayerJoined.value) {
         CoroutineScope(Dispatchers.Main).launch {
             navController.navigate(MenuRoute.SearchLobby.route)
         }
     } else {
         lobbyManager.handleLocalPlayerLeave()
-//        lobbyManager.localPlayerId?.let { gameService.sendLeavingRequest(it) }
-//        gameService.leaveLobby().thenRun {
-//            setHasPlayerJoined(false)
-//            CoroutineScope(Dispatchers.Main).launch {
-//                navController.navigate(MenuRoute.SearchLobby.route)
-//            }
-//            setLeaveButtonLoading(false)
-//        }
-        // TODO this should be in StateManager
+
         CoroutineScope(Dispatchers.Main).launch {
             navController.navigate(MenuRoute.SearchLobby.route)
         }
-        setHasPlayerJoined(false)
-        setLeaveButtonLoading(false)
+        isLeaveButtonLoading.value = false
     }
 }
 
 fun handleJoinButtonClick(
     currentNickname: PlayerNickname?,
-//    gameService: GameService,
     lobbyManager: LobbyManager,
-    setJoinButtonLoading: (Boolean) -> Unit,
-    setHasPlayerJoined: (Boolean) -> Unit
+    isJoinButtonLoading: MutableState<Boolean>,
 ) {
-    setJoinButtonLoading(true)
+    isJoinButtonLoading.value = true
+
     currentNickname?.let { nickname ->
         lobbyManager.handleLocalPlayerJoin(nickname)
-//        gameService.joinLobby(lobbyManager.lobbyId, nickname).thenRun {
-//            setJoinButtonLoading(false)
-//            setHasPlayerJoined(true)
-//        }
-        // TODO this should be in StateManager
-        setJoinButtonLoading(false)
-        setHasPlayerJoined(true)
+        isJoinButtonLoading.value = false
     }
 }

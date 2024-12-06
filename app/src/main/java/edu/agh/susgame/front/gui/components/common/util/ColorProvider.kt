@@ -1,12 +1,11 @@
 package edu.agh.susgame.front.gui.components.common.util
 
 import androidx.compose.ui.graphics.Color
-import kotlin.random.Random
 
 class ColorProvider {
     companion object {
-        val a = Color(12uL)
-        val b = "12".toULong()
+        val DEFAULT_COLOR = Color.LightGray
+
         val colors = listOf(
             Color(0xFF6A5ACD), // Slate Blue
             Color(0xFF7FFF00), // Chartreuse

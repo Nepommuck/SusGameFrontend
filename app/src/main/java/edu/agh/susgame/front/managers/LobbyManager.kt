@@ -8,9 +8,11 @@ import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
+import edu.agh.susgame.front.gui.components.common.util.ColorProvider
 import edu.agh.susgame.front.gui.components.common.util.ParserDTO
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
+import edu.agh.susgame.front.managers.state.LobbyStateManager
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService
 
@@ -22,21 +24,23 @@ class LobbyManager(
 //    val maxNumOfPlayers: Int,
 //    val gameTime: Int,
 ) {
+    val lobbyState = LobbyStateManager()
+
     // ATTRIBUTES - DEFAULT
     var localPlayerId: PlayerId? = null
     val playersMap: SnapshotStateMap<PlayerId, PlayerLobby> = mutableStateMapOf()
     val gameManager: MutableState<GameManager?> = mutableStateOf(null)
-    val isGameReady: MutableState<Boolean> = mutableStateOf(false)
-    val isColorBeingChanged: MutableState<Boolean> = mutableStateOf(false)
 
     // SERVICE MANAGEMENT - UPDATE FROM SERVER MESSAGES
     fun updateFromRest() {
         lobbyService.getById(lobbyId).thenApply { lobby ->
             lobby?.playersWaiting?.forEach { player ->
-                updateAddPlayer(
+                updatePlayerJoins(
                     playerId = player.id,
                     nickname = player.nickname,
-                    color = Color(player.color.decimalRgbaValue.toULong()),
+                    color = player.color?.let {
+                        Color(it.decimalRgbaValue.toULong())
+                    } ?: ColorProvider.DEFAULT_COLOR,
                     readiness = if (player.readiness) PlayerStatus.READY else PlayerStatus.NOT_READY
                 )
             }
@@ -44,10 +48,10 @@ class LobbyManager(
         }
     }
 
-    fun updateAddPlayer(
+    fun updatePlayerJoins(
         playerId: PlayerId,
         nickname: PlayerNickname,
-        color: Color = Color.Red,
+        color: Color = ColorProvider.DEFAULT_COLOR,
         readiness: PlayerStatus = PlayerStatus.NOT_READY
     ) {
         playersMap[playerId] = PlayerLobby(
@@ -56,6 +60,7 @@ class LobbyManager(
             color = mutableStateOf(color),
             status = mutableStateOf(readiness)
         )
+        updateAllPlayersAreReadyValue()
     }
 
     fun updatePlayerColor(playerId: PlayerId, color: Color) {
@@ -64,10 +69,12 @@ class LobbyManager(
 
     fun updatePlayerStatus(playerId: PlayerId, status: PlayerStatus) {
         playersMap[playerId]?.status?.value = status
+        updateAllPlayersAreReadyValue()
     }
 
-    fun updateRemovePlayer(playerId: PlayerId) {
+    fun updatePlayerLeaves(playerId: PlayerId) {
         playersMap.remove(playerId)
+        updateAllPlayersAreReadyValue()
     }
 
     fun updateLocalPlayerId(playerId: PlayerId) {
@@ -77,11 +84,14 @@ class LobbyManager(
     // HANDLE GUI INPUT
     fun handleLocalPlayerJoin(nickname: PlayerNickname) {
         gameService.joinLobby(lobbyId, nickname)
+        lobbyState.hasPlayerJoined.value = true
+        updateAllPlayersAreReadyValue()
     }
 
     fun handleLocalPlayerLeave() {
         localPlayerId?.let { gameService.sendLeavingRequest(it) }
         gameService.leaveLobby()
+        lobbyState.hasPlayerJoined.value = false
     }
 
     fun handlePlayerColorChange(color: Color) {
@@ -91,7 +101,7 @@ class LobbyManager(
                 playerId = it,
                 color = color,
             )
-            isColorBeingChanged.value = false
+            lobbyState.isColorBeingChanged.value = false
         }
     }
 
@@ -99,10 +109,12 @@ class LobbyManager(
         localPlayerId?.let {
             val currentStatus = getPlayerStatus(it)
             val newStatus =
-                if (currentStatus == PlayerStatus.READY) PlayerStatus.NOT_READY else PlayerStatus.READY
+                if (currentStatus == PlayerStatus.READY) PlayerStatus.NOT_READY
+                else PlayerStatus.READY
             gameService.sendChangePlayerReadinessRequest(it, newStatus)
             updatePlayerStatus(it, newStatus)
         }
+        updateAllPlayersAreReadyValue()
     }
 
     // UTILS
@@ -115,12 +127,13 @@ class LobbyManager(
                     if (gameMapDTO != null) {
                         this.gameManager.value = this.localPlayerId?.let {
                             ParserDTO.gameMapDtoToGameManager(
+                                gameService = gameService,
                                 gameMapDTO = gameMapDTO,
                                 localPlayerId = it,
                                 players = playersMap.values.toList()
                             )
                         }
-                        isGameReady.value = true
+                        lobbyState.isGameMapReady.value = true
                     } else {
                         println("Failed to update map from the server for gameMapId: $id and player: $this.localPlayer.id")
                     }
@@ -130,4 +143,10 @@ class LobbyManager(
 
     // PRIVATE
     private fun getPlayerStatus(id: PlayerId) = playersMap[id]?.status?.value
+
+    private fun updateAllPlayersAreReadyValue() {
+        lobbyState.areAllPlayersReady.value = playersMap.values.all { player ->
+            player.status.value == PlayerStatus.READY
+        }
+    }
 }
