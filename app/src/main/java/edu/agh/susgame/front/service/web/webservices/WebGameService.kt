@@ -1,5 +1,7 @@
 package edu.agh.susgame.front.service.web.webservices
 
+import androidx.compose.ui.graphics.Color
+import edu.agh.susgame.dto.common.ColorDTO
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
@@ -123,11 +125,11 @@ class WebGameService(
         )
     }
 
-    override fun sendPlayerChangeColor(playerId: PlayerId, color: ULong) {
+    override fun sendPlayerChangeColor(playerId: PlayerId, color: Color) {
         sendClientSocketMessage(
             ClientSocketMessage.PlayerChangeColor(
                 playerId = playerId.value,
-                color = color
+                color = ColorDTO(color.value.toString())
             )
         )
     }

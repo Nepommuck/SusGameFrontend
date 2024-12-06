@@ -49,7 +49,7 @@ class WebLobbyManager(
     fun handleColorChange(decodedMessage: ServerSocketMessage.PlayerChangeColor) {
         lobbyManager.updatePlayerColor(
             playerId = PlayerId(decodedMessage.playerId),
-            color = Color(decodedMessage.color)
+            color = Color(decodedMessage.color.decimalRgbaValue.toULong()),
         )
     }
 }

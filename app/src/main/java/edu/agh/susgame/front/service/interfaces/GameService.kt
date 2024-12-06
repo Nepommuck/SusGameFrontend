@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.service.interfaces
 
+import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
@@ -32,8 +33,10 @@ interface GameService {
 
     fun sendStartGame()
 
-    fun sendPlayerChangeColor(playerId: PlayerId, color: ULong)
+    fun sendPlayerChangeColor(playerId: PlayerId, color: Color)
+
     fun sendUpgradeRouter(routerId: NodeId)
+
     fun sendFixRouter(routerId: NodeId)
 
     // REST

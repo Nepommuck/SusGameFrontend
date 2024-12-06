@@ -36,7 +36,7 @@ class LobbyManager(
                 updateAddPlayer(
                     playerId = player.id,
                     nickname = player.nickname,
-                    color = Color(player.color),
+                    color = Color(player.color.decimalRgbaValue.toULong()),
                     readiness = if (player.readiness) PlayerStatus.READY else PlayerStatus.NOT_READY
                 )
             }
@@ -89,7 +89,7 @@ class LobbyManager(
             updatePlayerColor(it, color)
             gameService.sendPlayerChangeColor(
                 playerId = it,
-                color = color.value
+                color = color,
             )
             isColorBeingChanged.value = false
         }
