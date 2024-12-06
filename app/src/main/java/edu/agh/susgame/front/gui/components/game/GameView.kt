@@ -41,7 +41,7 @@ fun GameView(
                     GameGraphComponent(
                         gameManager = it,
                         gameService = gameService,
-                        navController = menuNavController
+                        navController = menuNavController,
                     )
                 }
             } ?: run {

@@ -1,11 +1,9 @@
 package edu.agh.susgame.front.managers
 
 import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import edu.agh.susgame.dto.rest.model.PlayerId
@@ -22,6 +20,7 @@ import edu.agh.susgame.front.gui.components.common.graph.node.Router
 import edu.agh.susgame.front.gui.components.common.graph.node.Server
 import edu.agh.susgame.front.gui.components.common.util.Coordinates
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
+import edu.agh.susgame.front.managers.state.GameStateManager
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 
@@ -35,11 +34,12 @@ class GameManager(
     val packetsToWin: Int,
     val localPlayerId: PlayerId,
 ) {
+    // Shared game state
+    val gameState = GameStateManager()
+
     // ATTRIBUTES - DEFAULT
     private var gameService: GameService? = null
     private val pathsByPlayerId: SnapshotStateMap<PlayerId, Path> = mutableStateMapOf()
-    val isPathBeingChanged: MutableState<Boolean> = mutableStateOf(false)
-    val gameStatus: MutableState<GameStatus> = mutableStateOf(GameStatus.WAITING)
     val gameTimeLeft: MutableIntState = mutableIntStateOf(0)
     val chatMessages: SnapshotStateList<SimpleMessage> = mutableStateListOf()
     val pathBuilder: PathBuilder = PathBuilder(serverId)
@@ -114,7 +114,7 @@ class GameManager(
     }
 
     fun updateGameStatus(status: GameStatus) {
-        gameStatus.value = status
+        gameState.gameStatus.value = status
     }
 
     // HANDLE GUI INPUT

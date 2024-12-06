@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -20,7 +21,7 @@ import edu.agh.susgame.front.gui.components.common.util.Calculate
 private val SIZE_DP = 50.dp
 
 @Composable
-fun NavIcons(isComputerVisible: Boolean, setComputerViewVisibility: (Boolean) -> Unit) {
+fun NavIcons(isComputerVisible: MutableState<Boolean>) {
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -32,9 +33,9 @@ fun NavIcons(isComputerVisible: Boolean, setComputerViewVisibility: (Boolean) ->
             modifier = Modifier
                 .size(SIZE_DP)
                 .padding(PaddingXS)
-                .alpha(Calculate.getAlpha(!isComputerVisible))
+                .alpha(Calculate.getAlpha(!isComputerVisible.value))
                 .clickable {
-                    setComputerViewVisibility(false)
+                    isComputerVisible.value = false
                 }
         )
 
@@ -43,9 +44,9 @@ fun NavIcons(isComputerVisible: Boolean, setComputerViewVisibility: (Boolean) ->
             modifier = Modifier
                 .size(SIZE_DP)
                 .padding(PaddingXS)
-                .alpha(Calculate.getAlpha(isComputerVisible))
+                .alpha(Calculate.getAlpha(isComputerVisible.value))
                 .clickable {
-                    setComputerViewVisibility(true)
+                    isComputerVisible.value = true
                 }
         )
     }

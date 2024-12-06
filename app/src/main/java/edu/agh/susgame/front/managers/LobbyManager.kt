@@ -9,7 +9,6 @@ import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerREST
-import edu.agh.susgame.front.gui.components.common.util.ColorProvider
 import edu.agh.susgame.front.gui.components.common.util.ParserDTO
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
@@ -31,7 +30,6 @@ class LobbyManager(
 
     val isColorBeingChanged: MutableState<Boolean> = mutableStateOf(false)
 
-    val colorProvider: ColorProvider = ColorProvider()
     fun updateFromRest(lobby: Lobby) {
         lobby.playersWaiting.forEach {
             addPlayerRest(it)
@@ -40,7 +38,7 @@ class LobbyManager(
 
     fun addLocalPlayer() {
         val localPlayerRest =
-            PlayerREST(localPlayer.name, localPlayer.id, colorProvider.getUniqueRandomColor())
+            PlayerREST(localPlayer.name, localPlayer.id)
         addPlayerRest(localPlayerRest)
     }
 

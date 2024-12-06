@@ -1,4 +1,4 @@
-package edu.agh.susgame.front.gui.component.menu.components.lobby.elements
+package edu.agh.susgame.front.gui.components.menu.components.lobby.elements
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -94,7 +94,7 @@ internal fun LobbyComp(
                         .fillMaxSize()
                         .padding(PaddingL),
                 ) {
-                    items(lobbyManager.playersMap.toList()) { (id, player) ->
+                    items(lobbyManager.playersMap.toList()) { (_, player) ->
                         PlayerRow(
                             player = player,
                             lobbyManager = lobbyManager,
@@ -122,7 +122,7 @@ internal fun LobbyComp(
                                 lobbyManager.setPlayerColor(lobbyManager.localPlayer.id, newColor)
                                 gameService.sendPlayerChangeColor(
                                     lobbyManager.localPlayer.id,
-                                    newColor.value
+                                    newColor.value,
                                 )
                                 lobbyManager.isColorBeingChanged.value = false
                             })
