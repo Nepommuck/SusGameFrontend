@@ -1,32 +1,11 @@
 package edu.agh.susgame.front.gui.components.common.util
 
 import androidx.compose.ui.graphics.Color
-import kotlin.random.Random
 
 class ColorProvider {
-    private val colorsMutable = mutableListOf(
-        0xFF5733L, // Pomarańczowy
-        0x33FF57L, // Zielony
-        0x3357FFL, // Niebieski
-        0xFF33A1L, // Różowy
-        0xFFD633L, // Żółty
-        0x33FFF5L, // Turkusowy
-        0x8E33FFL  // Fioletowy
-    )
-
-    private fun generateRandomColor(): Long {
-        return Random.nextLong(0xFFFFFF + 1L)
-    }
-
-    fun getUniqueRandomColor(): Long {
-        if (colorsMutable.isEmpty()) {
-            val randomColor = generateRandomColor()
-            colorsMutable.add(randomColor)
-        }
-        return colorsMutable.removeAt(Random.nextInt(colorsMutable.size))
-    }
-
     companion object {
+        val DEFAULT_COLOR = Color.LightGray
+
         val colors = listOf(
             Color(0xFF6A5ACD), // Slate Blue
             Color(0xFF7FFF00), // Chartreuse

@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,6 +22,8 @@ fun PlayerColorIcon(
     player: PlayerLobby,
     lobbyManager: LobbyManager
 ) {
+    var isColorBeingChanged by remember { lobbyManager.lobbyState.isColorBeingChanged }
+
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -30,10 +35,9 @@ fun PlayerColorIcon(
             .background(player.color.value, shape = RoundedCornerShape(20.dp))
             .border(2.dp, Color.Black, shape = RoundedCornerShape(20.dp))
             .let {
-                if (player.id == lobbyManager.localPlayer.id) {
+                if (player.id == lobbyManager.localPlayerId) {
                     it.clickable {
-                        lobbyManager.isColorBeingChanged.value =
-                            !lobbyManager.isColorBeingChanged.value
+                        isColorBeingChanged = !isColorBeingChanged
                     }
                 } else it
             }

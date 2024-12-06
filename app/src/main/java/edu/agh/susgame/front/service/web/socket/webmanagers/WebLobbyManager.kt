@@ -3,7 +3,6 @@ package edu.agh.susgame.front.service.web.socket.webmanagers
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
-import edu.agh.susgame.dto.rest.model.PlayerREST
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.managers.LobbyManager
@@ -12,39 +11,45 @@ class WebLobbyManager(
     private val lobbyManager: LobbyManager
 ) {
     fun handlePlayerChangingReadinessResponse(decodedMessage: ServerSocketMessage.PlayerChangeReadiness) {
-        if (decodedMessage.state) {
-            lobbyManager.updatePlayerStatus(PlayerId(decodedMessage.playerId), PlayerStatus.READY)
-        } else {
-            lobbyManager.updatePlayerStatus(
-                PlayerId(decodedMessage.playerId),
-                PlayerStatus.NOT_READY
-            )
+        val newStatus = when(decodedMessage.state){
+            true -> PlayerStatus.READY
+            false -> PlayerStatus.NOT_READY
         }
+        lobbyManager.updatePlayerStatus(
+            playerId = PlayerId(decodedMessage.playerId),
+            status = newStatus
+        )
+
     }
 
     fun handlePlayerJoiningResponse(decodedMessage: ServerSocketMessage.PlayerJoining) {
-        lobbyManager.addPlayerRest(
-            PlayerREST(
-                PlayerNickname(decodedMessage.playerName),
-                PlayerId(decodedMessage.playerId),
-            )
+        lobbyManager.updatePlayerJoins(
+            nickname = PlayerNickname(decodedMessage.playerName),
+            playerId = PlayerId(decodedMessage.playerId),
         )
     }
 
     fun handlePlayerLeavingResponse(decodedMessage: ServerSocketMessage.PlayerLeaving) {
-        lobbyManager.removePlayer(PlayerId(decodedMessage.playerId))
+        lobbyManager.updatePlayerLeaves(
+            playerId = PlayerId(decodedMessage.playerId)
+        )
     }
 
     fun handleIdConfig(decodedMessage: ServerSocketMessage.IdConfig) {
-        lobbyManager.localPlayer.id = PlayerId(decodedMessage.id)
-        lobbyManager.addLocalPlayer()
+        lobbyManager.updateLocalPlayerId(
+            playerId = PlayerId(decodedMessage.id)
+        )
+        lobbyManager.updateFromRest()
     }
 
     fun handleGameStarted() {
-        lobbyManager.getMapFromServer()
+        lobbyManager.loadMapFromServer()
     }
 
     fun handleColorChange(decodedMessage: ServerSocketMessage.PlayerChangeColor) {
-        lobbyManager.setPlayerColor(PlayerId(decodedMessage.playerId), Color(decodedMessage.color))
+        lobbyManager.updatePlayerColor(
+            playerId = PlayerId(decodedMessage.playerId),
+            color = Color(decodedMessage.color.decimalRgbaValue.toULong()),
+        )
     }
 }

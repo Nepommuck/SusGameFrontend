@@ -14,5 +14,5 @@ data class RouterDTO(
     val spaceLeft: Int,
     val upgradeCost: Int,
     val overheatLevel: Int,
-    val isWorking: Boolean,
+    val isWorking: Boolean
 )
