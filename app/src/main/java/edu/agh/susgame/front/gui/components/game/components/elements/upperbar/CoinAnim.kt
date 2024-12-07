@@ -8,34 +8,24 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
-import edu.agh.susgame.R
 import edu.agh.susgame.front.gui.components.common.util.Calculate
+import edu.agh.susgame.front.managers.ResourceManager
 import kotlinx.coroutines.delay
-
-private const val DELAY_MS: Long = 70
-private val ANIMATION_FRAMES = listOf(
-    R.drawable.token0,
-    R.drawable.token1,
-    R.drawable.token2,
-    R.drawable.token3,
-    R.drawable.token4,
-    R.drawable.token5,
-    R.drawable.token6,
-)
 
 @Composable
 fun CoinAnim() {
     var animFrameIndex by remember { mutableIntStateOf(0) }
+    val anim = ResourceManager.TOKEN_ANIMATION
 
     LaunchedEffect(Unit) {
         while (true) {
-            delay(DELAY_MS)
-            animFrameIndex = Calculate.incrementAnimIndex(animFrameIndex, ANIMATION_FRAMES.size)
+            delay(anim.frameRate)
+            animFrameIndex = Calculate.incrementAnimIndex(animFrameIndex, anim.frames.size)
         }
     }
 
     Image(
-        painter = painterResource(id = ANIMATION_FRAMES[animFrameIndex]),
+        painter = painterResource(id = anim.frames[animFrameIndex]),
         contentDescription = null,
     )
 }

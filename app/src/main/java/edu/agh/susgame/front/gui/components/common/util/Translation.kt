@@ -3,8 +3,6 @@ package edu.agh.susgame.front.gui.components.common.util
 import edu.agh.susgame.dto.rest.model.LobbyId
 
 object Translation {
-    const val GAME_TITLE = "SusGame"
-
     object Button {
         const val GO_BACK = "Wróć"
         const val EDIT = "Edytuj"
@@ -19,6 +17,7 @@ object Translation {
     }
 
     object Menu {
+        const val GAME_TITLE = "CyberSurfers"
         const val JOIN_GAME = "Dołącz do gry"
         const val CREATE_GAME = "Stwórz nową grę"
         const val IP_ADDRESS = "Adres IP serwera"

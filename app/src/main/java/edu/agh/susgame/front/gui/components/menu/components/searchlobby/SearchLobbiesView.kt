@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.gui.components.common.theme.Header
+import edu.agh.susgame.front.gui.components.common.theme.MenuBackground
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.elements.LobbyRow
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
@@ -34,7 +35,6 @@ fun SearchLobbiesView(
     var awaitingGames by remember { mutableStateOf<Map<LobbyId, Lobby>?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
-
     LaunchedEffect(Unit) {
         lobbyService.getAll()
             .thenAccept {
@@ -42,7 +42,7 @@ fun SearchLobbiesView(
                 isLoading = false
             }
     }
-
+    MenuBackground()
     Column {
         Header(title = Translation.Lobby.FIND_GAME)
         if (isLoading) {

@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import edu.agh.susgame.front.gui.components.common.theme.Header
+import edu.agh.susgame.front.gui.components.common.theme.MenuBackground
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.CreateGameComp
@@ -40,6 +41,8 @@ fun CreateLobbyView(
     var selectedNumberOfPlayers by remember { mutableIntStateOf(DEFAULT_PLAYERS_AMOUNT) }
     var gameTime by remember { mutableIntStateOf(DEFAULT_GAME_TIME) }
     var isGamePinEnabled by remember { mutableStateOf(false) }
+
+    MenuBackground()
 
     Column(Modifier.padding(PaddingL)) {
         Column(

@@ -13,19 +13,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Calculate
+import edu.agh.susgame.front.managers.ResourceManager
 import kotlinx.coroutines.delay
-
-private const val DELAY_MS: Long = 300
-private val ANIMATION_SYMBOLS = listOf('/', "-", '\\', '|')
 
 @Composable
 fun LoadAnim() {
     var animFrameIndex by remember { mutableIntStateOf(0) }
-
+    val anim = ResourceManager.HOURGLASS_ANIMATION
     LaunchedEffect(Unit) {
         while (true) {
-            delay(DELAY_MS)
-            animFrameIndex = Calculate.incrementAnimIndex(animFrameIndex, ANIMATION_SYMBOLS.size)
+            delay(anim.frameRate)
+            animFrameIndex = Calculate.incrementAnimIndex(animFrameIndex, anim.frames.size)
         }
     }
 
@@ -34,16 +32,16 @@ fun LoadAnim() {
         horizontalArrangement = Arrangement.Center,
     ) {
         Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.Center) {
-            Text(text = "(", style = TextStyler.TerminalLarge)
+            Text(text = "(", style = TextStyler.TerminalM)
         }
         Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.Center) {
             Text(
-                text = ANIMATION_SYMBOLS[animFrameIndex].toString(),
-                style = TextStyler.TerminalLarge
+                text = anim.frames[animFrameIndex],
+                style = TextStyler.TerminalM
             )
         }
         Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.Center) {
-            Text(text = ")", style = TextStyler.TerminalLarge)
+            Text(text = ")", style = TextStyler.TerminalM)
         }
 
     }
