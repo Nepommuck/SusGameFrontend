@@ -11,9 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import edu.agh.susgame.front.config.AppConfig
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
+import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Translation
 
 @Composable
@@ -29,7 +31,8 @@ fun NumberOfPlayersComp(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         Text(
-            text = "${Translation.CreateGame.AMOUNT_OF_PLAYERS}:"
+            text = "${Translation.CreateGame.AMOUNT_OF_PLAYERS}:",
+            style = TextStyler.TerminalM
         )
         Spacer(modifier = Modifier.width(PaddingL))
 

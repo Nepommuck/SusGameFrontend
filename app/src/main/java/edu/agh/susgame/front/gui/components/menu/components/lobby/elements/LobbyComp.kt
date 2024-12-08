@@ -32,6 +32,7 @@ import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
+import edu.agh.susgame.front.gui.components.common.theme.PaddingXL
 import edu.agh.susgame.front.gui.components.common.theme.RefreshIcon
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Translation
@@ -145,14 +146,16 @@ fun LobbyComp(
 
             Column(
                 modifier = Modifier
-                    .weight(1f),
+                    .weight(1f)
+                    .fillMaxSize()
+                .padding(PaddingXL),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (isColorBeingChanged) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Color.Gray)
+                            .background(Color.Black.copy(alpha = 0.3f))
                     ) {
                         ColorMenuComp(
                             onColorSelected = { newColor ->
