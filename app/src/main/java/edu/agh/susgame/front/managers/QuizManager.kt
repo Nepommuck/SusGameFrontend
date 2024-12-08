@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion
 import edu.agh.susgame.front.managers.state.util.QuizAnswerState
 import edu.agh.susgame.front.managers.state.util.QuizState
+import edu.agh.susgame.front.service.interfaces.GameService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -12,15 +13,18 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.time.Duration.Companion.seconds
 
-class QuizManager {
+class QuizManager(
+    private val gameService: GameService,
+) {
     private val _quizState = mutableStateOf<QuizState>(QuizState.QuestionNotAvailable)
     private val availableQuestions = ConcurrentLinkedQueue<QuizQuestion>()
 
     val quizState = derivedStateOf { _quizState.value }
 
-    fun handleNewQuestion(newQuestion: QuizQuestion) {
+    fun enqueueNewQuestion(newQuestion: QuizQuestion) {
         availableQuestions.add(newQuestion)
-        loadNewQuestionIfAvailable()
+
+        awaitAndLoadNewQuestionIfAvailable()
     }
 
     fun answerCurrentQuestion(answer: QuizQuestion.QuizAnswer) {
@@ -30,6 +34,10 @@ class QuizManager {
         ) {
             _quizState.value = stateSnapshot.copy(
                 answerState = QuizAnswerState.Answered(selectedAnswer = answer)
+            )
+            gameService.sendQuizQuestionAnswer(
+                questionId = stateSnapshot.question.id,
+                answerId = answer.id,
             )
 
             CoroutineScope(Dispatchers.Main).launch {
@@ -51,10 +59,11 @@ class QuizManager {
             )
 
             CoroutineScope(Dispatchers.Main).launch {
+                // TODO Parametrize
                 delay(2.seconds)
                 clearGradedQuestion()
-                delay(2.seconds)
-                loadNewQuestionIfAvailable()
+
+                awaitAndLoadNewQuestionIfAvailable()
             }
         }
     }
@@ -68,16 +77,20 @@ class QuizManager {
         }
     }
 
-    private fun loadNewQuestionIfAvailable() {
-        if (_quizState.value is QuizState.QuestionAvailable) {
-            return
-        }
+    private fun awaitAndLoadNewQuestionIfAvailable() {
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(2.seconds)
 
-        availableQuestions.poll()?.let { nextQuestion ->
-            _quizState.value = QuizState.QuestionAvailable(
-                question = nextQuestion,
-                answerState = QuizAnswerState.NotAnswered,
-            )
+            if (_quizState.value is QuizState.QuestionAvailable) {
+                return@launch
+            }
+
+            availableQuestions.poll()?.let { nextQuestion ->
+                _quizState.value = QuizState.QuestionAvailable(
+                    question = nextQuestion,
+                    answerState = QuizAnswerState.NotAnswered,
+                )
+            }
         }
     }
 }

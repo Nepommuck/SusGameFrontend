@@ -13,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import edu.agh.susgame.R
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.gui.components.game.components.computer.desktop.components.DesktopIconButton
+import edu.agh.susgame.front.gui.components.game.components.computer.desktop.components.DesktopIconPlaceholder
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.state.util.ComputerState
@@ -41,7 +42,8 @@ fun DesktopView(gameManager: GameManager) {
                 imageDescription = "icon-tree",
                 onClick = {
                     computerState.value = ComputerState.MiniGameOpened(MiniGame.MiniGame1)
-                    gameManager.quizManager.handleNewQuestion(
+                    // TODO 114 Delete
+                    gameManager.quizManager.enqueueNewQuestion(
                         QuizQuestion.fromDto(
                             ServerSocketMessage.QuizQuestionDTO(
                                 questionId = -1,
@@ -76,14 +78,7 @@ fun DesktopView(gameManager: GameManager) {
                 onClick = { computerState.value = ComputerState.ChatOpened },
             )
 
-//            DesktopIconPlaceholder()
-
-            DesktopIconButton(
-                painter = painterResource(id = R.drawable.computer_icon_tree),
-                imageDescription = "icon-tree",
-                onClick = {
-                },
-            )
+            DesktopIconPlaceholder()
         }
     }
 }
