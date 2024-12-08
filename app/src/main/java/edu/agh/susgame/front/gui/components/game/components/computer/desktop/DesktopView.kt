@@ -11,10 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import edu.agh.susgame.R
-import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.gui.components.game.components.computer.desktop.components.DesktopIconButton
 import edu.agh.susgame.front.gui.components.game.components.computer.desktop.components.DesktopIconPlaceholder
-import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.state.util.ComputerState
 import edu.agh.susgame.front.managers.state.util.MiniGame
@@ -42,17 +40,6 @@ fun DesktopView(gameManager: GameManager) {
                 imageDescription = "icon-tree",
                 onClick = {
                     computerState.value = ComputerState.MiniGameOpened(MiniGame.MiniGame1)
-                    // TODO 114 Delete
-                    gameManager.quizManager.enqueueNewQuestion(
-                        QuizQuestion.fromDto(
-                            ServerSocketMessage.QuizQuestionDTO(
-                                questionId = -1,
-                                question = "Czy masz rozum i godność człowieka?",
-                                answers = listOf("Tak", "Nie", "Nie wiem", "Chyba"),
-                                correctAnswer = 2,
-                            )
-                        ),
-                    )
                 },
             )
 
@@ -64,7 +51,7 @@ fun DesktopView(gameManager: GameManager) {
                         computerState.value = ComputerState.QuizQuestionOpened
                     }
                 },
-                isVisible = { gameManager.quizManager.quizState.value is QuizState.QuestionAvailable }
+                isVisible = { quizState.value is QuizState.QuestionAvailable }
             )
         }
 
