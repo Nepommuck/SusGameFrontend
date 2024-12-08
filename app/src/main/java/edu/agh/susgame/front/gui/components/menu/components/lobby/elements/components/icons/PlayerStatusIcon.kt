@@ -22,9 +22,8 @@ internal fun PlayerStatusIcon(
     val status by playerStatus
 
     val iconId: Int = when (status) {
-        PlayerStatus.READY -> R.drawable.accept
-        PlayerStatus.NOT_READY -> R.drawable.cross
-        PlayerStatus.CONNECTING -> R.drawable.menu
+        PlayerStatus.READY -> R.drawable.ready
+        PlayerStatus.NOT_READY -> R.drawable.unready
     }
 
     Box(
@@ -35,10 +34,6 @@ internal fun PlayerStatusIcon(
             painter = painterResource(id = iconId),
             contentDescription = null,
             modifier = Modifier
-                .graphicsLayer(
-                    scaleX = 0.5f,
-                    scaleY = 0.5f
-                )
                 .align(Alignment.Center)
         )
     }

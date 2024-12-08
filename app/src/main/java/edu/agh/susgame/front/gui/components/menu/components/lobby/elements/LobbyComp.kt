@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
@@ -28,6 +29,8 @@ import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
+import edu.agh.susgame.front.gui.components.common.theme.RefreshIcon
+import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.ColorMenuComp
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.PlayerRow
@@ -78,8 +81,9 @@ fun LobbyComp(
         navController.navigate("${MenuRoute.Game.route}/${lobbyManager.lobbyId.value}")
     }
 
-    Column(modifier = Modifier.padding(PaddingL)) {
-        Header(title = lobbyManager.name)
+    Column(modifier = Modifier.padding(PaddingL), horizontalAlignment = Alignment.CenterHorizontally) {
+//        RefreshIcon(onRefreshClicked = { lobbyManager.updateFromRest() })
+        Header(title = lobbyManager.name, style = TextStyler.TerminalXL)
         Row {
 
             Column(
@@ -99,7 +103,6 @@ fun LobbyComp(
                         PlayerRow(
                             player = player,
                             lobbyManager = lobbyManager,
-                            gameService = gameService
                         )
                     }
                 }
@@ -112,6 +115,7 @@ fun LobbyComp(
                     .weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
+//                RefreshIcon(onRefreshClicked = { lobbyManager.updateFromRest() })
                 if (isColorBeingChanged) {
                     Box(
                         modifier = Modifier

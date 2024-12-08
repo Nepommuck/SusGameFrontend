@@ -24,7 +24,8 @@ object Translation {
     }
 
     object Lobby {
-        const val FIND_GAME = "Znajdź grę"
+        const val FINDING_GAMES = "Szukanie gier..."
+        const val CHOOSE_GAME = "Wybierz grę"
         const val CHOOSE_NICKNAME = "Podaj nick"
         const val NICKNAME_ERROR_MESSAGE = "Nick nie może zawierać spacji"
 

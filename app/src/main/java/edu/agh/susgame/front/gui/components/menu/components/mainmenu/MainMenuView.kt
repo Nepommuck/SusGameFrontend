@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.MenuBackground
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
+import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.mainmenu.elements.IpAddressInput
 import edu.agh.susgame.front.gui.components.menu.components.mainmenu.elements.MainMenuButton
@@ -37,7 +38,7 @@ fun MainMenuView(
 
         Spacer(modifier = Modifier.weight(0.5f))
         Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
-            Header(title = Translation.Menu.GAME_TITLE)
+            Header(title = Translation.Menu.GAME_TITLE, style = TextStyler.TerminalXXL)
         }
 
         Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {

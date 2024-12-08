@@ -9,13 +9,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
 import edu.agh.susgame.front.gui.components.common.util.Calculate
-import edu.agh.susgame.front.managers.ResourceManager
+import edu.agh.susgame.front.gui.components.common.theme.Animations
 import kotlinx.coroutines.delay
 
 @Composable
 fun CoinAnim() {
     var animFrameIndex by remember { mutableIntStateOf(0) }
-    val anim = ResourceManager.TOKEN_ANIMATION
+    val anim = Animations.TOKEN_ANIMATION
 
     LaunchedEffect(Unit) {
         while (true) {

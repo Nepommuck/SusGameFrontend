@@ -1,11 +1,9 @@
 package edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.icons
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -13,7 +11,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
+import edu.agh.susgame.R
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.managers.LobbyManager
 
@@ -28,19 +28,25 @@ fun PlayerColorIcon(
         modifier = Modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center
-
     ) {
-        Box(modifier = Modifier
-            .fillMaxSize(0.9f)
-            .background(player.color.value, shape = RoundedCornerShape(20.dp))
-            .border(2.dp, Color.Black, shape = RoundedCornerShape(20.dp))
-            .let {
-                if (player.id == lobbyManager.localPlayerId) {
-                    it.clickable {
+        Image(
+            painter = painterResource(id = R.drawable.player),
+            contentDescription = "Player Color Icon",
+            modifier = Modifier
+                .fillMaxSize(),
+            colorFilter = ColorFilter.lighting(
+                multiply = player.color.value,
+                add = Color.DarkGray
+            )
+        )
+        if (player.id == lobbyManager.localPlayerId) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable {
                         isColorBeingChanged = !isColorBeingChanged
                     }
-                } else it
-            }
-        )
+            )
+        }
     }
 }

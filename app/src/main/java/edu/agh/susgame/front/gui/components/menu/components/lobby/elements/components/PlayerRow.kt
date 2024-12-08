@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
+import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.icons.PlayerColorIcon
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.icons.PlayerStatusIcon
@@ -26,59 +27,50 @@ import edu.agh.susgame.front.service.interfaces.GameService
 fun PlayerRow(
     player: PlayerLobby,
     lobbyManager: LobbyManager,
-    gameService: GameService,
 ) {
 
     Row(
         modifier = Modifier
             .padding(PaddingS)
             .fillMaxWidth()
-            .height(70.dp)
-            .background(Color.Gray, shape = RoundedCornerShape(20.dp))
+            .height(60.dp)
     ) {
         Box(
             modifier = Modifier
-                .weight(2f)
+                .weight(1f)
+        ) {
+            PlayerColorIcon(
+                player = player,
+                lobbyManager = lobbyManager
+            )
+        }
 
+        Box(
+            modifier = Modifier
+                .weight(3f)
                 .fillMaxSize()
                 .align(Alignment.CenterVertically)
         ) {
             Text(
                 modifier = Modifier.align(Alignment.CenterStart),
-                text = player.name.value
+                text = player.name.value,
+                style = TextStyler.TerminalM
             )
         }
-        Row(
+        Box(
             modifier = Modifier
                 .weight(1f)
-                .fillMaxSize()
-        )
-        {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-            ) {
-                PlayerColorIcon(
-                    player = player,
-                    lobbyManager = lobbyManager
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .background(Color.DarkGray)
-                    .fillMaxSize()
-                    .align(Alignment.CenterVertically)
-                    .let {
-                        if (player.id == lobbyManager.localPlayerId) {
-                            it.clickable {
-                                lobbyManager.handleLocalPlayerStatusChange()
-                            }
-                        } else it
-                    }
+                .fillMaxSize(0.8f)
+                .align(Alignment.CenterVertically)
+                .let {
+                    if (player.id == lobbyManager.localPlayerId) {
+                        it.clickable {
+                            lobbyManager.handleLocalPlayerStatusChange()
+                        }
+                    } else it
+                }
             ) {
                 PlayerStatusIcon(playerStatus = player.status)
             }
-        }
     }
 }

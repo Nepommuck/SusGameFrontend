@@ -1,9 +1,9 @@
-package edu.agh.susgame.front.managers
+package edu.agh.susgame.front.gui.components.common.theme
 
 import edu.agh.susgame.R
 
 
-object ResourceManager {
+object Animations {
     data class AnimationFrames(val frames: List<Int>, val frameRate: Long)
     data class AnimationFramesString(val frames: List<String>, val frameRate: Long)
 
@@ -49,6 +49,4 @@ object ResourceManager {
         frames = listOf("/", "-", "\\", "|"),
         frameRate = 300
     )
-
-
 }

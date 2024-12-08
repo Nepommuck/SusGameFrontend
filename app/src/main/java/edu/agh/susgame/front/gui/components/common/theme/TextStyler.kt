@@ -8,9 +8,9 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
 object TextStyler {
-    private fun baseTextStyle(fontSize: TextUnit): TextStyle {
+    private fun baseTextStyle(fontSize: TextUnit, color: Color = Color.LightGray.copy(alpha = 0.8f)): TextStyle {
         return TextStyle(
-            color = Color.LightGray.copy(alpha = 0.8f),
+            color = color,
             fontSize = fontSize,
             fontFamily = FontFamily.Monospace,
             fontWeight = FontWeight.Bold,
@@ -23,7 +23,11 @@ object TextStyler {
         )
     }
     val TerminalXXL = baseTextStyle(50.sp)
+    val TerminalXL = baseTextStyle(30.sp)
     val TerminalL = baseTextStyle(20.sp)
     val TerminalM = baseTextStyle(14.sp)
     val TerminalS = baseTextStyle(11.sp)
+
+    val Chat = baseTextStyle(16.sp, Color.Green)
+
 }
