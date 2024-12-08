@@ -3,7 +3,12 @@ package edu.agh.susgame.front.gui.components.game.components.computer.quiz
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 
 
-data class QuizQuestion(val question: String, val answers: List<QuizAnswer>) {
+data class QuizQuestion(
+    val question: String,
+    val backendId: QuizQuestionId,
+    val answers: List<QuizAnswer>,
+) {
+    data class QuizQuestionId(val value: Int)
 
     data class QuizAnswer(val index: Int, val answer: String, val isCorrect: Boolean)
 
@@ -14,6 +19,7 @@ data class QuizQuestion(val question: String, val answers: List<QuizAnswer>) {
 
             return QuizQuestion(
                 question = dto.question,
+                backendId = QuizQuestionId(dto.questionId),
                 answers = dto.answers.mapIndexed { index, answer ->
                     QuizAnswer(index, answer, isCorrect = dto.correctAnswer == index)
                 }

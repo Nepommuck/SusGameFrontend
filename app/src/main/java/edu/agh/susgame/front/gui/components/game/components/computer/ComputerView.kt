@@ -28,7 +28,7 @@ fun ComputerComponent(
             .background(ChatColors.BACKGROUND)
     ) {
         Box(modifier = Modifier.weight(1f)) {
-            DesktopView(gameManager.gameState)
+            DesktopView(gameManager)
         }
         Box(modifier = Modifier.weight(1f)) {
             when (computerState.value) {
@@ -44,15 +44,16 @@ fun ComputerComponent(
                 }
 
                 is ComputerState.QuizQuestionOpened -> Box {
-                    when (val quizState = gameManager.gameState.quizState.value) {
+                    val quizState = gameManager.quizManager.quizState
+
+                    when (val stateSnapshot = quizState.value) {
                         QuizState.QuestionNotAvailable ->
                             computerState.value = ComputerState.NothingOpened
 
                         is QuizState.QuestionAvailable -> QuizQuestionView(
-//                            quizState = remember { mutableStateOf(quizState) },
-                            quizQuestion = quizState.question,
-                            answerState = quizState.answerState,
-                            quizState = gameManager.gameState.quizState,
+                            quizQuestion = stateSnapshot.question,
+                            answerState = stateSnapshot.answerState,
+                            quizManager = gameManager.quizManager,
                         )
                     }
                 }

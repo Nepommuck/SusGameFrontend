@@ -8,7 +8,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
-import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.dto.socket.common.GameStatus
 import edu.agh.susgame.front.gui.components.common.graph.edge.Edge
 import edu.agh.susgame.front.gui.components.common.graph.edge.EdgeId
@@ -38,6 +37,8 @@ class GameManager(
 ) {
     // Shared game state
     val gameState = GameStateManager()
+
+    val quizManager = QuizManager()
 
     // ATTRIBUTES - DEFAULT
     private val pathsByPlayerId: SnapshotStateMap<PlayerId, Path> = mutableStateMapOf()
@@ -181,6 +182,7 @@ class GameManager(
             }
         }
     }
+
     fun clearEdges(playerId: PlayerId?) {
         playerId?.let {
             edgesList.forEach { edge ->
@@ -223,12 +225,12 @@ class GameManager(
 
     private fun initNodesIdsToEdgeId(): Map<Pair<NodeId, NodeId>, EdgeId> {
         return edgesList.associate { Pair(it.firstNodeId, it.secondNodeId) to it.id }.flatMap {
-                sequenceOf(
-                    it.toPair(), Pair(it.key.second, it.key.first) to it.value
-                )
-            }.associate {
-                it.first to it.second
-            }
+            sequenceOf(
+                it.toPair(), Pair(it.key.second, it.key.first) to it.value
+            )
+        }.associate {
+            it.first to it.second
+        }
     }
 
     private fun initServer(): Server {

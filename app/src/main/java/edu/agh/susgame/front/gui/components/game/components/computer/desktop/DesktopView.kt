@@ -14,16 +14,17 @@ import edu.agh.susgame.R
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.gui.components.game.components.computer.desktop.components.DesktopIconButton
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion
-import edu.agh.susgame.front.managers.state.GameStateManager
+import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.state.util.ComputerState
 import edu.agh.susgame.front.managers.state.util.MiniGame
-import edu.agh.susgame.front.managers.state.util.QuizAnswerState
 import edu.agh.susgame.front.managers.state.util.QuizState
 
 
 @Composable
-fun DesktopView(gameState: GameStateManager) {
+fun DesktopView(gameManager: GameManager) {
+    val gameState = gameManager.gameState
     val computerState = gameState.computerState
+    val quizState = gameManager.quizManager.quizState
 
     Column(
         modifier = Modifier
@@ -40,8 +41,8 @@ fun DesktopView(gameState: GameStateManager) {
                 imageDescription = "icon-tree",
                 onClick = {
                     computerState.value = ComputerState.MiniGameOpened(MiniGame.MiniGame1)
-                    gameState.quizState.value = QuizState.QuestionAvailable(
-                        question = QuizQuestion.fromDto(
+                    gameManager.quizManager.handleNewQuestion(
+                        QuizQuestion.fromDto(
                             ServerSocketMessage.QuizQuestionDTO(
                                 questionId = -1,
                                 question = "Czy masz rozum i godność człowieka?",
@@ -49,7 +50,6 @@ fun DesktopView(gameState: GameStateManager) {
                                 correctAnswer = 2,
                             )
                         ),
-                        answerState = QuizAnswerState.NotAnswered,
                     )
                 },
             )
@@ -58,11 +58,11 @@ fun DesktopView(gameState: GameStateManager) {
                 painter = painterResource(id = R.drawable.computer_icon_question),
                 imageDescription = "icon-gear",
                 onClick = {
-                    if (gameState.quizState.value is QuizState.QuestionAvailable) {
+                    if (quizState.value is QuizState.QuestionAvailable) {
                         computerState.value = ComputerState.QuizQuestionOpened
                     }
                 },
-                isVisible = { gameState.quizState.value is QuizState.QuestionAvailable }
+                isVisible = { gameManager.quizManager.quizState.value is QuizState.QuestionAvailable }
             )
         }
 
@@ -82,7 +82,6 @@ fun DesktopView(gameState: GameStateManager) {
                 painter = painterResource(id = R.drawable.computer_icon_tree),
                 imageDescription = "icon-tree",
                 onClick = {
-                    gameState.quizState.value = QuizState.QuestionNotAvailable
                 },
             )
         }
