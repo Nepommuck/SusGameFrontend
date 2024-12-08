@@ -74,7 +74,7 @@ fun NodeInfoComp(
                                     )
                                 },
                                 valueRange = 0f..node.maxPacketsToSend.intValue.toFloat(),
-                                steps = node.maxPacketsToSend.intValue,
+                                steps = node.maxPacketsToSend.intValue - 1,
                                 modifier = Modifier.padding(top = 16.dp)
                             )
                         }
@@ -114,14 +114,13 @@ fun NodeInfoComp(
                         }
 
                         is Router -> {
-                            val router = node
                             Box(modifier = Modifier.size(SIZE_DP)) {
-                                if (!router.isWorking.value) {
+                                if (!node.isWorking.value) {
                                     Image(
                                         painter = painterResource(id = R.drawable.repair_tools),
                                         contentDescription = "Repair",
                                         modifier = Modifier.clickable {
-                                            gameManager.handleRouterRepair(router.id)
+                                            gameManager.handleRouterRepair(node.id)
                                             onExit()
                                         }
                                     )
@@ -130,7 +129,7 @@ fun NodeInfoComp(
                                         painter = painterResource(id = R.drawable.plus),
                                         contentDescription = "Upgrade",
                                         modifier = Modifier.clickable {
-                                            gameManager.handleRouterUpgrade(router.id)
+                                            gameManager.handleRouterUpgrade(node.id)
                                         }
                                     )
 

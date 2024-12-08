@@ -19,10 +19,13 @@ class PathBuilder(private val serverId: NodeId) {
 
     fun getLastNode(): NodeId? = path.lastOrNull()
 
-    // TODO GAME-67
-//    fun deleteNodeFromPath(nodeId: NodeId) {
-//        TODO("GAME-67 Implement")
-//    }
+    fun deleteNodeFromPath(nodeId: NodeId) {
+        val index = path.indexOf(nodeId)
+        if (index != -1) {
+            path.subList(index + 1, path.size).clear()
+        }
+        updateValidity()
+    }
 
     fun isNodeValid(nodeId: NodeId): Boolean {
         return !path.contains(nodeId)
