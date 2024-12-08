@@ -18,12 +18,15 @@ import edu.agh.susgame.front.gui.components.game.components.computer.quiz.compon
 import edu.agh.susgame.front.managers.QuizManager
 import edu.agh.susgame.front.managers.state.util.QuizAnswerState
 
+
 @Composable
 fun QuizQuestionView(
     quizQuestion: QuizQuestion,
     answerState: QuizAnswerState,
     quizManager: QuizManager,
 ) {
+    val answers = quizQuestion.answers
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -35,14 +38,14 @@ fun QuizQuestionView(
         Spacer(modifier = Modifier.height(PaddingL))
 
         QuizAnswersRow(
-            answers = Pair(quizQuestion.answers[0], quizQuestion.answers[1]),
+            answers = Pair(answers[0], answers[1]),
             answerState, quizManager,
         )
 
         Spacer(modifier = Modifier.height(PaddingS))
 
         QuizAnswersRow(
-            answers = Pair(quizQuestion.answers[2], quizQuestion.answers[3]),
+            answers = Pair(answers[2], answers[3]),
             answerState, quizManager,
         )
     }

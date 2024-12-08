@@ -45,7 +45,7 @@ fun DesktopView(gameManager: GameManager) {
 
             DesktopIconButton(
                 painter = painterResource(id = R.drawable.computer_icon_question),
-                imageDescription = "icon-gear",
+                imageDescription = "icon-question",
                 onClick = {
                     if (quizState.value is QuizState.QuestionAvailable) {
                         computerState.value = ComputerState.QuizQuestionOpened

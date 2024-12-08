@@ -66,7 +66,6 @@ object Translation {
         const val SERVER = "Serwer"
         const val ACCEPT_PATH = "Zatwierdź ścieżkę"
         const val ABORT_PATH = "Anuluj ścieżkę"
-        const val YOU = "Ty"
     }
 
     object Error {
