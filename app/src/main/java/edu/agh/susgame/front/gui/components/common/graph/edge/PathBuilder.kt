@@ -20,9 +20,11 @@ class PathBuilder(private val serverId: NodeId) {
     fun getLastNode(): NodeId? = path.lastOrNull()
 
     fun deleteNodeFromPath(nodeId: NodeId) {
-        val index = path.indexOf(nodeId)
-        if (index != -1) {
-            path.subList(index + 1, path.size).clear()
+        val nodeIndex = path.indexOf(nodeId)
+        if (nodeIndex != -1) {
+            path.removeAll(
+                elements = path.filterIndexed { index, _ -> index > nodeIndex },
+            )
         }
         updateValidity()
     }
