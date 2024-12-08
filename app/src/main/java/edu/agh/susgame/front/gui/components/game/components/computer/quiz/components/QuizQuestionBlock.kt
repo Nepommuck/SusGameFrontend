@@ -9,8 +9,7 @@ import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizCo
 @Composable
 fun QuizQuestionBlock(question: String) {
     QuizBlock(
-        width = 350.dp,
-        height = 80.dp,
+        widthPercentage = 46.0,
     ) {
         Text(question, color = QuizColors.TEXT)
     }

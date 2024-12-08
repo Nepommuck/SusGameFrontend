@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -14,13 +15,20 @@ import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizCo
 
 
 @Composable
+private fun calculateScreenWidth(percentage: Double): Dp =
+    (LocalConfiguration.current.screenWidthDp * percentage / 100.0).dp
+
+
+@Composable
 fun QuizBlock(
-    width: Dp,
-    height: Dp,
+    widthPercentage: Double,
     gradient: Brush = QuizColors.QUIZ_BLOCK_GRADIENT,
     onClick: (() -> Unit)? = null,
     content: @Composable BoxScope.() -> Unit,
 ) {
+    val width = calculateScreenWidth(widthPercentage)
+    val height = width / 4
+
     EmeraldShapedBox(
         modifier = Modifier
             .width(width)

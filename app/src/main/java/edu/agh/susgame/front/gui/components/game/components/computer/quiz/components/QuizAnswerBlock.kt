@@ -1,13 +1,9 @@
 package edu.agh.susgame.front.gui.components.game.components.computer.quiz.components
 
-//import edu.agh.susgame.front.gui.components.game.components.computer.quiz.components.AnswerButtonState.NotSelected
-//import edu.agh.susgame.front.gui.components.game.components.computer.quiz.components.AnswerButtonState.RightAnswer
-//import edu.agh.susgame.front.gui.components.game.components.computer.quiz.components.AnswerButtonState.Selected
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizColors
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion.QuizAnswer
 import edu.agh.susgame.front.managers.QuizManager
@@ -34,6 +30,7 @@ private sealed class AnswerButtonState(val textColor: Color, val blockGradient: 
     )
 }
 
+
 @Composable
 fun QuizAnswerBlock(
     answer: QuizAnswer,
@@ -52,8 +49,7 @@ fun QuizAnswerBlock(
     }
 
     QuizBlock(
-        width = 150.dp,
-        height = 40.dp,
+        widthPercentage = 23.0,
         gradient = getButtonState().blockGradient,
         onClick = {
             if (answerState is NotAnswered) {
