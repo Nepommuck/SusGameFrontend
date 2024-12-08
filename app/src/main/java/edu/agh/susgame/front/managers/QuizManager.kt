@@ -2,6 +2,7 @@ package edu.agh.susgame.front.managers
 
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
+import edu.agh.susgame.front.config.AppConfig
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion
 import edu.agh.susgame.front.managers.state.util.QuizAnswerState
 import edu.agh.susgame.front.managers.state.util.QuizState
@@ -11,7 +12,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.ConcurrentLinkedQueue
-import kotlin.time.Duration.Companion.seconds
+
+
+private val quizConfig = AppConfig.gameConfig.quizConfig
 
 class QuizManager(
     private val gameService: GameService,
@@ -41,7 +44,7 @@ class QuizManager(
             )
 
             CoroutineScope(Dispatchers.Main).launch {
-                delay(2.seconds)
+                delay(quizConfig.awaitAnswerGradeDuration)
                 handleQuestionGrading()
             }
         }
@@ -59,8 +62,7 @@ class QuizManager(
             )
 
             CoroutineScope(Dispatchers.Main).launch {
-                // TODO Parametrize
-                delay(2.seconds)
+                delay(quizConfig.loadNextQuestionCooldown / 2)
                 clearGradedQuestion()
 
                 awaitAndLoadNewQuestionIfAvailable()
@@ -79,7 +81,7 @@ class QuizManager(
 
     private fun awaitAndLoadNewQuestionIfAvailable() {
         CoroutineScope(Dispatchers.Main).launch {
-            delay(2.seconds)
+            delay(quizConfig.loadNextQuestionCooldown / 2)
 
             if (_quizState.value is QuizState.QuestionAvailable) {
                 return@launch

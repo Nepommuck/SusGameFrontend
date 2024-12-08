@@ -6,6 +6,7 @@ import edu.agh.susgame.front.config.utils.Configuration.GameConfig.GameTimeMinut
 import edu.agh.susgame.front.config.utils.Configuration.GameConfig.PlayersPerGame
 import edu.agh.susgame.front.config.utils.Configuration.WebConfig
 import edu.agh.susgame.front.config.utils.ProviderType
+import kotlin.time.Duration.Companion.seconds
 
 object AppConfig : Configuration {
     override val providers = ProviderType.WEB
@@ -29,5 +30,9 @@ object AppConfig : Configuration {
             min = 2,
             max = 6
         ),
+        quizConfig = GameConfig.QuizConfig(
+            awaitAnswerGradeDuration = 3.seconds,
+            loadNextQuestionCooldown = 10.seconds,
+        )
     )
 }
