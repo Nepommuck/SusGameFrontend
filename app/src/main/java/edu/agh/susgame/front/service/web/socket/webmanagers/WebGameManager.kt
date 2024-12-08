@@ -69,11 +69,11 @@ class WebGameManager(
 //        gameManager.updatePathsFromServer(decodedMessage)
     }
 
-    fun handleServerError(decodedMessage: ServerSocketMessage.ServerError) {
-        println("Server error: ${decodedMessage.errorMessage}")
+    fun handleQuizQuestion(quizQuestion: ServerSocketMessage.QuizQuestionDTO) {
+
     }
 
-    fun handlerQuizQuestion(decodedMessage: ServerSocketMessage.QuizQuestionDTO) {
-
+    fun handleServerError(decodedMessage: ServerSocketMessage.ServerError) {
+        println("Server error: ${decodedMessage.errorMessage}")
     }
 }

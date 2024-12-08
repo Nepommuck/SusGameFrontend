@@ -7,10 +7,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import edu.agh.susgame.front.gui.components.game.components.computer.chat.ChatColors
-import edu.agh.susgame.front.gui.components.game.components.computer.chat.ChatComponent
-import edu.agh.susgame.front.gui.components.game.components.computer.desktop.DesktopComponent
+import edu.agh.susgame.front.gui.components.game.components.computer.chat.ChatView
+import edu.agh.susgame.front.gui.components.game.components.computer.desktop.DesktopView
+import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestionView
 import edu.agh.susgame.front.managers.GameManager
-import edu.agh.susgame.front.managers.state.ComputerState
+import edu.agh.susgame.front.managers.state.util.ComputerState
+import edu.agh.susgame.front.managers.state.util.QuizState
 import edu.agh.susgame.front.service.interfaces.GameService
 
 
@@ -26,7 +28,7 @@ fun ComputerComponent(
             .background(ChatColors.BACKGROUND)
     ) {
         Box(modifier = Modifier.weight(1f)) {
-            DesktopComponent(computerState)
+            DesktopView(gameManager.gameState)
         }
         Box(modifier = Modifier.weight(1f)) {
             when (computerState.value) {
@@ -34,11 +36,25 @@ fun ComputerComponent(
                     Box {}
 
                 ComputerState.ChatOpened ->
-                    ChatComponent(gameService, gameManager)
+                    ChatView(gameService, gameManager)
 
                 is ComputerState.MiniGameOpened -> Box {
                     val miniGame = (computerState.value as ComputerState.MiniGameOpened).miniGame
                     Text("Minigame $miniGame")
+                }
+
+                is ComputerState.QuizQuestionOpened -> Box {
+                    when (val quizState = gameManager.gameState.quizState.value) {
+                        QuizState.QuestionNotAvailable ->
+                            computerState.value = ComputerState.NothingOpened
+
+                        is QuizState.QuestionAvailable -> QuizQuestionView(
+//                            quizState = remember { mutableStateOf(quizState) },
+                            quizQuestion = quizState.question,
+                            answerState = quizState.answerState,
+                            quizState = gameManager.gameState.quizState,
+                        )
+                    }
                 }
             }
         }

@@ -29,7 +29,7 @@ object ChatColors {
 }
 
 @Composable
-fun ChatComponent(
+fun ChatView(
     gameService: GameService,
     gameManager: GameManager
 ) {
