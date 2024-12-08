@@ -26,7 +26,7 @@ private sealed class AnswerButtonState(val textColor: Color, val blockGradient: 
 
     data object CorrectAnswer : AnswerButtonState(
         textColor = QuizColors.TEXT,
-        blockGradient = QuizColors.RIGHT_ANSWER_GRADIENT,
+        blockGradient = QuizColors.CORRECT_ANSWER_GRADIENT,
     )
 }
 
