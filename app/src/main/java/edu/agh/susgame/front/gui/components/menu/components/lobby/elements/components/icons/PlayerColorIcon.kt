@@ -36,7 +36,7 @@ fun PlayerColorIcon(
                 .fillMaxSize(),
             colorFilter = ColorFilter.lighting(
                 multiply = player.color.value,
-                add = Color.DarkGray
+                add = Color.Black
             )
         )
         if (player.id == lobbyManager.localPlayerId) {

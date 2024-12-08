@@ -2,14 +2,12 @@ package edu.agh.susgame.front.gui.components.menu.components.mainmenu.elements
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidthIn
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,9 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.config.AppConfig
@@ -76,15 +72,21 @@ fun IpAddressInput(ipAddressProvider: IpAddressProvider) {
 
     ) {
         OutlinedTextField(
-            label = { Text(Translation.Menu.IP_ADDRESS, style = TextStyler.TerminalS,textAlign = TextAlign.Center) },
+            label = {
+                Text(
+                    Translation.Menu.IP_ADDRESS,
+                    style = TextStyler.TerminalS,
+                    textAlign = TextAlign.Left
+                )
+            },
             placeholder = { Text("123.45.67.89") },
             value = currentInput,
             onValueChange = { onIpValueChange(it) },
             isError = !isInputValid,
             singleLine = true,
             readOnly = !isInEditMode,
-            textStyle = TextStyler.TerminalM,
-            modifier = Modifier.width(170.dp),
+            textStyle = TextStyler.TerminalM.copy(textAlign = TextAlign.Center),
+            modifier = Modifier.wrapContentWidth()
         )
         Button(
             onClick = { onButtonClicked() },

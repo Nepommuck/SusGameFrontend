@@ -19,11 +19,11 @@ import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.gui.components.common.theme.MenuBackground
+import edu.agh.susgame.front.gui.components.common.theme.RefreshIcon
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.elements.HeaderLobby
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.elements.LoadingAnim
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.elements.LobbyRow
-import edu.agh.susgame.front.gui.components.common.theme.RefreshIcon
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.elements.ReturnButton
 import edu.agh.susgame.front.service.interfaces.LobbyService
 
@@ -53,6 +53,7 @@ fun SearchLobbiesView(
     if (isLoading) {
         LoadingAnim()
         HeaderLobby(text = Translation.Lobby.FINDING_GAMES)
+        ReturnButton(navController = navController)
 
     } else {
         RefreshIcon(
@@ -66,10 +67,10 @@ fun SearchLobbiesView(
             HeaderLobby(text = Translation.Lobby.CHOOSE_GAME)
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp),
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
-                    .fillMaxWidth(0.7f),
+                    .fillMaxWidth(0.8f),
             ) {
                 awaitingGames.value?.forEach {
                     LobbyRow(it.value, navController)

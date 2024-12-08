@@ -3,14 +3,14 @@ package edu.agh.susgame.front.gui.components.menu.components.lobby.elements.comp
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import edu.agh.susgame.R
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
@@ -21,9 +21,9 @@ internal fun PlayerStatusIcon(
 ) {
     val status by playerStatus
 
-    val iconId: Int = when (status) {
-        PlayerStatus.READY -> R.drawable.ready
-        PlayerStatus.NOT_READY -> R.drawable.unready
+    val (iconId, color) = when (status) {
+        PlayerStatus.READY -> Pair(R.drawable.ready, Color.Green)
+        PlayerStatus.NOT_READY -> Pair(R.drawable.unready, Color.Red)
     }
 
     Box(
@@ -34,7 +34,11 @@ internal fun PlayerStatusIcon(
             painter = painterResource(id = iconId),
             contentDescription = null,
             modifier = Modifier
-                .align(Alignment.Center)
+                .align(Alignment.Center),
+            colorFilter = ColorFilter.lighting(
+                multiply = color,
+                add = Color.Black
+            )
         )
     }
 }

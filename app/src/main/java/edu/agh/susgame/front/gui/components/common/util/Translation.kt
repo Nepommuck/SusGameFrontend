@@ -10,7 +10,7 @@ object Translation {
         const val BACK_TO_MAIN_MENU = "Wróć do menu głównego"
         const val LEAVE = "Opuść"
         const val JOIN = "Dołącz"
-        const val PLAY = "Rozpocznij gre!"
+        const val PLAY = "Rozpocznij grę!"
         const val CREATE = "Stwórz"
         const val LOADING = "Ładowanie"
         const val SEND = "Wyślij"
@@ -28,6 +28,7 @@ object Translation {
         const val CHOOSE_GAME = "Wybierz grę"
         const val CHOOSE_NICKNAME = "Podaj nick"
         const val NICKNAME_ERROR_MESSAGE = "Nick nie może zawierać spacji"
+        const val NUM_OF_PLAYERS = "Gracze"
 
         fun nPlayersAwaiting(n: Int): String {
             require(n >= 0) { "Number of players can't be negative, but was: $n" }
