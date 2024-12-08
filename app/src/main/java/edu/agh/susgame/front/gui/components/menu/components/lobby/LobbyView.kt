@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.front.gui.components.common.theme.MenuBackground
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.LobbyComp
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.FailedToLoadComp
@@ -35,7 +36,7 @@ fun LobbyView(
                 isLoading = false
             }
     }
-
+    MenuBackground()
     Column {
         when {
             isLoading -> Text(text = "${Translation.Button.LOADING}...")

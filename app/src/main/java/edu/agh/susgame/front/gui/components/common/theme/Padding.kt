@@ -6,3 +6,4 @@ val PaddingXS = 5.dp
 val PaddingS = 8.dp
 val PaddingM = 12.dp
 val PaddingL = 16.dp
+val PaddingXL = 24.dp

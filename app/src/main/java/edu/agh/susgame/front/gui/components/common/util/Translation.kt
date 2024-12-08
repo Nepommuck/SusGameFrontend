@@ -3,8 +3,6 @@ package edu.agh.susgame.front.gui.components.common.util
 import edu.agh.susgame.dto.rest.model.LobbyId
 
 object Translation {
-    const val GAME_TITLE = "SusGame"
-
     object Button {
         const val GO_BACK = "Wróć"
         const val EDIT = "Edytuj"
@@ -12,22 +10,25 @@ object Translation {
         const val BACK_TO_MAIN_MENU = "Wróć do menu głównego"
         const val LEAVE = "Opuść"
         const val JOIN = "Dołącz"
-        const val PLAY = "Rozpocznij gre!"
+        const val PLAY = "Rozpocznij grę!"
         const val CREATE = "Stwórz"
         const val LOADING = "Ładowanie"
         const val SEND = "Wyślij"
     }
 
     object Menu {
+        const val GAME_TITLE = "CyberSurfers"
         const val JOIN_GAME = "Dołącz do gry"
         const val CREATE_GAME = "Stwórz nową grę"
         const val IP_ADDRESS = "Adres IP serwera"
     }
 
     object Lobby {
-        const val FIND_GAME = "Znajdź grę"
+        const val FINDING_GAMES = "Szukanie gier..."
+        const val CHOOSE_GAME = "Wybierz grę"
         const val CHOOSE_NICKNAME = "Podaj nick"
         const val NICKNAME_ERROR_MESSAGE = "Nick nie może zawierać spacji"
+        const val NUM_OF_PLAYERS = "Gracze"
 
         fun nPlayersAwaiting(n: Int): String {
             require(n >= 0) { "Number of players can't be negative, but was: $n" }

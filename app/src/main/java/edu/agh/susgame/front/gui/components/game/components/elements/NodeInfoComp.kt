@@ -58,11 +58,11 @@ fun NodeInfoComp(
                         .weight(5f)
                         .padding(PaddingM),
                 ) {
-                    Text(node.getInfo(), style = TextStyler.TerminalMedium)
+                    Text(node.getInfo(), style = TextStyler.TerminalS)
                     if (node is Host) {
                         Text(
                             Translation.Game.TOKENS + ": " + gameManager.playersById[node.playerId]?.tokens?.intValue.toString(),
-                            style = TextStyler.TerminalMedium
+                            style = TextStyler.TerminalS
                         )
                         if (node.id == gameManager.hostIdByPlayerId[gameManager.localPlayerId]) {
                             Slider(

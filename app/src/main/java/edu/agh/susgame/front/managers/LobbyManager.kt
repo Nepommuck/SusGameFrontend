@@ -21,7 +21,7 @@ class LobbyManager(
     val gameService: GameService,
     val lobbyId: LobbyId,
     val name: String,
-//    val maxNumOfPlayers: Int,
+    val maxNumOfPlayers: Int,
 //    val gameTime: Int,
 ) {
     val lobbyState = LobbyStateManager()
