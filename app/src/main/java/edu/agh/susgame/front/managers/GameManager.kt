@@ -160,30 +160,23 @@ class GameManager(
     fun addNodeToPathBuilder(nodeId: NodeId) {
         if (pathBuilder.getCurrentNumberOfNodes() == 0) {
             pathBuilder.addNode(nodeId)
-        } else if (nodeId !in pathBuilder.path) {
+        } else {
             val edgeId = pathBuilder.getLastNode()?.let { lastNodeId ->
                 getEdgeId(lastNodeId, nodeId)
             }
             edgeId?.let {
                 if (pathBuilder.isNodeValid(nodeId)) {
                     pathBuilder.addNode(nodeId)
-                    addPlayerToEdge(edgeId)
+                    updateEdge(edgeId)
                 }
-            }
-        } else {
-            pathBuilder.deleteNodeFromPath(nodeId)
-            clearEdges(localPlayerId)
-            pathBuilder.path.zipWithNext { host1, host2 ->
-                updateEdge(
-                    NodeId(host1.value), NodeId(host2.value), localPlayerId
-                )
             }
         }
     }
+
     fun clearEdges(playerId: PlayerId?) {
-        playerId?.let {
+        if (playerId != null) {
             edgesList.forEach { edge ->
-                edge.removePlayer(it)
+                edge.removePlayer(playerId)
             }
         }
     }
@@ -194,7 +187,7 @@ class GameManager(
         playerId?.let { edgesById[getEdgeId(from, to)]?.addPlayer(playerId) }
     }
 
-    private fun addPlayerToEdge(edgeId: EdgeId) {
+    private fun updateEdge(edgeId: EdgeId) {
         edgesById[edgeId]?.addPlayer(localPlayerId)
     }
 
