@@ -19,17 +19,22 @@ fun DesktopIconButton(
     painter: Painter,
     imageDescription: String,
     onClick: () -> Unit,
+    isVisible: () -> Boolean = { true },
 ) {
-    Box(
-        modifier = Modifier
-            .size(BUTTON_SIZE)
-            .clickable(role = Role.Button) { onClick() }
-    ) {
-        Image(
-            painter = painter,
-            contentDescription = imageDescription,
-            modifier = Modifier.fillMaxSize(),
-        )
+    if (!isVisible()) {
+        DesktopIconPlaceholder()
+    } else {
+        Box(
+            modifier = Modifier
+                .size(BUTTON_SIZE)
+                .clickable(role = Role.Button) { onClick() }
+        ) {
+            Image(
+                painter = painter,
+                contentDescription = imageDescription,
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
     }
 }
 

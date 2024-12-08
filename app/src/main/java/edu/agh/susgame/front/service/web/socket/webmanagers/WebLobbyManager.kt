@@ -11,7 +11,7 @@ class WebLobbyManager(
     private val lobbyManager: LobbyManager
 ) {
     fun handlePlayerChangingReadinessResponse(decodedMessage: ServerSocketMessage.PlayerChangeReadiness) {
-        val newStatus = when(decodedMessage.state){
+        val newStatus = when (decodedMessage.state) {
             true -> PlayerStatus.READY
             false -> PlayerStatus.NOT_READY
         }

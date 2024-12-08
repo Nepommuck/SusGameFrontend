@@ -4,6 +4,7 @@ import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ServerSocketMessage
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
+import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion
 import edu.agh.susgame.front.managers.GameManager
 
 class WebGameManager(
@@ -69,11 +70,13 @@ class WebGameManager(
 //        gameManager.updatePathsFromServer(decodedMessage)
     }
 
-    fun handleServerError(decodedMessage: ServerSocketMessage.ServerError) {
-        println("Server error: ${decodedMessage.errorMessage}")
+    fun handleQuizQuestion(quizQuestionDto: ServerSocketMessage.QuizQuestionDTO) {
+        gameManager.quizManager.enqueueNewQuestion(
+            newQuestion = QuizQuestion.fromDto(quizQuestionDto)
+        )
     }
 
-    fun handlerQuizQuestion(decodedMessage: ServerSocketMessage.QuizQuestionDTO) {
-
+    fun handleServerError(decodedMessage: ServerSocketMessage.ServerError) {
+        println("Server error: ${decodedMessage.errorMessage}")
     }
 }
