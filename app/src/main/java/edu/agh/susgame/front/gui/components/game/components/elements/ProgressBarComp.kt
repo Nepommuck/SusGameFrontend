@@ -76,7 +76,7 @@ fun ProgressBarComp(
                 ) * 100).roundToInt().toString()
 
                 Text(
-                    text = "$percentage% Critical Network Data", style = TextStyler.TerminalMedium
+                    text = "$percentage% Critical Network Data", style = TextStyler.TerminalS
                 )
             }
         }
@@ -103,7 +103,7 @@ fun ProgressBarComp(
                 ) {
                     Text(
                         "$playerTokens ByteTokens",
-                        style = TextStyler.TerminalMedium
+                        style = TextStyler.TerminalS
                     )
 
                 }
@@ -113,7 +113,7 @@ fun ProgressBarComp(
                 ) {
                     Text(
                         text = "     ${getTime(timeLeft)}",
-                        style = TextStyler.TerminalMedium,
+                        style = TextStyler.TerminalS,
                     )
                 }
             }

@@ -27,7 +27,6 @@ fun ColorMenuComp(
         columns = GridCells.Adaptive(minSize = 64.dp),
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Gray)
     ) {
         items(ColorProvider.colors) { color ->
             Box(

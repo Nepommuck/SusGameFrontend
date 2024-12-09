@@ -7,49 +7,55 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.config.AppConfig
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
+import edu.agh.susgame.front.gui.components.common.theme.PaddingXL
+import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Translation
-import java.util.Locale
 
 @Composable
-fun GameTimeComp(
-    gameTime: Int,
+fun PlayersNumberComp(
+    numOfPlayers: Int,
     onGameTimeChange: (Int) -> Unit
 ) {
+    val playersPerGame = AppConfig.gameConfig.playersPerGame
     Row(
         Modifier
-            .padding(PaddingL)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(start = 8.dp, end = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         Text(
-            modifier = Modifier.weight(0.2f),
-            text = "${Translation.CreateGame.GAME_TIME}:"
+            text = "${Translation.CreateGame.AMOUNT_OF_PLAYERS}: ",
+            style = TextStyler.TerminalM
         )
         Text(
-            text = String.format(
-                locale = Locale.getDefault(),
-                format = "%02d",
-                gameTime
-            ) + " ${Translation.CreateGame.MINUTES} "
+            text = "$numOfPlayers",
+            style = TextStyler.TerminalInput
         )
         Spacer(
             modifier = Modifier.width(PaddingL)
         )
         Slider(
-            modifier = Modifier.weight(0.3f),
-            value = gameTime.toFloat(),
+            value = numOfPlayers.toFloat(),
             onValueChange = { newValue ->
                 onGameTimeChange(newValue.toInt())
             },
-            valueRange = AppConfig.gameConfig.gameTimeMinutes.min.toFloat()..AppConfig.gameConfig.gameTimeMinutes.max.toFloat(),
-            steps = (AppConfig.gameConfig.gameTimeMinutes.max - AppConfig.gameConfig.gameTimeMinutes.min - 1)
+            valueRange = playersPerGame.min.toFloat()..playersPerGame.max.toFloat(),
+            steps = (playersPerGame.max - playersPerGame.min - 1),
+            colors = SliderDefaults.colors(
+                thumbColor = Color.White.copy(alpha = 0.7f),
+                activeTrackColor = Color.DarkGray,
+                inactiveTrackColor = Color.Gray,
+            )
         )
     }
 }

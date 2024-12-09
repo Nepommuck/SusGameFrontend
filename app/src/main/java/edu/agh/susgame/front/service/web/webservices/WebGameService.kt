@@ -190,6 +190,5 @@ class WebGameService(
         when (status) {
             PlayerStatus.READY -> true
             PlayerStatus.NOT_READY -> false
-            PlayerStatus.CONNECTING -> false
         }
 }

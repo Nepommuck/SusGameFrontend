@@ -4,9 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidthIn
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,10 +17,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.config.AppConfig
 import edu.agh.susgame.front.gui.components.common.theme.PaddingM
+import edu.agh.susgame.front.gui.components.common.theme.TextStyler
+import edu.agh.susgame.front.gui.components.common.theme.Transparent
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.service.web.IpAddressProvider
 
@@ -69,22 +72,36 @@ fun IpAddressInput(ipAddressProvider: IpAddressProvider) {
 
     ) {
         OutlinedTextField(
-            label = { Text(Translation.Menu.IP_ADDRESS) },
+            label = {
+                Text(
+                    Translation.Menu.IP_ADDRESS,
+                    style = TextStyler.TerminalS,
+                    textAlign = TextAlign.Left
+                )
+            },
             placeholder = { Text("123.45.67.89") },
             value = currentInput,
             onValueChange = { onIpValueChange(it) },
             isError = !isInputValid,
             singleLine = true,
             readOnly = !isInEditMode,
-            textStyle = MaterialTheme.typography.bodyMedium.copy(
-                fontFamily = FontFamily.Monospace
-            ),
-            modifier = Modifier.width(170.dp)
+            textStyle = TextStyler.TerminalInput.copy(textAlign = TextAlign.Center),
+            modifier = Modifier.wrapContentWidth()
         )
-
         Button(
             onClick = { onButtonClicked() },
             modifier = Modifier.requiredWidthIn(min = 120.dp),
-        ) { Text(text = if (isInEditMode) Translation.Button.ACCEPT else Translation.Button.EDIT) }
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Transparent,
+                disabledContainerColor = Transparent
+            ),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Text(
+                text = if (isInEditMode) Translation.Button.ACCEPT else Translation.Button.EDIT,
+                style = TextStyler.TerminalM
+            )
+        }
+
     }
 }

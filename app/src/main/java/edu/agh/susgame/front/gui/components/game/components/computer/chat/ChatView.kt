@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.theme.PaddingM
+import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.game.components.computer.chat.components.ChatButtons
 import edu.agh.susgame.front.gui.components.game.components.computer.chat.components.ChatMessages
@@ -44,7 +45,7 @@ fun ChatView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(PaddingM),
     ) {
-        Header(title = Translation.Game.CHAT, color = ChatColors.TEXT)
+        Header(title = Translation.Game.CHAT, style = TextStyler.Chat)
 
         NewChatMessageInput(inputValue = newMessageInputValue)
 

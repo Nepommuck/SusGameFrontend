@@ -18,7 +18,6 @@ interface LobbyService {
         gameName: String,
         gamePin: String,
         maxNumberOfPlayers: Int,
-        gameTime: Int,
     ): CompletableFuture<CreateNewGameResult>
 }
 

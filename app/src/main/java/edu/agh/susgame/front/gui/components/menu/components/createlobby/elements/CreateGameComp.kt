@@ -2,18 +2,18 @@ package edu.agh.susgame.front.gui.components.menu.components.createlobby.element
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import edu.agh.susgame.front.gui.components.common.theme.PaddingL
+import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.CreateNewGameResult
@@ -27,19 +27,12 @@ fun CreateGameComp(
     gameName: String,
     gamePin: String,
     selectedNumberOfPlayers: Int,
-    gameTime: Int,
     lobbyService: LobbyService,
     navController: NavController
 ) {
-    Row(
-        Modifier
-            .padding(PaddingL)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        val context = LocalContext.current
-        Button(onClick = {
+    val context = LocalContext.current
+    Button(
+        onClick = {
             createGameHandler(
                 gameName,
                 context,
@@ -47,15 +40,18 @@ fun CreateGameComp(
                 navController,
                 gamePin,
                 selectedNumberOfPlayers,
-                gameTime
             )
-        }) {
-            Text(
-                text = Translation.Button.CREATE
-            )
-        }
+        },
+        modifier = Modifier.wrapContentSize(),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Green.copy(alpha = 0.5f),
+        ),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Text(text = Translation.Button.CREATE, style = TextStyler.TerminalM, color = Color.White)
     }
 }
+
 
 private fun createGameHandler(
     gameName: String,
@@ -64,7 +60,6 @@ private fun createGameHandler(
     navController: NavController,
     gamePin: String,
     numOfPlayers: Int,
-    gameTime: Int,
 ) {
     if (gameName == "") Toast.makeText(
         androidContext,
@@ -72,7 +67,7 @@ private fun createGameHandler(
         Toast.LENGTH_SHORT,
     ).show()
     else {
-        provider.createNewGame(gameName, gamePin, numOfPlayers, gameTime)
+        provider.createNewGame(gameName, gamePin, numOfPlayers)
             .thenAccept { creationResult ->
                 val toastMessage = when (creationResult) {
                     is CreateNewGameResult.Success ->

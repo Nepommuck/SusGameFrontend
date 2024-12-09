@@ -5,12 +5,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,17 +21,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
+import edu.agh.susgame.front.gui.components.common.theme.PaddingXL
+import edu.agh.susgame.front.gui.components.common.theme.RefreshIcon
+import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.ColorMenuComp
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.PlayerRow
+import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.buttons.JoinButton
+import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.buttons.LeaveButton
+import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.buttons.StartButton
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.service.interfaces.GameService
@@ -54,8 +64,7 @@ fun LobbyComp(
                 gameService = gameService,
                 lobbyId = lobbyInit.id,
                 name = lobbyInit.name,
-//                maxNumOfPlayers = lobbyInit.maxNumOfPlayers,
-//                gameTime = lobbyInit.gameTime
+                maxNumOfPlayers = lobbyInit.maxNumOfPlayers,
             )
         )
     }
@@ -63,6 +72,7 @@ fun LobbyComp(
     var playerNicknameInputValue by remember { mutableStateOf("") }
     var currentNickname: PlayerNickname? by remember { mutableStateOf(null) }
     val isLeaveButtonLoading = remember { mutableStateOf(false) }
+    val isJoinButtonLoading = remember { mutableStateOf(false) }
 
     val lobbyState = lobbyManager.lobbyState
     val isGameReady by remember { lobbyState.isGameMapReady }
@@ -78,45 +88,73 @@ fun LobbyComp(
         navController.navigate("${MenuRoute.Game.route}/${lobbyManager.lobbyId.value}")
     }
 
-    Column(modifier = Modifier.padding(PaddingL)) {
-        Header(title = lobbyManager.name)
-        Row {
 
+    Column(
+        modifier = Modifier
+            .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.weight(0.1f))
+        Header(title = lobbyManager.name, style = TextStyler.TerminalXL)
+        Spacer(modifier = Modifier.weight(0.1f))
+
+        Row(modifier = Modifier.weight(2f)) {
             Column(
                 modifier = Modifier
-                    .weight(1f)
+                    .fillMaxSize()
+                    .weight(1.2f)
+                    .padding(PaddingL),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "${Translation.Lobby.nPlayersAwaiting(lobbyManager.getNumberOfPlayers())}:",
-                    Modifier.padding(vertical = PaddingS)
-                )
+                Row(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .fillMaxWidth(0.5f),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "${Translation.Lobby.NUM_OF_PLAYERS}: ${lobbyManager.getNumberOfPlayers()}/${lobbyManager.maxNumOfPlayers}",
+                        style = TextStyler.TerminalM
+                    )
+                    RefreshIcon(onRefreshClicked = { lobbyManager.updateFromRest() })
+                }
+
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(PaddingL),
+                        .weight(1f)
+                        .padding(PaddingS),
+                    verticalArrangement = Arrangement.spacedBy(14.dp),
                 ) {
                     items(lobbyManager.playersMap.toList()) { (_, player) ->
                         PlayerRow(
                             player = player,
                             lobbyManager = lobbyManager,
-                            gameService = gameService
                         )
                     }
                 }
-
+                Box(modifier = Modifier.weight(0.2f)) {
+                    LeaveButton(onClick = {
+                        handleLeaveButtonClick(
+                            navController,
+                            lobbyManager,
+                            isLeaveButtonLoading
+                        )
+                    })
+                }
             }
 
 
             Column(
                 modifier = Modifier
-                    .weight(1f),
-                verticalArrangement = Arrangement.Center
+                    .weight(1f)
+                    .fillMaxSize()
+                    .padding(PaddingXL),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (isColorBeingChanged) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Color.Gray)
+                            .background(Color.Black.copy(alpha = 0.3f))
                     ) {
                         ColorMenuComp(
                             onColorSelected = { newColor ->
@@ -132,57 +170,36 @@ fun LobbyComp(
                             color = Color.Red,
                         )
                     }
-                    OutlinedTextField(
-                        value = playerNicknameInputValue,
-                        onValueChange = { newValue ->
-                            playerNicknameInputValue = newValue
-                            updateNicknameOrInvalidate(newValue) { validatedNicknameOrNull ->
-                                currentNickname = validatedNicknameOrNull
-                            }
-                        },
-                        label = { Text(text = Translation.Lobby.CHOOSE_NICKNAME) },
-                        isError = isError,
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    )
-                }
-
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Button(
-                        enabled = !isLeaveButtonLoading.value,
-                        onClick = {
-                            handleLeaveButtonClick(
-                                navController = navController,
-                                lobbyManager = lobbyManager,
-                                isLeaveButtonLoading = isLeaveButtonLoading,
-                            )
-                        }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Text(
-                            text = if (isLeaveButtonLoading.value) Translation.Button.LOADING
-                            else Translation.Button.LEAVE
-                        )
-                    }
-
-                    if (lobbyState.hasPlayerJoined.value) {
-                        Button(
-                            onClick = {
-                                if (!isGameReady) {
-                                    gameService.sendStartGame()
+                        OutlinedTextField(
+                            value = playerNicknameInputValue,
+                            onValueChange = { newValue ->
+                                playerNicknameInputValue = newValue
+                                updateNicknameOrInvalidate(newValue) { validatedNicknameOrNull ->
+                                    currentNickname = validatedNicknameOrNull
                                 }
                             },
-                            enabled = lobbyState.areAllPlayersReady.value && lobbyManager.getNumberOfPlayers() >= 2
-                        ) {
-                            Text(text = Translation.Button.PLAY)
-                        }
-                    } else {
-                        val isJoinButtonLoading = remember { mutableStateOf(false) }
+                            label = {
+                                Text(
+                                    text = Translation.Lobby.CHOOSE_NICKNAME,
+                                    style = TextStyler.TerminalS
+                                )
+                            },
+                            isError = isError,
+                            singleLine = true,
+                            textStyle = TextStyler.TerminalM.copy(textAlign = TextAlign.Center),
+                            modifier = Modifier
+                                .weight(3f)
+                                .padding(PaddingS)
+                        )
 
-                        Button(
-                            enabled = !isJoinButtonLoading.value && currentNickname != null,
+                        JoinButton(
+                            isJoinButtonLoading = isJoinButtonLoading.value,
+                            isEnabled = currentNickname != null,
                             onClick = {
                                 CoroutineScope(Dispatchers.Main).launch {
                                     handleJoinButtonClick(
@@ -191,14 +208,19 @@ fun LobbyComp(
                                         isJoinButtonLoading = isJoinButtonLoading,
                                     )
                                 }
-                            },
-                        ) {
-                            Text(
-                                text = if (isJoinButtonLoading.value) Translation.Button.LOADING
-                                else Translation.Button.JOIN
-                            )
-                        }
+                            }
+                        )
                     }
+                }
+                if (lobbyState.hasPlayerJoined.value) {
+                    StartButton(
+                        isEnabled = lobbyState.areAllPlayersReady.value && lobbyManager.getNumberOfPlayers() >= 2,
+                        onClick = {
+                            if (!isGameReady) {
+                                gameService.sendStartGame()
+                            }
+                        }
+                    )
                 }
             }
         }
