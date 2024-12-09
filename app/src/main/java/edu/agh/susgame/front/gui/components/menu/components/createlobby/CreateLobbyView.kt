@@ -1,8 +1,12 @@
 package edu.agh.susgame.front.gui.components.menu.components.createlobby
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,10 +20,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.MenuBackground
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
+import edu.agh.susgame.front.gui.components.common.theme.PaddingM
+import edu.agh.susgame.front.gui.components.common.theme.PaddingXL
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.CreateGameComp
@@ -31,7 +39,6 @@ import edu.agh.susgame.front.service.interfaces.LobbyService
 
 
 private const val DEFAULT_PLAYERS_AMOUNT = 4
-private const val DEFAULT_GAME_TIME = 10
 
 @Composable
 fun CreateLobbyView(
@@ -42,7 +49,6 @@ fun CreateLobbyView(
     var gamePin by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(value = false) }
     var selectedNumberOfPlayers by remember { mutableIntStateOf(DEFAULT_PLAYERS_AMOUNT) }
-    var gameTime by remember { mutableIntStateOf(DEFAULT_GAME_TIME) }
     var isGamePinEnabled by remember { mutableStateOf(false) }
 
     MenuBackground()
@@ -50,7 +56,7 @@ fun CreateLobbyView(
     Column(
         Modifier
             .fillMaxSize()
-            .padding(PaddingL),
+            .padding(PaddingM),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.weight(0.1f))
@@ -61,53 +67,54 @@ fun CreateLobbyView(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(3.5f)
+//                .weight(3.5f)
         ) {
-
-            Column(
-                Modifier
-                    .padding(PaddingL)
-                    .fillMaxWidth(0.5f)
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row(
+                modifier = Modifier.fillMaxSize(),
             ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight(0.9f)
+                        .padding(PaddingXL)
+                        .weight(5f),
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    GameNameComp(
+                        gameName = gameName,
+                        onGameNameChange = { gameName = it }
+                    )
+                    GamePinComp(
+                        gamePin = gamePin,
+                        showPassword = showPassword,
+                        isGamePinEnabled = isGamePinEnabled,
+                        onGamePinChange = { gamePin = it },
+                        onShowPasswordChange = { showPassword = it },
+                        onGamePinEnabledChange = { isGamePinEnabled = it }
+                    )
+                    PlayersNumberComp(
+                        numOfPlayers = selectedNumberOfPlayers,
+                        onGameTimeChange = { selectedNumberOfPlayers = it }
+                    )
+                    CreateGameComp(
+                        gameName = gameName,
+                        gamePin = gamePin,
+                        selectedNumberOfPlayers = selectedNumberOfPlayers,
+                        lobbyService = lobbyService,
+                        navController = navController
+                    )
+                }
+                Column(modifier = Modifier.fillMaxSize().weight(4f),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
-                GameNameComp(
-                    gameName = gameName,
-                    onGameNameChange = { gameName = it }
-                )
-
-                GamePinComp(
-                    gamePin = gamePin,
-                    showPassword = showPassword,
-                    isGamePinEnabled = isGamePinEnabled,
-                    onGamePinChange = { gamePin = it },
-                    onShowPasswordChange = { showPassword = it },
-                    onGamePinEnabledChange = { isGamePinEnabled = it }
-                )
-
-
-                PlayersNumberComp(
-                    numOfPlayers = selectedNumberOfPlayers,
-                    onGameTimeChange = { selectedNumberOfPlayers = it }
-                )
-
-                CreateGameComp(
-                    gameName = gameName,
-                    gamePin = gamePin,
-                    selectedNumberOfPlayers = selectedNumberOfPlayers,
-                    gameTime = gameTime,
-                    lobbyService = lobbyService,
-                    navController = navController
-                )
+                }
             }
         }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f)
-        ) {
-            ReturnButton(navController = navController)
-        }
     }
+
+        ReturnButton(navController = navController)
+
+
 }

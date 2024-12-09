@@ -85,7 +85,7 @@ fun IpAddressInput(ipAddressProvider: IpAddressProvider) {
             isError = !isInputValid,
             singleLine = true,
             readOnly = !isInEditMode,
-            textStyle = TextStyler.TerminalM.copy(textAlign = TextAlign.Center),
+            textStyle = TextStyler.TerminalInput.copy(textAlign = TextAlign.Center),
             modifier = Modifier.wrapContentWidth()
         )
         Button(

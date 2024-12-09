@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.config.AppConfig
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.theme.PaddingXL
@@ -27,21 +28,23 @@ fun PlayersNumberComp(
     val playersPerGame = AppConfig.gameConfig.playersPerGame
     Row(
         Modifier
-            .padding(PaddingXL)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(start = 8.dp, end = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         Text(
-            modifier = Modifier.weight(3f),
-            text = "${Translation.CreateGame.AMOUNT_OF_PLAYERS}: $numOfPlayers",
+            text = "${Translation.CreateGame.AMOUNT_OF_PLAYERS}: ",
             style = TextStyler.TerminalM
+        )
+        Text(
+            text = "$numOfPlayers",
+            style = TextStyler.TerminalInput
         )
         Spacer(
             modifier = Modifier.width(PaddingL)
         )
         Slider(
-            modifier = Modifier.weight(2f),
             value = numOfPlayers.toFloat(),
             onValueChange = { newValue ->
                 onGameTimeChange(newValue.toInt())
@@ -49,7 +52,7 @@ fun PlayersNumberComp(
             valueRange = playersPerGame.min.toFloat()..playersPerGame.max.toFloat(),
             steps = (playersPerGame.max - playersPerGame.min - 1),
             colors = SliderDefaults.colors(
-                thumbColor = Color.White.copy(alpha = 0.9f),
+                thumbColor = Color.White.copy(alpha = 0.7f),
                 activeTrackColor = Color.DarkGray,
                 inactiveTrackColor = Color.Gray,
             )

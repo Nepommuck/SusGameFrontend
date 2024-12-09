@@ -27,11 +27,6 @@ object TextStyler {
     val TerminalL = baseTextStyle(30.sp)
     val TerminalM = baseTextStyle(23.sp)
     val TerminalS = baseTextStyle(14.sp)
-
+    val TerminalInput = baseTextStyle(23.sp, color = Color.White.copy(alpha = 0.65f))
     val Chat = baseTextStyle(16.sp, Color.Green)
-
-    private val customFontFamily = FontFamily(
-        Font(R.font.vt323regular)
-    )
-
 }

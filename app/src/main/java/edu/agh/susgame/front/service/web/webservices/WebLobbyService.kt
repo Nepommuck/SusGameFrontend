@@ -56,7 +56,6 @@ class WebLobbyService(private val gamesRest: GamesRest) : LobbyService {
         gameName: String,
         gamePin: String,
         maxNumberOfPlayers: Int,
-        gameTime: Int,
     ): CompletableFuture<CreateNewGameResult> =
         gamesRest.createGame(gameName, maxNumberOfPlayers, gamePin)
             .thenApply {

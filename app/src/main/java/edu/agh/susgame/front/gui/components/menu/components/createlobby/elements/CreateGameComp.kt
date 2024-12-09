@@ -27,7 +27,6 @@ fun CreateGameComp(
     gameName: String,
     gamePin: String,
     selectedNumberOfPlayers: Int,
-    gameTime: Int,
     lobbyService: LobbyService,
     navController: NavController
 ) {
@@ -41,14 +40,13 @@ fun CreateGameComp(
                 navController,
                 gamePin,
                 selectedNumberOfPlayers,
-                gameTime
             )
         },
         modifier = Modifier.wrapContentSize(),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Green.copy(alpha = 0.5f), // Ustawienie przezroczystego tła
+            containerColor = Color.Green.copy(alpha = 0.5f),
         ),
-        shape = RoundedCornerShape(16.dp) // Zaokrąglone rogi
+        shape = RoundedCornerShape(16.dp)
     ) {
         Text(text = Translation.Button.CREATE, style = TextStyler.TerminalM, color = Color.White)
     }
@@ -62,7 +60,6 @@ private fun createGameHandler(
     navController: NavController,
     gamePin: String,
     numOfPlayers: Int,
-    gameTime: Int,
 ) {
     if (gameName == "") Toast.makeText(
         androidContext,
@@ -70,7 +67,7 @@ private fun createGameHandler(
         Toast.LENGTH_SHORT,
     ).show()
     else {
-        provider.createNewGame(gameName, gamePin, numOfPlayers, gameTime)
+        provider.createNewGame(gameName, gamePin, numOfPlayers)
             .thenAccept { creationResult ->
                 val toastMessage = when (creationResult) {
                     is CreateNewGameResult.Success ->
