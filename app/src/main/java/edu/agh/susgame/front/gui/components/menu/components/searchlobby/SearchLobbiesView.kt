@@ -76,8 +76,6 @@ fun SearchLobbiesView(
                     LobbyRow(it.value, navController)
                 }
             }
-//            ReturnButton(navController = navController)
-
         }
         ReturnButton(navController = navController)
     }

@@ -19,11 +19,6 @@ object TextStyler {
             ),
             fontWeight = FontWeight.Bold,
             letterSpacing = 3.sp,
-//            shadow = Shadow(
-//                color = Color.Black,
-//                offset = Offset(2f, 2f),
-//                blurRadius = 4f
-//            )
         )
     }
 

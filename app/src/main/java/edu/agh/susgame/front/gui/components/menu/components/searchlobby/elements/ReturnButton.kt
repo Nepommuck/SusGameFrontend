@@ -3,7 +3,6 @@ package edu.agh.susgame.front.gui.components.menu.components.searchlobby.element
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -26,7 +25,6 @@ fun ReturnButton(
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
-//                .requiredSize(100.dp)
                 .padding(16.dp)
                 .align(Alignment.BottomStart)
         ) {

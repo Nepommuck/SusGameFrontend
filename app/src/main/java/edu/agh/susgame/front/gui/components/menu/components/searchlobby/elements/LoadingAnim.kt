@@ -26,7 +26,7 @@ fun LoadingAnim() {
     LaunchedEffect(Unit) {
         while (true) {
             currentFrame.intValue = (currentFrame.intValue + 1) % animationFrames.size
-            delay(1000L / frameRate)
+            delay(frameRate)
         }
     }
     Box(modifier = Modifier.fillMaxSize()) {

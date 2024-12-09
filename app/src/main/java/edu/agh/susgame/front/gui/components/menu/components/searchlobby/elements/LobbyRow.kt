@@ -30,7 +30,6 @@ internal fun LobbyRow(
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp)
-//            .padding(bottom = PaddingM)
             .clickable {
                 navController.navigate(
                     MenuRoute.Lobby.routeWithArgument(lobbyId = lobby.id)

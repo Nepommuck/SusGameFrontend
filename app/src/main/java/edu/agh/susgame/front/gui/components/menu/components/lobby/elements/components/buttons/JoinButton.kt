@@ -19,9 +19,7 @@ fun JoinButton(
     onClick: () -> Unit
 ) {
     Button(
-        modifier = Modifier
-//            .fillMaxWidth()
-            .padding(8.dp),
+        modifier = Modifier.padding(8.dp),
         onClick = onClick,
         enabled = isEnabled && !isJoinButtonLoading,
         shape = RoundedCornerShape(16.dp),

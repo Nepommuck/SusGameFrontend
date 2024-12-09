@@ -31,7 +31,6 @@ fun PlayerRow(
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp),
-//            .background(Color.Gray),
         contentAlignment = Alignment.Center
     ) {
         Image(

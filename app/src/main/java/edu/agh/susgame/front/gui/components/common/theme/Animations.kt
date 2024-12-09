@@ -8,45 +8,25 @@ object Animations {
     data class AnimationFramesString(val frames: List<String>, val frameRate: Long)
 
     val LOADING_ANIMATION = AnimationFrames(
-        frames = listOf(
-            R.drawable.i0,
-            R.drawable.i1,
-            R.drawable.i2,
-            R.drawable.i3,
-            R.drawable.i4,
-            R.drawable.i5,
-            R.drawable.i6,
-            R.drawable.i7,
-            R.drawable.i8,
-            R.drawable.i9,
-            R.drawable.i10,
-            R.drawable.i11,
-            R.drawable.i12,
-            R.drawable.i13,
-            R.drawable.i14,
-            R.drawable.i15,
-            R.drawable.i16,
-            R.drawable.i17,
-            R.drawable.i18,
-            R.drawable.i19,
-            R.drawable.i20,
-            R.drawable.i21,
-        ), frameRate = 24
+        frames = generateFrames("i", 0..21),
+        frameRate = 50
     )
 
     val TOKEN_ANIMATION = AnimationFrames(
-        frames = listOf(
-            R.drawable.token0,
-            R.drawable.token1,
-            R.drawable.token2,
-            R.drawable.token3,
-            R.drawable.token4,
-            R.drawable.token5,
-            R.drawable.token6,
-        ), frameRate = 300
+        frames = generateFrames("token", 0..6),
+        frameRate = 100
     )
+
     val HOURGLASS_ANIMATION = AnimationFramesString(
         frames = listOf("/", "-", "\\", "|"),
         frameRate = 300
     )
+
+    private fun generateFrames(resourcePrefix: String, range: IntRange): List<Int> {
+        return range.map { id ->
+            val resourceName = "$resourcePrefix$id"
+            val resourceId = R.drawable::class.java.getField(resourceName).getInt(null)
+            resourceId
+        }
+    }
 }

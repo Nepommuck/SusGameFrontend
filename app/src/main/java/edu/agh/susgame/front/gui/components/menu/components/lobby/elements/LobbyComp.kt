@@ -65,7 +65,6 @@ fun LobbyComp(
                 lobbyId = lobbyInit.id,
                 name = lobbyInit.name,
                 maxNumOfPlayers = lobbyInit.maxNumOfPlayers,
-//                gameTime = lobbyInit.gameTime
             )
         )
     }

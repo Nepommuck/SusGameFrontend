@@ -24,6 +24,7 @@ fun PlayersNumberComp(
     numOfPlayers: Int,
     onGameTimeChange: (Int) -> Unit
 ) {
+    val playersPerGame = AppConfig.gameConfig.playersPerGame
     Row(
         Modifier
             .padding(PaddingXL)
@@ -45,15 +46,13 @@ fun PlayersNumberComp(
             onValueChange = { newValue ->
                 onGameTimeChange(newValue.toInt())
             },
-            valueRange = AppConfig.gameConfig.playersPerGame.min.toFloat()..AppConfig.gameConfig.playersPerGame.max.toFloat(),
-            steps = (AppConfig.gameConfig.playersPerGame.max - AppConfig.gameConfig.playersPerGame.min - 1),
+            valueRange = playersPerGame.min.toFloat()..playersPerGame.max.toFloat(),
+            steps = (playersPerGame.max - playersPerGame.min - 1),
             colors = SliderDefaults.colors(
-                thumbColor = Color.White.copy(alpha = 0.9f), // Kolor "thumb" (uchwyt)
-                activeTrackColor = Color.DarkGray, // Kolor aktywnego fragmentu suwaka
-                inactiveTrackColor = Color.Gray, // Kolor nieaktywnego fragmentu suwaka
-//                activeTickColor = Color.D, // Kolor aktywnych ticków
-//                inactiveTickColor = Color.LightGray // Kolor nieaktywnych ticków
-        )
+                thumbColor = Color.White.copy(alpha = 0.9f),
+                activeTrackColor = Color.DarkGray,
+                inactiveTrackColor = Color.Gray,
+            )
         )
     }
 }

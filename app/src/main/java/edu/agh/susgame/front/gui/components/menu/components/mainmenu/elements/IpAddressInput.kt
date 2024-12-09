@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.config.AppConfig
 import edu.agh.susgame.front.gui.components.common.theme.PaddingM
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
+import edu.agh.susgame.front.gui.components.common.theme.Transparent
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.service.web.IpAddressProvider
 
@@ -92,8 +93,8 @@ fun IpAddressInput(ipAddressProvider: IpAddressProvider) {
             onClick = { onButtonClicked() },
             modifier = Modifier.requiredWidthIn(min = 120.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0),
-                disabledContainerColor = Color(0)
+                containerColor = Transparent,
+                disabledContainerColor = Transparent
             ),
             shape = RoundedCornerShape(16.dp)
         ) {

@@ -13,14 +13,8 @@ interface Configuration {
 
     class GameConfig(
         val maxPinLength: Int,
-        val gameTimeMinutes: GameTimeMinutes,
         val playersPerGame: PlayersPerGame,
     ) {
-        data class GameTimeMinutes(
-            val min: Int,
-            val max: Int,
-        )
-
         data class PlayersPerGame(
             val min: Int,
             val max: Int,

@@ -24,6 +24,7 @@ import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.CreateGameComp
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.GameNameComp
+import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.GamePinComp
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.PlayersNumberComp
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.elements.ReturnButton
 import edu.agh.susgame.front.service.interfaces.LobbyService
@@ -76,20 +77,15 @@ fun CreateLobbyView(
                     onGameNameChange = { gameName = it }
                 )
 
-//                GamePinComp(
-//                    gamePin = gamePin,
-//                    showPassword = showPassword,
-//                    isGamePinEnabled = isGamePinEnabled,
-//                    onGamePinChange = { gamePin = it },
-//                    onShowPasswordChange = { showPassword = it },
-//                    onGamePinEnabledChange = { isGamePinEnabled = it }
-//                )
+                GamePinComp(
+                    gamePin = gamePin,
+                    showPassword = showPassword,
+                    isGamePinEnabled = isGamePinEnabled,
+                    onGamePinChange = { gamePin = it },
+                    onShowPasswordChange = { showPassword = it },
+                    onGamePinEnabledChange = { isGamePinEnabled = it }
+                )
 
-
-//                NumberOfPlayersComp(
-//                    numberOfPlayers = selectedNumberOfPlayers,
-//                    onNumberOfPlayersChange = { selectedNumberOfPlayers = it }
-//                )
 
                 PlayersNumberComp(
                     numOfPlayers = selectedNumberOfPlayers,
@@ -114,5 +110,4 @@ fun CreateLobbyView(
             ReturnButton(navController = navController)
         }
     }
-//    ReturnButton(navController = navController)
 }

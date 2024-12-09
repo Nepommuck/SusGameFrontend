@@ -20,9 +20,7 @@ fun StartButton(
     Button(
         onClick = onClick,
         enabled = isEnabled,
-        modifier = Modifier
-//            .fillMaxWidth()
-            .padding(8.dp),
+        modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Green.copy(alpha = 0.3f),
