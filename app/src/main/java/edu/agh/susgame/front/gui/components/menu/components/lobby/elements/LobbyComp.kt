@@ -147,7 +147,7 @@ fun LobbyComp(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxSize()
-                .padding(PaddingXL),
+                    .padding(PaddingXL),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (isColorBeingChanged) {

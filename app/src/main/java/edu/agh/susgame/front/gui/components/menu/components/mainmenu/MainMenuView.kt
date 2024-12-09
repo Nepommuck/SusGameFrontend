@@ -34,28 +34,34 @@ fun MainMenuView(
     ) {
 
 
-    Spacer(modifier = Modifier.weight(0.5f))
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f), contentAlignment = Alignment.Center) {
+        Spacer(modifier = Modifier.weight(0.5f))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f), contentAlignment = Alignment.Center
+        ) {
             Header(title = Translation.Menu.GAME_TITLE, style = TextStyler.TerminalXXL)
         }
 
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f), contentAlignment = Alignment.Center
+        ) {
             IpAddressInput(ipAddressProvider)
         }
 
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f), horizontalArrangement = Arrangement.SpaceEvenly) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f), horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
             Spacer(modifier = Modifier.weight(0.6f))
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .weight(1f),
-                        contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center
             ) {
                 MainMenuButton(
                     text = Translation.Menu.JOIN_GAME,
@@ -68,7 +74,7 @@ fun MainMenuView(
                 modifier = Modifier
                     .fillMaxSize()
                     .weight(1f),
-                        contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center
             )
             {
                 MainMenuButton(

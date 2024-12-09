@@ -8,8 +8,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
-import edu.agh.susgame.front.gui.components.common.util.Calculate
 import edu.agh.susgame.front.gui.components.common.theme.Animations
+import edu.agh.susgame.front.gui.components.common.util.Calculate
 import kotlinx.coroutines.delay
 
 @Composable

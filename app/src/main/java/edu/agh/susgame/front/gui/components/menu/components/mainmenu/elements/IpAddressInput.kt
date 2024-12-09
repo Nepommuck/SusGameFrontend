@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.config.AppConfig
@@ -98,7 +97,10 @@ fun IpAddressInput(ipAddressProvider: IpAddressProvider) {
             ),
             shape = RoundedCornerShape(16.dp)
         ) {
-            Text(text = if (isInEditMode) Translation.Button.ACCEPT else Translation.Button.EDIT, style = TextStyler.TerminalM)
+            Text(
+                text = if (isInEditMode) Translation.Button.ACCEPT else Translation.Button.EDIT,
+                style = TextStyler.TerminalM
+            )
         }
 
     }
