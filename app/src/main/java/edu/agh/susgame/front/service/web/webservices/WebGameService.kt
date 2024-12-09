@@ -10,6 +10,8 @@ import edu.agh.susgame.dto.socket.common.GameStatus
 import edu.agh.susgame.front.config.utils.Configuration
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
+import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion.QuizAnswerId
+import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion.QuizQuestionId
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.service.interfaces.GameService
@@ -164,6 +166,15 @@ class WebGameService(
         sendClientSocketMessage(
             ClientSocketMessage.FixRouterDTO(
                 deviceId = routerId.value
+            )
+        )
+    }
+
+    override fun sendQuizQuestionAnswer(questionId: QuizQuestionId, answerId: QuizAnswerId) {
+        sendClientSocketMessage(
+            ClientSocketMessage.QuizAnswerDTO(
+                questionId = questionId.value,
+                answer = answerId.value,
             )
         )
     }

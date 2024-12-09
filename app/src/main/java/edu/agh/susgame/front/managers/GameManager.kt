@@ -38,6 +38,8 @@ class GameManager(
     // Shared game state
     val gameState = GameStateManager()
 
+    val quizManager = QuizManager(gameService)
+
     // ATTRIBUTES - DEFAULT
     private val pathsByPlayerId: SnapshotStateMap<PlayerId, Path> = mutableStateMapOf()
     val gameTimeLeft: MutableIntState = mutableIntStateOf(0)

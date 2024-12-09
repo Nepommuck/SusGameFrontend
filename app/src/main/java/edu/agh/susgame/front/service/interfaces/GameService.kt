@@ -6,6 +6,8 @@ import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
+import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion.QuizAnswerId
+import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion.QuizQuestionId
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.LobbyManager
 import kotlinx.coroutines.flow.SharedFlow
@@ -39,14 +41,12 @@ interface GameService {
 
     fun sendFixRouter(routerId: NodeId)
 
+    fun sendQuizQuestionAnswer(questionId: QuizQuestionId, answerId: QuizAnswerId)
+
     // REST
     fun isPlayerInLobby(lobbyId: LobbyId): Boolean
 
     fun joinLobby(lobbyId: LobbyId, nickname: PlayerNickname): CompletableFuture<Unit>
 
     fun leaveLobby(): CompletableFuture<Unit>
-
-    // TODO GAME-79 All specific methods like
-    //  `sendRouterUpdate(routerId, newRouterParams), `notifyAboutCreditChange(int)` etc.
-    //  should be added
 }

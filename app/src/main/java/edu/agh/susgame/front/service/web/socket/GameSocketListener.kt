@@ -109,7 +109,7 @@ class GameWebSocketListener : WebSocketListener() {
                 }
 
                 is ServerSocketMessage.QuizQuestionDTO -> {
-                    webGameManager?.handlerQuizQuestion(decodedMessage)
+                    webGameManager?.handleQuizQuestion(decodedMessage)
                 }
 
                 is ServerSocketMessage.GameStarted -> {

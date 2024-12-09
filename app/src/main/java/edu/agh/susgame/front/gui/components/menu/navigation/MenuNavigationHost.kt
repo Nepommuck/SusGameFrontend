@@ -34,12 +34,21 @@ fun MenuNavigationHost(
             // Very useful for development purposes
 //            ComputerComponent(
 //                gameService, GameManager(
-//                    nodesList = emptyList(),
+//                    nodesList = listOf(
+//                        Server(
+//                            id = NodeId(1), name = "", position = Coordinates(0, 0),
+//                            packetsToWin = 100,
+//                            packetsReceived = mutableIntStateOf(0)
+//                        )
+//                    ),
 //                    edgesList = emptyList(),
 //                    playersList = emptyList(),
 //                    serverId = NodeId(1),
 //                    mapSize = Coordinates(100, 100),
 //                    localPlayerId = PlayerId(21),
+//                    criticalBufferOverheatLevel = 10,
+//                    packetsToWin = 5,
+//                    gameService = gameService,
 //                )
 //            )
         }
@@ -87,7 +96,6 @@ fun MenuNavigationHost(
                     lobbyManager = it
                 )
             }
-
         }
     }
 }
