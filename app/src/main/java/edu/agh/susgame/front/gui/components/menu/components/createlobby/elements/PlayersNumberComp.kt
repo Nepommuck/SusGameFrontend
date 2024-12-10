@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.config.AppConfig
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
-import edu.agh.susgame.front.gui.components.common.theme.PaddingXL
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Translation
 

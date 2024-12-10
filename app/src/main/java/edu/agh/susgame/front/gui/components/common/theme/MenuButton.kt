@@ -12,8 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import edu.agh.susgame.front.gui.components.common.theme.TextStyler
-import edu.agh.susgame.front.gui.components.common.theme.Transparent
 
 @Composable
 fun MenuButton(

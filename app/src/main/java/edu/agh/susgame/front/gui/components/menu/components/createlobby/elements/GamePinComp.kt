@@ -40,7 +40,7 @@ fun GamePinComp(
     ) {
         OutlinedTextField(
             label = {
-                Text(text = Translation.CreateGame.ENTER_GAME_PIN, style= TextStyler.TerminalS)
+                Text(text = Translation.CreateGame.ENTER_GAME_PIN, style = TextStyler.TerminalS)
             },
             visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {

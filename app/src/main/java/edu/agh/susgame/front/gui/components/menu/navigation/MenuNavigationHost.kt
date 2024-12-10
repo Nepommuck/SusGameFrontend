@@ -27,30 +27,7 @@ fun MenuNavigationHost(
         startDestination = MenuRoute.MainMenu.route,
     ) {
         composable(route = MenuRoute.MainMenu.route) {
-
             MainMenuView(menuNavController, ipAddressProvider)
-
-            // TODO Cleanup one day
-            // Very useful for development purposes
-//            ComputerComponent(
-//                gameService, GameManager(
-//                    nodesList = listOf(
-//                        Server(
-//                            id = NodeId(1), name = "", position = Coordinates(0, 0),
-//                            packetsToWin = 100,
-//                            packetsReceived = mutableIntStateOf(0)
-//                        )
-//                    ),
-//                    edgesList = emptyList(),
-//                    playersList = emptyList(),
-//                    serverId = NodeId(1),
-//                    mapSize = Coordinates(100, 100),
-//                    localPlayerId = PlayerId(21),
-//                    criticalBufferOverheatLevel = 10,
-//                    packetsToWin = 5,
-//                    gameService = gameService,
-//                )
-//            )
         }
 
         composable(route = MenuRoute.SearchLobby.route) {

@@ -23,11 +23,11 @@ import androidx.navigation.NavController
 import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
 import edu.agh.susgame.front.gui.components.common.theme.MenuBackground
+import edu.agh.susgame.front.gui.components.common.theme.MenuButton
 import edu.agh.susgame.front.gui.components.common.theme.RefreshIcon
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.elements.HeaderLobby
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.elements.LoadingAnim
-import edu.agh.susgame.front.gui.components.common.theme.MenuButton
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.elements.LobbyRow
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.elements.PinInput
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
