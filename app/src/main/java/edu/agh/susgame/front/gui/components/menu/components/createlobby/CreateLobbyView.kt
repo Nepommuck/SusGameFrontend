@@ -1,6 +1,5 @@
 package edu.agh.susgame.front.gui.components.menu.components.createlobby
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,10 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -20,12 +16,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.MenuBackground
-import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.theme.PaddingM
 import edu.agh.susgame.front.gui.components.common.theme.PaddingXL
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
@@ -34,7 +27,8 @@ import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.GameNameComp
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.GamePinComp
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.elements.PlayersNumberComp
-import edu.agh.susgame.front.gui.components.menu.components.searchlobby.elements.ReturnButton
+import edu.agh.susgame.front.gui.components.common.theme.MenuButton
+import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.LobbyService
 
 
@@ -104,7 +98,9 @@ fun CreateLobbyView(
                         navController = navController
                     )
                 }
-                Column(modifier = Modifier.fillMaxSize().weight(4f),
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .weight(4f),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -113,8 +109,9 @@ fun CreateLobbyView(
             }
         }
     }
-
-        ReturnButton(navController = navController)
-
-
+    MenuButton(
+        text = Translation.Button.GO_BACK,
+        onClick = { navController.navigate(MenuRoute.MainMenu.route) },
+        alignment = Alignment.BottomStart
+    )
 }

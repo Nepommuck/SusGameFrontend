@@ -36,6 +36,7 @@ fun LobbyView(
                 isLoading = false
             }
     }
+
     MenuBackground()
     Column {
         when {
