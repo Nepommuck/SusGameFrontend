@@ -27,7 +27,7 @@ import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.theme.Transparent
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 
-private const val isLobbyLocked: Boolean = true // TODO GAME-121 this should be taken from Lobby
+private const val isLobbyLocked: Boolean = false // TODO GAME-121 this should be taken from Lobby
 
 @Composable
 internal fun LobbyRow(
@@ -102,6 +102,5 @@ internal fun LobbyRow(
                 )
             }
         }
-
     }
 }

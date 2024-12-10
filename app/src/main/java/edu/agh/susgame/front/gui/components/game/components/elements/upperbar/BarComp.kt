@@ -1,7 +1,9 @@
 package edu.agh.susgame.front.gui.components.game.components.elements.upperbar
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,8 +22,8 @@ import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.text.style.TextAlign
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Calculate
-import edu.agh.susgame.front.gui.components.game.components.elements.packetsRatio
 import edu.agh.susgame.front.managers.GameManager
+import kotlin.math.roundToInt
 
 @Composable
 fun BarComp(gameManager: GameManager) {
@@ -52,7 +54,7 @@ fun BarComp(gameManager: GameManager) {
                 )
                 drawRect(
                     color = Color.Blue.copy(alpha = 0.9f),
-                    size = Size(width = size.width/2, height = size.height)
+                    size = Size(width = progressWidth, height = size.height)
                 )
             }
             drawRoundRect(
@@ -62,15 +64,23 @@ fun BarComp(gameManager: GameManager) {
                 style = Stroke(width = 8f)
             )
         }
-        Text(
-            text = "${
-                packetsRatio(
-                    packetsReceived,
-                    gameManager.packetsToWin
-                )
-            }% Critical Network Data",
-            style = TextStyler.TerminalM,
-            textAlign = TextAlign.Center
-        )
+        Row (Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Absolute.Center, verticalAlignment = Alignment.CenterVertically){
+            LoadAnim()
+            Text(
+                text = " ${
+                    packetsRatio(
+                        packetsReceived,
+                        gameManager.packetsToWin
+                    )
+                }% Critical Network Data",
+                style = TextStyler.TerminalM,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
+
+private fun packetsRatio(packetsReceived: Int, packetsToWin: Int): String =
+    (Calculate.getFloatProgress(packetsReceived, packetsToWin) * 100)
+        .roundToInt()
+        .toString()

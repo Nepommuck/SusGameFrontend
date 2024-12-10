@@ -18,20 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.gui.components.common.theme.PaddingXL
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
-import edu.agh.susgame.front.gui.components.common.util.Calculate
 import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.BarComp
 import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.CoinAnim
 import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.HourglassImg
-import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.LoadAnim
+import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.MenuButton
 import edu.agh.susgame.front.managers.GameManager
 import java.util.Locale
-import kotlin.math.roundToInt
 
 @Composable
 fun UpperBarComp(
     gameManager: GameManager
 ) {
-    val packetsReceived by remember { gameManager.getServerReceivedPackets() }
     val playerTokens by remember { gameManager.getPlayerTokens(gameManager.localPlayerId) }
     val timeLeft by remember { gameManager.gameTimeLeft }
 
@@ -46,13 +43,10 @@ fun UpperBarComp(
                 .padding(PaddingXL),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(modifier = Modifier.weight(1f)) {
-                LoadAnim()
-            }
-            Box(modifier = Modifier.weight(5f)) {
+            Box(modifier = Modifier.weight(4f)) {
                 BarComp(gameManager)
             }
-            Box(modifier = Modifier.weight(6f), contentAlignment = Alignment.Center) {
+            Box(modifier = Modifier.weight(3f), contentAlignment = Alignment.Center) {
                 Row(
                     modifier = Modifier.fillMaxSize(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -73,15 +67,17 @@ fun UpperBarComp(
                     )
                 }
             }
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                MenuButton(
+                    onClick = { gameManager.gameState.isMenuOpened.value = !gameManager.gameState.isMenuOpened.value  }
+                )
+            }
         }
     }
 }
-
-fun packetsRatio(packetsReceived: Int, packetsToWin: Int): String =
-    (Calculate.getFloatProgress(packetsReceived, packetsToWin) * 100)
-        .roundToInt()
-        .toString()
-
 
 fun getTime(gameTimeLeft: Int): String {
     val minutes = gameTimeLeft / 60

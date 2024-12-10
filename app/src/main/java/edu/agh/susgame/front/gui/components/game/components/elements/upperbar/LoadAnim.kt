@@ -2,7 +2,7 @@ package edu.agh.susgame.front.gui.components.game.components.elements.upperbar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,12 +29,11 @@ fun LoadAnim() {
     }
 
     Row(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxHeight(),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = "(", style = TextStyler.TerminalL)
-
         Text(
             text = anim.frames[animFrameIndex],
             style = TextStyler.TerminalL

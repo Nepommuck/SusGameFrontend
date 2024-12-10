@@ -1,6 +1,7 @@
 package edu.agh.susgame.front.gui.components.game.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -48,14 +50,16 @@ internal fun GameGraphComponent(
 
     val gameState = gameManager.gameState
     val isPathValid by gameManager.pathBuilder.isPathValid
-    
+
     Background()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
         GameNet(gameManager = gameManager)
         UpperBarComp(gameManager = gameManager)
+
         Box(
             modifier = Modifier
                 .align(Alignment.CenterStart)
@@ -124,6 +128,19 @@ internal fun GameGraphComponent(
         NavIcons(
             isComputerVisible = gameState.isComputerViewVisible,
         )
+    }
+    if (gameState.isMenuOpened.value) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(0.6f)
+                    .background(Color.LightGray),
+                contentAlignment = Alignment.Center
+            ) {
+
+                Text(text = "MENU")
+            }
+        }
     }
 
     when (gameState.gameStatus.value) {

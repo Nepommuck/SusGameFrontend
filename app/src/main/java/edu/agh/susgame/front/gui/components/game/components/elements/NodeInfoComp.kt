@@ -44,13 +44,12 @@ fun NodeInfoComp(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth(0.4f)
+                .fillMaxWidth(0.5f)
                 .fillMaxHeight(0.5f)
                 .align(Alignment.BottomEnd)
                 .padding(PaddingM)
                 .background(Color(0x40808080))
         ) {
-
             Row(Modifier.fillMaxSize()) {
                 Column(
                     modifier = Modifier
@@ -74,7 +73,7 @@ fun NodeInfoComp(
                                     )
                                 },
                                 valueRange = 0f..node.maxPacketsToSend.intValue.toFloat(),
-                                steps = node.maxPacketsToSend.intValue - 1,
+                                steps = node.maxPacketsToSend.intValue + 1,
                                 modifier = Modifier.padding(top = 16.dp)
                             )
                         }
