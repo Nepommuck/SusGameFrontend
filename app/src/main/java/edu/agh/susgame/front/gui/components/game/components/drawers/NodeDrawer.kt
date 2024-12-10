@@ -94,7 +94,10 @@ fun getColorFilterForNode(
     return when (node) {
         is Host -> {
             val hostColor = gameManager.playersById[node.playerId]?.color?.value ?: Color.Gray
-            ColorFilter.tint(color = hostColor.copy(alpha = 0.8f))
+            ColorFilter.lighting(
+                hostColor.copy(alpha = 0.8f),
+                Color.Black
+            )
         }
 
         is Router -> {
@@ -112,7 +115,10 @@ fun getColorFilterForNode(
                     blue = 0,
                     alpha = (0.8f * 255).toInt()
                 )
-            ColorFilter.tint(color = routerColor)
+            ColorFilter.lighting(
+                routerColor,
+                Color.Black
+            )
         }
 
         else -> null
