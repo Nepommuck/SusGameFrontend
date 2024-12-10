@@ -34,7 +34,7 @@ fun MenuButton(
                 ),
                 shape = RoundedCornerShape(16.dp)
             ) {
-                Text(text = text, style = TextStyler.TerminalM)
+                Text(text = text, style = TextStyler.TerminalL)
             }
         }
     }

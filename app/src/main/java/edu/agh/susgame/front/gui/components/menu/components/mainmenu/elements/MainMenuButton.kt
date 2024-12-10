@@ -37,7 +37,7 @@ fun MainMenuButton(
     ) {
         Text(
             text = text,
-            style = TextStyler.TerminalM
+            style = TextStyler.TerminalL
         )
     }
 }

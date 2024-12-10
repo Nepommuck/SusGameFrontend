@@ -29,7 +29,7 @@ fun StartButton(
     ) {
         Text(
             text = Translation.Button.PLAY,
-            style = TextStyler.TerminalM,
+            style = TextStyler.TerminalL,
             color = Color.White
         )
     }

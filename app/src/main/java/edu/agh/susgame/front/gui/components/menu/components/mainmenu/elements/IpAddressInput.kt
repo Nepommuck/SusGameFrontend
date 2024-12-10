@@ -99,7 +99,7 @@ fun IpAddressInput(ipAddressProvider: IpAddressProvider) {
         ) {
             Text(
                 text = if (isInEditMode) Translation.Button.ACCEPT else Translation.Button.EDIT,
-                style = TextStyler.TerminalM
+                style = TextStyler.TerminalL
             )
         }
 

@@ -65,7 +65,7 @@ fun PlayerRow(
                 Text(
                     modifier = Modifier.align(Alignment.CenterStart),
                     text = player.name.value,
-                    style = TextStyler.TerminalM
+                    style = TextStyler.TerminalL
                 )
             }
             Box(

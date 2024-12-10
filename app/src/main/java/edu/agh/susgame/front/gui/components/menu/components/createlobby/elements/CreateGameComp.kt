@@ -48,7 +48,7 @@ fun CreateGameComp(
         ),
         shape = RoundedCornerShape(16.dp)
     ) {
-        Text(text = Translation.Button.CREATE, style = TextStyler.TerminalM, color = Color.White)
+        Text(text = Translation.Button.CREATE, style = TextStyler.TerminalL, color = Color.White)
     }
 }
 

@@ -2,7 +2,6 @@ package edu.agh.susgame.front.gui.components.game.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,13 +12,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -28,12 +23,11 @@ import edu.agh.susgame.dto.socket.common.GameStatus
 import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.util.Calculate
 import edu.agh.susgame.front.gui.components.common.util.Translation
-import edu.agh.susgame.front.gui.components.common.util.ZoomState
 import edu.agh.susgame.front.gui.components.game.components.computer.ComputerComponent
-import edu.agh.susgame.front.gui.components.game.components.drawers.EdgeDrawer
-import edu.agh.susgame.front.gui.components.game.components.drawers.NodeDrawer
+import edu.agh.susgame.front.gui.components.game.components.elements.Background
+import edu.agh.susgame.front.gui.components.game.components.elements.GameNet
 import edu.agh.susgame.front.gui.components.game.components.elements.NodeInfoComp
-import edu.agh.susgame.front.gui.components.game.components.elements.ProgressBarComp
+import edu.agh.susgame.front.gui.components.game.components.elements.UpperBarComp
 import edu.agh.susgame.front.gui.components.game.components.elements.bottombar.NavIcons
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.managers.GameManager
@@ -54,62 +48,14 @@ internal fun GameGraphComponent(
 
     val gameState = gameManager.gameState
     val isPathValid by gameManager.pathBuilder.isPathValid
-
-    val zoomState = remember {
-        ZoomState(
-            maxZoomIn = 2f,
-            maxZoomOut = 0.5f,
-            totalSize = gameManager.mapSize,
-        )
-    }
-
+    
+    Background()
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-
-        Image(
-            painter = painterResource(id = R.drawable.background),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTransformGestures { _, pan, zoom, _ ->
-                    zoomState.scale(zoom)
-                    zoomState.move(pan)
-                }
-            }
-            .graphicsLayer(
-                scaleX = zoomState.scaleValue(),
-                scaleY = zoomState.scaleValue(),
-                translationX = zoomState.translationX(),
-                translationY = zoomState.translationY(),
-                clip = false
-            )
-
-        ) {
-
-            EdgeDrawer(gameManager)
-
-            NodeDrawer(gameManager)
-        }
-
-        gameState.currentlyInspectedNode.value
-            ?.takeIf { !gameState.isPathBeingChanged.value }
-            ?.let { node ->
-                NodeInfoComp(
-                    node = node,
-                    onExit = { gameState.currentlyInspectedNode.value = null },
-                    changingPath = { state -> gameState.isPathBeingChanged.value = state },
-                    gameManager = gameManager,
-                )
-            }
-
+        GameNet(gameManager = gameManager)
+        UpperBarComp(gameManager = gameManager)
         Box(
             modifier = Modifier
                 .align(Alignment.CenterStart)
@@ -159,7 +105,17 @@ internal fun GameGraphComponent(
                 }
             }
         }
-        ProgressBarComp(gameManager = gameManager)
+
+        gameState.currentlyInspectedNode.value
+            ?.takeIf { !gameState.isPathBeingChanged.value }
+            ?.let { node ->
+                NodeInfoComp(
+                    node = node,
+                    onExit = { gameState.currentlyInspectedNode.value = null },
+                    changingPath = { state -> gameState.isPathBeingChanged.value = state },
+                    gameManager = gameManager,
+                )
+            }
 
         if (gameState.isComputerViewVisible.value) {
             ComputerComponent(gameService = gameService, gameManager = gameManager)

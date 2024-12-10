@@ -13,6 +13,7 @@ import edu.agh.susgame.dto.rest.games.GamesRest
 import edu.agh.susgame.front.config.AppConfig
 import edu.agh.susgame.front.config.utils.ProviderType
 import edu.agh.susgame.front.gui.components.common.theme.SusGameTheme
+import edu.agh.susgame.front.gui.components.game.components.GameGraphComponent
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuNavigationHost
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.LobbyService

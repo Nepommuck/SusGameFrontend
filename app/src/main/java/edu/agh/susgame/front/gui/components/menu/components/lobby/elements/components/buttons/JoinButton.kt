@@ -30,7 +30,7 @@ fun JoinButton(
     ) {
         Text(
             text = if (isJoinButtonLoading) Translation.Button.LOADING else Translation.Button.JOIN,
-            style = TextStyler.TerminalM,
+            style = TextStyler.TerminalL,
             color = Color.White
         )
     }

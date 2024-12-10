@@ -86,7 +86,7 @@ internal fun LobbyRow(
             ) {
                 Text(
                     text = lobby.name,
-                    style = TextStyler.TerminalM,
+                    style = TextStyler.TerminalL,
                 )
             }
             Box(
@@ -98,7 +98,7 @@ internal fun LobbyRow(
             {
                 Text(
                     text = "${lobby.playersWaiting.size}/${lobby.maxNumOfPlayers}",
-                    style = TextStyler.TerminalM,
+                    style = TextStyler.TerminalL,
                 )
             }
         }

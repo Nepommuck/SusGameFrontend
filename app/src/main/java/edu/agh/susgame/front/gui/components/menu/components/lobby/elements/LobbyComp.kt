@@ -113,7 +113,7 @@ fun LobbyComp(
                 ) {
                     Text(
                         text = "${Translation.Lobby.NUM_OF_PLAYERS}: ${lobbyManager.getNumberOfPlayers()}/${lobbyManager.maxNumOfPlayers}",
-                        style = TextStyler.TerminalM
+                        style = TextStyler.TerminalL
                     )
                     RefreshIcon(onRefreshClicked = { lobbyManager.updateFromRest() })
                 }
@@ -191,7 +191,7 @@ fun LobbyComp(
                             },
                             isError = isError,
                             singleLine = true,
-                            textStyle = TextStyler.TerminalM.copy(textAlign = TextAlign.Center),
+                            textStyle = TextStyler.TerminalL.copy(textAlign = TextAlign.Center),
                             modifier = Modifier
                                 .weight(3f)
                                 .padding(PaddingS)

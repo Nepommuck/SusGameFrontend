@@ -34,7 +34,7 @@ fun PlayersNumberComp(
     ) {
         Text(
             text = "${Translation.CreateGame.AMOUNT_OF_PLAYERS}: ",
-            style = TextStyler.TerminalM
+            style = TextStyler.TerminalL
         )
         Text(
             text = "$numOfPlayers",
