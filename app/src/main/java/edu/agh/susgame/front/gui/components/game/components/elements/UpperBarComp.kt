@@ -16,12 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import edu.agh.susgame.R
 import edu.agh.susgame.front.gui.components.common.theme.PaddingXL
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
-import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.BarComp
 import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.CoinAnim
 import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.HourglassImg
-import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.MenuButton
+import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.ProgressBar
+import edu.agh.susgame.front.gui.components.game.components.elements.upperbar.UpperButton
 import edu.agh.susgame.front.managers.GameManager
 import java.util.Locale
 
@@ -44,7 +45,7 @@ fun UpperBarComp(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(modifier = Modifier.weight(4f)) {
-                BarComp(gameManager)
+                ProgressBar(gameManager)
             }
             Box(modifier = Modifier.weight(3f), contentAlignment = Alignment.Center) {
                 Row(
@@ -71,9 +72,25 @@ fun UpperBarComp(
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center
             ) {
-                MenuButton(
-                    onClick = { gameManager.gameState.isMenuOpened.value = !gameManager.gameState.isMenuOpened.value  }
-                )
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    UpperButton(
+                        onClick = {
+                            gameManager.gameState.zoomState.value.reset()
+                        },
+                        resourceId = R.drawable.repair_tools
+                    )
+                    UpperButton(
+                        onClick = {
+                            gameManager.gameState.isMenuOpened.value =
+                                !gameManager.gameState.isMenuOpened.value
+                        },
+                        resourceId = R.drawable.menu
+                    )
+                }
             }
         }
     }

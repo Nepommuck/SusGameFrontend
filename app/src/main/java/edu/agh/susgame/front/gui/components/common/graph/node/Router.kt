@@ -18,7 +18,9 @@ class Router(
     val isWorking: MutableState<Boolean> = mutableStateOf(true)
     val overheat: MutableIntState = mutableIntStateOf(0)
 
-    override fun getInfo(): String {
+    override fun getNodeName(): String = Translation.Game.ROUTER
+
+    fun getName2(): String {
         return """
             ${Translation.Game.ROUTER}
             ${Translation.Game.STATE}: ${if (isWorking.value) Translation.Game.RUNNING else Translation.Game.SHUTDOWN}

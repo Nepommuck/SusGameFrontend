@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import edu.agh.susgame.front.gui.components.common.theme.Animations
+import edu.agh.susgame.front.gui.components.common.util.AssetsManager
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Calculate
 import kotlinx.coroutines.delay
@@ -20,7 +20,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun LoadAnim() {
     var animFrameIndex by remember { mutableIntStateOf(0) }
-    val anim = Animations.HOURGLASS_ANIMATION
+    val anim = AssetsManager.HOURGLASS_ANIMATION
     LaunchedEffect(Unit) {
         while (true) {
             delay(anim.frameRate)

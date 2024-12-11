@@ -37,4 +37,10 @@ class ZoomState(
         translationY.floatValue =
             (translationY.floatValue + offset.y).coerceIn(-scaledHeight, scaledHeight)
     }
+
+    fun reset() {
+        scale.floatValue = 1f
+        translationX.floatValue = 0f
+        translationY.floatValue = 0f
+    }
 }

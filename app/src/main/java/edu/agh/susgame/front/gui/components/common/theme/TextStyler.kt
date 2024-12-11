@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.sp
 import edu.agh.susgame.R
 
 object TextStyler {
-    private fun baseTextStyle(fontSize: TextUnit, color: Color = Color(0xF0989bb9)): TextStyle {
+    private fun baseTextStyle(fontSize: TextUnit, color: Color = Color(0xF0989bb9), letterSpacing:TextUnit = 3.sp): TextStyle {
         return TextStyle(
             color = color,
             fontSize = fontSize,
@@ -18,7 +18,7 @@ object TextStyler {
                 Font(R.font.vt323regular)
             ),
             fontWeight = FontWeight.Bold,
-            letterSpacing = 3.sp,
+            letterSpacing = letterSpacing,
         )
     }
 
@@ -27,6 +27,7 @@ object TextStyler {
     val TerminalL = baseTextStyle(23.sp)
     val TerminalM = baseTextStyle(17.sp)
     val TerminalS = baseTextStyle(14.sp)
+    val TerminalName = baseTextStyle(14.sp, letterSpacing = 1.sp)
     val TerminalInput = baseTextStyle(23.sp, color = Color.White.copy(alpha = 0.65f))
     val Chat = baseTextStyle(16.sp, Color.Green)
 }

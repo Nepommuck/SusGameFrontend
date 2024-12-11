@@ -4,11 +4,11 @@ import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import edu.agh.susgame.front.gui.components.common.util.ZoomState
 import edu.agh.susgame.front.gui.components.game.components.drawers.EdgeDrawer
 import edu.agh.susgame.front.gui.components.game.components.drawers.NodeDrawer
 import edu.agh.susgame.front.managers.GameManager
@@ -17,13 +17,7 @@ import edu.agh.susgame.front.managers.GameManager
 fun GameNet(
     gameManager: GameManager
 ) {
-    val zoomState = remember {
-        ZoomState(
-            maxZoomIn = 2f,
-            maxZoomOut = 0.5f,
-            totalSize = gameManager.mapSize,
-        )
-    }
+    val zoomState by remember { gameManager.gameState.zoomState }
 
     Box(modifier = Modifier
         .fillMaxSize()

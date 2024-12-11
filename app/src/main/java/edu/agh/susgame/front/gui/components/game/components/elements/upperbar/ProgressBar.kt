@@ -26,7 +26,7 @@ import edu.agh.susgame.front.managers.GameManager
 import kotlin.math.roundToInt
 
 @Composable
-fun BarComp(gameManager: GameManager) {
+fun ProgressBar(gameManager: GameManager) {
     val packetsReceived by remember { gameManager.getServerReceivedPackets() }
     Box(
         modifier = Modifier.fillMaxSize(),

@@ -10,6 +10,5 @@ sealed class Node(
     val name: String,
     val position: Coordinates,
 ) {
-    // TODO fow now it's in string, later on this should be improved to something more accurate
-    abstract fun getInfo(): String
+    abstract fun getNodeName(): String
 }

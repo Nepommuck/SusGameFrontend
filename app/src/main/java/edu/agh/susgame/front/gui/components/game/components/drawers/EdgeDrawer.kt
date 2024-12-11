@@ -29,10 +29,10 @@ fun EdgeDrawer(gameManager: GameManager) {
 
             if (startXY != null && endXY != null) {
                 val startOffset = with(density) {
-                    Offset(startXY.position.x.dp.toPx(), startXY.position.y.dp.toPx())
+                    Offset((startXY.position.x.dp + 30.dp).toPx(), startXY.position.y.dp.toPx())
                 }
                 val endOffset = with(density) {
-                    Offset(endXY.position.x.dp.toPx(), endXY.position.y.dp.toPx())
+                    Offset((endXY.position.x.dp + 30.dp).toPx(), endXY.position.y.dp.toPx())
                 }
 
                 val dx = endOffset.x - startOffset.x

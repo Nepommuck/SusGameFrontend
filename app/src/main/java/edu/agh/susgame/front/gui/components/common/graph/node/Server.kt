@@ -13,7 +13,9 @@ class Server(
     val packetsReceived: MutableIntState = mutableIntStateOf(0)
 ) : Node(id, name, position) {
 
-    override fun getInfo(): String {
+    override fun getNodeName(): String = Translation.Game.SERVER
+
+    fun getName1(): String {
         return """
             ${Translation.Game.SERVER}
             ${Translation.Game.RECEIVED_DATA}: ${packetsReceived.intValue}/$packetsToWin

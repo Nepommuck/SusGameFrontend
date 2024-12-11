@@ -13,15 +13,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import edu.agh.susgame.front.gui.components.common.theme.Animations
+import edu.agh.susgame.front.gui.components.common.util.AssetsManager
 import kotlinx.coroutines.delay
 
 
 @Composable
 fun LoadingAnim() {
     val currentFrame = remember { mutableIntStateOf(0) }
-    val animationFrames = Animations.LOADING_ANIMATION.frames
-    val frameRate = Animations.LOADING_ANIMATION.frameRate
+    val animationFrames = AssetsManager.LOADING_ANIMATION.frames
+    val frameRate = AssetsManager.LOADING_ANIMATION.frameRate
 
     LaunchedEffect(Unit) {
         while (true) {

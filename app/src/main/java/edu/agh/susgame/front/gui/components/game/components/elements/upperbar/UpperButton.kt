@@ -11,12 +11,15 @@ import androidx.compose.ui.res.painterResource
 import edu.agh.susgame.R
 
 @Composable
-fun MenuButton(onClick: () -> Unit) {
+fun UpperButton(
+    onClick: () -> Unit,
+    resourceId: Int
+) {
     Box(
         modifier = Modifier.fillMaxHeight(),
         contentAlignment = Alignment.Center
     ) {
-        Image(painter = painterResource(id = R.drawable.menu),
+        Image(painter = painterResource(id = resourceId),
             contentDescription = null,
             modifier = Modifier
                 .clickable { onClick() }

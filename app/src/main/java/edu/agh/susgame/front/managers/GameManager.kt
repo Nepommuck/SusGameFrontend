@@ -36,7 +36,7 @@ class GameManager(
     private val gameService: GameService,
 ) {
     // Shared game state
-    val gameState = GameStateManager()
+    val gameState = GameStateManager(mapSize)
 
     val quizManager = QuizManager(gameService)
 
