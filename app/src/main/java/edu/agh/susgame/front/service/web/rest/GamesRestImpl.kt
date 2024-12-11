@@ -9,8 +9,10 @@ import edu.agh.susgame.dto.rest.games.model.GetAllGamesApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameMapApiResult
 import edu.agh.susgame.dto.rest.model.GameMapDTO
-import edu.agh.susgame.dto.rest.model.Lobby
+import edu.agh.susgame.dto.rest.model.LobbyDetails
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyPin
+import edu.agh.susgame.dto.rest.model.LobbyRow
 import edu.agh.susgame.front.config.utils.Configuration.WebConfig
 import edu.agh.susgame.front.service.web.IpAddressProvider
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -40,14 +42,17 @@ class GamesRestImpl(
             else {
                 val lobbies = Gson().fromJson(
                     response.body?.string(),
-                    Array<Lobby>::class.java,
+                    Array<LobbyRow>::class.java,
                 ).toList()
 
                 GetAllGamesApiResult.Success(lobbies)
             }
         }
 
-    override fun getGame(gameId: LobbyId): CompletableFuture<GetGameApiResult> =
+    override fun getGameDetails(
+        gameId: LobbyId,
+        gamePin: LobbyPin?,
+    ): CompletableFuture<GetGameApiResult> =
         CompletableFuture.supplyAsync {
             val request = Request.Builder()
                 .get()
@@ -64,11 +69,11 @@ class GamesRestImpl(
                 HttpURLConnection.HTTP_NOT_FOUND -> GetGameApiResult.DoesNotExist
 
                 HttpURLConnection.HTTP_OK -> {
-                    val lobby = Gson().fromJson(
+                    val lobbyDetails = Gson().fromJson(
                         response.body?.string(),
-                        Lobby::class.java,
+                        LobbyDetails::class.java,
                     )
-                    GetGameApiResult.Success(lobby)
+                    GetGameApiResult.Success(lobbyDetails)
                 }
 
                 else -> GetGameApiResult.OtherError

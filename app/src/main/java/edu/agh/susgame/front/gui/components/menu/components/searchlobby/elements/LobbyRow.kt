@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,18 +20,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.agh.susgame.R
-import edu.agh.susgame.dto.rest.model.Lobby
-import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyRow
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.theme.Transparent
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 
-private const val isLobbyLocked: Boolean = true // TODO GAME-121 this should be taken from Lobby
 
 @Composable
 internal fun LobbyRow(
-    lobby: Lobby,
-    currentLobbyId: MutableState<LobbyId?>,
+    lobby: LobbyRow,
     navController: NavController
 ) {
     Box(
@@ -40,8 +36,10 @@ internal fun LobbyRow(
             .fillMaxWidth()
             .height(50.dp)
             .clickable {
-                if (isLobbyLocked) {
-                    currentLobbyId.value = lobby.id
+                if (lobby.isPinSetUp) {
+                    navController.navigate(
+                        MenuRoute.EnterPin.routeWithArgument(lobbyId = lobby.id)
+                    )
                 } else {
                     navController.navigate(
                         MenuRoute.Lobby.routeWithArgument(lobbyId = lobby.id)
@@ -75,7 +73,11 @@ internal fun LobbyRow(
                     painter = painterResource(R.drawable.padlock),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
-                    colorFilter = ColorFilter.tint(if (isLobbyLocked) Color.White.copy(alpha = 0.6f) else Transparent)
+                    colorFilter = ColorFilter.tint(
+                        color =
+                            if (lobby.isPinSetUp) Color.White.copy(alpha = 0.6f)
+                            else Transparent
+                    )
                 )
             }
             Box(
@@ -97,11 +99,10 @@ internal fun LobbyRow(
             )
             {
                 Text(
-                    text = "${lobby.playersWaiting.size}/${lobby.maxNumOfPlayers}",
+                    text = "${lobby.playersWaitingCount}/${lobby.maxNumOfPlayers}",
                     style = TextStyler.TerminalM,
                 )
             }
         }
-
     }
 }

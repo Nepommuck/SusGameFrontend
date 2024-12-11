@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyPin
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.gui.components.common.util.ColorProvider
@@ -14,12 +15,14 @@ import edu.agh.susgame.front.gui.components.common.util.player.PlayerLobby
 import edu.agh.susgame.front.gui.components.common.util.player.PlayerStatus
 import edu.agh.susgame.front.managers.state.LobbyStateManager
 import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.GetGameDetailsResult.Success
 import edu.agh.susgame.front.service.interfaces.LobbyService
 
 class LobbyManager(
     val lobbyService: LobbyService,
     val gameService: GameService,
     val lobbyId: LobbyId,
+    val lobbyPin: LobbyPin?,
     val name: String,
     val maxNumOfPlayers: Int,
 ) {
@@ -32,19 +35,24 @@ class LobbyManager(
 
     // SERVICE MANAGEMENT - UPDATE FROM SERVER MESSAGES
     fun updateFromRest() {
-        lobbyService.getById(lobbyId).thenApply { lobby ->
-            lobby?.playersWaiting?.forEach { player ->
-                updatePlayerJoins(
-                    playerId = player.id,
-                    nickname = player.nickname,
-                    color = player.color?.let {
-                        Color(it.decimalRgbaValue.toULong())
-                    } ?: ColorProvider.DEFAULT_COLOR,
-                    readiness = if (player.readiness) PlayerStatus.READY else PlayerStatus.NOT_READY
-                )
+        lobbyService
+            .getLobbyDetails(lobbyId, lobbyPin)
+            .thenApply { result ->
+                when (result) {
+                    is Success -> result.lobbyDetails.playersWaiting.forEach { player ->
+                        updatePlayerJoins(
+                            playerId = player.id,
+                            nickname = player.nickname,
+                            color = player.color?.let {
+                                Color(it.decimalRgbaValue.toULong())
+                            } ?: ColorProvider.DEFAULT_COLOR,
+                            readiness = if (player.readiness) PlayerStatus.READY else PlayerStatus.NOT_READY
+                        )
+                    }
+
+                    else -> {}
+                }
             }
-            println(lobby?.playersWaiting)
-        }
     }
 
     fun updatePlayerJoins(

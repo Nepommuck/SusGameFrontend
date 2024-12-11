@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyPin
 import edu.agh.susgame.front.gui.components.game.GameView
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.CreateLobbyView
 import edu.agh.susgame.front.gui.components.menu.components.lobby.LobbyView
@@ -44,16 +45,18 @@ fun MenuNavigationHost(
         ) { backStackEntry ->
             val lobbyId = backStackEntry.arguments
                 ?.getInt(MenuRoute.Lobby.gameIdArgument.name)
-                ?.run {
-                    LobbyId(this)
-                }
+                ?.run { LobbyId(this) }
+
+            val lobbyPin = backStackEntry.arguments
+                ?.getString(MenuRoute.Lobby.gamePinArgument.name)
+                ?.run { LobbyPin(this) }
 
             when (lobbyId) {
                 null ->
                     SearchLobbiesView(lobbyService, menuNavController)
 
                 else ->
-                    LobbyView(lobbyId, lobbyService, gameService, menuNavController)
+                    LobbyView(lobbyId, lobbyPin, lobbyService, gameService, menuNavController)
             }
         }
 

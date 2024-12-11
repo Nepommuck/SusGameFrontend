@@ -27,7 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import edu.agh.susgame.dto.rest.model.Lobby
+import edu.agh.susgame.dto.rest.model.LobbyDetails
+import edu.agh.susgame.dto.rest.model.LobbyPin
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
@@ -51,7 +52,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LobbyComp(
-    lobbyInit: Lobby,
+    lobbyDetails: LobbyDetails,
+    lobbyPin: LobbyPin?,
     lobbyService: LobbyService,
     gameService: GameService,
     navController: NavController,
@@ -62,9 +64,10 @@ fun LobbyComp(
             LobbyManager(
                 lobbyService = lobbyService,
                 gameService = gameService,
-                lobbyId = lobbyInit.id,
-                name = lobbyInit.name,
-                maxNumOfPlayers = lobbyInit.maxNumOfPlayers,
+                lobbyId = lobbyDetails.id,
+                lobbyPin = lobbyPin,
+                name = lobbyDetails.name,
+                maxNumOfPlayers = lobbyDetails.maxNumOfPlayers,
             )
         )
     }
