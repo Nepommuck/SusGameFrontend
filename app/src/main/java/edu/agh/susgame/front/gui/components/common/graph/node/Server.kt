@@ -15,9 +15,8 @@ class Server(
 
     override fun getNodeName(): String = Translation.Game.SERVER
 
-    fun getName1(): String {
+    override fun getInfo(): String {
         return """
-            ${Translation.Game.SERVER}
             ${Translation.Game.RECEIVED_DATA}: ${packetsReceived.intValue}/$packetsToWin
         """.trimIndent()
     }

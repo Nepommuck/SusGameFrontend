@@ -95,7 +95,7 @@ fun NodeDrawer(gameManager: GameManager) {
                                 }
                             }
 
-                            is Router -> { RouterBar(router = node)
+                            is Router -> { RouterBar(router = node,width=0.4f, padding = 0.dp)
                             }
 
                             is Server -> { }

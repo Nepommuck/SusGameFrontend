@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,14 +20,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
 import edu.agh.susgame.front.gui.components.common.graph.node.Host
 import edu.agh.susgame.front.gui.components.common.graph.node.Node
+import edu.agh.susgame.front.gui.components.common.graph.node.Router
+import edu.agh.susgame.front.gui.components.common.graph.node.Server
 import edu.agh.susgame.front.gui.components.common.theme.PaddingM
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.AssetsManager
+import edu.agh.susgame.front.gui.components.game.components.elements.nodeinfo.host.HostBottom
+import edu.agh.susgame.front.gui.components.game.components.elements.nodeinfo.host.HostIcons
+import edu.agh.susgame.front.gui.components.game.components.elements.nodeinfo.host.HostInfo
+import edu.agh.susgame.front.gui.components.game.components.elements.nodeinfo.router.RouterBottom
+import edu.agh.susgame.front.gui.components.game.components.elements.nodeinfo.router.RouterIcons
+import edu.agh.susgame.front.gui.components.game.components.elements.nodeinfo.router.RouterInfo
+import edu.agh.susgame.front.gui.components.game.components.elements.nodeinfo.server.ServerBottom
+import edu.agh.susgame.front.gui.components.game.components.elements.nodeinfo.server.ServerIcons
+import edu.agh.susgame.front.gui.components.game.components.elements.nodeinfo.server.ServerInfo
 import edu.agh.susgame.front.managers.GameManager
 
 private val SIZE_DP = 50.dp
@@ -37,7 +48,6 @@ private val SIZE_DP = 50.dp
 fun NodeInfoComp(
     node: Node,
     onExit: () -> Unit,
-    changingPath: (Boolean) -> Unit,
     gameManager: GameManager
 ) {
 
@@ -64,8 +74,9 @@ fun NodeInfoComp(
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .alpha(0.07f)
-                    .fillMaxHeight(0.8f)
+                    .alpha(0.04f)
+                    .fillMaxHeight(0.8f),
+                contentScale = ContentScale.Crop
             )
             Column(
                 modifier = Modifier
@@ -76,8 +87,7 @@ fun NodeInfoComp(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f)
-                        .background(Color.Gray),
+                        .weight(1f),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -87,7 +97,8 @@ fun NodeInfoComp(
                         contentDescription = "Exit",
                         modifier = Modifier
                             .clickable { onExit() }
-                            .padding(4.dp)
+                            .padding(6.dp)
+                            .alpha(0.8f)
                     )
                 }
                 Row(
@@ -98,46 +109,51 @@ fun NodeInfoComp(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .weight(1f)
-                            .background(Color.LightGray)
+                            .weight(3f)
                     ) {
-                        Box(modifier = Modifier
-                            .fillMaxSize()
-                            .weight(2f)
-                            .background(Color.Red)) {
-
-                        }
-                        Box(
+                        Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .weight(1f)
-                                .background(Color.Cyan),
-                            contentAlignment = Alignment.Center
+                                .weight(2f)
                         ) {
-                            if (node is Host && node.id == gameManager.hostIdByPlayerId[gameManager.localPlayerId]) {
-                                Slider(
-                                    value = node.packetsToSend.intValue.toFloat(),
-                                    onValueChange = { newValue ->
-                                        gameManager.handleHostFlowChange(
-                                            hostId = node.id,
-                                            flow = newValue.toInt()
-                                        )
-                                    },
-                                    valueRange = 0f..node.maxPacketsToSend.intValue.toFloat(),
-                                    steps = node.maxPacketsToSend.intValue + 1,
-//                                    modifier = Modifier.padding(top = 16.dp)
-                                )
+                            when (node) {
+                                is Host -> HostInfo(host = node)
+                                is Router -> RouterInfo(router = node)
+                                is Server -> ServerInfo(server = node)
                             }
                         }
-                    }
-                    Column(
+
+
+                    Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .weight(1f)
-                            .background(Color.Blue)
+                            .weight(1f),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(text = "2")
+                        when (node) {
+                            is Host -> HostBottom(host = node, gameManager = gameManager)
+                            is Router -> RouterBottom(router = node)
+                            is Server -> ServerBottom(server = node)
+                        }
+
                     }
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(4f)
+                ) {
+                    when (node) {
+                        is Host -> HostIcons(
+                            host = node,
+                            gameManager = gameManager,
+                            onExit = onExit
+                        )
+
+                        is Router -> RouterIcons(router = node, gameManager = gameManager)
+                        is Server -> ServerIcons(server = node, gameManager = gameManager)
+                    }
+
                 }
 
 
@@ -231,7 +247,8 @@ fun NodeInfoComp(
 //                        }
 //                    }
 //                }
-            }
-        }
+
+        }}}
     }
 }
+

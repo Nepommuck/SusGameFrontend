@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -19,18 +20,24 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.unit.Dp
 import edu.agh.susgame.front.gui.components.common.graph.node.Router
 import edu.agh.susgame.front.gui.components.common.util.Calculate
 
 @Composable
-fun RouterBar(router: Router) {
+fun RouterBar(
+    router: Router,
+    width: Float,
+    padding: Dp
+) {
     val bufferCurrentPackets by remember { router.bufferCurrentPackets }
     val bufferSize by remember { router.bufferSize }
 
     Box(
         modifier = Modifier
             .fillMaxHeight()
-            .fillMaxWidth(0.4f),
+            .fillMaxWidth(width)
+            .padding(padding),
         contentAlignment = Alignment.Center
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {

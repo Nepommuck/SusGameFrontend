@@ -67,8 +67,8 @@ object Translation {
         const val ROUTER = "Router"
         const val HOST = "Host"
         const val SERVER = "Serwer"
-        const val ACCEPT_PATH = "Zatwierdź ścieżkę"
-        const val ABORT_PATH = "Anuluj ścieżkę"
+        const val ACCEPT_PATH = "Zatwierdź"
+        const val ABORT_PATH = "Anuluj"
     }
 
     object Error {

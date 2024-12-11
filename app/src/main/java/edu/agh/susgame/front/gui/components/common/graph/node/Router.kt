@@ -19,10 +19,12 @@ class Router(
     val overheat: MutableIntState = mutableIntStateOf(0)
 
     override fun getNodeName(): String = Translation.Game.ROUTER
+    fun getState(): String = if (isWorking.value) Translation.Game.RUNNING else Translation.Game.SHUTDOWN
 
-    fun getName2(): String {
+    fun getBuffer(): String = "${bufferCurrentPackets.intValue}/${bufferSize.intValue}"
+
+    override fun getInfo(): String {
         return """
-            ${Translation.Game.ROUTER}
             ${Translation.Game.STATE}: ${if (isWorking.value) Translation.Game.RUNNING else Translation.Game.SHUTDOWN}
             ${Translation.Game.BUFFER_STATE}: ${bufferCurrentPackets.intValue}/${bufferSize.intValue}
             ${Translation.Game.UPGRADE_COST}: ${upgradeCost.intValue}

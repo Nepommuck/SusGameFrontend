@@ -49,7 +49,7 @@ internal fun GameGraphComponent(
     }
 
     val gameState = gameManager.gameState
-    val isPathValid by gameManager.pathBuilder.isPathValid
+
 
     Background()
 
@@ -64,59 +64,58 @@ internal fun GameGraphComponent(
             modifier = Modifier
                 .align(Alignment.CenterStart)
         ) {
-            if (gameState.isPathBeingChanged.value) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(SIZE_DP)
-                            .padding(PaddingS)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.cross),
-                            contentDescription = Translation.Game.ABORT_PATH,
-                            modifier = Modifier.clickable {
-                                gameManager.clearEdges(gameManager.localPlayerId)
-                                gameState.isPathBeingChanged.value = false
-                                gameManager.pathBuilder.reset()
-                            }
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .size(SIZE_DP)
-                            .padding(PaddingS)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.accept),
-                            contentDescription = Translation.Game.ACCEPT_PATH,
-                            modifier = Modifier
-                                .alpha(
-                                    Calculate.getAlpha(isPathValid)
-                                )
-                                .clickable(
-                                    enabled = isPathValid
-                                ) {
-                                    if (isPathValid) {
-                                        gameManager.handlePathChange()
-                                        gameState.isPathBeingChanged.value = false
-                                        gameState.currentlyInspectedNode.value = null
-                                    }
-                                }
-                        )
-                    }
-                }
-            }
+//            if (gameState.isPathBeingChanged.value) {
+//                Column(
+//                    horizontalAlignment = Alignment.CenterHorizontally
+//                ) {
+//                    Box(
+//                        modifier = Modifier
+//                            .size(SIZE_DP)
+//                            .padding(PaddingS)
+//                    ) {
+//                        Image(
+//                            painter = painterResource(id = R.drawable.cross),
+//                            contentDescription = Translation.Game.ABORT_PATH,
+//                            modifier = Modifier.clickable {
+//                                gameManager.clearEdges(gameManager.localPlayerId)
+//                                gameState.isPathBeingChanged.value = false
+//                                gameManager.pathBuilder.reset()
+//                            }
+//                        )
+//                    }
+//                    Box(
+//                        modifier = Modifier
+//                            .size(SIZE_DP)
+//                            .padding(PaddingS)
+//                    ) {
+//                        Image(
+//                            painter = painterResource(id = R.drawable.accept),
+//                            contentDescription = Translation.Game.ACCEPT_PATH,
+//                            modifier = Modifier
+//                                .alpha(
+//                                    Calculate.getAlpha(isPathValid)
+//                                )
+//                                .clickable(
+//                                    enabled = isPathValid
+//                                ) {
+//                                    if (isPathValid) {
+//                                        gameManager.handlePathChange()
+//                                        gameState.isPathBeingChanged.value = false
+//                                        gameState.currentlyInspectedNode.value = null
+//                                    }
+//                                }
+//                        )
+//                    }
+//                }
+//            }
         }
 
         gameState.currentlyInspectedNode.value
-            ?.takeIf { !gameState.isPathBeingChanged.value }
             ?.let { node ->
                 NodeInfoComp(
                     node = node,
                     onExit = { gameState.currentlyInspectedNode.value = null },
-                    changingPath = { state -> gameState.isPathBeingChanged.value = state },
+//                    changingPath = { state -> gameState.isPathBeingChanged.value = state },
                     gameManager = gameManager,
                 )
             }

@@ -17,4 +17,10 @@ class Host(
     val maxPacketsToSend: MutableIntState = mutableIntStateOf(5)
     override fun getNodeName(): String = "${Translation.Game.HOST}: $name"
 
+    override fun getInfo(): String {
+        return """
+            ${Translation.Game.PACKETS_TO_SEND}: ${packetsToSend.intValue}/${maxPacketsToSend.intValue}
+        """.trimIndent()
+    }
+
 }

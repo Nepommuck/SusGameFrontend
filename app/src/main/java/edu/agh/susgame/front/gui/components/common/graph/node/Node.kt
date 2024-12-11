@@ -11,4 +11,5 @@ sealed class Node(
     val position: Coordinates,
 ) {
     abstract fun getNodeName(): String
+    abstract fun getInfo(): String
 }
