@@ -16,9 +16,13 @@ import edu.agh.susgame.front.gui.components.common.theme.MenuBackground
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.LobbyComp
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.FailedToLoadComp
+import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.interfaces.GetGameDetailsResult
 import edu.agh.susgame.front.service.interfaces.LobbyService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -39,8 +43,11 @@ fun LobbyView(
                     lobbyDetails = result.lobbyDetails
                     isLoading = false
                 } else {
-                    // TODO GAME-121
-                    println("Wrong PIN")
+                    CoroutineScope(Dispatchers.Main).launch {
+                        navController.navigate(
+                            MenuRoute.EnterPin.routeWithArgument(lobbyId)
+                        )
+                    }
                 }
             }
     }
