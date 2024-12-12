@@ -74,9 +74,8 @@ internal fun LobbyRow(
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                     colorFilter = ColorFilter.tint(
-                        color =
-                            if (lobby.isPinSetUp) Color.White.copy(alpha = 0.6f)
-                            else Transparent
+                        color = if (lobby.isPinSetUp) Color.White.copy(alpha = 0.6f)
+                        else Transparent
                     )
                 )
             }
