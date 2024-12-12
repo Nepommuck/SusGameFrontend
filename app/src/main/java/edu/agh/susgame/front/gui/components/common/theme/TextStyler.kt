@@ -27,6 +27,7 @@ object TextStyler {
     val TerminalL = baseTextStyle(23.sp)
     val TerminalM = baseTextStyle(17.sp)
     val TerminalS = baseTextStyle(14.sp)
+    val TerminalXS = baseTextStyle(10.sp,color = Color.White.copy(alpha = 0.8f))
     val TerminalName = baseTextStyle(14.sp, letterSpacing = 1.sp)
     val TerminalInput = baseTextStyle(23.sp, color = Color.White.copy(alpha = 0.65f))
     val Chat = baseTextStyle(16.sp, Color.Green)

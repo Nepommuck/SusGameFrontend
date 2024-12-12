@@ -19,7 +19,6 @@ fun RouterBottom(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        RouterBar(router = router, width = 1f, padding = 3.dp)
-        Text(text = router.getBuffer(), style = TextStyler.TerminalS)
+        RouterBar(router = router, width = 1f, padding = 3.dp,TextStyler.TerminalS)
     }
 }

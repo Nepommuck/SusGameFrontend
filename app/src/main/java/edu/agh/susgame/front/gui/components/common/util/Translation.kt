@@ -57,18 +57,19 @@ object Translation {
         const val YOU_LOST = "Przegrałeś!"
         const val CHAT = "Chat"
         const val STATE = "Stan"
-        const val SHUTDOWN = "Wyłączony"
-        const val RUNNING = "Działajacy"
+        const val SHUTDOWN = "Shutdown"
+        const val RUNNING = "Running"
         const val BUFFER_STATE = "Stan bufora"
         const val UPGRADE_COST = "Koszt ulepszenia"
-        const val RECEIVED_DATA = "Otrzymane dane"
-        const val PACKETS_TO_SEND = "Wysyłane pakiety"
+        const val RECEIVED_DATA = "Dane"
+        const val PACKETS_TO_SEND = "Przesył"
         const val TOKENS = "Tokeny"
         const val ROUTER = "Router"
         const val HOST = "Host"
         const val SERVER = "Serwer"
         const val ACCEPT_PATH = "Zatwierdź"
         const val ABORT_PATH = "Anuluj"
+        const val ROUTING = "Routing"
     }
 
     object Error {

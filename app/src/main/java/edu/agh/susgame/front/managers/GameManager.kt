@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.common.GameStatus
@@ -98,9 +99,19 @@ class GameManager(
     }
 
     fun updatePath(hostId: NodeId, route: List<Int>) {
+        clearRouters(playerIdByHostId[hostId])
+        route.dropLast(1).forEach {
+            playerIdByHostId[hostId]?.let { playerId ->
+                (nodesById[NodeId(it)] as? Router?)?.playersSet?.add(
+                    playerId
+                )
+            }
+        }
         if (playerIdByHostId[hostId] != localPlayerId) {
             clearEdges(playerIdByHostId[hostId])
+//            clearRouters(playerIdByHostId[hostId])
             val path = listOf(hostId.value) + route
+
             path.zipWithNext { host1, host2 ->
                 updateEdge(
                     NodeId(host1), NodeId(host2), playerIdByHostId[hostId]
@@ -158,6 +169,9 @@ class GameManager(
     fun getPlayerTokens(playerId: PlayerId): MutableIntState = playersById[playerId]?.tokens
         ?: throw IllegalStateException("Player ${playerId.value} doesn't exist in the map")
 
+    fun getPlayerColor(playerId: PlayerId): Color = playersById[playerId]?.color?.value
+        ?: throw IllegalStateException("Player ${playerId.value} doesn't exist in the map")
+
     // UTILS
     fun addNodeToPathBuilder(nodeId: NodeId) {
         if (pathBuilder.getCurrentNumberOfNodes() == 0) {
@@ -188,6 +202,13 @@ class GameManager(
             edgesList.forEach { edge ->
                 edge.removePlayer(it)
             }
+        }
+    }
+
+    private fun clearRouters(playerId: PlayerId?) {
+        playerId?.let {
+            nodesList.filterIsInstance<Router>()
+                .forEach { router -> router.playersSet.remove(it) }
         }
     }
 

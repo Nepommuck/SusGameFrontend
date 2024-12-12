@@ -59,7 +59,7 @@ fun NodeInfoComp(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth(0.5f)
+                .fillMaxWidth(0.55f)
                 .fillMaxHeight(0.5f)
                 .align(Alignment.BottomEnd)
                 .padding(PaddingM)
@@ -117,44 +117,44 @@ fun NodeInfoComp(
                                 .weight(2f)
                         ) {
                             when (node) {
-                                is Host -> HostInfo(host = node)
-                                is Router -> RouterInfo(router = node)
+                                is Host -> HostInfo(host = node, gameManager)
+                                is Router -> RouterInfo(router = node,gameManager)
                                 is Server -> ServerInfo(server = node)
                             }
                         }
 
 
-                    Box(
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            when (node) {
+                                is Host -> HostBottom(host = node, gameManager = gameManager)
+                                is Router -> RouterBottom(router = node)
+                                is Server -> ServerBottom(server = node)
+                            }
+
+                        }
+                    }
+                    Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .weight(1f),
-                        contentAlignment = Alignment.Center
+                            .weight(4f)
                     ) {
                         when (node) {
-                            is Host -> HostBottom(host = node, gameManager = gameManager)
-                            is Router -> RouterBottom(router = node)
-                            is Server -> ServerBottom(server = node)
+                            is Host -> HostIcons(
+                                host = node,
+                                gameManager = gameManager,
+                                onExit = onExit
+                            )
+
+                            is Router -> RouterIcons(router = node, gameManager = gameManager)
+                            is Server -> ServerIcons(server = node, gameManager = gameManager)
                         }
 
                     }
-                }
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(4f)
-                ) {
-                    when (node) {
-                        is Host -> HostIcons(
-                            host = node,
-                            gameManager = gameManager,
-                            onExit = onExit
-                        )
-
-                        is Router -> RouterIcons(router = node, gameManager = gameManager)
-                        is Server -> ServerIcons(server = node, gameManager = gameManager)
-                    }
-
-                }
 
 
 //                Row(Modifier.fillMaxSize()) {
@@ -248,7 +248,9 @@ fun NodeInfoComp(
 //                    }
 //                }
 
-        }}}
+                }
+            }
+        }
     }
 }
 

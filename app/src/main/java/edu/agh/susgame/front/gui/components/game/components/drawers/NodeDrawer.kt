@@ -3,12 +3,10 @@ package edu.agh.susgame.front.gui.components.game.components.drawers
 import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,7 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import edu.agh.susgame.R
 import edu.agh.susgame.front.gui.components.common.graph.node.Host
 import edu.agh.susgame.front.gui.components.common.graph.node.Node
 import edu.agh.susgame.front.gui.components.common.graph.node.Router
@@ -89,16 +86,25 @@ fun NodeDrawer(gameManager: GameManager) {
                         contentAlignment = Alignment.TopCenter
                     ) {
                         when (node) {
-                            is Host -> {
+                            is Host ->
                                 gameManager.playersById[node.playerId]?.name?.value?.let {
-                                    Text(text = it, style = TextStyler.TerminalName, textAlign = TextAlign.Center)
+                                    Text(
+                                        text = it,
+                                        style = TextStyler.TerminalName,
+                                        textAlign = TextAlign.Center
+                                    )
                                 }
-                            }
 
-                            is Router -> { RouterBar(router = node,width=0.4f, padding = 0.dp)
-                            }
 
-                            is Server -> { }
+                            is Router -> RouterBar(
+                                router = node,
+                                width = 0.4f,
+                                padding = 0.dp,
+                                TextStyler.TerminalXS
+                            )
+
+
+                            is Server -> {}
                         }
                     }
                 }
