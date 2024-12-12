@@ -90,7 +90,7 @@ class LobbyManager(
 
     // HANDLE GUI INPUT
     fun handleLocalPlayerJoin(nickname: PlayerNickname) {
-        gameService.joinLobby(lobbyId, nickname)
+        gameService.joinLobby(lobbyId, lobbyPin, nickname)
         lobbyState.hasPlayerJoined.value = true
         updateAllPlayersAreReadyValue()
     }

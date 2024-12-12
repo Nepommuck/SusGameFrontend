@@ -88,9 +88,10 @@ fun LobbyComp(
     }
 
     if (isGameReady) {
-        navController.navigate("${MenuRoute.Game.route}/${lobbyManager.lobbyId.value}")
+        navController.navigate(
+            MenuRoute.Game.routeWithArgument(lobbyId = lobbyManager.lobbyId)
+        )
     }
-
 
     Column(
         modifier = Modifier
@@ -253,13 +254,13 @@ fun handleLeaveButtonClick(
 
     if (!lobbyManager.lobbyState.hasPlayerJoined.value) {
         CoroutineScope(Dispatchers.Main).launch {
-            navController.navigate(MenuRoute.SearchLobby.route)
+            navController.navigate(MenuRoute.FindGame.route)
         }
     } else {
         lobbyManager.handleLocalPlayerLeave()
 
         CoroutineScope(Dispatchers.Main).launch {
-            navController.navigate(MenuRoute.SearchLobby.route)
+            navController.navigate(MenuRoute.FindGame.route)
         }
         isLeaveButtonLoading.value = false
     }

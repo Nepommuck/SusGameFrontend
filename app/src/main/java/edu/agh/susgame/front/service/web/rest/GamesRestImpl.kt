@@ -59,15 +59,17 @@ class GamesRestImpl(
                 .url(
                     baseUrlBuilder()
                         .addPathSegment(gameId.value.toString())
-                        .build()
+                        .apply {
+                            if (gamePin != null) {
+                                addQueryParameter(name = "gamePin", value = gamePin.value)
+                            }
+                        }.build()
                 ).build()
 
             val response = httpClient.newCall(request)
                 .execute()
 
             when (response.code) {
-                HttpURLConnection.HTTP_NOT_FOUND -> GetGameApiResult.DoesNotExist
-
                 HttpURLConnection.HTTP_OK -> {
                     val lobbyDetails = Gson().fromJson(
                         response.body?.string(),
@@ -75,6 +77,10 @@ class GamesRestImpl(
                     )
                     GetGameApiResult.Success(lobbyDetails)
                 }
+
+                GetGameApiResult.DoesNotExist.responseCode -> GetGameApiResult.DoesNotExist
+
+                GetGameApiResult.InvalidPin.responseCode -> GetGameApiResult.InvalidPin
 
                 else -> GetGameApiResult.OtherError
             }

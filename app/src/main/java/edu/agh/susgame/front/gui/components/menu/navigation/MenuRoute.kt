@@ -9,9 +9,9 @@ import edu.agh.susgame.dto.rest.model.LobbyPin
 
 sealed class MenuRoute(
     internal val mainRoute: String,
-    arguments: List<NamedNavArgument> = emptyList()
+    val arguments: List<NamedNavArgument> = emptyList(),
 ) {
-    val route: String =
+    open val route: String =
         when (arguments) {
             emptyList<NamedNavArgument>() -> mainRoute
 
@@ -23,9 +23,9 @@ sealed class MenuRoute(
 
     data object MainMenu : MenuRoute("main-menu")
 
-    data object SearchLobby : MenuRoute("search-game")
+    data object FindGame : MenuRoute("search-game")
 
-    data object CreateLobby : MenuRoute("create-game")
+    data object CreateGame : MenuRoute("create-game")
 
     private data object LobbyArguments {
         val gameId = navArgument("game_id") {
@@ -46,8 +46,12 @@ sealed class MenuRoute(
         val gamePinArgument = LobbyArguments.gamePin
 
         fun routeWithArgument(lobbyId: LobbyId, lobbyPin: LobbyPin? = null) =
-            "${Lobby.mainRoute}/${lobbyId.value}" +
+            "$mainRoute/${lobbyId.value}" +
                     lobbyPin?.let { pin -> "?${gamePinArgument.name}=${pin.value}" }.orEmpty()
+
+        // handle optional `gamePin` argument
+        override val route =
+            "$mainRoute/{${gameIdArgument.name}}?${gamePinArgument.name}={${gamePinArgument.name}}"
     }
 
     data object EnterPin : MenuRoute(
@@ -56,10 +60,15 @@ sealed class MenuRoute(
     ) {
         val gameIdArgument = LobbyArguments.gameId
 
-        fun routeWithArgument(lobbyId: LobbyId) = "${EnterPin.mainRoute}/${lobbyId.value}"
+        fun routeWithArgument(lobbyId: LobbyId) = "$mainRoute/${lobbyId.value}"
     }
 
-    data object Game : MenuRoute("game") {
+    data object Game : MenuRoute(
+        mainRoute = "game",
+        arguments = listOf(LobbyArguments.gameId),
+    ) {
         val gameIdArgument = LobbyArguments.gameId
+
+        fun routeWithArgument(lobbyId: LobbyId) = "$mainRoute/${lobbyId.value}"
     }
 }

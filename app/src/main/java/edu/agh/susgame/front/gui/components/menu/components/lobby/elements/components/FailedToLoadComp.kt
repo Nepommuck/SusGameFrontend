@@ -14,7 +14,7 @@ fun FailedToLoadComp(lobbyId: LobbyId, navController: NavController) {
     Column {
         Text(text = Translation.Error.failedToLoadGame(lobbyId))
         Button(onClick = {
-            navController.navigate(MenuRoute.SearchLobby.route)
+            navController.navigate(MenuRoute.FindGame.route)
         }) {
             Text(text = Translation.Button.GO_BACK)
         }

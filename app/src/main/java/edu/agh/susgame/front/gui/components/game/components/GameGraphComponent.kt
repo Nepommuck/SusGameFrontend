@@ -181,7 +181,7 @@ internal fun GameGraphComponent(
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Button(onClick = { navController.navigate(MenuRoute.SearchLobby.route) }) {
+                Button(onClick = { navController.navigate(MenuRoute.FindGame.route) }) {
                     Text(message)
                 }
             }
