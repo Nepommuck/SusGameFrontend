@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.gui.components.menu.components.enterpin.elements
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,40 +44,43 @@ fun PinInput(
     Box(
         modifier = Modifier
             .fillMaxWidth(0.5f)
-            .fillMaxHeight(0.7f),
+            .fillMaxHeight(0.4f),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
+
         ) {
             var currentPinInputValue by remember { mutableStateOf("") }
             var badPinProvided by remember { mutableStateOf(false) }
+            Box(modifier = Modifier.weight(1f)) {
+                OutlinedTextField(
+                    label = {
+                        Text(
+                            text = Translation.Lobby.ENTER_GAME_PIN,
+                            style = TextStyler.TerminalS,
+                        )
+                    },
+                    value = currentPinInputValue,
+                    textStyle = TextStyler.TerminalInput.copy(textAlign = TextAlign.Left),
+                    onValueChange = { currentPinInputValue = it },
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f).align(Alignment.Center),
+                    singleLine = true
+                )
 
-            OutlinedTextField(
-                label = {
-                    Text(
-                        text = Translation.Lobby.ENTER_GAME_PIN,
-                        style = TextStyler.TerminalS,
-                    )
-                },
-                value = currentPinInputValue,
-                textStyle = TextStyler.TerminalInput.copy(textAlign = TextAlign.Left),
-                onValueChange = { currentPinInputValue = it },
-                modifier = Modifier
-                    .fillMaxWidth(0.8f),
-                singleLine = true
-            )
 
+            }
             Text(
                 text = if (badPinProvided) Translation.Lobby.WRONG_PIN else "",
                 color = Color.Red,
                 style = TextStyler.TerminalS,
             )
-
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxSize().weight(1f),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
