@@ -24,7 +24,7 @@ interface LobbyService {
 
     fun createNewGame(
         gameName: String,
-        gamePin: String,
+        gamePin: LobbyPin?,
         maxNumberOfPlayers: Int,
     ): CompletableFuture<CreateNewGameResult>
 }

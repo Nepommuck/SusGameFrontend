@@ -58,7 +58,7 @@ class WebLobbyService(private val gamesRest: GamesRest) : LobbyService {
 
     override fun createNewGame(
         gameName: String,
-        gamePin: String,
+        gamePin: LobbyPin?,
         maxNumberOfPlayers: Int,
     ): CompletableFuture<CreateNewGameResult> =
         gamesRest.createGame(gameName, maxNumberOfPlayers, gamePin)

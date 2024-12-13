@@ -1,6 +1,6 @@
 package edu.agh.susgame.front.service.web.rest
 
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import edu.agh.susgame.dto.rest.games.GamesRest
 import edu.agh.susgame.dto.rest.games.model.CreateGameApiResult
 import edu.agh.susgame.dto.rest.games.model.GameCreationApiResponse
@@ -26,6 +26,7 @@ class GamesRestImpl(
     override val webConfig: WebConfig,
     override val ipAddressProvider: IpAddressProvider
 ) : GamesRest, AbstractRest(endpointName = "games") {
+    private val gson = GsonBuilder().serializeNulls().create()
 
     override fun getAllGames(): CompletableFuture<GetAllGamesApiResult> =
         CompletableFuture.supplyAsync {
@@ -40,7 +41,7 @@ class GamesRestImpl(
             if (!response.isSuccessful)
                 GetAllGamesApiResult.Error
             else {
-                val lobbies = Gson().fromJson(
+                val lobbies = gson.fromJson(
                     response.body?.string(),
                     Array<LobbyRow>::class.java,
                 ).toList()
@@ -71,7 +72,7 @@ class GamesRestImpl(
 
             when (response.code) {
                 HttpURLConnection.HTTP_OK -> {
-                    val lobbyDetails = Gson().fromJson(
+                    val lobbyDetails = gson.fromJson(
                         response.body?.string(),
                         LobbyDetails::class.java,
                     )
@@ -103,7 +104,7 @@ class GamesRestImpl(
 
         when (response.code) {
             HttpURLConnection.HTTP_OK -> GetGameMapApiResult.Success(
-                gameMap = Gson().fromJson(
+                gameMap = gson.fromJson(
                     response.body?.string(),
                     GameMapDTO::class.java,
                 )
@@ -120,11 +121,11 @@ class GamesRestImpl(
     override fun createGame(
         gameName: String,
         maxNumberOfPlayers: Int,
-        gamePin: String?,
+        gamePin: LobbyPin?,
     ): CompletableFuture<CreateGameApiResult> = CompletableFuture.supplyAsync {
         val gameCreationRequest = GameCreationRequest(gameName, maxNumberOfPlayers, gamePin)
 
-        val body = Gson().toJson(gameCreationRequest)
+        val body = gson.toJson(gameCreationRequest)
             .toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -140,7 +141,7 @@ class GamesRestImpl(
                 CreateGameApiResult.NameAlreadyExists
 
             HttpURLConnection.HTTP_CREATED -> {
-                val gameCreationApiResponse = Gson().fromJson(
+                val gameCreationApiResponse = gson.fromJson(
                     response.body?.string(),
                     GameCreationApiResponse::class.java,
                 )

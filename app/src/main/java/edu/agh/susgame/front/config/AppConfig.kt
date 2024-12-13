@@ -12,7 +12,7 @@ object AppConfig : Configuration {
 
     override val webConfig = WebConfig(
         // Very useful for development purposes
-        defaultIpAddress = "192.168.0.101",
+        defaultIpAddress = "192.168.0.100",
         // defaultIpAddress = null,
 
         protocol = "http",

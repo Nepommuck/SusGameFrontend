@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import edu.agh.susgame.dto.rest.model.LobbyPin
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.MenuBackground
 import edu.agh.susgame.front.gui.components.common.theme.MenuButton
@@ -39,10 +40,10 @@ fun CreateLobbyView(
     navController: NavController,
 ) {
     var gameName by remember { mutableStateOf(Translation.CreateGame.DEFAULT_GAME_NAME) }
-    var gamePin by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(value = false) }
     var selectedNumberOfPlayers by remember { mutableIntStateOf(DEFAULT_PLAYERS_AMOUNT) }
     var isGamePinEnabled by remember { mutableStateOf(false) }
+    var gamePinInputValue by remember { mutableStateOf("") }
 
     MenuBackground()
 
@@ -75,10 +76,10 @@ fun CreateLobbyView(
                         onGameNameChange = { gameName = it }
                     )
                     GamePinComp(
-                        gamePin = gamePin,
+                        gamePin = gamePinInputValue,
                         showPassword = showPassword,
                         isGamePinEnabled = isGamePinEnabled,
-                        onGamePinChange = { gamePin = it },
+                        onGamePinChange = { gamePinInputValue = it },
                         onShowPasswordChange = { showPassword = it },
                         onGamePinEnabledChange = { isGamePinEnabled = it }
                     )
@@ -88,7 +89,7 @@ fun CreateLobbyView(
                     )
                     CreateGameComp(
                         gameName = gameName,
-                        gamePin = gamePin,
+                        gamePin = if (isGamePinEnabled) LobbyPin(gamePinInputValue) else null,
                         selectedNumberOfPlayers = selectedNumberOfPlayers,
                         lobbyService = lobbyService,
                         navController = navController
