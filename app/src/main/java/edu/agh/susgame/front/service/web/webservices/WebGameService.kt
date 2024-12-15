@@ -3,6 +3,7 @@ package edu.agh.susgame.front.service.web.webservices
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.common.ColorDTO
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyPin
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ClientSocketMessage
@@ -71,12 +72,20 @@ class WebGameService(
     override fun isPlayerInLobby(lobbyId: LobbyId): Boolean =
         this.currentLobbyId == lobbyId && this.socket != null
 
-    override fun joinLobby(lobbyId: LobbyId, nickname: PlayerNickname): CompletableFuture<Unit> =
+    override fun joinLobby(
+        lobbyId: LobbyId,
+        lobbyPin: LobbyPin?,
+        nickname: PlayerNickname
+    ): CompletableFuture<Unit> =
         CompletableFuture.supplyAsync {
             val url = baseUrlBuilder()
                 .addPathSegment("join")
                 .addQueryParameter("gameId", lobbyId.value.toString())
-                .addQueryParameter("playerName", nickname.value)
+                .apply {
+                    if (lobbyPin != null) {
+                        addQueryParameter("gamePin", lobbyPin.value)
+                    }
+                }.addQueryParameter("playerName", nickname.value)
                 .build()
 
             val request = Request.Builder()

@@ -48,7 +48,7 @@ fun GameView(
                 Column {
                     Text(text = Translation.Error.UNEXPECTED_ERROR)
                     Button(onClick = {
-                        menuNavController.navigate(MenuRoute.SearchLobby.route)
+                        menuNavController.navigate(MenuRoute.FindGame.route)
                     }) {
                         Text(text = Translation.Button.BACK_TO_MAIN_MENU)
                     }

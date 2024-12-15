@@ -9,42 +9,60 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
-import edu.agh.susgame.dto.rest.model.Lobby
+import edu.agh.susgame.dto.rest.model.LobbyDetails
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyPin
 import edu.agh.susgame.front.gui.components.common.theme.MenuBackground
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.LobbyComp
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.FailedToLoadComp
+import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.GameService
+import edu.agh.susgame.front.service.interfaces.GetGameDetailsResult
 import edu.agh.susgame.front.service.interfaces.LobbyService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun LobbyView(
     lobbyId: LobbyId,
+    lobbyPin: LobbyPin?,
     lobbyService: LobbyService,
     gameService: GameService,
     navController: NavController,
 ) {
-    var lobby by remember { mutableStateOf<Lobby?>(null) }
+    var lobbyDetails by remember { mutableStateOf<LobbyDetails?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        lobbyService.getById(lobbyId)
-            .thenAccept {
-                lobby = it
-                isLoading = false
+        lobbyService.getLobbyDetails(lobbyId, lobbyPin)
+            .thenAccept { result ->
+                if (result is GetGameDetailsResult.Success) {
+                    lobbyDetails = result.lobbyDetails
+                    isLoading = false
+                } else {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        navController.navigate(
+                            MenuRoute.EnterPin.routeWithArgument(lobbyId)
+                        )
+                    }
+                }
             }
     }
 
     MenuBackground()
     Column {
         when {
-            isLoading -> Text(text = "${Translation.Button.LOADING}...")
-            lobby == null -> FailedToLoadComp(lobbyId, navController)
-            else -> lobby?.let {
+            isLoading ->
+                Text(text = "${Translation.Button.LOADING}...")
 
-                LobbyComp(it, lobbyService, gameService, navController)
+            lobbyDetails == null ->
+                FailedToLoadComp(lobbyId, navController)
+
+            else -> lobbyDetails?.let { details ->
+                LobbyComp(details, lobbyPin, lobbyService, gameService, navController)
             }
         }
     }

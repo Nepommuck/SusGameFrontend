@@ -2,6 +2,7 @@ package edu.agh.susgame.front.service.interfaces
 
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyPin
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
@@ -46,7 +47,11 @@ interface GameService {
     // REST
     fun isPlayerInLobby(lobbyId: LobbyId): Boolean
 
-    fun joinLobby(lobbyId: LobbyId, nickname: PlayerNickname): CompletableFuture<Unit>
+    fun joinLobby(
+        lobbyId: LobbyId,
+        lobbyPin: LobbyPin?,
+        nickname: PlayerNickname
+    ): CompletableFuture<Unit>
 
     fun leaveLobby(): CompletableFuture<Unit>
 }

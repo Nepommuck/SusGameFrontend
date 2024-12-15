@@ -1,6 +1,6 @@
 package edu.agh.susgame.front.service.web.rest
 
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import edu.agh.susgame.dto.rest.games.GamesRest
 import edu.agh.susgame.dto.rest.games.model.CreateGameApiResult
 import edu.agh.susgame.dto.rest.games.model.GameCreationApiResponse
@@ -9,8 +9,10 @@ import edu.agh.susgame.dto.rest.games.model.GetAllGamesApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameMapApiResult
 import edu.agh.susgame.dto.rest.model.GameMapDTO
-import edu.agh.susgame.dto.rest.model.Lobby
+import edu.agh.susgame.dto.rest.model.LobbyDetails
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyPin
+import edu.agh.susgame.dto.rest.model.LobbyRow
 import edu.agh.susgame.front.config.utils.Configuration.WebConfig
 import edu.agh.susgame.front.service.web.IpAddressProvider
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -24,6 +26,7 @@ class GamesRestImpl(
     override val webConfig: WebConfig,
     override val ipAddressProvider: IpAddressProvider
 ) : GamesRest, AbstractRest(endpointName = "games") {
+    private val gson = GsonBuilder().serializeNulls().create()
 
     override fun getAllGames(): CompletableFuture<GetAllGamesApiResult> =
         CompletableFuture.supplyAsync {
@@ -38,38 +41,47 @@ class GamesRestImpl(
             if (!response.isSuccessful)
                 GetAllGamesApiResult.Error
             else {
-                val lobbies = Gson().fromJson(
+                val lobbies = gson.fromJson(
                     response.body?.string(),
-                    Array<Lobby>::class.java,
+                    Array<LobbyRow>::class.java,
                 ).toList()
 
                 GetAllGamesApiResult.Success(lobbies)
             }
         }
 
-    override fun getGame(gameId: LobbyId): CompletableFuture<GetGameApiResult> =
+    override fun getGameDetails(
+        gameId: LobbyId,
+        gamePin: LobbyPin?,
+    ): CompletableFuture<GetGameApiResult> =
         CompletableFuture.supplyAsync {
             val request = Request.Builder()
                 .get()
                 .url(
                     baseUrlBuilder()
                         .addPathSegment(gameId.value.toString())
-                        .build()
+                        .apply {
+                            if (gamePin != null) {
+                                addQueryParameter(name = "gamePin", value = gamePin.value)
+                            }
+                        }.build()
                 ).build()
 
             val response = httpClient.newCall(request)
                 .execute()
 
             when (response.code) {
-                HttpURLConnection.HTTP_NOT_FOUND -> GetGameApiResult.DoesNotExist
-
                 HttpURLConnection.HTTP_OK -> {
-                    val lobby = Gson().fromJson(
+                    val lobbyDetails = gson.fromJson(
                         response.body?.string(),
-                        Lobby::class.java,
+                        LobbyDetails::class.java,
                     )
-                    GetGameApiResult.Success(lobby)
+                    GetGameApiResult.Success(lobbyDetails)
                 }
+
+                GetGameApiResult.DoesNotExist.responseCode -> GetGameApiResult.DoesNotExist
+
+                GetGameApiResult.InvalidPin.responseCode -> GetGameApiResult.InvalidPin
 
                 else -> GetGameApiResult.OtherError
             }
@@ -92,7 +104,7 @@ class GamesRestImpl(
 
         when (response.code) {
             HttpURLConnection.HTTP_OK -> GetGameMapApiResult.Success(
-                gameMap = Gson().fromJson(
+                gameMap = gson.fromJson(
                     response.body?.string(),
                     GameMapDTO::class.java,
                 )
@@ -109,11 +121,11 @@ class GamesRestImpl(
     override fun createGame(
         gameName: String,
         maxNumberOfPlayers: Int,
-        gamePin: String?,
+        gamePin: LobbyPin?,
     ): CompletableFuture<CreateGameApiResult> = CompletableFuture.supplyAsync {
         val gameCreationRequest = GameCreationRequest(gameName, maxNumberOfPlayers, gamePin)
 
-        val body = Gson().toJson(gameCreationRequest)
+        val body = gson.toJson(gameCreationRequest)
             .toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
 
         val request = Request.Builder()
@@ -129,7 +141,7 @@ class GamesRestImpl(
                 CreateGameApiResult.NameAlreadyExists
 
             HttpURLConnection.HTTP_CREATED -> {
-                val gameCreationApiResponse = Gson().fromJson(
+                val gameCreationApiResponse = gson.fromJson(
                     response.body?.string(),
                     GameCreationApiResponse::class.java,
                 )
