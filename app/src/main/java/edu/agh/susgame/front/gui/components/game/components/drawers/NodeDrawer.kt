@@ -75,7 +75,6 @@ fun NodeDrawer(gameManager: GameManager) {
                                 if (gameManager.gameState.isPathBeingChanged.value) {
                                     gameManager.addNodeToPathBuilder(node.id)
                                 } else {
-                                    gameManager.gameState.currentlyInspectedNode.value = null
                                     gameManager.gameState.currentlyInspectedNode.value = node
                                 }
                             },
@@ -97,12 +96,14 @@ fun NodeDrawer(gameManager: GameManager) {
                                 }
 
 
-                            is Router -> RouterBar(
-                                router = node,
-                                width = 0.4f,
-                                padding = 0.dp,
-                                TextStyler.TerminalXS
-                            )
+                            is Router -> if (gameManager.gameState.areRouterBuffersShown.value) {
+                                RouterBar(
+                                    router = node,
+                                    width = 0.4f,
+                                    padding = 0.dp,
+                                    TextStyler.TerminalXS
+                                )
+                            }
 
 
                             is Server -> {}

@@ -26,4 +26,7 @@ class GameStateManager(mapSize: Coordinates) {
     val isPathBeingChanged: MutableState<Boolean> = mutableStateOf(false)
     val isComputerViewVisible: MutableState<Boolean> = mutableStateOf(false)
     val isMenuOpened: MutableState<Boolean> = mutableStateOf(false)
+
+    val areRouterBuffersShown: MutableState<Boolean> = mutableStateOf(true)
+    val areEdgesBandwidthShown: MutableState<Boolean> = mutableStateOf(true)
 }

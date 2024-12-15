@@ -49,7 +49,7 @@ class GameManager(
 
     // ATTRIBUTES - WITH INIT
     private val playerIdByHostId: Map<NodeId, PlayerId> = initPlayerIdByHostId()
-    private val edgesById: Map<EdgeId, Edge> = initEdgesById()
+    private val edgesById: SnapshotStateMap<EdgeId, Edge> = initEdgesById()
     private val nodesIdsToEdgeId: Map<Pair<NodeId, NodeId>, EdgeId> = initNodesIdsToEdgeId()
     private val server: Server = initServer()
     val hostIdByPlayerId: Map<PlayerId, NodeId> = initHostIdByPlayerId()
@@ -127,6 +127,12 @@ class GameManager(
         gameState.gameStatus.value = status
     }
 
+    fun updateEdge(edgeId: EdgeId, upgradeCost: Int, packetsTransported: Int){
+        println(edgesById[edgeId]?.packetsTransported?.intValue)
+        edgesById[edgeId]?.packetsTransported?.intValue = packetsTransported
+        edgesById[edgeId]?.upgradeCost?.intValue = upgradeCost
+    }
+
     // HANDLE GUI INPUT
     fun handleHostFlowChange(hostId: NodeId, flow: Int) {
         (nodesById[hostId] as? Host)?.let { host ->
@@ -160,6 +166,10 @@ class GameManager(
         )
         chatMessages.add(message)
         gameService.sendSimpleMessage(message.message)
+    }
+
+    fun handleEdgeUpdate(edgeId: EdgeId){
+        println("UPDATING EDGE $edgeId")
     }
 
     // GUI GETTERS
@@ -235,8 +245,8 @@ class GameManager(
         return nodesList.associateBy { it.id }
     }
 
-    private fun initEdgesById(): Map<EdgeId, Edge> {
-        return edgesList.associateBy { it.id }
+    private fun initEdgesById(): SnapshotStateMap<EdgeId, Edge> {
+        return mutableStateMapOf(*edgesList.associateBy { it.id }.toList().toTypedArray())
     }
 
     private fun initNodesIdsToEdgeId(): Map<Pair<NodeId, NodeId>, EdgeId> {

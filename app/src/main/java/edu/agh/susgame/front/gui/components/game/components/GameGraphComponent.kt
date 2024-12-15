@@ -17,6 +17,7 @@ import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.game.components.computer.ComputerComponent
 import edu.agh.susgame.front.gui.components.game.components.elements.Background
 import edu.agh.susgame.front.gui.components.game.components.elements.GameNet
+import edu.agh.susgame.front.gui.components.game.components.elements.LeftButtons
 import edu.agh.susgame.front.gui.components.game.components.elements.NodeInfoComp
 import edu.agh.susgame.front.gui.components.game.components.elements.UpperBarComp
 import edu.agh.susgame.front.gui.components.game.components.elements.bottombar.NavIcons
@@ -42,13 +43,14 @@ internal fun GameGraphComponent(
 
     Background()
 
+
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
         GameNet(gameManager = gameManager)
         UpperBarComp(gameManager = gameManager)
-
+        LeftButtons(gameManager.gameState)
         gameState.currentlyInspectedNode.value
             ?.let { node ->
                 NodeInfoComp(
@@ -65,6 +67,7 @@ internal fun GameGraphComponent(
         NavIcons(
             isComputerVisible = gameState.isComputerViewVisible,
         )
+
     }
     if (gameState.isMenuOpened.value) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -79,6 +82,8 @@ internal fun GameGraphComponent(
             }
         }
     }
+
+
 
     when (gameState.gameStatus.value) {
         GameStatus.FINISHED_WON, GameStatus.FINISHED_LOST -> {

@@ -1,5 +1,6 @@
 package edu.agh.susgame.front.gui.components.game.components.elements
 
+
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
