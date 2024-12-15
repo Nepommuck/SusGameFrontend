@@ -32,6 +32,7 @@ object Translation {
         const val NUM_OF_PLAYERS = "Gracze"
         const val ENTER_GAME_PIN = "Wprowadź PIN gry"
         const val WRONG_PIN = "Błędny PIN"
+        const val PIN = "PIN"
 
         fun nPlayersAwaiting(n: Int): String {
             require(n >= 0) { "Number of players can't be negative, but was: $n" }

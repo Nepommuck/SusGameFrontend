@@ -39,7 +39,7 @@ object ParserDTO {
             nodes.add(
                 Host(
                     id = NodeId(host.id),
-                    name = players[PlayerId(host.playerId)]?.name?.value ?: "ERROR",
+                    name = players[PlayerId(host.playerId)]?.name?.value ?: "",
                     position = Coordinates(host.coordinates.x, host.coordinates.y),
                     playerId = PlayerId(host.playerId)
                 )
