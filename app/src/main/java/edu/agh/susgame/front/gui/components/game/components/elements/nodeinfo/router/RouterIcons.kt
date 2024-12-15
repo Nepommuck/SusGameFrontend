@@ -32,10 +32,12 @@ fun RouterIcons(
                 cost = router.upgradeCost,
                 modifier = Modifier
                     .weight(2f)
-                    .clickable {
-                        gameManager.handleRouterUpgrade(router.id)
-                    },
-
+                    .clickable(
+                        enabled = canUpgrade(router, gameManager),
+                        onClick = { gameManager.handleRouterUpgrade(router.id) })
+                    .alpha(
+                        if (canUpgrade(router, gameManager)) 1f else 0.4f
+                    )
                 )
         }
         Column(
@@ -59,4 +61,10 @@ fun RouterIcons(
             )
         }
     }
+}
+
+fun canUpgrade(router: Router, gameManager: GameManager): Boolean {
+    return gameManager.playersById[gameManager.localPlayerId]?.tokens?.intValue?.let {
+        it >= router.upgradeCost.intValue
+    } ?: false
 }

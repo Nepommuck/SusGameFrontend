@@ -73,9 +73,9 @@ fun NodeInfoComp(
                 ),
                 contentDescription = null,
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .alpha(0.04f)
-                    .fillMaxHeight(0.8f),
+                    .alpha(0.03f)
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(40.dp)),
                 contentScale = ContentScale.Crop
             )
             Column(
