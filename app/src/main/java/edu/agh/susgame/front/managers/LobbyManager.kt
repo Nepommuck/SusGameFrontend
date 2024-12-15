@@ -132,13 +132,17 @@ class LobbyManager(
             lobbyService.getGameMap(id)
                 .thenApply { gameMapDTO ->
                     if (gameMapDTO != null) {
-                        this.gameManager.value = this.localPlayerId?.let {
-                            ParserDTO.gameMapDtoToGameManager(
-                                gameService = gameService,
-                                gameMapDTO = gameMapDTO,
-                                localPlayerId = it,
-                                players = playersMap.values.toList()
-                            )
+                        try {
+                            this.gameManager.value = this.localPlayerId?.let {
+                                ParserDTO.gameMapDtoToGameManager(
+                                    gameService = gameService,
+                                    gameMapDTO = gameMapDTO,
+                                    localPlayerId = it,
+                                    players = playersMap
+                                )
+                            }
+                        } catch (e: Exception) {
+                            println("Error updating gameManager: ${e.message}")
                         }
                         lobbyState.isGameMapReady.value = true
                     } else {

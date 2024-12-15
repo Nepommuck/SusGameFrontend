@@ -27,7 +27,7 @@ import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 class GameManager(
     val nodesList: List<Node>,
     val edgesList: List<Edge>,
-    val playersList: List<PlayerLobby>,
+    val playersById: Map<PlayerId, PlayerLobby>,
     val serverId: NodeId,
     val mapSize: Coordinates,
     val criticalBufferOverheatLevel: Int,
@@ -53,7 +53,6 @@ class GameManager(
     private val server: Server = initServer()
     val hostIdByPlayerId: Map<PlayerId, NodeId> = initHostIdByPlayerId()
     val nodesById: Map<NodeId, Node> = initNodesById()
-    val playersById: Map<PlayerId, PlayerLobby> = initPlayersById()
 
 
     init {
@@ -217,10 +216,6 @@ class GameManager(
 
     private fun initEdgesById(): Map<EdgeId, Edge> {
         return edgesList.associateBy { it.id }
-    }
-
-    private fun initPlayersById(): Map<PlayerId, PlayerLobby> {
-        return playersList.associateBy { it.id }
     }
 
     private fun initNodesIdsToEdgeId(): Map<Pair<NodeId, NodeId>, EdgeId> {

@@ -19,7 +19,7 @@ object ParserDTO {
         gameService: GameService,
         gameMapDTO: GameMapDTO,
         localPlayerId: PlayerId,
-        players: List<PlayerLobby>,
+        players: Map<PlayerId,PlayerLobby>,
     ): GameManager {
         println("Parsing GameMapDTO: $gameMapDTO")
         val nodes = mutableListOf<Node>()
@@ -39,7 +39,7 @@ object ParserDTO {
             nodes.add(
                 Host(
                     id = NodeId(host.id),
-                    name = players[host.playerId].name.value,
+                    name = players[PlayerId(host.playerId)]?.name?.value ?: "ERROR",
                     position = Coordinates(host.coordinates.x, host.coordinates.y),
                     playerId = PlayerId(host.playerId)
                 )
@@ -74,7 +74,7 @@ object ParserDTO {
             GameManager(
                 nodesList = nodes,
                 edgesList = edges,
-                playersList = players,
+                playersById = players,
                 serverId = serverId,
                 mapSize = mapSize,
                 localPlayerId = localPlayerId,
