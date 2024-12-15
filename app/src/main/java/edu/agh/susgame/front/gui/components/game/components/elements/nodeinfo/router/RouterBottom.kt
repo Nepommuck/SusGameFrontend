@@ -2,7 +2,6 @@ package edu.agh.susgame.front.gui.components.game.components.elements.nodeinfo.r
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +18,6 @@ fun RouterBottom(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        RouterBar(router = router, width = 1f, padding = 3.dp,TextStyler.TerminalS)
+        RouterBar(router = router, width = 1f, padding = 3.dp, TextStyler.TerminalS)
     }
 }

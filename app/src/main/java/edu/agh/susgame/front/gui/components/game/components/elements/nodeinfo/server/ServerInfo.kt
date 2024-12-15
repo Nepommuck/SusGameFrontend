@@ -2,7 +2,6 @@ package edu.agh.susgame.front.gui.components.game.components.elements.nodeinfo.s
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import edu.agh.susgame.front.gui.components.common.graph.node.Router
 import edu.agh.susgame.front.gui.components.common.graph.node.Server
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 

@@ -21,7 +21,8 @@ class Router(
     val playersSet: MutableSet<PlayerId> = mutableSetOf()
 
     override fun getNodeName(): String = Translation.Game.ROUTER
-    fun getState(): String = if (isWorking.value) Translation.Game.RUNNING else Translation.Game.SHUTDOWN
+    fun getState(): String =
+        if (isWorking.value) Translation.Game.RUNNING else Translation.Game.SHUTDOWN
 
     fun getBuffer(): String = "${bufferCurrentPackets.intValue}/${bufferSize.intValue}"
 

@@ -118,7 +118,7 @@ fun NodeInfoComp(
                         ) {
                             when (node) {
                                 is Host -> HostInfo(host = node, gameManager)
-                                is Router -> RouterInfo(router = node,gameManager)
+                                is Router -> RouterInfo(router = node, gameManager)
                                 is Server -> ServerInfo(server = node)
                             }
                         }
@@ -155,99 +155,6 @@ fun NodeInfoComp(
                         }
 
                     }
-
-
-//                Row(Modifier.fillMaxSize()) {
-//                    Column(
-//                        modifier = Modifier
-//                            .fillMaxSize()
-//                            .weight(5f)
-//                            .padding(PaddingM),
-//                    ) {
-////                        Text(node.getInfo(), style = TextStyler.TerminalS)
-//                        if (node is Host) {
-//                            Text(
-//                                Translation.Game.TOKENS + ": " + gameManager.playersById[node.playerId]?.tokens?.intValue.toString(),
-//                                style = TextStyler.TerminalS
-//                            )
-//                            if (node.id == gameManager.hostIdByPlayerId[gameManager.localPlayerId]) {
-//                                Slider(
-//                                    value = node.packetsToSend.intValue.toFloat(),
-//                                    onValueChange = { newValue ->
-//                                        gameManager.handleHostFlowChange(
-//                                            hostId = node.id,
-//                                            flow = newValue.toInt()
-//                                        )
-//                                    },
-//                                    valueRange = 0f..node.maxPacketsToSend.intValue.toFloat(),
-//                                    steps = node.maxPacketsToSend.intValue + 1,
-//                                    modifier = Modifier.padding(top = 16.dp)
-//                                )
-//                            }
-//                        }
-//                    }
-//                    Column(
-//                        modifier = Modifier
-//                            .fillMaxSize()
-//                            .weight(1f)
-//                            .padding(PaddingM)
-//                    ) {
-//
-////                    Box(modifier = Modifier.size(SIZE_DP)) {
-////                        Image(
-////                            painter = painterResource(id = R.drawable.cross),
-////                            contentDescription = "Exit",
-////                            modifier = Modifier.clickable { onExit() }
-////                        )
-////
-////                    }
-//                        when (node) {
-//                            is Host -> {
-//                                if (gameManager.localPlayerId == node.playerId) {
-//                                    Box(modifier = Modifier.size(SIZE_DP)) {
-//                                        Image(
-//                                            painter = painterResource(id = R.drawable.shuffle),
-//                                            contentDescription = "Exit",
-//                                            modifier = Modifier.clickable {
-//                                                gameManager.clearEdges(gameManager.localPlayerId)
-//                                                changingPath(true)
-//                                                gameManager.addNodeToPathBuilder(nodeId = node.id)
-//                                                onExit()
-//                                            }
-//                                        )
-//                                    }
-//                                }
-//                            }
-//
-//                            is Router -> {
-//                                Box(modifier = Modifier.size(SIZE_DP)) {
-//                                    if (!node.isWorking.value) {
-//                                        Image(
-//                                            painter = painterResource(id = R.drawable.repair_tools),
-//                                            contentDescription = "Repair",
-//                                            modifier = Modifier.clickable {
-//                                                gameManager.handleRouterRepair(node.id)
-//                                                onExit()
-//                                            }
-//                                        )
-//                                    } else {
-//                                        Image(
-//                                            painter = painterResource(id = R.drawable.plus),
-//                                            contentDescription = "Upgrade",
-//                                            modifier = Modifier.clickable {
-//                                                gameManager.handleRouterUpgrade(node.id)
-//                                            }
-//                                        )
-//
-//                                    }
-//                                }
-//                            }
-//
-//                            is Server -> {}
-//                        }
-//                    }
-//                }
-
                 }
             }
         }

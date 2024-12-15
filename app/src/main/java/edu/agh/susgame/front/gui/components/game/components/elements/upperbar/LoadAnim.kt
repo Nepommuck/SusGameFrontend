@@ -12,8 +12,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import edu.agh.susgame.front.gui.components.common.util.AssetsManager
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
+import edu.agh.susgame.front.gui.components.common.util.AssetsManager
 import edu.agh.susgame.front.gui.components.common.util.Calculate
 import kotlinx.coroutines.delay
 

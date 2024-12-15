@@ -75,6 +75,7 @@ fun NodeDrawer(gameManager: GameManager) {
                                 if (gameManager.gameState.isPathBeingChanged.value) {
                                     gameManager.addNodeToPathBuilder(node.id)
                                 } else {
+                                    gameManager.gameState.currentlyInspectedNode.value = null
                                     gameManager.gameState.currentlyInspectedNode.value = node
                                 }
                             },

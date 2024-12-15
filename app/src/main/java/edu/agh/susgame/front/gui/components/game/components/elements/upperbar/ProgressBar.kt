@@ -64,7 +64,11 @@ fun ProgressBar(gameManager: GameManager) {
                 style = Stroke(width = 8f)
             )
         }
-        Row (Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Absolute.Center, verticalAlignment = Alignment.CenterVertically){
+        Row(
+            Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.Absolute.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             LoadAnim()
             Text(
                 text = " ${

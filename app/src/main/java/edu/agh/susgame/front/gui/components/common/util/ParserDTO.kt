@@ -19,7 +19,7 @@ object ParserDTO {
         gameService: GameService,
         gameMapDTO: GameMapDTO,
         localPlayerId: PlayerId,
-        players: Map<PlayerId,PlayerLobby>,
+        players: Map<PlayerId, PlayerLobby>,
     ): GameManager {
         println("Parsing GameMapDTO: $gameMapDTO")
         val nodes = mutableListOf<Node>()

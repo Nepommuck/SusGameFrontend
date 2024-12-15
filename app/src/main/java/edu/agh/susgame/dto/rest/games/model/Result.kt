@@ -14,7 +14,8 @@ import java.net.HttpURLConnection
 
 
 sealed class GetAllGamesApiResult(responseCode: Int) : ApiResult(responseCode) {
-    data class Success(val lobbies: List<LobbyRow>) : GetAllGamesApiResult(HttpURLConnection.HTTP_OK)
+    data class Success(val lobbies: List<LobbyRow>) :
+        GetAllGamesApiResult(HttpURLConnection.HTTP_OK)
 
     data object Error : GetAllGamesApiResult(HttpURLConnection.HTTP_INTERNAL_ERROR)
 }
@@ -45,7 +46,8 @@ sealed class GetGameMapApiResult(responseCode: Int) : ApiResult(responseCode) {
 
 
 sealed class CreateGameApiResult(responseCode: Int) : ApiResult(responseCode) {
-    data class Success(val createdLobbyId: LobbyId) : CreateGameApiResult(HttpURLConnection.HTTP_CREATED)
+    data class Success(val createdLobbyId: LobbyId) :
+        CreateGameApiResult(HttpURLConnection.HTTP_CREATED)
 
     data object NameAlreadyExists : CreateGameApiResult(HttpURLConnection.HTTP_CONFLICT)
 

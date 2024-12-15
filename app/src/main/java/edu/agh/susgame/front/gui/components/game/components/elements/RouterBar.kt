@@ -23,9 +23,7 @@ import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import edu.agh.susgame.front.gui.components.common.graph.node.Router
-import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Calculate
 
 @Composable
@@ -35,8 +33,8 @@ fun RouterBar(
     padding: Dp,
     textStyle: TextStyle
 ) {
-    val bufferCurrentPackets by remember { router.bufferCurrentPackets }
-    val bufferSize by remember { router.bufferSize }
+    val bufferCurrentPackets by router.bufferCurrentPackets
+    val bufferSize by router.bufferSize
 
     Box(
         modifier = Modifier

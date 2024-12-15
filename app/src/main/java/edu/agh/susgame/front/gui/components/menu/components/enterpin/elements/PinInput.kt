@@ -1,6 +1,5 @@
 package edu.agh.susgame.front.gui.components.menu.components.enterpin.elements
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -68,7 +67,8 @@ fun PinInput(
                     textStyle = TextStyler.TerminalInput.copy(textAlign = TextAlign.Left),
                     onValueChange = { currentPinInputValue = it },
                     modifier = Modifier
-                        .fillMaxWidth(0.8f).align(Alignment.Center),
+                        .fillMaxWidth(0.8f)
+                        .align(Alignment.Center),
                     singleLine = true
                 )
 
@@ -80,7 +80,9 @@ fun PinInput(
                 style = TextStyler.TerminalS,
             )
             Row(
-                modifier = Modifier.fillMaxSize().weight(1f),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {

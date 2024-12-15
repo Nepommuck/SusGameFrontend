@@ -33,6 +33,7 @@ object AssetsManager {
             resourceId
         }
     }
+
     fun nodeToResourceId(node: Node): Int = when (node) {
         is Host -> R.drawable.host
         is Router -> R.drawable.router

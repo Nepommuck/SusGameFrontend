@@ -86,8 +86,8 @@ fun RouterInfo(
                 horizontalArrangement = Arrangement.Absolute.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                router.playersSet.forEach{
-                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center){
+                router.playersSet.forEach {
+                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                         PlayerIcon(color = gameManager.getPlayerColor(playerId = it))
                     }
                 }
