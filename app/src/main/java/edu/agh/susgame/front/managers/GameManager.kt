@@ -127,7 +127,7 @@ class GameManager(
         gameState.gameStatus.value = status
     }
 
-    fun updateEdge(edgeId: EdgeId, upgradeCost: Int, packetsTransported: Int){
+    fun updateEdge(edgeId: EdgeId, upgradeCost: Int, packetsTransported: Int) {
         println(edgesById[edgeId]?.packetsTransported?.intValue)
         edgesById[edgeId]?.packetsTransported?.intValue = packetsTransported
         edgesById[edgeId]?.upgradeCost?.intValue = upgradeCost
@@ -168,7 +168,7 @@ class GameManager(
         gameService.sendSimpleMessage(message.message)
     }
 
-    fun handleEdgeUpdate(edgeId: EdgeId){
+    fun handleEdgeUpdate(edgeId: EdgeId) {
         println("UPDATING EDGE $edgeId")
     }
 
