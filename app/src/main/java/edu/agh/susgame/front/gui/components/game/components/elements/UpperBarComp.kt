@@ -81,7 +81,7 @@ fun UpperBarComp(
                         onClick = {
                             gameManager.gameState.zoomState.value.reset()
                         },
-                        resourceId = R.drawable.repair_tools
+                        resourceId = R.drawable.centralize
                     )
                     UpperButton(
                         onClick = {

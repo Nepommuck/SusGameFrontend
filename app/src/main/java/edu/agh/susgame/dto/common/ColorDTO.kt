@@ -9,4 +9,6 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class ColorDTO(val decimalRgbaValue: String)
+data class ColorDTO(
+    val decimalRgbaValue: String
+)
