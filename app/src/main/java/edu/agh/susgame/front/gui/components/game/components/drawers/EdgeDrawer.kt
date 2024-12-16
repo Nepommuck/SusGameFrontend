@@ -97,6 +97,41 @@ fun EdgeDrawer(gameManager: GameManager) {
                 val middleX = ((leftX + rightX) / 2) - 6.dp
                 val middleY = (downY + upY) / 2 - 6.dp
 
+
+                edge.playersIdsUsingEdge.forEachIndexed { index, playerId ->
+                    gameManager.playersById[playerId]?.color?.let { color ->
+
+                        val playerOffset = index * 10
+
+                        val playerStartOffset = Offset(
+                            newStartOffset.x + playerOffset,
+                            newStartOffset.y + playerOffset
+                        )
+
+                        val playerEndOffset = Offset(
+                            newEndOffset.x + playerOffset,
+                            newEndOffset.y + playerOffset
+                        )
+
+                        val playerPath = Path().apply {
+                            moveTo(playerStartOffset.x, playerStartOffset.y)
+                            lineTo(playerEndOffset.x, playerEndOffset.y)
+                        }
+                        Canvas(modifier = Modifier.fillMaxSize()) {
+                            drawPath(
+                                path = playerPath,
+                                color = color.value,
+                                style = Stroke(
+                                    width = 7f,
+                                    pathEffect = PathEffect.dashPathEffect(
+                                        floatArrayOf(10f, 7f),
+                                        0f
+                                    )
+                                )
+                            )
+                        }
+                    }
+                }
                 if (gameManager.gameState.areEdgesBandwidthShown.value) {
                     Row(
                         modifier = Modifier
@@ -131,41 +166,6 @@ fun EdgeDrawer(gameManager: GameManager) {
 //                            textAlign = TextAlign.Center,
 //                        )
 
-                    }
-                }
-
-                edge.playersIdsUsingEdge.forEachIndexed { index, playerId ->
-                    gameManager.playersById[playerId]?.color?.let { color ->
-
-                        val playerOffset = index * 10
-
-                        val playerStartOffset = Offset(
-                            newStartOffset.x + playerOffset,
-                            newStartOffset.y + playerOffset
-                        )
-
-                        val playerEndOffset = Offset(
-                            newEndOffset.x + playerOffset,
-                            newEndOffset.y + playerOffset
-                        )
-
-                        val playerPath = Path().apply {
-                            moveTo(playerStartOffset.x, playerStartOffset.y)
-                            lineTo(playerEndOffset.x, playerEndOffset.y)
-                        }
-                        Canvas(modifier = Modifier.fillMaxSize()) {
-                            drawPath(
-                                path = playerPath,
-                                color = color.value,
-                                style = Stroke(
-                                    width = 7f,
-                                    pathEffect = PathEffect.dashPathEffect(
-                                        floatArrayOf(10f, 7f),
-                                        0f
-                                    )
-                                )
-                            )
-                        }
                     }
                 }
             }
