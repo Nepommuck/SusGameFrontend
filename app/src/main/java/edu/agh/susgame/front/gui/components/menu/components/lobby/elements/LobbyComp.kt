@@ -129,7 +129,7 @@ fun LobbyComp(
                     ) {
                         Text(
                             text = "${Translation.Lobby.NUM_OF_PLAYERS}: ${lobbyManager.getNumberOfPlayers()}/${lobbyManager.maxNumOfPlayers}",
-                            style = TextStyler.TerminalM
+                            style = TextStyler.TerminalL
                         )
                         RefreshIcon(onRefreshClicked = { lobbyManager.updateFromRest() })
                     }

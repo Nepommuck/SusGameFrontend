@@ -99,7 +99,7 @@ internal fun LobbyRow(
             {
                 Text(
                     text = "${lobby.playersWaitingCount}/${lobby.maxNumOfPlayers}",
-                    style = TextStyler.TerminalM,
+                    style = TextStyler.TerminalL,
                 )
             }
         }

@@ -38,7 +38,7 @@ fun RouterIcons(
                     .alpha(
                         if (canUpgrade(router, gameManager)) 1f else 0.4f
                     )
-                )
+            )
         }
         Column(
             modifier = Modifier

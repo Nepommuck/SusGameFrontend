@@ -40,9 +40,7 @@ internal fun GameGraphComponent(
 
     val gameState = gameManager.gameState
 
-
     Background()
-
 
     Box(
         modifier = Modifier
@@ -82,8 +80,6 @@ internal fun GameGraphComponent(
             }
         }
     }
-
-
 
     when (gameState.gameStatus.value) {
         GameStatus.FINISHED_WON, GameStatus.FINISHED_LOST -> {
