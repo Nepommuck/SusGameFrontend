@@ -94,7 +94,7 @@ fun EdgeDrawer(gameManager: GameManager) {
                 val rightX = (newEndOffset.x / density.density).dp
                 val downY = (newStartOffset.y / density.density).dp
 
-                val middleX = ((leftX + rightX) / 2) - 15.dp
+                val middleX = ((leftX + rightX) / 2) - 6.dp
                 val middleY = (downY + upY) / 2 - 6.dp
 
                 if (gameManager.gameState.areEdgesBandwidthShown.value) {
@@ -107,7 +107,8 @@ fun EdgeDrawer(gameManager: GameManager) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "${edge.packetsTransported.intValue}/${edge.bandwidth}",
+//                            text = "${edge.packetsTransported.intValue}/${edge.bandwidth}",
+                            text = "${edge.bandwidth}",
                             style = TextStyler.TerminalM,
                             textAlign = TextAlign.Center,
                             color = Color.White.copy(alpha = 0.8f)
