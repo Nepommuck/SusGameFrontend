@@ -112,24 +112,23 @@ fun EdgeDrawer(gameManager: GameManager) {
                             textAlign = TextAlign.Center,
                             color = Color.White.copy(alpha = 0.8f)
                         )
-                        Image(
-                            painter = painterResource(id = R.drawable.plus),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .clickable(
-                                    onClick = {
-                                        gameManager.handleEdgeUpdate(edgeId = edge.id)
-                                    }
-                                )
-
-                                .padding(2.dp)
-                        )
-                        Text(
-                            text = "${edge.upgradeCost.intValue}",
-                            style = TextStyler.TerminalS,
-                            textAlign = TextAlign.Center,
-//                            color = Color.White.copy(alpha = 0.8f)
-                        )
+                        // CODE TO UPDATE EDGES -> delete it if it will not be used
+//                        Image(
+//                            painter = painterResource(id = R.drawable.plus),
+//                            contentDescription = null,
+//                            modifier = Modifier
+//                                .clickable(
+//                                    onClick = {
+//                                        gameManager.handleEdgeUpdate(edgeId = edge.id)
+//                                    }
+//                                )
+//                                .padding(2.dp)
+//                        )
+//                        Text(
+//                            text = "${edge.upgradeCost.intValue}",
+//                            style = TextStyler.TerminalS,
+//                            textAlign = TextAlign.Center,
+//                        )
 
                     }
                 }
