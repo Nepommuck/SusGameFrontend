@@ -127,9 +127,11 @@ fun LobbyComp(
                             .fillMaxWidth(0.5f),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        val currentPlayersText =
+                            "${lobbyManager.getNumberOfPlayers()}/${lobbyManager.maxNumOfPlayers}"
                         Text(
-                            text = "${Translation.Lobby.NUM_OF_PLAYERS}: ${lobbyManager.getNumberOfPlayers()}/${lobbyManager.maxNumOfPlayers}",
-                            style = TextStyler.TerminalL
+                            text = "${Translation.Lobby.NUM_OF_PLAYERS}: $currentPlayersText",
+                            style = TextStyler.TerminalL,
                         )
                         RefreshIcon(onRefreshClicked = { lobbyManager.updateFromRest() })
                     }

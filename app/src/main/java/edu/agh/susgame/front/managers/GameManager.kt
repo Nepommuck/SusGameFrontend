@@ -108,7 +108,6 @@ class GameManager(
         }
         if (playerIdByHostId[hostId] != localPlayerId) {
             clearEdges(playerIdByHostId[hostId])
-//            clearRouters(playerIdByHostId[hostId])
             val path = listOf(hostId.value) + route
 
             path.zipWithNext { host1, host2 ->
@@ -128,7 +127,7 @@ class GameManager(
     }
 
     fun updateEdge(edgeId: EdgeId, upgradeCost: Int, packetsTransported: Int) {
-        println(edgesById[edgeId]?.packetsTransported?.intValue)
+        println("Updating edge ${edgeId.value}")
         edgesById[edgeId]?.packetsTransported?.intValue = packetsTransported
         edgesById[edgeId]?.upgradeCost?.intValue = upgradeCost
     }

@@ -54,9 +54,9 @@ fun RouterInfo(
                     text = router.getState(),
                     style = TextStyler.TerminalS,
                     textAlign = TextAlign.Center,
-                    color = if (!router.isWorking.value) Color.Red.copy(alpha = 0.7f) else (Color.Green.copy(
-                        alpha = 0.7f
-                    ))
+                    color =
+                    if (!router.isWorking.value) Color.Red.copy(alpha = 0.7f)
+                    else Color.Green.copy(alpha = 0.7f)
                 )
             }
         }

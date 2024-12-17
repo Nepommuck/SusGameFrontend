@@ -1,16 +1,13 @@
 package edu.agh.susgame.front.gui.components.game.components.drawers
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,15 +19,16 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import edu.agh.susgame.R
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.managers.GameManager
 import kotlin.math.sqrt
 
-private const val CIRCLE_RADIUS = 50f
+private val OFFSET_BOX: Dp = 30.dp
+private val OFFSET_LABEL: Dp = 6.dp
+
 
 @Composable
 fun EdgeDrawer(gameManager: GameManager) {
@@ -43,10 +41,13 @@ fun EdgeDrawer(gameManager: GameManager) {
 
             if (startXY != null && endXY != null) {
                 val startOffset = with(density) {
-                    Offset((startXY.position.x.dp + 30.dp).toPx(), startXY.position.y.dp.toPx())
+                    Offset(
+                        (startXY.position.x.dp + OFFSET_BOX).toPx(),
+                        startXY.position.y.dp.toPx()
+                    )
                 }
                 val endOffset = with(density) {
-                    Offset((endXY.position.x.dp + 30.dp).toPx(), endXY.position.y.dp.toPx())
+                    Offset((endXY.position.x.dp + OFFSET_BOX).toPx(), endXY.position.y.dp.toPx())
                 }
 
                 val dx = endOffset.x - startOffset.x
@@ -81,8 +82,8 @@ fun EdgeDrawer(gameManager: GameManager) {
                         style = Stroke(
                             width = 5f,
                             pathEffect = PathEffect.dashPathEffect(
-                                floatArrayOf(10f, 7f),
-                                0f
+                                intervals = floatArrayOf(10f, 7f),
+                                phase = 0f,
                             )
                         )
                     )
@@ -94,8 +95,8 @@ fun EdgeDrawer(gameManager: GameManager) {
                 val rightX = (newEndOffset.x / density.density).dp
                 val downY = (newStartOffset.y / density.density).dp
 
-                val middleX = ((leftX + rightX) / 2) - 6.dp
-                val middleY = (downY + upY) / 2 - 6.dp
+                val middleX = ((leftX + rightX) / 2) - OFFSET_LABEL
+                val middleY = (downY + upY) / 2 - OFFSET_LABEL
 
 
                 edge.playersIdsUsingEdge.forEachIndexed { index, playerId ->
@@ -124,8 +125,8 @@ fun EdgeDrawer(gameManager: GameManager) {
                                 style = Stroke(
                                     width = 7f,
                                     pathEffect = PathEffect.dashPathEffect(
-                                        floatArrayOf(10f, 7f),
-                                        0f
+                                        intervals = floatArrayOf(10f, 7f),
+                                        phase = 0f
                                     )
                                 )
                             )

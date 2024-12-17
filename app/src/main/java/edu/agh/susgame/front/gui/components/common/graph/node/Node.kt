@@ -7,9 +7,9 @@ data class NodeId(val value: Int)
 
 sealed class Node(
     val id: NodeId,
-    val name: String,
     val position: Coordinates,
 ) {
-    abstract fun getNodeName(): String
+    abstract val name: String
+
     abstract fun getInfo(): String
 }

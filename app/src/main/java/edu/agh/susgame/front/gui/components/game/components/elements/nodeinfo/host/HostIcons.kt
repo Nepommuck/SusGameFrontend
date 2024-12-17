@@ -28,15 +28,13 @@ import edu.agh.susgame.front.managers.GameManager
 fun HostIcons(
     host: Host,
     gameManager: GameManager,
-    onExit: () -> Unit
 ) {
     val isPathValid by gameManager.pathBuilder.isPathValid
     Box(
         modifier = Modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center
-    )
-    {
+    ) {
         if (gameManager.localPlayerId == host.playerId) {
             if (!gameManager.gameState.isPathBeingChanged.value) {
                 Icons(resourceId = R.drawable.shuffle,
@@ -112,64 +110,10 @@ fun HostIcons(
                             )
                         }
                     }
-
-//                    Box(
-//                        modifier = Modifier
-//                            .fillMaxSize()
-//                            .weight(1f)
-//                            .clickable {
-//                                gameManager.clearEdges(gameManager.localPlayerId)
-//                                gameManager.gameState.isPathBeingChanged.value = false
-//                                gameManager.pathBuilder.reset()
-//                            }
-//                    ) {
-//                        Text(text = "ODRZUĆ")
-//                    }
-
-
                 }
             }
         }
     }
 }
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize(),
-//
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.SpaceEvenly
-//    )
-//    {
-//        Image(
-//            painter = painterResource(id = R.drawable.accept),
-//            contentDescription = Translation.Game.ACCEPT_PATH,
-//            modifier = Modifier
-//                .fillMaxSize(0.6f)
-//                .weight(1f)
-//                .alpha(
-//                    Calculate.getAlpha(isPathValid)
-//                )
-//                .clickable(
-//                    enabled = isPathValid
-//                ) {
-//                    if (isPathValid) {
-//                        gameManager.handlePathChange()
-//                        gameManager.gameState.isPathBeingChanged.value = false
-//                        gameManager.gameState.currentlyInspectedNode.value = null
-//                    }
-//                }
-//        )
-//        Image(
-//            painter = painterResource(id = R.drawable.cross),
-//            contentDescription = Translation.Game.ABORT_PATH,
-//            modifier = Modifier
-//                .weight(1f)
-//                .fillMaxSize(0.6f)
-//                .clickable {
-//                    gameManager.clearEdges(gameManager.localPlayerId)
-//                    gameManager.gameState.isPathBeingChanged.value = false
-//                    gameManager.pathBuilder.reset()
-//                }
-//        )
 
 

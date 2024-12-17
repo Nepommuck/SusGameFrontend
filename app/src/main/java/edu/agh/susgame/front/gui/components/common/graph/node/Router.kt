@@ -10,17 +10,17 @@ import edu.agh.susgame.front.gui.components.common.util.Translation
 
 class Router(
     id: NodeId,
-    name: String,
     position: Coordinates,
     val bufferSize: MutableIntState,
-) : Node(id, name, position) {
+) : Node(id, position) {
+    override val name: String = Translation.Game.ROUTER
+
     val bufferCurrentPackets: MutableIntState = mutableIntStateOf(0)
     val upgradeCost: MutableIntState = mutableIntStateOf(0)
     val isWorking: MutableState<Boolean> = mutableStateOf(true)
     val overheat: MutableIntState = mutableIntStateOf(0)
     val playersSet: MutableSet<PlayerId> = mutableSetOf()
 
-    override fun getNodeName(): String = Translation.Game.ROUTER
     fun getState(): String =
         if (isWorking.value) Translation.Game.RUNNING else Translation.Game.SHUTDOWN
 

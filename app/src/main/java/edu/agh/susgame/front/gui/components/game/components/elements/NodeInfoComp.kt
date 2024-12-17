@@ -91,7 +91,7 @@ fun NodeInfoComp(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(node.getNodeName(), style = TextStyler.TerminalM)
+                    Text(node.name, style = TextStyler.TerminalM)
                     Image(
                         painter = painterResource(id = R.drawable.cross),
                         contentDescription = "Exit",
@@ -146,8 +146,7 @@ fun NodeInfoComp(
                         when (node) {
                             is Host -> HostIcons(
                                 host = node,
-                                gameManager = gameManager,
-                                onExit = onExit
+                                gameManager = gameManager
                             )
 
                             is Router -> RouterIcons(router = node, gameManager = gameManager)

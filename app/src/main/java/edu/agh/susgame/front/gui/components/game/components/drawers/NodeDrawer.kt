@@ -95,7 +95,6 @@ fun NodeDrawer(gameManager: GameManager) {
                                     )
                                 }
 
-
                             is Router -> if (gameManager.gameState.areRouterBuffersShown.value) {
                                 RouterBar(
                                     router = node,
@@ -104,7 +103,6 @@ fun NodeDrawer(gameManager: GameManager) {
                                     TextStyler.TerminalXS
                                 )
                             }
-
 
                             is Server -> {}
                         }
@@ -131,8 +129,8 @@ fun getColorFilterForNode(
         is Host -> {
             val hostColor = gameManager.playersById[node.playerId]?.color?.value ?: Color.Gray
             ColorFilter.lighting(
-                hostColor.copy(alpha = 0.8f),
-                Color.Black
+                multiply = hostColor.copy(alpha = 0.8f),
+                add = Color.Black
             )
         }
 
@@ -142,7 +140,6 @@ fun getColorFilterForNode(
                     node.overheat.intValue.toFloat() / gameManager.criticalBufferOverheatLevel
                 else
                     0f
-
             val routerColor =
                 if (!node.isWorking.value) Color.Gray
                 else Color(
@@ -152,8 +149,8 @@ fun getColorFilterForNode(
                     alpha = (0.8f * 255).toInt()
                 )
             ColorFilter.lighting(
-                routerColor,
-                Color.Black
+                multiply = routerColor,
+                add = Color.Black
             )
         }
 

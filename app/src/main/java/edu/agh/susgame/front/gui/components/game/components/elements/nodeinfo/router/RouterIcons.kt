@@ -25,8 +25,7 @@ fun RouterIcons(
                 .fillMaxSize()
                 .weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally,
-        )
-        {
+        ) {
             Icons(
                 resourceId = R.drawable.upgrade,
                 cost = router.upgradeCost,
@@ -64,7 +63,8 @@ fun RouterIcons(
 }
 
 fun canUpgrade(router: Router, gameManager: GameManager): Boolean {
-    return gameManager.playersById[gameManager.localPlayerId]?.tokens?.intValue?.let {
-        it >= router.upgradeCost.intValue
-    } ?: false
+    val localPlayer = gameManager.playersById[gameManager.localPlayerId]
+        ?: return false
+
+    return localPlayer.tokens.intValue >= router.upgradeCost.intValue
 }

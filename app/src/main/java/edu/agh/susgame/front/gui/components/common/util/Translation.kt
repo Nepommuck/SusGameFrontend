@@ -33,20 +33,12 @@ object Translation {
         const val ENTER_GAME_PIN = "Wprowadź PIN gry"
         const val WRONG_PIN = "Błędny PIN"
         const val PIN = "PIN"
-
-        fun nPlayersAwaiting(n: Int): String {
-            require(n >= 0) { "Number of players can't be negative, but was: $n" }
-
-            return "Oczekuje $n ${if (n == 1) "gracz" else "graczy"}"
-        }
     }
 
     object CreateGame {
         const val ENTER_GAME_NAME = "Nazwa gry"
         const val ENTER_GAME_PIN = "PIN gry"
         const val AMOUNT_OF_PLAYERS = "Liczba graczy"
-        const val GAME_TIME = "Czas gry"
-        const val MINUTES = "minut"
         const val DEFAULT_GAME_NAME = "default"
         const val CREATE_NO_GAME_NAME = "Podaj nazwę gry!"
         const val CREATE_SUCCESS = "Pomyślnie stworzono grę!"
@@ -65,7 +57,6 @@ object Translation {
         const val UPGRADE_COST = "Koszt ulepszenia"
         const val RECEIVED_DATA = "Dane"
         const val PACKETS_TO_SEND = "Przesył"
-        const val TOKENS = "Tokeny"
         const val ROUTER = "Router"
         const val HOST = "Host"
         const val SERVER = "Serwer"

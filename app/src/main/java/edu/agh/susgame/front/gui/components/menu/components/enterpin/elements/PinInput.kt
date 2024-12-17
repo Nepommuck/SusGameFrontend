@@ -71,8 +71,6 @@ fun PinInput(
                         .align(Alignment.Center),
                     singleLine = true
                 )
-
-
             }
             Text(
                 text = if (badPinProvided) Translation.Lobby.WRONG_PIN else "",

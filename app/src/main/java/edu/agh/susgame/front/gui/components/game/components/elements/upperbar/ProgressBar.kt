@@ -70,21 +70,19 @@ fun ProgressBar(gameManager: GameManager) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             LoadAnim()
+            val packetsRatio = packetsRatio(
+                packetsReceived,
+                gameManager.packetsToWin,
+            )
             Text(
-                text = " ${
-                    packetsRatio(
-                        packetsReceived,
-                        gameManager.packetsToWin
-                    )
-                }% Critical Network Data",
+                text = "$packetsRatio% Critical Network Data",
                 style = TextStyler.TerminalM,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
     }
 }
 
-private fun packetsRatio(packetsReceived: Int, packetsToWin: Int): String =
+private fun packetsRatio(packetsReceived: Int, packetsToWin: Int): Int =
     (Calculate.getFloatProgress(packetsReceived, packetsToWin) * 100)
         .roundToInt()
-        .toString()
