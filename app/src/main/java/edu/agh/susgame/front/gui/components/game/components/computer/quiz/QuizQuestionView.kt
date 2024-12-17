@@ -34,7 +34,7 @@ fun QuizQuestionView(
     ) {
         Box(
             modifier = Modifier
-                .weight(1f)
+                .weight(1.5f)
                 .padding(PaddingL)
         ) {
             QuizQuestionBlock(question = quizQuestion.question)
