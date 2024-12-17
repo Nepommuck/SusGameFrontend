@@ -1,7 +1,9 @@
 package edu.agh.susgame.front.gui.components.game.components.computer.quiz.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -29,19 +31,16 @@ fun QuizBlock(
     val width = calculateScreenWidth(widthPercentage)
     val height = width / 4
 
-    EmeraldShapedBox(
+    Box(
         modifier = Modifier
-            .width(width)
-            .height(height)
+            .fillMaxSize()
             .let { modifier ->
                 if (onClick == null) modifier
                 else modifier.clickable(role = Role.Button) { onClick() }
             }
     ) {
         EmeraldShapedBox(
-            modifier = Modifier
-                .width(width - 6.dp)
-                .height(height - 4.dp),
+            modifier = Modifier.fillMaxSize(),
             gradient = gradient,
         ) { content() }
     }

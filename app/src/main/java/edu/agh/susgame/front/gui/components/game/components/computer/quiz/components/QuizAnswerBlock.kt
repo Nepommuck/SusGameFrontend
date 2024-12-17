@@ -1,9 +1,13 @@
 package edu.agh.susgame.front.gui.components.game.components.computer.quiz.components
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizColors
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion.QuizAnswer
 import edu.agh.susgame.front.managers.QuizManager
@@ -57,6 +61,11 @@ fun QuizAnswerBlock(
             }
         }
     ) {
-        Text(text = answer.answer, color = getButtonState().textColor)
+        Text(
+            text = answer.answer,
+            color = getButtonState().textColor,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(3.dp)
+        )
     }
 }
