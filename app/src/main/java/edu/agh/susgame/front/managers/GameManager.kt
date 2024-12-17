@@ -167,10 +167,6 @@ class GameManager(
         gameService.sendSimpleMessage(message.message)
     }
 
-    fun handleEdgeUpdate(edgeId: EdgeId) {
-        println("UPDATING EDGE $edgeId")
-    }
-
     // GUI GETTERS
     fun getServerReceivedPackets(): MutableIntState = server.packetsReceived
 
@@ -268,8 +264,19 @@ class GameManager(
             val neighbouringHostEdge = edgesList.first { edge ->
                 edge.firstNodeId == hostId || edge.secondNodeId == hostId
             }
-            (initNodesById()[hostId] as? Host?)?.maxPacketsToSend?.intValue =
-                neighbouringHostEdge.bandwidth
+
+            val routerId = if (neighbouringHostEdge.firstNodeId != hostId) {
+                neighbouringHostEdge.firstNodeId
+            } else {
+                neighbouringHostEdge.secondNodeId
+            }
+
+            val router = initNodesById()[routerId] as? Router
+
+            router?.let {
+                (initNodesById()[hostId] as? Host)?.maxPacketsToSend = it.bufferSize
+            }
         }
     }
+
 }

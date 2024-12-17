@@ -37,10 +37,10 @@ fun HostIcons(
     ) {
         if (gameManager.localPlayerId == host.playerId) {
             if (!gameManager.gameState.isPathBeingChanged.value) {
-                Icons(resourceId = R.drawable.shuffle,
+                Icons(resourceId = R.drawable.routing,
                     cost = null,
                     modifier = Modifier
-                        .fillMaxSize(0.6f)
+                        .fillMaxSize()
                         .clickable {
                             gameManager.clearEdges(gameManager.localPlayerId)
                             gameManager.gameState.isPathBeingChanged.value = true
@@ -78,7 +78,7 @@ fun HostIcons(
                             ) {
                             Text(
                                 text = Translation.Game.ACCEPT_PATH,
-                                style = TextStyler.TerminalL,
+                                style = TextStyler.TerminalM,
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -105,7 +105,7 @@ fun HostIcons(
                         ) {
                             Text(
                                 text = Translation.Game.ABORT_PATH,
-                                style = TextStyler.TerminalL,
+                                style = TextStyler.TerminalM,
                                 textAlign = TextAlign.Center
                             )
                         }

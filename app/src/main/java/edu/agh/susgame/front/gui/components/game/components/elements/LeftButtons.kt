@@ -44,7 +44,7 @@ fun LeftButtons(gameStateManager: GameStateManager) {
                     .padding(5.dp)
             )
             Image(
-                painter = painterResource(id = R.drawable.token0),
+                painter = painterResource(id = R.drawable.edges),
                 contentDescription = "Fix router",
                 modifier = Modifier
                     .clickable(

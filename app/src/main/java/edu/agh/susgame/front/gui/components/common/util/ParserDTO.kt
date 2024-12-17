@@ -58,9 +58,9 @@ object ParserDTO {
             )
         }
 
-        val edges = gameMapDTO.edges.mapIndexed { index, edgeDTO ->
+        val edges = gameMapDTO.edges.map { edgeDTO ->
             Edge(
-                id = EdgeId(index),
+                id = EdgeId(edgeDTO.id),
                 firstNodeId = NodeId(edgeDTO.from),
                 secondNodeId = NodeId(edgeDTO.to),
                 bandwidth = edgeDTO.weight

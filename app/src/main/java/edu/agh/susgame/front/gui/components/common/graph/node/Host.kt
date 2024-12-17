@@ -16,7 +16,7 @@ class Host(
     override val name: String = "${Translation.Game.HOST}: ${playerNickname?.value.orEmpty()}"
 
     val packetsToSend: MutableIntState = mutableIntStateOf(0)
-    val maxPacketsToSend: MutableIntState = mutableIntStateOf(5)
+    var maxPacketsToSend: MutableIntState = mutableIntStateOf(5)
 
     fun getFlow(): String = "${packetsToSend.intValue}/${maxPacketsToSend.intValue}"
 
