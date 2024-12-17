@@ -1,5 +1,7 @@
 package edu.agh.susgame.front.gui.components.common.graph.edge
 
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.PlayerId
@@ -12,12 +14,14 @@ class Edge(
     val firstNodeId: NodeId,
     val secondNodeId: NodeId,
     var bandwidth: Int,
-    var color: Color = Color.Black,
 ) {
+    var color: Color = Color.Black
     var playersIdsUsingEdge = mutableStateListOf<PlayerId>()
+    val packetsTransported: MutableIntState = mutableIntStateOf(0)
+    val upgradeCost: MutableIntState = mutableIntStateOf(0)
 
     fun addPlayer(playerId: PlayerId) {
-        if (!playersIdsUsingEdge.contains(playerId)) { // this should be a set, but theres problem with recompositon
+        if (!playersIdsUsingEdge.contains(playerId)) {
             playersIdsUsingEdge.add(playerId)
         }
     }

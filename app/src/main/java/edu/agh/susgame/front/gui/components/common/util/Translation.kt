@@ -14,6 +14,7 @@ object Translation {
         const val CREATE = "Stwórz"
         const val LOADING = "Ładowanie"
         const val SEND = "Wyślij"
+        const val CANCEL = "Anuluj"
     }
 
     object Menu {
@@ -29,20 +30,15 @@ object Translation {
         const val CHOOSE_NICKNAME = "Podaj nick"
         const val NICKNAME_ERROR_MESSAGE = "Nick nie może zawierać spacji"
         const val NUM_OF_PLAYERS = "Gracze"
-
-        fun nPlayersAwaiting(n: Int): String {
-            require(n >= 0) { "Number of players can't be negative, but was: $n" }
-
-            return "Oczekuje $n ${if (n == 1) "gracz" else "graczy"}"
-        }
+        const val ENTER_GAME_PIN = "Wprowadź PIN gry"
+        const val WRONG_PIN = "Błędny PIN"
+        const val PIN = "PIN"
     }
 
     object CreateGame {
         const val ENTER_GAME_NAME = "Nazwa gry"
         const val ENTER_GAME_PIN = "PIN gry"
         const val AMOUNT_OF_PLAYERS = "Liczba graczy"
-        const val GAME_TIME = "Czas gry"
-        const val MINUTES = "minut"
         const val DEFAULT_GAME_NAME = "default"
         const val CREATE_NO_GAME_NAME = "Podaj nazwę gry!"
         const val CREATE_SUCCESS = "Pomyślnie stworzono grę!"
@@ -55,18 +51,18 @@ object Translation {
         const val YOU_LOST = "Przegrałeś!"
         const val CHAT = "Chat"
         const val STATE = "Stan"
-        const val SHUTDOWN = "Wyłączony"
-        const val RUNNING = "Działajacy"
+        const val SHUTDOWN = "Shutdown"
+        const val RUNNING = "Running"
         const val BUFFER_STATE = "Stan bufora"
         const val UPGRADE_COST = "Koszt ulepszenia"
-        const val RECEIVED_DATA = "Otrzymane dane"
-        const val PACKETS_TO_SEND = "Wysyłane pakiety"
-        const val TOKENS = "Tokeny"
+        const val RECEIVED_DATA = "Dane"
+        const val PACKETS_TO_SEND = "Przesył"
         const val ROUTER = "Router"
         const val HOST = "Host"
         const val SERVER = "Serwer"
-        const val ACCEPT_PATH = "Zatwierdź ścieżkę"
-        const val ABORT_PATH = "Anuluj ścieżkę"
+        const val ACCEPT_PATH = "Zatwierdź"
+        const val ABORT_PATH = "Anuluj"
+        const val ROUTING = "Routing"
     }
 
     object Error {

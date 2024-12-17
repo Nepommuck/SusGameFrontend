@@ -5,8 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyPin
 import edu.agh.susgame.front.gui.components.game.GameView
 import edu.agh.susgame.front.gui.components.menu.components.createlobby.CreateLobbyView
+import edu.agh.susgame.front.gui.components.menu.components.enterpin.EnterPinView
 import edu.agh.susgame.front.gui.components.menu.components.lobby.LobbyView
 import edu.agh.susgame.front.gui.components.menu.components.mainmenu.MainMenuView
 import edu.agh.susgame.front.gui.components.menu.components.searchlobby.SearchLobbiesView
@@ -27,68 +29,60 @@ fun MenuNavigationHost(
         startDestination = MenuRoute.MainMenu.route,
     ) {
         composable(route = MenuRoute.MainMenu.route) {
-
             MainMenuView(menuNavController, ipAddressProvider)
-
-            // TODO Cleanup one day
-            // Very useful for development purposes
-//            ComputerComponent(
-//                gameService, GameManager(
-//                    nodesList = listOf(
-//                        Server(
-//                            id = NodeId(1), name = "", position = Coordinates(0, 0),
-//                            packetsToWin = 100,
-//                            packetsReceived = mutableIntStateOf(0)
-//                        )
-//                    ),
-//                    edgesList = emptyList(),
-//                    playersList = emptyList(),
-//                    serverId = NodeId(1),
-//                    mapSize = Coordinates(100, 100),
-//                    localPlayerId = PlayerId(21),
-//                    criticalBufferOverheatLevel = 10,
-//                    packetsToWin = 5,
-//                    gameService = gameService,
-//                )
-//            )
         }
 
-        composable(route = MenuRoute.SearchLobby.route) {
+        composable(route = MenuRoute.FindGame.route) {
             SearchLobbiesView(lobbyService, menuNavController)
         }
 
-        composable(route = MenuRoute.CreateLobby.route) {
+        composable(route = MenuRoute.CreateGame.route) {
             CreateLobbyView(lobbyService, menuNavController)
         }
 
         composable(
-            route = MenuRoute.Lobby.route,
-            arguments = listOf(MenuRoute.Lobby.gameIdArgument),
+            route = MenuRoute.EnterPin.route,
+            arguments = MenuRoute.EnterPin.arguments,
         ) { backStackEntry ->
             val lobbyId = backStackEntry.arguments
-                ?.getInt(MenuRoute.Lobby.gameIdArgument.name)
-                ?.run {
-                    LobbyId(this)
-                }
+                ?.getInt(MenuRoute.EnterPin.gameIdArgument.name)
+                ?.let { LobbyId(it) }
 
-            when (lobbyId) {
-                null ->
-                    SearchLobbiesView(lobbyService, menuNavController)
-
-                else ->
-                    LobbyView(lobbyId, lobbyService, gameService, menuNavController)
+            if (lobbyId != null) {
+                EnterPinView(lobbyId, lobbyService, menuNavController)
+            } else {
+                menuNavController.navigate(MenuRoute.FindGame.route)
             }
         }
 
         composable(
-            "${MenuRoute.Game.route}/{${MenuRoute.Game.gameIdArgument.name}}",
-            arguments = listOf(MenuRoute.Game.gameIdArgument),
+            route = MenuRoute.Lobby.route,
+            arguments = MenuRoute.Lobby.arguments,
+        ) { backStackEntry ->
+            val lobbyId = backStackEntry.arguments
+                ?.getInt(MenuRoute.Lobby.gameIdArgument.name)
+                ?.let { LobbyId(it) }
+
+            val lobbyPin = backStackEntry.arguments
+                ?.getString(MenuRoute.Lobby.gamePinArgument.name)
+                ?.let { LobbyPin(it) }
+
+            if (lobbyId != null)
+                LobbyView(lobbyId, lobbyPin, lobbyService, gameService, menuNavController)
+            else
+                menuNavController.navigate(MenuRoute.FindGame.route)
+        }
+
+        composable(
+            MenuRoute.Game.route,
+            arguments = MenuRoute.Game.arguments,
         ) { backStackEntry ->
             val lobbyId = backStackEntry.arguments
                 ?.getInt(MenuRoute.Game.gameIdArgument.name)
                 ?.run {
                     LobbyId(this)
                 }
+
             if (lobbyId != null) lobbyService.lobbyManager?.let {
                 GameView(
                     menuNavController,

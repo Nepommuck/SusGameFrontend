@@ -67,7 +67,7 @@ fun MainMenuView(
                     text = Translation.Menu.JOIN_GAME,
                     ipAddressProvider = ipAddressProvider,
                     onClick = {
-                        navController.navigate(MenuRoute.SearchLobby.route)
+                        navController.navigate(MenuRoute.FindGame.route)
                     })
             }
             Box(
@@ -81,7 +81,7 @@ fun MainMenuView(
                     text = Translation.Menu.CREATE_GAME,
                     ipAddressProvider = ipAddressProvider,
                     onClick = {
-                        navController.navigate(MenuRoute.CreateLobby.route)
+                        navController.navigate(MenuRoute.CreateGame.route)
                     }
                 )
             }

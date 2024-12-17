@@ -1,9 +1,13 @@
-package edu.agh.susgame.front.gui.components.common.theme
+package edu.agh.susgame.front.gui.components.common.util
 
 import edu.agh.susgame.R
+import edu.agh.susgame.front.gui.components.common.graph.node.Host
+import edu.agh.susgame.front.gui.components.common.graph.node.Node
+import edu.agh.susgame.front.gui.components.common.graph.node.Router
+import edu.agh.susgame.front.gui.components.common.graph.node.Server
 
 
-object Animations {
+object AssetsManager {
     data class AnimationFrames(val frames: List<Int>, val frameRate: Long)
     data class AnimationFramesString(val frames: List<String>, val frameRate: Long)
 
@@ -28,5 +32,11 @@ object Animations {
             val resourceId = R.drawable::class.java.getField(resourceName).getInt(null)
             resourceId
         }
+    }
+
+    fun nodeToResourceId(node: Node): Int = when (node) {
+        is Host -> R.drawable.host
+        is Router -> R.drawable.router
+        is Server -> R.drawable.server
     }
 }

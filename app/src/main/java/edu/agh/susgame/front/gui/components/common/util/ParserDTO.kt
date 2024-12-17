@@ -3,6 +3,7 @@ package edu.agh.susgame.front.gui.components.common.util
 import androidx.compose.runtime.mutableIntStateOf
 import edu.agh.susgame.dto.rest.model.GameMapDTO
 import edu.agh.susgame.dto.rest.model.PlayerId
+import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.gui.components.common.graph.edge.Edge
 import edu.agh.susgame.front.gui.components.common.graph.edge.EdgeId
 import edu.agh.susgame.front.gui.components.common.graph.node.Host
@@ -19,7 +20,7 @@ object ParserDTO {
         gameService: GameService,
         gameMapDTO: GameMapDTO,
         localPlayerId: PlayerId,
-        players: List<PlayerLobby>,
+        players: Map<PlayerId, PlayerLobby>,
     ): GameManager {
         println("Parsing GameMapDTO: $gameMapDTO")
         val nodes = mutableListOf<Node>()
@@ -28,7 +29,6 @@ object ParserDTO {
             nodes.add(
                 Server(
                     id = NodeId(server.id),
-                    name = "S${server.id}",
                     position = Coordinates(server.coordinates.x, server.coordinates.y),
                     packetsToWin = gameMapDTO.gameGoal
                 )
@@ -39,7 +39,9 @@ object ParserDTO {
             nodes.add(
                 Host(
                     id = NodeId(host.id),
-                    name = players[host.playerId].name.value,
+                    playerNickname = PlayerNickname(
+                        (players[PlayerId(host.playerId)]?.name?.value ?: "")
+                    ),
                     position = Coordinates(host.coordinates.x, host.coordinates.y),
                     playerId = PlayerId(host.playerId)
                 )
@@ -50,16 +52,15 @@ object ParserDTO {
             nodes.add(
                 Router(
                     id = NodeId(router.id),
-                    name = "R${router.id}",
                     position = Coordinates(router.coordinates.x, router.coordinates.y),
                     bufferSize = mutableIntStateOf(router.bufferSize)
                 )
             )
         }
 
-        val edges = gameMapDTO.edges.mapIndexed { index, edgeDTO ->
+        val edges = gameMapDTO.edges.map { edgeDTO ->
             Edge(
-                id = EdgeId(index),
+                id = EdgeId(edgeDTO.id),
                 firstNodeId = NodeId(edgeDTO.from),
                 secondNodeId = NodeId(edgeDTO.to),
                 bandwidth = edgeDTO.weight
@@ -74,7 +75,7 @@ object ParserDTO {
             GameManager(
                 nodesList = nodes,
                 edgesList = edges,
-                playersList = players,
+                playersById = players,
                 serverId = serverId,
                 mapSize = mapSize,
                 localPlayerId = localPlayerId,

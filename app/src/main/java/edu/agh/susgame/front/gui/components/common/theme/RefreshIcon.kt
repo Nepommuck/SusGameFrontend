@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import edu.agh.susgame.R
@@ -21,7 +20,7 @@ fun RefreshIcon(
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
-                .requiredSize(110.dp)
+                .requiredSize(120.dp)
                 .padding(40.dp)
                 .align(Alignment.TopEnd)
                 .clickable {
@@ -29,11 +28,10 @@ fun RefreshIcon(
                 }
         ) {
             Image(
-                painter = painterResource(R.drawable.power),
+                painter = painterResource(R.drawable.refresh),
                 contentDescription = "Loading Animation",
                 modifier = Modifier
                     .fillMaxSize()
-                    .alpha(0.5f),
             )
         }
     }

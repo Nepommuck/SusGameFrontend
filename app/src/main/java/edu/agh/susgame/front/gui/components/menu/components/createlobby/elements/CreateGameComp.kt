@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import edu.agh.susgame.dto.rest.model.LobbyPin
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun CreateGameComp(
     gameName: String,
-    gamePin: String,
+    gamePin: LobbyPin?,
     selectedNumberOfPlayers: Int,
     lobbyService: LobbyService,
     navController: NavController
@@ -48,7 +49,7 @@ fun CreateGameComp(
         ),
         shape = RoundedCornerShape(16.dp)
     ) {
-        Text(text = Translation.Button.CREATE, style = TextStyler.TerminalM, color = Color.White)
+        Text(text = Translation.Button.CREATE, style = TextStyler.TerminalL, color = Color.White)
     }
 }
 
@@ -58,7 +59,7 @@ private fun createGameHandler(
     androidContext: Context,
     provider: LobbyService,
     navController: NavController,
-    gamePin: String,
+    gamePin: LobbyPin?,
     numOfPlayers: Int,
 ) {
     if (gameName == "") Toast.makeText(
@@ -89,7 +90,10 @@ private fun createGameHandler(
 
                     if (creationResult is CreateNewGameResult.Success) {
                         navController.navigate(
-                            MenuRoute.Lobby.routeWithArgument(lobbyId = creationResult.lobbyId),
+                            MenuRoute.Lobby.routeWithArgument(
+                                lobbyId = creationResult.lobbyId,
+                                lobbyPin = gamePin,
+                            ),
                         )
                     }
                 }

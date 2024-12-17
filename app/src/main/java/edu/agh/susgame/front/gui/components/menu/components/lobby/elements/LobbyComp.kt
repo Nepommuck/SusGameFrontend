@@ -27,7 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import edu.agh.susgame.dto.rest.model.Lobby
+import edu.agh.susgame.dto.rest.model.LobbyDetails
+import edu.agh.susgame.dto.rest.model.LobbyPin
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
@@ -51,7 +52,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LobbyComp(
-    lobbyInit: Lobby,
+    lobbyDetails: LobbyDetails,
+    lobbyPin: LobbyPin?,
     lobbyService: LobbyService,
     gameService: GameService,
     navController: NavController,
@@ -62,9 +64,10 @@ fun LobbyComp(
             LobbyManager(
                 lobbyService = lobbyService,
                 gameService = gameService,
-                lobbyId = lobbyInit.id,
-                name = lobbyInit.name,
-                maxNumOfPlayers = lobbyInit.maxNumOfPlayers,
+                lobbyId = lobbyDetails.id,
+                lobbyPin = lobbyPin,
+                name = lobbyDetails.name,
+                maxNumOfPlayers = lobbyDetails.maxNumOfPlayers,
             )
         )
     }
@@ -85,142 +88,158 @@ fun LobbyComp(
     }
 
     if (isGameReady) {
-        navController.navigate("${MenuRoute.Game.route}/${lobbyManager.lobbyId.value}")
+        navController.navigate(
+            MenuRoute.Game.routeWithArgument(lobbyId = lobbyManager.lobbyId)
+        )
     }
-
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.weight(0.1f))
-        Header(title = lobbyManager.name, style = TextStyler.TerminalXL)
-        Spacer(modifier = Modifier.weight(0.1f))
-
-        Row(modifier = Modifier.weight(2f)) {
-            Column(
+    Box(modifier = Modifier.fillMaxSize()) {
+        lobbyPin?.let {
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1.2f)
-                    .padding(PaddingL),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(
-                    modifier = Modifier
-                        .height(40.dp)
-                        .fillMaxWidth(0.5f),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "${Translation.Lobby.NUM_OF_PLAYERS}: ${lobbyManager.getNumberOfPlayers()}/${lobbyManager.maxNumOfPlayers}",
-                        style = TextStyler.TerminalM
-                    )
-                    RefreshIcon(onRefreshClicked = { lobbyManager.updateFromRest() })
-                }
-
-                LazyColumn(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(PaddingS),
-                    verticalArrangement = Arrangement.spacedBy(14.dp),
-                ) {
-                    items(lobbyManager.playersMap.toList()) { (_, player) ->
-                        PlayerRow(
-                            player = player,
-                            lobbyManager = lobbyManager,
-                        )
-                    }
-                }
-                Box(modifier = Modifier.weight(0.2f)) {
-                    LeaveButton(onClick = {
-                        handleLeaveButtonClick(
-                            navController,
-                            lobbyManager,
-                            isLeaveButtonLoading
-                        )
-                    })
-                }
-            }
-
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
                     .fillMaxSize()
                     .padding(PaddingXL),
-                horizontalAlignment = Alignment.CenterHorizontally
+                contentAlignment = Alignment.BottomCenter
             ) {
-                if (isColorBeingChanged) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.Black.copy(alpha = 0.3f))
-                    ) {
-                        ColorMenuComp(
-                            onColorSelected = { newColor ->
-                                lobbyManager.handlePlayerColorChange(newColor)
-                            })
-                    }
-                }
-                if (!lobbyState.hasPlayerJoined.value) {
-                    val isError = isNicknameError(currentNickname, playerNicknameInputValue)
-                    if (isError) {
-                        Text(
-                            text = Translation.Lobby.NICKNAME_ERROR_MESSAGE,
-                            color = Color.Red,
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        OutlinedTextField(
-                            value = playerNicknameInputValue,
-                            onValueChange = { newValue ->
-                                playerNicknameInputValue = newValue
-                                updateNicknameOrInvalidate(newValue) { validatedNicknameOrNull ->
-                                    currentNickname = validatedNicknameOrNull
-                                }
-                            },
-                            label = {
-                                Text(
-                                    text = Translation.Lobby.CHOOSE_NICKNAME,
-                                    style = TextStyler.TerminalS
-                                )
-                            },
-                            isError = isError,
-                            singleLine = true,
-                            textStyle = TextStyler.TerminalM.copy(textAlign = TextAlign.Center),
-                            modifier = Modifier
-                                .weight(3f)
-                                .padding(PaddingS)
-                        )
+                Text(text = "${Translation.Lobby.PIN}: ${it.value}", style = TextStyler.TerminalM)
+            }
+        }
 
-                        JoinButton(
-                            isJoinButtonLoading = isJoinButtonLoading.value,
-                            isEnabled = currentNickname != null,
-                            onClick = {
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    handleJoinButtonClick(
-                                        currentNickname = currentNickname,
-                                        lobbyManager = lobbyManager,
-                                        isJoinButtonLoading = isJoinButtonLoading,
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.weight(0.1f))
+            Header(title = lobbyManager.name, style = TextStyler.TerminalXL)
+            Spacer(modifier = Modifier.weight(0.1f))
+
+            Row(modifier = Modifier.weight(2f)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1.2f)
+                        .padding(PaddingL),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .height(40.dp)
+                            .fillMaxWidth(0.5f),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val currentPlayersText =
+                            "${lobbyManager.getNumberOfPlayers()}/${lobbyManager.maxNumOfPlayers}"
+                        Text(
+                            text = "${Translation.Lobby.NUM_OF_PLAYERS}: $currentPlayersText",
+                            style = TextStyler.TerminalL,
+                        )
+                        RefreshIcon(onRefreshClicked = { lobbyManager.updateFromRest() })
+                    }
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(PaddingS),
+                        verticalArrangement = Arrangement.spacedBy(14.dp),
+                    ) {
+                        items(lobbyManager.playersMap.toList()) { (_, player) ->
+                            PlayerRow(
+                                player = player,
+                                lobbyManager = lobbyManager,
+                            )
+                        }
+                    }
+                    Box(modifier = Modifier.weight(0.2f)) {
+                        LeaveButton(onClick = {
+                            handleLeaveButtonClick(
+                                navController,
+                                lobbyManager,
+                                isLeaveButtonLoading
+                            )
+                        })
+                    }
+                }
+
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxSize()
+                        .padding(PaddingXL),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (isColorBeingChanged) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.Black.copy(alpha = 0.3f))
+                        ) {
+                            ColorMenuComp(
+                                onColorSelected = { newColor ->
+                                    lobbyManager.handlePlayerColorChange(newColor)
+                                })
+                        }
+                    }
+                    if (!lobbyState.hasPlayerJoined.value) {
+                        val isError = isNicknameError(currentNickname, playerNicknameInputValue)
+                        if (isError) {
+                            Text(
+                                text = Translation.Lobby.NICKNAME_ERROR_MESSAGE,
+                                color = Color.Red,
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            OutlinedTextField(
+                                value = playerNicknameInputValue,
+                                onValueChange = { newValue ->
+                                    playerNicknameInputValue = newValue
+                                    updateNicknameOrInvalidate(newValue) { validatedNicknameOrNull ->
+                                        currentNickname = validatedNicknameOrNull
+                                    }
+                                },
+                                label = {
+                                    Text(
+                                        text = Translation.Lobby.CHOOSE_NICKNAME,
+                                        style = TextStyler.TerminalS
                                     )
+                                },
+                                isError = isError,
+                                singleLine = true,
+                                textStyle = TextStyler.TerminalM.copy(textAlign = TextAlign.Center),
+                                modifier = Modifier
+                                    .weight(3f)
+                                    .padding(PaddingS)
+                            )
+
+                            JoinButton(
+                                isJoinButtonLoading = isJoinButtonLoading.value,
+                                isEnabled = currentNickname != null,
+                                onClick = {
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        handleJoinButtonClick(
+                                            currentNickname = currentNickname,
+                                            lobbyManager = lobbyManager,
+                                            isJoinButtonLoading = isJoinButtonLoading,
+                                        )
+                                    }
+                                }
+                            )
+                        }
+                    }
+                    if (lobbyState.hasPlayerJoined.value) {
+                        StartButton(
+                            isEnabled = lobbyState.areAllPlayersReady.value && lobbyManager.getNumberOfPlayers() >= 1,
+                            onClick = {
+                                if (!isGameReady) {
+                                    gameService.sendStartGame()
                                 }
                             }
                         )
                     }
-                }
-                if (lobbyState.hasPlayerJoined.value) {
-                    StartButton(
-                        isEnabled = lobbyState.areAllPlayersReady.value && lobbyManager.getNumberOfPlayers() >= 2,
-                        onClick = {
-                            if (!isGameReady) {
-                                gameService.sendStartGame()
-                            }
-                        }
-                    )
                 }
             }
         }
@@ -250,13 +269,13 @@ fun handleLeaveButtonClick(
 
     if (!lobbyManager.lobbyState.hasPlayerJoined.value) {
         CoroutineScope(Dispatchers.Main).launch {
-            navController.navigate(MenuRoute.SearchLobby.route)
+            navController.navigate(MenuRoute.FindGame.route)
         }
     } else {
         lobbyManager.handleLocalPlayerLeave()
 
         CoroutineScope(Dispatchers.Main).launch {
-            navController.navigate(MenuRoute.SearchLobby.route)
+            navController.navigate(MenuRoute.FindGame.route)
         }
         isLeaveButtonLoading.value = false
     }

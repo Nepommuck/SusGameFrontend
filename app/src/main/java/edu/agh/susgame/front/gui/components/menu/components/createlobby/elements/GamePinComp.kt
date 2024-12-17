@@ -40,7 +40,7 @@ fun GamePinComp(
     ) {
         OutlinedTextField(
             label = {
-                Text(text = Translation.CreateGame.ENTER_GAME_PIN, style= TextStyler.TerminalS)
+                Text(text = Translation.CreateGame.ENTER_GAME_PIN, style = TextStyler.TerminalS)
             },
             visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
@@ -69,9 +69,9 @@ fun GamePinComp(
                 if (!it) onGamePinChange("")
             },
             colors = CheckboxDefaults.colors(
-                checkedColor = Color.Green.copy(alpha = 0.5f), // Kolor wypełnienia, gdy zaznaczone
-                uncheckedColor = Color.White.copy(alpha = 0.7f), // Kolor obramowania, gdy niezaznaczone
-                checkmarkColor = Color.White.copy(alpha = 0.7f) // Kolor "ptaszka"
+                checkedColor = Color.Green.copy(alpha = 0.5f),
+                uncheckedColor = Color.White.copy(alpha = 0.7f),
+                checkmarkColor = Color.White.copy(alpha = 0.7f)
             )
         )
     }

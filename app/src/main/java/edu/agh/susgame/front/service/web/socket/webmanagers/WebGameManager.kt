@@ -3,6 +3,7 @@ package edu.agh.susgame.front.service.web.socket.webmanagers
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.ServerSocketMessage
+import edu.agh.susgame.front.gui.components.common.graph.edge.EdgeId
 import edu.agh.susgame.front.gui.components.common.graph.node.NodeId
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion
 import edu.agh.susgame.front.managers.GameManager
@@ -60,6 +61,15 @@ class WebGameManager(
                 overheat = routerDTO.overheatLevel
             )
         }
+
+        decodedMessage.edges.forEach { edgeDTO ->
+            gameManager.updateEdge(
+                edgeId = EdgeId(edgeDTO.id),
+                upgradeCost = edgeDTO.upgradeCost,
+                packetsTransported = edgeDTO.packetsTransported
+            )
+        }
+
         gameManager.updateGameStatus(decodedMessage.gameStatus)
 
         gameManager.updateGameTime(decodedMessage.remainingSeconds)

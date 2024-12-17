@@ -32,7 +32,7 @@ fun LeaveButton(
                 ),
                 shape = RoundedCornerShape(16.dp)
             ) {
-                Text(text = Translation.Button.LEAVE, style = TextStyler.TerminalM)
+                Text(text = Translation.Button.LEAVE, style = TextStyler.TerminalL)
             }
         }
     }

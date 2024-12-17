@@ -1,8 +1,17 @@
 package edu.agh.susgame.front.gui.components.game.components.drawers
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -10,18 +19,21 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.managers.GameManager
 import kotlin.math.sqrt
 
-private const val CIRCLE_RADIUS = 50f
+private val OFFSET_BOX: Dp = 30.dp
+private val OFFSET_LABEL: Dp = 6.dp
+
 
 @Composable
 fun EdgeDrawer(gameManager: GameManager) {
     val density = LocalDensity.current
-
-
-    Canvas(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
         gameManager.edgesList.forEach { edge ->
 
             val startXY = gameManager.nodesById[edge.firstNodeId]
@@ -29,10 +41,13 @@ fun EdgeDrawer(gameManager: GameManager) {
 
             if (startXY != null && endXY != null) {
                 val startOffset = with(density) {
-                    Offset(startXY.position.x.dp.toPx(), startXY.position.y.dp.toPx())
+                    Offset(
+                        (startXY.position.x.dp + OFFSET_BOX).toPx(),
+                        startXY.position.y.dp.toPx()
+                    )
                 }
                 val endOffset = with(density) {
-                    Offset(endXY.position.x.dp.toPx(), endXY.position.y.dp.toPx())
+                    Offset((endXY.position.x.dp + OFFSET_BOX).toPx(), endXY.position.y.dp.toPx())
                 }
 
                 val dx = endOffset.x - startOffset.x
@@ -43,7 +58,7 @@ fun EdgeDrawer(gameManager: GameManager) {
                 val unitX = dx / length
                 val unitY = dy / length
 
-                val offset = 50f
+                val offset = 70f
 
                 val newStartOffset = Offset(
                     startOffset.x + unitX * offset,
@@ -55,25 +70,35 @@ fun EdgeDrawer(gameManager: GameManager) {
                     endOffset.y - unitY * offset
                 )
 
-                // Rysuj główną linię
+
                 val path = Path().apply {
                     moveTo(newStartOffset.x, newStartOffset.y)
                     lineTo(newEndOffset.x, newEndOffset.y)
                 }
-
-                drawPath(
-                    path = path,
-                    color = Color.Gray,
-                    style = Stroke(
-                        width = 5f,
-                        pathEffect = PathEffect.dashPathEffect(
-                            floatArrayOf(10f, 7f),
-                            0f
+                Canvas(modifier = Modifier.fillMaxSize()) {
+                    drawPath(
+                        path = path,
+                        color = Color.Gray,
+                        style = Stroke(
+                            width = 5f,
+                            pathEffect = PathEffect.dashPathEffect(
+                                intervals = floatArrayOf(10f, 7f),
+                                phase = 0f,
+                            )
                         )
                     )
-                )
+                }
 
-                // Rysuj linie graczy
+                val leftX = (newStartOffset.x / density.density).dp
+                val upY = (newEndOffset.y / density.density).dp
+
+                val rightX = (newEndOffset.x / density.density).dp
+                val downY = (newStartOffset.y / density.density).dp
+
+                val middleX = ((leftX + rightX) / 2) - OFFSET_LABEL
+                val middleY = (downY + upY) / 2 - OFFSET_LABEL
+
+
                 edge.playersIdsUsingEdge.forEachIndexed { index, playerId ->
                     gameManager.playersById[playerId]?.color?.let { color ->
 
@@ -93,17 +118,35 @@ fun EdgeDrawer(gameManager: GameManager) {
                             moveTo(playerStartOffset.x, playerStartOffset.y)
                             lineTo(playerEndOffset.x, playerEndOffset.y)
                         }
-
-                        drawPath(
-                            path = playerPath,
-                            color = color.value,
-                            style = Stroke(
-                                width = 7f,
-                                pathEffect = PathEffect.dashPathEffect(
-                                    floatArrayOf(10f, 7f),
-                                    0f
+                        Canvas(modifier = Modifier.fillMaxSize()) {
+                            drawPath(
+                                path = playerPath,
+                                color = color.value,
+                                style = Stroke(
+                                    width = 7f,
+                                    pathEffect = PathEffect.dashPathEffect(
+                                        intervals = floatArrayOf(10f, 7f),
+                                        phase = 0f
+                                    )
                                 )
                             )
+                        }
+                    }
+                }
+                if (gameManager.gameState.areEdgesBandwidthShown.value) {
+                    Row(
+                        modifier = Modifier
+                            .offset(middleX, middleY)
+                            .background(Color.Black, shape = RoundedCornerShape(8.dp))
+                            .height(20.dp),
+                        horizontalArrangement = Arrangement.Absolute.Left,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "${edge.packetsTransported.intValue}",
+                            style = TextStyler.TerminalM,
+                            textAlign = TextAlign.Center,
+                            color = Color.White.copy(alpha = 0.8f)
                         )
                     }
                 }

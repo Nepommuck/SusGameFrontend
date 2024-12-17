@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.ui.graphics.Color
 import edu.agh.susgame.dto.rest.model.PlayerId
 import edu.agh.susgame.dto.rest.model.PlayerNickname
 import edu.agh.susgame.dto.socket.common.GameStatus
@@ -27,7 +28,7 @@ import edu.agh.susgame.front.service.interfaces.GameService.SimpleMessage
 class GameManager(
     val nodesList: List<Node>,
     val edgesList: List<Edge>,
-    val playersList: List<PlayerLobby>,
+    val playersById: Map<PlayerId, PlayerLobby>,
     val serverId: NodeId,
     val mapSize: Coordinates,
     val criticalBufferOverheatLevel: Int,
@@ -36,7 +37,7 @@ class GameManager(
     private val gameService: GameService,
 ) {
     // Shared game state
-    val gameState = GameStateManager()
+    val gameState = GameStateManager(mapSize)
 
     val quizManager = QuizManager(gameService)
 
@@ -48,12 +49,11 @@ class GameManager(
 
     // ATTRIBUTES - WITH INIT
     private val playerIdByHostId: Map<NodeId, PlayerId> = initPlayerIdByHostId()
-    private val edgesById: Map<EdgeId, Edge> = initEdgesById()
+    private val edgesById: SnapshotStateMap<EdgeId, Edge> = initEdgesById()
     private val nodesIdsToEdgeId: Map<Pair<NodeId, NodeId>, EdgeId> = initNodesIdsToEdgeId()
     private val server: Server = initServer()
     val hostIdByPlayerId: Map<PlayerId, NodeId> = initHostIdByPlayerId()
     val nodesById: Map<NodeId, Node> = initNodesById()
-    val playersById: Map<PlayerId, PlayerLobby> = initPlayersById()
 
 
     init {
@@ -98,9 +98,18 @@ class GameManager(
     }
 
     fun updatePath(hostId: NodeId, route: List<Int>) {
+        clearRouters(playerIdByHostId[hostId])
+        route.dropLast(1).forEach {
+            playerIdByHostId[hostId]?.let { playerId ->
+                (nodesById[NodeId(it)] as? Router?)?.playersSet?.add(
+                    playerId
+                )
+            }
+        }
         if (playerIdByHostId[hostId] != localPlayerId) {
             clearEdges(playerIdByHostId[hostId])
             val path = listOf(hostId.value) + route
+
             path.zipWithNext { host1, host2 ->
                 updateEdge(
                     NodeId(host1), NodeId(host2), playerIdByHostId[hostId]
@@ -115,6 +124,12 @@ class GameManager(
 
     fun updateGameStatus(status: GameStatus) {
         gameState.gameStatus.value = status
+    }
+
+    fun updateEdge(edgeId: EdgeId, upgradeCost: Int, packetsTransported: Int) {
+        println("Updating edge ${edgeId.value}")
+        edgesById[edgeId]?.packetsTransported?.intValue = packetsTransported
+        edgesById[edgeId]?.upgradeCost?.intValue = upgradeCost
     }
 
     // HANDLE GUI INPUT
@@ -158,6 +173,9 @@ class GameManager(
     fun getPlayerTokens(playerId: PlayerId): MutableIntState = playersById[playerId]?.tokens
         ?: throw IllegalStateException("Player ${playerId.value} doesn't exist in the map")
 
+    fun getPlayerColor(playerId: PlayerId): Color = playersById[playerId]?.color?.value
+        ?: throw IllegalStateException("Player ${playerId.value} doesn't exist in the map")
+
     // UTILS
     fun addNodeToPathBuilder(nodeId: NodeId) {
         if (pathBuilder.getCurrentNumberOfNodes() == 0) {
@@ -191,6 +209,13 @@ class GameManager(
         }
     }
 
+    private fun clearRouters(playerId: PlayerId?) {
+        playerId?.let {
+            nodesList.filterIsInstance<Router>()
+                .forEach { router -> router.playersSet.remove(it) }
+        }
+    }
+
     // PRIVATE
     private fun getEdgeId(from: NodeId, to: NodeId): EdgeId? = nodesIdsToEdgeId[Pair(from, to)]
     private fun updateEdge(from: NodeId, to: NodeId, playerId: PlayerId?) {
@@ -215,12 +240,8 @@ class GameManager(
         return nodesList.associateBy { it.id }
     }
 
-    private fun initEdgesById(): Map<EdgeId, Edge> {
-        return edgesList.associateBy { it.id }
-    }
-
-    private fun initPlayersById(): Map<PlayerId, PlayerLobby> {
-        return playersList.associateBy { it.id }
+    private fun initEdgesById(): SnapshotStateMap<EdgeId, Edge> {
+        return mutableStateMapOf(*edgesList.associateBy { it.id }.toList().toTypedArray())
     }
 
     private fun initNodesIdsToEdgeId(): Map<Pair<NodeId, NodeId>, EdgeId> {
@@ -243,8 +264,19 @@ class GameManager(
             val neighbouringHostEdge = edgesList.first { edge ->
                 edge.firstNodeId == hostId || edge.secondNodeId == hostId
             }
-            (initNodesById()[hostId] as? Host?)?.maxPacketsToSend?.intValue =
-                neighbouringHostEdge.bandwidth
+
+            val routerId = if (neighbouringHostEdge.firstNodeId != hostId) {
+                neighbouringHostEdge.firstNodeId
+            } else {
+                neighbouringHostEdge.secondNodeId
+            }
+
+            val router = initNodesById()[routerId] as? Router
+
+            router?.let {
+                (initNodesById()[hostId] as? Host)?.maxPacketsToSend = it.bufferSize
+            }
         }
     }
+
 }

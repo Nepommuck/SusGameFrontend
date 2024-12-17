@@ -6,10 +6,12 @@ import edu.agh.susgame.dto.rest.games.model.GetAllGamesApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameApiResult
 import edu.agh.susgame.dto.rest.games.model.GetGameMapApiResult
 import edu.agh.susgame.dto.rest.model.GameMapDTO
-import edu.agh.susgame.dto.rest.model.Lobby
 import edu.agh.susgame.dto.rest.model.LobbyId
+import edu.agh.susgame.dto.rest.model.LobbyPin
+import edu.agh.susgame.dto.rest.model.LobbyRow
 import edu.agh.susgame.front.managers.LobbyManager
 import edu.agh.susgame.front.service.interfaces.CreateNewGameResult
+import edu.agh.susgame.front.service.interfaces.GetGameDetailsResult
 import edu.agh.susgame.front.service.interfaces.LobbyService
 import java.util.concurrent.CompletableFuture
 
@@ -21,7 +23,7 @@ class WebLobbyService(private val gamesRest: GamesRest) : LobbyService {
         this.lobbyManager = lobbyManager
     }
 
-    override fun getAll(): CompletableFuture<Map<LobbyId, Lobby>> =
+    override fun getAll(): CompletableFuture<Map<LobbyId, LobbyRow>> =
         gamesRest.getAllGames().thenApply { response ->
             when (response) {
                 GetAllGamesApiResult.Error ->
@@ -34,14 +36,16 @@ class WebLobbyService(private val gamesRest: GamesRest) : LobbyService {
             }
         }
 
-    override fun getById(lobbyId: LobbyId): CompletableFuture<Lobby?> =
-        gamesRest.getGame(lobbyId).thenApply { response ->
+    override fun getLobbyDetails(
+        lobbyId: LobbyId,
+        lobbyPin: LobbyPin?,
+    ): CompletableFuture<GetGameDetailsResult> =
+        gamesRest.getGameDetails(lobbyId, lobbyPin).thenApply { response ->
             when (response) {
-                GetGameApiResult.DoesNotExist -> null
-                GetGameApiResult.OtherError -> null
-                is GetGameApiResult.Success -> response.lobby
+                is GetGameApiResult.Success -> GetGameDetailsResult.Success(response.lobby)
+                GetGameApiResult.InvalidPin -> GetGameDetailsResult.InvalidPin
+                else -> GetGameDetailsResult.OtherError
             }
-
         }
 
     override fun getGameMap(lobbyId: LobbyId): CompletableFuture<GameMapDTO?> =
@@ -54,7 +58,7 @@ class WebLobbyService(private val gamesRest: GamesRest) : LobbyService {
 
     override fun createNewGame(
         gameName: String,
-        gamePin: String,
+        gamePin: LobbyPin?,
         maxNumberOfPlayers: Int,
     ): CompletableFuture<CreateNewGameResult> =
         gamesRest.createGame(gameName, maxNumberOfPlayers, gamePin)
