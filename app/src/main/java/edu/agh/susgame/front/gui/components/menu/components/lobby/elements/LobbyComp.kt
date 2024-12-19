@@ -36,6 +36,7 @@ import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.theme.PaddingXL
 import edu.agh.susgame.front.gui.components.common.theme.RefreshIcon
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
+import edu.agh.susgame.front.gui.components.common.util.PreventNavigationBack
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.ColorMenuComp
 import edu.agh.susgame.front.gui.components.menu.components.lobby.elements.components.PlayerRow
@@ -92,6 +93,9 @@ fun LobbyComp(
             MenuRoute.Game.routeWithArgument(lobbyId = lobbyManager.lobbyId)
         )
     }
+
+    PreventNavigationBack(navigationActive = !lobbyState.hasPlayerJoined.value)
+
     Box(modifier = Modifier.fillMaxSize()) {
         lobbyPin?.let {
             Box(
