@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
+import edu.agh.susgame.front.gui.components.common.theme.PaddingS
+import edu.agh.susgame.front.gui.components.common.theme.PaddingXS
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion.QuizAnswer
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.components.QuizAnswerBlock
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.components.QuizQuestionBlock
@@ -28,14 +30,14 @@ fun QuizQuestionView(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(PaddingL),
+            .padding(PaddingXS),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Box(
             modifier = Modifier
                 .weight(1.5f)
-                .padding(PaddingL)
+                .padding(PaddingXS)
         ) {
             QuizQuestionBlock(question = quizQuestion.question)
         }
@@ -43,7 +45,7 @@ fun QuizQuestionView(
         Box(
             modifier = Modifier
                 .weight(1f)
-                .padding(PaddingL)
+                .padding(PaddingXS)
         ) {
             QuizAnswersRow(
                 answers = Pair(answers[0], answers[1]),
@@ -54,7 +56,7 @@ fun QuizQuestionView(
         Box(
             modifier = Modifier
                 .weight(1f)
-                .padding(PaddingL)
+                .padding(PaddingXS)
         ) {
             QuizAnswersRow(
                 answers = Pair(answers[2], answers[3]),
