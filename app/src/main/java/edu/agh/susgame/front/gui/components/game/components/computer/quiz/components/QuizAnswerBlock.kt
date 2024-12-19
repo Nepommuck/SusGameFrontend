@@ -54,7 +54,6 @@ fun QuizAnswerBlock(
     }
 
     QuizBlock(
-        widthPercentage = 23.0,
         gradient = getButtonState().blockGradient,
         onClick = {
             if (answerState is NotAnswered) {
@@ -66,7 +65,7 @@ fun QuizAnswerBlock(
             text = answer.answer,
             color = getButtonState().textColor,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(3.dp),
+            modifier = Modifier.padding(horizontal = 10.dp),
             fontSize = 10.sp
         )
     }
