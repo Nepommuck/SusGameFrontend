@@ -79,6 +79,7 @@ internal fun GameGraphComponent(
 
         NavIcons(
             isComputerVisible = gameState.isComputerViewVisible,
+            gameManager = gameManager
         )
 
     }
