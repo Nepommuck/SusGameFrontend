@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import edu.agh.susgame.front.gui.components.common.util.PreventNavigationBack
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.game.components.GameGraphComponent
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
@@ -31,6 +32,8 @@ fun GameView(
         gameManager.value = lobbyManager.gameManager.value
         isLoading.value = false
     }
+
+    PreventNavigationBack()
 
     Column {
         if (isLoading.value) {
