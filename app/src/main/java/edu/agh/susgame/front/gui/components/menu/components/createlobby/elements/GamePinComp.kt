@@ -31,7 +31,7 @@ fun GamePinComp(
     isGamePinEnabled: Boolean,
     onGamePinChange: (String) -> Unit,
     onShowPasswordChange: (Boolean) -> Unit,
-    onGamePinEnabledChange: (Boolean) -> Unit
+    onGamePinEnabledChange: (Boolean) -> Unit,
 ) {
     Row(
         Modifier.fillMaxWidth(),

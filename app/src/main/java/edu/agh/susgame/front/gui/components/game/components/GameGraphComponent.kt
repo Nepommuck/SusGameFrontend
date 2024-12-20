@@ -1,14 +1,19 @@
 package edu.agh.susgame.front.gui.components.game.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -59,11 +64,22 @@ internal fun GameGraphComponent(
             }
 
         if (gameState.isComputerViewVisible.value) {
-            ComputerComponent(gameService = gameService, gameManager = gameManager)
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight(0.7f)
+                        .fillMaxWidth(0.98f)
+                        .clip(RoundedCornerShape(50.dp))
+                        .border(4.dp, Color.Black, RoundedCornerShape(50.dp))
+                ) {
+                    ComputerComponent(gameService = gameService, gameManager = gameManager)
+                }
+            }
         }
 
         NavIcons(
             isComputerVisible = gameState.isComputerViewVisible,
+            gameManager = gameManager
         )
 
     }

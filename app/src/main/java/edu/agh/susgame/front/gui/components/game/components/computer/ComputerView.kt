@@ -30,7 +30,7 @@ fun ComputerComponent(
         Box(modifier = Modifier.weight(1f)) {
             DesktopView(gameManager)
         }
-        Box(modifier = Modifier.weight(1f)) {
+        Box(modifier = Modifier.weight(5f)) {
             when (computerState.value) {
                 ComputerState.NothingOpened ->
                     Box {}
