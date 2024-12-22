@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import edu.agh.susgame.front.gui.components.common.theme.PaddingL
-import edu.agh.susgame.front.gui.components.common.theme.PaddingS
 import edu.agh.susgame.front.gui.components.common.theme.PaddingXS
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion.QuizAnswer
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.components.QuizAnswerBlock

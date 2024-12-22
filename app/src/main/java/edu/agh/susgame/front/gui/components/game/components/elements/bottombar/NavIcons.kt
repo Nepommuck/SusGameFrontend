@@ -56,7 +56,9 @@ fun NavIcons(
                 .clickable {
                     isComputerVisible.value = true
                 },
-            colorFilter = if (gameManager.quizManager.quizState.value is QuizState.QuestionAvailable) {
+            colorFilter = if (
+                gameManager.quizManager.quizState.value is QuizState.QuestionAvailable
+            ) {
                 ColorFilter.lighting(
                     multiply = Color(0xFFFFA500),
                     add = Color.Black

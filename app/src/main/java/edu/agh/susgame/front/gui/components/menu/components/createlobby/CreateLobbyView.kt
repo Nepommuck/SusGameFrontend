@@ -151,20 +151,6 @@ fun CreateLobbyView(
                         }
                     }
 
-//                    val audioId = when (selectedNumberOfPlayers) {
-//                        2 -> R.raw.uncanny_2
-//                        3 -> R.raw.uncanny_3
-//                        4 -> R.raw.uncanny_4
-//                        5 -> R.raw.uncanny_5
-//                        6 -> R.raw.uncanny_6
-//                        else -> {
-//                            R.raw.uncanny_2
-//                        }
-//                    }
-//                    val mediaPlayer = MediaPlayer.create(LocalContext.current, audioId)
-//                    mediaPlayer.start()
-
-
                     if (howManyPinEnabled > 15) {
                         Box(modifier = Modifier.fillMaxSize()) {
                             Image(

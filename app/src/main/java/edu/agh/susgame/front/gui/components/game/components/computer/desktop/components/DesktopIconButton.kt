@@ -34,7 +34,9 @@ fun DesktopIconButton(
             Image(
                 painter = painter,
                 contentDescription = imageDescription,
-                modifier = Modifier.fillMaxSize().padding(PaddingS),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(PaddingS),
             )
         }
     }
