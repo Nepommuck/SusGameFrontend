@@ -15,6 +15,7 @@ import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQu
 import edu.agh.susgame.front.gui.components.game.components.computer.quiz.QuizQuestion.QuizQuestionId
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.LobbyManager
+import edu.agh.susgame.front.managers.state.GameStateManager
 import edu.agh.susgame.front.service.interfaces.GameService
 import edu.agh.susgame.front.service.web.IpAddressProvider
 import edu.agh.susgame.front.service.web.rest.AbstractRest
@@ -40,7 +41,9 @@ class WebGameService(
     private val listener = GameWebSocketListener()
 
     private var socket: WebSocket? = null
+    private var gameState: GameStateManager? = null
     private var currentLobbyId: LobbyId? = null
+    private var currentLobbyPin: LobbyPin? = null
     private var playerNickname: PlayerNickname? = null
 
     override val messagesFlow = listener.messagesFlow
@@ -48,20 +51,20 @@ class WebGameService(
     init {
         CoroutineScope(Dispatchers.Main).launch {
             listener.socketOpenedFlow.collect { socket ->
+                gameState?.isPlayerDisconnected?.value = false
                 this@WebGameService.socket = socket
             }
         }
         CoroutineScope(Dispatchers.Main).launch {
             listener.socketClosedFlow.collect {
                 socket = null
-                currentLobbyId = null
-                playerNickname = null
             }
         }
     }
 
     override fun initGameManager(gameManager: GameManager) {
         listener.initWebGameManager(gameManager)
+        gameState = gameManager.gameState
     }
 
     override fun initLobbyManager(lobbyManager: LobbyManager) {
@@ -75,27 +78,23 @@ class WebGameService(
     override fun joinLobby(
         lobbyId: LobbyId,
         lobbyPin: LobbyPin?,
-        nickname: PlayerNickname
+        nickname: PlayerNickname,
     ): CompletableFuture<Unit> =
-        CompletableFuture.supplyAsync {
-            val url = baseUrlBuilder()
-                .addPathSegment("join")
-                .addQueryParameter("gameId", lobbyId.value.toString())
-                .apply {
-                    if (lobbyPin != null) {
-                        addQueryParameter("gamePin", lobbyPin.value)
-                    }
-                }.addQueryParameter("playerName", nickname.value)
-                .build()
+        connectToWebSocket(lobbyId, lobbyPin, nickname)
 
-            val request = Request.Builder()
-                .url(url)
-                .build()
+    override fun rejoinLobby(playerId: PlayerId): CompletableFuture<Unit> {
+        val currentLobbyIdSnapshot = currentLobbyId
+        val playerNicknameSnapshot = playerNickname
 
-            client.newWebSocket(request, listener)
-            currentLobbyId = lobbyId
-            playerNickname = nickname
-        }
+        return if (currentLobbyIdSnapshot == null || playerNicknameSnapshot == null)
+            throw IllegalStateException("No lobby was recently joined")
+        else connectToWebSocket(
+            lobbyId = currentLobbyIdSnapshot,
+            lobbyPin = currentLobbyPin,
+            nickname = playerNicknameSnapshot,
+            playerId = playerId,
+        )
+    }
 
     override fun leaveLobby(): CompletableFuture<Unit> =
         CompletableFuture.supplyAsync {
@@ -186,6 +185,35 @@ class WebGameService(
                 answer = answerId.value,
             )
         )
+    }
+
+    private fun connectToWebSocket(
+        lobbyId: LobbyId,
+        lobbyPin: LobbyPin?,
+        nickname: PlayerNickname,
+        playerId: PlayerId? = null,
+    ): CompletableFuture<Unit> = CompletableFuture.supplyAsync {
+        val url = baseUrlBuilder()
+            .addPathSegment("join")
+            .addQueryParameter("gameId", lobbyId.value.toString())
+            .addQueryParameter("playerName", nickname.value)
+            .apply {
+                if (lobbyPin != null) {
+                    addQueryParameter("gamePin", lobbyPin.value)
+                }
+                if (playerId != null) {
+                    addQueryParameter("playerId", playerId.value.toString())
+                }
+            }.build()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        client.newWebSocket(request, listener)
+        currentLobbyId = lobbyId
+        currentLobbyPin = lobbyPin
+        playerNickname = nickname
     }
 
     @OptIn(ExperimentalSerializationApi::class)

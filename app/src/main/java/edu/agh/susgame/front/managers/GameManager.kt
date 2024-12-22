@@ -127,7 +127,6 @@ class GameManager(
     }
 
     fun updateEdge(edgeId: EdgeId, upgradeCost: Int, packetsTransported: Int) {
-        println("Updating edge ${edgeId.value}")
         edgesById[edgeId]?.packetsTransported?.intValue = packetsTransported
         edgesById[edgeId]?.upgradeCost?.intValue = upgradeCost
     }

@@ -50,8 +50,10 @@ interface GameService {
     fun joinLobby(
         lobbyId: LobbyId,
         lobbyPin: LobbyPin?,
-        nickname: PlayerNickname
+        nickname: PlayerNickname,
     ): CompletableFuture<Unit>
+
+    fun rejoinLobby(playerId: PlayerId): CompletableFuture<Unit>
 
     fun leaveLobby(): CompletableFuture<Unit>
 }

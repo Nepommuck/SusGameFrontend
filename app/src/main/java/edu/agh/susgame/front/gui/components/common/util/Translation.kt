@@ -8,6 +8,7 @@ object Translation {
         const val EDIT = "Edytuj"
         const val ACCEPT = "Zatwierdź"
         const val BACK_TO_MAIN_MENU = "Wróć do menu głównego"
+        const val TRY_RECONNECTING = "Spróbuj połączyć ponownie"
         const val LEAVE = "Opuść"
         const val JOIN = "Dołącz"
         const val PLAY = "Rozpocznij grę!"
@@ -63,6 +64,11 @@ object Translation {
         const val ACCEPT_PATH = "Zatwierdź"
         const val ABORT_PATH = "Anuluj"
         const val ROUTING = "Routing"
+        val DISCONNECTED_FROM_GAME_MESSAGE = """
+            |Utracono połączenie z grą
+            |Sprawdź połączenie internetowe i spróbuj połączyć się ponownie
+            |Możesz też wrócić do menu głównego
+        """.trimMargin()
     }
 
     object Error {

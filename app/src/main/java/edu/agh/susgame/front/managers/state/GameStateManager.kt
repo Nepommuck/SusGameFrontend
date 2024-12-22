@@ -29,4 +29,6 @@ class GameStateManager(mapSize: Coordinates) {
 
     val areRouterBuffersShown: MutableState<Boolean> = mutableStateOf(true)
     val areEdgesBandwidthShown: MutableState<Boolean> = mutableStateOf(true)
+
+    val isPlayerDisconnected: MutableState<Boolean> = mutableStateOf(false)
 }
