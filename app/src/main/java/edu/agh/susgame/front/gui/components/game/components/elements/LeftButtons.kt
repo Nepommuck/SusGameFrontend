@@ -41,7 +41,7 @@ fun LeftButtons(gameStateManager: GameStateManager) {
                     .alpha(
                         if (gameStateManager.areRouterBuffersShown.value) 1f else 0.3f
                     )
-                    .padding(5.dp)
+                    .padding(6.dp)
             )
             Image(
                 painter = painterResource(id = R.drawable.edges),
@@ -56,7 +56,7 @@ fun LeftButtons(gameStateManager: GameStateManager) {
                     .alpha(
                         if (gameStateManager.areEdgesBandwidthShown.value) 1f else 0.3f
                     )
-                    .padding(5.dp)
+                    .padding(6.dp)
             )
         }
     }

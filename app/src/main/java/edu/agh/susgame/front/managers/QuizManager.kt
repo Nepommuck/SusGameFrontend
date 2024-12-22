@@ -81,12 +81,9 @@ class QuizManager(
 
     private fun awaitAndLoadNewQuestionIfAvailable() {
         CoroutineScope(Dispatchers.Main).launch {
-            delay(quizConfig.loadNextQuestionCooldown / 2)
-
             if (_quizState.value is QuizState.QuestionAvailable) {
                 return@launch
             }
-
             availableQuestions.poll()?.let { nextQuestion ->
                 _quizState.value = QuizState.QuestionAvailable(
                     question = nextQuestion,

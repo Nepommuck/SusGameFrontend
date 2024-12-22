@@ -20,7 +20,7 @@ class GameStateManager(mapSize: Coordinates) {
     )
 
     val gameStatus: MutableState<GameStatus> = mutableStateOf(GameStatus.WAITING)
-    val computerState: MutableState<ComputerState> = mutableStateOf(ComputerState.NothingOpened)
+    val computerState: MutableState<ComputerState> = mutableStateOf(ComputerState.ChatOpened)
     val currentlyInspectedNode: MutableState<Node?> = mutableStateOf(null)
 
     val isPathBeingChanged: MutableState<Boolean> = mutableStateOf(false)

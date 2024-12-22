@@ -1,5 +1,7 @@
 package edu.agh.susgame.front.gui.components.menu.components.createlobby
 
+import android.media.MediaPlayer
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -15,7 +18,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
+import edu.agh.susgame.R
 import edu.agh.susgame.dto.rest.model.LobbyPin
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.MenuBackground
@@ -32,7 +39,7 @@ import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.LobbyService
 
 
-private const val DEFAULT_PLAYERS_AMOUNT = 4
+private const val DEFAULT_PLAYERS_AMOUNT = 2
 
 @Composable
 fun CreateLobbyView(
@@ -43,7 +50,35 @@ fun CreateLobbyView(
     var showPassword by remember { mutableStateOf(value = false) }
     var selectedNumberOfPlayers by remember { mutableIntStateOf(DEFAULT_PLAYERS_AMOUNT) }
     var isGamePinEnabled by remember { mutableStateOf(false) }
+    var howManyPinEnabled by remember { mutableIntStateOf(0) }
     var gamePinInputValue by remember { mutableStateOf("") }
+
+    val audioId = when (selectedNumberOfPlayers) {
+        2 -> R.raw.uncanny_2
+        3 -> R.raw.uncanny_3
+        4 -> R.raw.uncanny_4
+        5 -> R.raw.uncanny_5
+        6 -> R.raw.uncanny_6
+        else -> {
+            R.raw.uncanny_2
+        }
+    }
+
+    val context = LocalContext.current
+
+    LaunchedEffect(selectedNumberOfPlayers) {
+        if (howManyPinEnabled > 15) {
+            val mediaPlayer = MediaPlayer.create(context, audioId)
+
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.stop()
+                mediaPlayer.prepareAsync()
+            }
+
+            mediaPlayer.start()
+        }
+
+    }
 
     MenuBackground()
 
@@ -81,7 +116,10 @@ fun CreateLobbyView(
                         isGamePinEnabled = isGamePinEnabled,
                         onGamePinChange = { gamePinInputValue = it },
                         onShowPasswordChange = { showPassword = it },
-                        onGamePinEnabledChange = { isGamePinEnabled = it }
+                        onGamePinEnabledChange = {
+                            isGamePinEnabled = it
+                            howManyPinEnabled += 1
+                        },
                     )
                     PlayersNumberComp(
                         numOfPlayers = selectedNumberOfPlayers,
@@ -102,7 +140,28 @@ fun CreateLobbyView(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // TODO Add some content here
+                    val resourceId = when (selectedNumberOfPlayers) {
+                        2 -> R.drawable.uncanny2
+                        3 -> R.drawable.uncanny3
+                        4 -> R.drawable.uncanny4
+                        5 -> R.drawable.uncanny5
+                        6 -> R.drawable.uncanny6
+                        else -> {
+                            R.drawable.uncanny2
+                        }
+                    }
+
+                    if (howManyPinEnabled > 15) {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Image(
+                                painter = painterResource(id = resourceId),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+                    }
                 }
             }
         }
