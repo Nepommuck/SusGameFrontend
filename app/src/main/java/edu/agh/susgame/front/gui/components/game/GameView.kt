@@ -2,7 +2,6 @@ package edu.agh.susgame.front.gui.components.game
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -15,6 +14,7 @@ import androidx.navigation.NavController
 import edu.agh.susgame.front.gui.components.common.util.PreventNavigationBack
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.game.components.GameGraphComponent
+import edu.agh.susgame.front.gui.components.game.components.elements.rejoin.RejoinGameView
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.LobbyManager
@@ -40,19 +40,7 @@ fun GameView(
         if (isLoading.value) {
             Text(text = "${Translation.Button.LOADING}...")
         } else if (gameManager.value?.gameState?.isPlayerDisconnected?.value == true) {
-            Row {
-                Button(onClick = {
-                    menuNavController.navigate(MenuRoute.MainMenu.route)
-                }) { Text("EXIT") }
-                Button(
-                    enabled = lobbyManager.localPlayerId != null,
-                    onClick = {
-                        lobbyManager.localPlayerId?.let { playerId ->
-                            gameService.rejoinLobby(playerId)
-                        }
-                    },
-                ) { Text("CONNECT") }
-            }
+            RejoinGameView(lobbyManager, gameService, menuNavController)
         } else {
             gameManager.value?.let {
                 Box(modifier = Modifier.fillMaxSize()) {
