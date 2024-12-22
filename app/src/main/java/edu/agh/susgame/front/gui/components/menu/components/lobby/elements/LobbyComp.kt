@@ -236,9 +236,8 @@ fun LobbyComp(
                     }
                     if (lobbyState.hasPlayerJoined.value) {
                         StartButton(
-                            // TODO GAME-134
                             isEnabled = lobbyState.areAllPlayersReady.value &&
-                                    lobbyManager.getNumberOfPlayers() >= 1,
+                                    lobbyManager.getNumberOfPlayers() > 1,
                             onClick = {
                                 if (!isGameReady) {
                                     gameService.sendStartGame()
