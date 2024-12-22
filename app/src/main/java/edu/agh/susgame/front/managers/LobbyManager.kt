@@ -39,15 +39,25 @@ class LobbyManager(
             .getLobbyDetails(lobbyId, lobbyPin)
             .thenApply { result ->
                 when (result) {
-                    is Success -> result.lobbyDetails.playersWaiting.forEach { player ->
-                        updatePlayerJoins(
-                            playerId = player.id,
-                            nickname = player.nickname,
-                            color = player.color?.let {
-                                Color(it.decimalRgbaValue.toULong())
-                            } ?: ColorProvider.DEFAULT_COLOR,
-                            readiness = if (player.readiness) PlayerStatus.READY else PlayerStatus.NOT_READY
+                    is Success -> {
+                        val playersWaiting = result.lobbyDetails.playersWaiting
+
+                        playersWaiting.forEach { player ->
+                            updatePlayerJoins(
+                                playerId = player.id,
+                                nickname = player.nickname,
+                                color = player.color?.let {
+                                    Color(it.decimalRgbaValue.toULong())
+                                } ?: ColorProvider.DEFAULT_COLOR,
+                                readiness =
+                                if (player.readiness) PlayerStatus.READY
+                                else PlayerStatus.NOT_READY,
+                            )
+                        }
+                        removeNoLongerPresentPlayers(
+                            presentPlayers = playersWaiting.map { it.id },
                         )
+                        updateAllPlayersAreReadyValue()
                     }
 
                     else -> {}
@@ -67,7 +77,6 @@ class LobbyManager(
             color = mutableStateOf(color),
             status = mutableStateOf(readiness)
         )
-        updateAllPlayersAreReadyValue()
     }
 
     fun updatePlayerColor(playerId: PlayerId, color: Color) {
@@ -152,12 +161,24 @@ class LobbyManager(
         }
     }
 
+    fun handleSocketDisconnect() {
+        gameManager.value?.gameState?.isPlayerDisconnected?.value = true
+    }
+
     // PRIVATE
     private fun getPlayerStatus(id: PlayerId) = playersMap[id]?.status?.value
 
     private fun updateAllPlayersAreReadyValue() {
         lobbyState.areAllPlayersReady.value = playersMap.values.all { player ->
             player.status.value == PlayerStatus.READY
+        }
+    }
+
+    private fun removeNoLongerPresentPlayers(presentPlayers: List<PlayerId>) {
+        playersMap.toMap().keys.forEach { playerId ->
+            if (!presentPlayers.contains(playerId)) {
+                playersMap.remove(playerId)
+            }
         }
     }
 }

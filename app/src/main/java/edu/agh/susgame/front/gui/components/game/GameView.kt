@@ -2,6 +2,7 @@ package edu.agh.susgame.front.gui.components.game
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -38,6 +39,20 @@ fun GameView(
     Column {
         if (isLoading.value) {
             Text(text = "${Translation.Button.LOADING}...")
+        } else if (gameManager.value?.gameState?.isPlayerDisconnected?.value == true) {
+            Row {
+                Button(onClick = {
+                    menuNavController.navigate(MenuRoute.MainMenu.route)
+                }) { Text("EXIT") }
+                Button(
+                    enabled = lobbyManager.localPlayerId != null,
+                    onClick = {
+                        lobbyManager.localPlayerId?.let { playerId ->
+                            gameService.rejoinLobby(playerId)
+                        }
+                    },
+                ) { Text("CONNECT") }
+            }
         } else {
             gameManager.value?.let {
                 Box(modifier = Modifier.fillMaxSize()) {
