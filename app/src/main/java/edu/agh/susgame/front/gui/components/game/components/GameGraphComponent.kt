@@ -51,19 +51,22 @@ internal fun GameGraphComponent(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        GameNet(gameManager = gameManager)
         UpperBarComp(gameManager = gameManager)
-        LeftButtons(gameManager.gameState)
-        gameState.currentlyInspectedNode.value
-            ?.let { node ->
-                NodeInfoComp(
-                    node = node,
-                    onExit = { gameState.currentlyInspectedNode.value = null },
-                    gameManager = gameManager,
-                )
-            }
-
-        if (gameState.isComputerViewVisible.value) {
+        if (!gameState.isComputerViewVisible.value) {
+            GameNet(gameManager = gameManager)
+            LeftButtons(gameManager.gameState)
+            gameState.currentlyInspectedNode.value
+                ?.let { node ->
+                    NodeInfoComp(
+                        node = node,
+                        onExit = {
+                            gameManager.cancelChangingPath()
+                            gameManager.gameState.currentlyInspectedNode.value = null
+                        },
+                        gameManager = gameManager,
+                    )
+                }
+        } else {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Box(
                     modifier = Modifier

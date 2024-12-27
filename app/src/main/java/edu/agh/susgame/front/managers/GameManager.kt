@@ -149,7 +149,7 @@ class GameManager(
     }
 
     fun handlePathChange() {
-        val path = Path(pathBuilder.path)
+        val path = Path(pathBuilder.path.toList())
         pathsByPlayerId[localPlayerId] = path
         gameService.sendHostRouteUpdate(
             hostId = path.path.first(),
@@ -159,11 +159,13 @@ class GameManager(
     }
 
     fun handleSendingMessage(text: String) {
-        val message = SimpleMessage(
-            author = playersById[localPlayerId]?.name ?: PlayerNickname("[???]"), message = text
-        )
-        chatMessages.add(message)
-        gameService.sendSimpleMessage(message.message)
+        if (text.isNotEmpty()) {
+            val message = SimpleMessage(
+                author = playersById[localPlayerId]?.name ?: PlayerNickname("[???]"), message = text
+            )
+            chatMessages.add(message)
+            gameService.sendSimpleMessage(message.message)
+        }
     }
 
     // GUI GETTERS
@@ -205,6 +207,17 @@ class GameManager(
             edgesList.forEach { edge ->
                 edge.removePlayer(it)
             }
+        }
+    }
+
+    fun cancelChangingPath(){
+        clearEdges(localPlayerId)
+        gameState.isPathBeingChanged.value = false
+        pathBuilder.reset()
+        pathsByPlayerId[localPlayerId]?.path?.zipWithNext { node1, node2 ->
+            updateEdge(
+                node1, node2, localPlayerId
+            )
         }
     }
 

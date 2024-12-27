@@ -12,6 +12,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import edu.agh.susgame.front.gui.components.common.theme.Blue
 import edu.agh.susgame.front.gui.components.common.theme.Header
 import edu.agh.susgame.front.gui.components.common.theme.PaddingL
 import edu.agh.susgame.front.gui.components.common.theme.PaddingM
@@ -25,7 +26,7 @@ import edu.agh.susgame.front.service.interfaces.GameService
 
 
 object ChatColors {
-    val TEXT = Color.Green
+    val TEXT = Blue
     val BACKGROUND = Color.Black
 }
 
