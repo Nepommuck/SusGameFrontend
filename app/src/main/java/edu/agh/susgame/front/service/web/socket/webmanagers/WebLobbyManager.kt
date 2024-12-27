@@ -52,4 +52,8 @@ class WebLobbyManager(
             color = Color(decodedMessage.color.decimalRgbaValue.toULong()),
         )
     }
+
+    fun handleSocketClosed() {
+        lobbyManager.handleSocketDisconnect()
+    }
 }

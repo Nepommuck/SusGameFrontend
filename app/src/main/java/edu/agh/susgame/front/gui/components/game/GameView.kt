@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import edu.agh.susgame.front.gui.components.common.util.PreventNavigationBack
 import edu.agh.susgame.front.gui.components.common.util.Translation
 import edu.agh.susgame.front.gui.components.game.components.GameGraphComponent
+import edu.agh.susgame.front.gui.components.game.components.elements.rejoin.RejoinGameView
 import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.managers.GameManager
 import edu.agh.susgame.front.managers.LobbyManager
@@ -38,6 +39,8 @@ fun GameView(
     Column {
         if (isLoading.value) {
             Text(text = "${Translation.Button.LOADING}...")
+        } else if (gameManager.value?.gameState?.isPlayerDisconnected?.value == true) {
+            RejoinGameView(lobbyManager, gameService, menuNavController)
         } else {
             gameManager.value?.let {
                 Box(modifier = Modifier.fillMaxSize()) {

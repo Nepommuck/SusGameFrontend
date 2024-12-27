@@ -127,6 +127,8 @@ class GameWebSocketListener : WebSocketListener() {
         webSocket.close(1000, null)
         println("WebSocket Closing: $code / $reason")
 
+        webLobbyManager?.handleSocketClosed()
+
         CoroutineScope(Dispatchers.Main).launch {
             _socketClosedFlow.emit(Unit)
         }
@@ -140,5 +142,10 @@ class GameWebSocketListener : WebSocketListener() {
                 ${t.stackTrace.toList().joinToString("\n") { it.toString() }}")
             """.trimIndent()
         )
+        webLobbyManager?.handleSocketClosed()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            _socketClosedFlow.emit(Unit)
+        }
     }
 }
