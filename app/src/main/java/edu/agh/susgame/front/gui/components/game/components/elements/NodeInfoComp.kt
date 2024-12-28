@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,7 @@ import edu.agh.susgame.front.gui.components.common.graph.node.Host
 import edu.agh.susgame.front.gui.components.common.graph.node.Node
 import edu.agh.susgame.front.gui.components.common.graph.node.Router
 import edu.agh.susgame.front.gui.components.common.graph.node.Server
+import edu.agh.susgame.front.gui.components.common.theme.Blue
 import edu.agh.susgame.front.gui.components.common.theme.PaddingM
 import edu.agh.susgame.front.gui.components.common.theme.TextStyler
 import edu.agh.susgame.front.gui.components.common.util.AssetsManager
@@ -64,7 +66,7 @@ fun NodeInfoComp(
                 .align(Alignment.BottomEnd)
                 .padding(PaddingM)
                 .clip(RoundedCornerShape(40.dp))
-                .border(6.dp, Color.Black.copy(alpha = 0.8f), RoundedCornerShape(40.dp))
+                .border(3.dp, Color.Black.copy(alpha = 0.8f), RoundedCornerShape(40.dp))
                 .background(Color(0x40808080))
         ) {
             Image(
@@ -95,6 +97,7 @@ fun NodeInfoComp(
                     Image(
                         painter = painterResource(id = R.drawable.cross),
                         contentDescription = "Exit",
+                        colorFilter = ColorFilter.tint(Blue),
                         modifier = Modifier
                             .clickable { onExit() }
                             .padding(6.dp)

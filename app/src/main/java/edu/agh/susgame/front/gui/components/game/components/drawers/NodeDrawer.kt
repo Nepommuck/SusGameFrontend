@@ -140,18 +140,18 @@ fun getColorFilterForNode(
                     node.overheat.intValue.toFloat() / gameManager.criticalBufferOverheatLevel
                 else
                     0f
+
             val routerColor =
-                if (!node.isWorking.value) Color.Gray
-                else Color(
-                    red = (load * 255).toInt(),
-                    green = ((1 - load) * 255).toInt(),
-                    blue = 0,
-                    alpha = (0.8f * 255).toInt()
+                if (!node.isWorking.value) Color.DarkGray
+                else Color.Red.copy(alpha = load)
+
+            val colorFilter =
+                if (load == 0f) null
+                else ColorFilter.lighting(
+                    multiply = routerColor,
+                    add = Color.Black
                 )
-            ColorFilter.lighting(
-                multiply = routerColor,
-                add = Color.Black
-            )
+            colorFilter
         }
 
         else -> null

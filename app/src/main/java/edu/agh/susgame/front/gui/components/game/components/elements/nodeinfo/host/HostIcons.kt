@@ -92,9 +92,7 @@ fun HostIcons(
                     ) {
                         Button(
                             onClick = {
-                                gameManager.clearEdges(gameManager.localPlayerId)
-                                gameManager.gameState.isPathBeingChanged.value = false
-                                gameManager.pathBuilder.reset()
+                                gameManager.cancelChangingPath()
                             },
                             modifier = Modifier.requiredWidthIn(min = 120.dp),
                             colors = ButtonDefaults.buttonColors(
