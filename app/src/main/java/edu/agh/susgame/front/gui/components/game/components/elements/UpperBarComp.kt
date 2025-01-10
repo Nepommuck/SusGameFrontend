@@ -83,13 +83,13 @@ fun UpperBarComp(
                         },
                         resourceId = R.drawable.centralize
                     )
-                    UpperButton(
-                        onClick = {
-                            gameManager.gameState.isMenuOpened.value =
-                                !gameManager.gameState.isMenuOpened.value
-                        },
-                        resourceId = R.drawable.menu
-                    )
+//                    UpperButton(
+//                        onClick = {
+//                            gameManager.gameState.isMenuOpened.value =
+//                                !gameManager.gameState.isMenuOpened.value
+//                        },
+//                        resourceId = R.drawable.menu
+//                    )
                 }
             }
         }

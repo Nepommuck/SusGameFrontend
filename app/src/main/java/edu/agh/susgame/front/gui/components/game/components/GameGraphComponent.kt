@@ -51,7 +51,7 @@ internal fun GameGraphComponent(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        UpperBarComp(gameManager = gameManager)
+
         if (!gameState.isComputerViewVisible.value) {
             GameNet(gameManager = gameManager)
             LeftButtons(gameManager.gameState)
@@ -79,6 +79,7 @@ internal fun GameGraphComponent(
                 }
             }
         }
+        UpperBarComp(gameManager = gameManager)
 
         NavIcons(
             isComputerVisible = gameState.isComputerViewVisible,

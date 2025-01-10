@@ -39,7 +39,7 @@ import edu.agh.susgame.front.gui.components.menu.navigation.MenuRoute
 import edu.agh.susgame.front.service.interfaces.LobbyService
 
 
-private const val DEFAULT_PLAYERS_AMOUNT = 2
+private const val DEFAULT_PLAYERS_AMOUNT = 4
 
 @Composable
 fun CreateLobbyView(
